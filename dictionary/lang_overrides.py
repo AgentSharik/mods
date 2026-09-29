@@ -28,6 +28,17 @@ OVERRIDES = {
     'dimension.minecraft.overworld':            'Обычный мир',
     'postAction.lychee.drop_xp':                '%s опыта',
     'contextual.lychee.secret':                 '§o???',
+    'tooltip.ironfurnaces.gui_input_output': 'Вход/Выход',
+    'tooltip.ironfurnaces.gui_none':          'НЕТ',
+    'tooltip.ironfurnaces.heaterX':          'X:',
+    'tooltip.ironfurnaces.heaterY':          'Y:',
+    'tooltip.ironfurnaces.heaterZ':          'Z:',
+    'tooltip.irons_lib.transmog_option.title': 'Трансморф Patreon:',
+    'transmog.irons_lib.witchhunter':         'Ведьма-охотница',
+    'laserio.tooltip.item.card.Filter':       'Фильтр:',
+    'block.mob_grinding_utils.solid_xp_block.tooltip_1': 'Пружинит.',
+    'message.rftoolsbuilder.shape_card.dimension': 'Измерение:',
+    'bonsaitrees4.tooltip.and_more':          '+%d',
 }
 
 # Технические и служебные подписи остаются на английском (правило пользователя).
@@ -59,6 +70,22 @@ INTENTIONAL = {
     'mod_gui.brandonscore.energy_bar.io', 'mod_gui.brandonscore.energy_bar.op',
     'mod_gui.brandonscore.energy_bar.rf', 'op.brandonscore.op',
     'contextual.lychee', 'postAction.lychee.set_block', 'result.lychee.default',
+    'tooltip.ironfurnaces.spooky1', 'tooltip.irons_lib.shift_tooltip',
+    'itemGroup.buildinggadgets2', 'idlecinematics.settings.fov',
+    'idlecinematics.settings.page.hud', 'bonsaitrees4.tooltip.and_more',
+    'tip.lychee.sec', 'result.lychee.true', 'result.lychee.false',
+    'contextual.lychee.secret', 'contextual.lychee',
+    'postAction.lychee.set_block', 'result.lychee.default',
+    'mod_gui.brandonscore.energy_bar.io', 'mod_gui.brandonscore.energy_bar.op',
+    'mod_gui.brandonscore.energy_bar.rf', 'op.brandonscore.op',
+    'main_screen.side_screen.x',
+    'main_screen.side_screen.y',
+    'main_screen.side_screen.z',
+    'idlecinematics.settings.emotecraft_status',
+    'tooltip.ironfurnaces.heaterX',
+    'tooltip.ironfurnaces.heaterY',
+    'tooltip.ironfurnaces.heaterZ',
+    'mob_grinding_utils.jei.any_experience',
 }
 
 
