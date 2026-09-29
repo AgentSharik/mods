@@ -90,7 +90,7 @@ OVERRIDES = {
     'message.xnet.antenna.one': 'Один',
     'message.xnet.antenna.two': 'Два',
     'message.xnet.facade.info': 'Подмена:',
-    'modularrouters.itemText.augments': 'Усиления:',
+    # 'modularrouters.itemText.augments' убран: автор перевёл это как «Дополнения:»
     'modularrouters.itemText.misc.flags': 'Флаги',
     'sound.xycraft_machines.subtitle.soaryn_box_deposit': 'Упс!',
     'xnet.directions.label': 'Направления:',
@@ -225,19 +225,27 @@ INTENTIONAL = {
 
 def apply_to_jar(path):
     path = pathlib.Path(path)
+    import fix_lang as _fl
+    author = _fl.author_ru(path.name)
+    blocked = {k for k, v in OVERRIDES.items()
+               if k in author and author[k] != v and not _fl.VANILLA_KEY.match(k)}
     tmp = path.with_suffix('.tmp.jar')
     touched = []
+    if blocked:
+        print(f'  🔒 {path.name}: авторских строк защищено — {len(blocked)} '
+              f'({", ".join(sorted(blocked)[:3])}{"…" if len(blocked) > 3 else ""})')
     with zipfile.ZipFile(path) as zin, zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as zout:
         for item in zin.infolist():
             data = zin.read(item.filename)
             if item.filename.endswith(('ru_ru.json', 'en_us.json')):
-                d = json.loads(data.decode('utf-8'))
+                d = json.loads(data.decode('utf-8-sig'))
                 changed = False
                 for k, v in OVERRIDES.items():
-                    if k in d and d[k] != v:
-                        d[k] = v
-                        changed = True
-                        touched.append(k)
+                    if k in blocked or k not in d or d[k] == v:
+                        continue
+                    d[k] = v
+                    changed = True
+                    touched.append(k)
                 if changed:
                     data = json.dumps(d, ensure_ascii=False, indent=2).encode('utf-8')
             zout.writestr(item, data)
