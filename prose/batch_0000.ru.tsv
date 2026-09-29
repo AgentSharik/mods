@@ -1,0 +1,144 @@
+# -*- coding: utf-8 -*-
+# Партия 0000 — перевод прозы.
+# Формат: английский \t русский
+# Обязательно сохраняются: §-коды, плейсхолдеры (%s %d %dx%d), теги <i> <n>
+On	On
+the	the
+%s CF	%s CF
+%s FE/t	%s FE/t
+'Small'	'Малый'
+<i>Yea.	<i>Ага.
+iChisel	iChisel
+manmaed	manmaed
+%s items	%s предметов
+%s/%s FE	%s/%s FE
+<i>Munchy	<i>Манчи
+Select %s	Выберите %s
+Shape: %s	Форма: %s
+%s / %s CF	%s / %s CF
+Chisel all	Выдолбить всё
+Plugin: %s	Плагин: %s
+Recipe: %s	Рецепт: %s
+show slabs	показать плиты
+Area: %dx%d	Область: %dx%d
+show blocks	показать блоки
+show stairs	показать ступеньки
+%d/%d Coffee	%d/%d Кофе
+Ball of Fur-s	Меховой шар
+Click to open	Нажмите, чтобы открыть
+View the page	Открыть страницу
+has to offer.	есть что предложить.
+Filter options	Параметры фильтра
+Fuzzy mode: %s	Нечёткий режим: %s
+Preview 1 by 1	Просмотр 1 на 1
+Preview 3 by 1	Просмотр 3 на 1
+Preview 3 by 3	Просмотр 3 на 3
+%s Crystal Flux	%s кристального потока
+<Laser stored!>	<Лазер сохранён!>
++01:00, -1 Level	+01:00, −1 уровень
+Enough to breed!	Достаточно для размножения!
+Previously "Bag"	Ранее «Сумка»
+%s for all shapes	%s для всех форм
+<i>A worm at work	<i>Червяк за работой
+<i>Greenhouse Gas	<i>Парниковый газ
+Cyber Light ◇ Red	Киберсвет ◇ Красный
+Items that use CF	Предметы, использующие CF
+Selected mode: %s	Выбранный режим: %s
+§6BlockZ Cycler§r	§6BlockZ Циклер§r
+§6BlockZ Master§r	§6BlockZ Мастер§r
+§6BlockZ Placer§r	§6BlockZ Установщик§r
+%s/%s Crystal Flux	%s/%s кристального потока
+<Block connected!>	<Блок подключён!>
+Blocks that use CF	Блоки, использующие CF
+Click to search...	Нажмите для поиска...
+Cyber Light ◇ Blue	Киберсвет ◇ Синий
+Cyber Light ◇ Cyan	Киберсвет ◇ Голубой
+Cyber Light ◇ Gray	Киберсвет ◇ Серый
+Cyber Light ◇ Lime	Киберсвет ◇ Лаймовый
+Cyber Light ◇ Pink	Киберсвет ◇ Розовый
+Selected Block: %s	Выбранный блок: %s
+Too many to breed!	Слишком много для размножения!
+§6BlockZ Crafter§r	§6BlockZ Крафтер§r
+Cyber Light ◇ Black	Киберсвет ◇ Чёрный
+Cyber Light ◇ Brown	Киберсвет ◇ Коричневый
+Cyber Light ◇ Green	Киберсвет ◇ Зелёный
+Cyber Light ◇ White	Киберсвет ◇ Белый
+Harvest some coffee	Соберите немного кофе
+Mode changed to: %s	Режим изменён на: %s
+show non-connecting	показать несоединяющиеся
+§6BlockZ Extender§r	§6BlockZ Расширитель§r
+§6BlockZ Replacer§r	§6BlockZ Заменитель§r
+%s / %s Crystal Flux	%s / %s кристального потока
+<i>Do the lotus pose	<i>Прими позу лотоса
+<i>Sequence Breaking	<i>Нарушение последовательности
+A list of everything	Список всего
+A story about ActAdd	История про ActAdd
+Conversion value: %s	Коэффициент конверсии: %s
+Cyber Light ◇ Orange	Киберсвет ◇ Оранжевый
+Cyber Light ◇ Purple	Киберсвет ◇ Фиолетовый
+Cyber Light ◇ Yellow	Киберсвет ◇ Жёлтый
+Hold a %s to modify!	Удерживайте %s, чтобы изменить!
+Hold a %s to toggle!	Удерживайте %s, чтобы переключить!
+Not enough to breed!	Недостаточно для размножения!
+Right-click to clear	ПКМ, чтобы очистить
+Cyber Light ◇ Magenta	Киберсвет ◇ Пурпурный
+Previously "Void Bag"	Ранее «Пустотная сумка»
+Shift-Click to remove	Shift+ПКМ, чтобы убрать
+Use Anvil to set tag.	Используйте наковальню, чтобы задать тег.
+Chisel a single block.	Выдолбите один блок.
+Connected textures: %s	Связанные текстуры: %s
+Installed Augments: %s	Установленные аугменты: %s
+Pillar axis set to: %s	Ось колонны задана: %s
+Right-Click to change!	ПКМ, чтобы изменить!
+Right-Click to open...	ПКМ, чтобы открыть...
+Right-Click to toggle!	ПКМ, чтобы переключить!
+<i>     Machines Primus	<i>     Machines Primus
+<n><n><n><i>Huge potato	<n><n><n><i>Огромная картошка
+Blocks that generate CF	Блоки, производящие CF
+Chisel on cooldown: %ss	Долблёный на перерыве: %s с
+Items that don't use CF	Предметы, не использующие CF
+Jack o'Lantern - Face 1	Джек-о'-фонарь — Лицо 1
+Jack o'Lantern - Face 2	Джек-о'-фонарь — Лицо 2
+Jack o'Lantern - Face 3	Джек-о'-фонарь — Лицо 3
+Jack o'Lantern - Face 4	Джек-о'-фонарь — Лицо 4
+Jack o'Lantern - Face 5	Джек-о'-фонарь — Лицо 5
+Jack o'Lantern - Face 6	Джек-о'-фонарь — Лицо 6
+Jack o'Lantern - Face 7	Джек-о'-фонарь — Лицо 7
+Jack o'Lantern - Face 8	Джек-о'-фонарь — Лицо 8
+Jack o'Lantern - Face 9	Джек-о'-фонарь — Лицо 9
+Right-click to open GUI	ПКМ, чтобы открыть меню
+A visit to the Engineers	Визит к инженерам
+Blocks that don't use CF	Блоки, не использующие CF
+Cyber Light ◇ Light Blue	Киберсвет ◇ Голубоватый
+Cyber Light ◇ Light Gray	Киберсвет ◇ Светло-серый
+Jack o'Lantern - Face 10	Джек-о'-фонарь — Лицо 10
+Jack o'Lantern - Face 11	Джек-о'-фонарь — Лицо 11
+Jack o'Lantern - Face 12	Джек-о'-фонарь — Лицо 12
+Jack o'Lantern - Face 13	Джек-о'-фонарь — Лицо 13
+Jack o'Lantern - Face 14	Джек-о'-фонарь — Лицо 14
+Jack o'Lantern - Face 15	Джек-о'-фонарь — Лицо 15
+Jack o'Lantern - Face 16	Джек-о'-фонарь — Лицо 16
+Lava → Cobbled Deepslate	Лава → Колотый глубинный сланец
+Open the Manual 50 times	Откройте Руководство 50 раз
+Right-Click to increase!	ПКМ, чтобы увеличить!
+§6BlockZ Color Changer§r	§6BlockZ Смена цвета§r
+Failed to spawn laser: %s	Не удалось создать лазер: %s
+Only into adjacent Blocks	Только в соседние блоки
+Or "Booklet", if you will	Или «Буклет», если хотите
+Water → Mossy Cobblestone	Вода → Замшелый булыжник
+Open a page to bookmark it	Откройте страницу, чтобы добавить в закладки
+Phantom Breakers & Placers	Фантомные дробилки и установщики
+Use while holding to open.	Используйте, удерживая, чтобы открыть.
+§6BlockZ CTM Toggle Tool§r	§6BlockZ Инструмент переключения CTM§r
+Chisel a 1x3 row of blocks.	Выдолбите ряд блоков 1x3.
+No Info available! Sorry :(	Нет информации! Извините :(
+Only out of adjacent Blocks	Только из соседних блоков
+Previously "Double Furnace"	Ранее «Двойная печь»
+Right-Click to change area!	ПКМ, чтобы изменить область!
+Sneak-right-click to toggle	Shift+ПКМ, чтобы переключить
+The Connection was cleared!	Соединение сброшено!
+§6BlockZ Checkered Cycler§r	§6BlockZ Шахматный циклер§r
+§7Cycle Variants: §e[Shift]	§7Смена вариантов: §e[Shift]
+<Laser connection modified!>	<Соединение лазера изменено!>
+Click to see more Information	Нажмите, чтобы увидеть больше информации
+§6BlockZ Pattern Randomizer§r	§6BlockZ Случайный узор§r
