@@ -34,7 +34,8 @@ _EN2TIER = {k: v for k, v in [
 def _ironfurnaces():
     d = {}
     d['itemGroup.ironfurnaces'] = 'Железные печи'
-    d['_comment'] = 'Обновления'
+    # ключ '_comment' без namespace нельзя класть в общий словарь:
+    # он протекает в любой мод, где есть такой ключ (Psi, ironchest, …)
     for key, ru in [
         ('iron', 'Железная печь'), ('gold', 'Золотая печь'),
         ('diamond', 'Алмазная печь'), ('emerald', 'Изумрудная печь'),
