@@ -1,4 +1,4 @@
-name: Build Auto-Packager add-on
+name: Build Fallen Relics
 
 on:
   push:
@@ -45,7 +45,7 @@ jobs:
       - name: Upload built JAR artifact
         uses: actions/upload-artifact@v5
         with:
-          name: autopackager-neoforge-1.21.1
+          name: fallen-relics-neoforge-1.21.1
           path: autopackager/build/libs/*.jar
           if-no-files-found: error
           retention-days: 30
@@ -54,8 +54,8 @@ jobs:
         if: github.ref == 'refs/heads/arena/423851f4-mods'
         shell: bash
         run: |
-          source_jar='autopackager/build/libs/autopackager-1.0.1.jar'
-          published_jar='autopackager-neoforge-1.21.1-1.0.1.jar'
+          source_jar='autopackager/build/libs/fallen-relics-1.0.2.jar'
+          published_jar='fallen-relics-neoforge-1.21.1-1.0.2.jar'
           test -f "$source_jar"
           cp "$source_jar" "$published_jar"
           git config user.name 'github-actions[bot]'
@@ -64,6 +64,6 @@ jobs:
           if git diff --cached --quiet; then
             echo 'The committed JAR is already up to date.'
           else
-            git commit -m 'Add built Auto-Packager NeoForge 1.21.1 JAR'
+            git commit -m 'Add built Fallen Relics NeoForge 1.21.1 JAR'
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi

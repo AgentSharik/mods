@@ -1,5 +1,5 @@
 {
-  "itemGroup.autopackager": "Автоупаковщик",
+  "itemGroup.autopackager": "Fallen Relics",
   "block.autopackager.packager": "Автоупаковщик",
   "autopackager.mode.current": "Текущий режим: %s",
   "autopackager.mode.hybrid": "Сначала 2×2, затем 3×3",
