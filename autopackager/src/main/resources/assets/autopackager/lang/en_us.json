@@ -1,0 +1,14 @@
+{
+  "itemGroup.autopackager": "Auto-Packager",
+  "block.autopackager.packager": "Auto-Packager",
+  "autopackager.mode.current": "Current mode: %s",
+  "autopackager.mode.hybrid": "2×2, then 3×3",
+  "autopackager.mode.hybrid2": "3×3, then 2×2",
+  "autopackager.mode.small": "2×2 only",
+  "autopackager.mode.large": "3×3 only",
+  "autopackager.mode.hollow": "3×3 hollow (eight items)",
+  "autopackager.mode.unpackage": "1×1 only",
+  "autopackager.hint": "Sneak + right-click to cycle modes",
+  "autopackager.input_side": "Input: left side; output: right side",
+  "autopackager.energy": "Uses 1,000 FE per successful operation"
+}

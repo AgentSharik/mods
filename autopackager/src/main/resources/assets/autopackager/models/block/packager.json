@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "autopackager:block/packager_side",
+    "side": "autopackager:block/packager_side",
+    "front": "autopackager:block/packager_front"
+  }
+}

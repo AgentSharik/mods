@@ -1,0 +1,5 @@
+Auto-Packager texture attribution
+
+The packager_front.png and packager_side.png textures in this add-on are adapted from the user-supplied Auto-Packager 1.9 JAR. The related AutoPackager source repository is https://github.com/MCUpdater-Mods/AutoPackager and is distributed under the Apache License, Version 2.0. See LICENSE.txt.
+
+This NeoForge 1.21.1 add-on is a separate implementation; it does not include or modify Functional Storage code or binaries.
