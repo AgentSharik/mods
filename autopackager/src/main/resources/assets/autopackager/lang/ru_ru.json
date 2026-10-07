@@ -1,0 +1,14 @@
+{
+  "itemGroup.autopackager": "Автоупаковщик",
+  "block.autopackager.packager": "Автоупаковщик",
+  "autopackager.mode.current": "Текущий режим: %s",
+  "autopackager.mode.hybrid": "Сначала 2×2, затем 3×3",
+  "autopackager.mode.hybrid2": "Сначала 3×3, затем 2×2",
+  "autopackager.mode.small": "Только 2×2",
+  "autopackager.mode.large": "Только 3×3",
+  "autopackager.mode.hollow": "Полая 3×3 (8 ингредиентов)",
+  "autopackager.mode.unpackage": "Только 1×1",
+  "autopackager.hint": "Shift + ПКМ — сменить режим",
+  "autopackager.input_output": "Предметы можно вводить и извлекать с любой стороны",
+  "autopackager.recipes": "Использует рецепты крафта Minecraft и установленных модов"
+}

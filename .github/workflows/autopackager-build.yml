@@ -54,8 +54,8 @@ jobs:
         if: github.ref == 'refs/heads/arena/423851f4-mods'
         shell: bash
         run: |
-          source_jar='autopackager/build/libs/autopackager-1.0.0.jar'
-          published_jar='autopackager-neoforge-1.21.1-1.0.0.jar'
+          source_jar='autopackager/build/libs/autopackager-1.0.1.jar'
+          published_jar='autopackager-neoforge-1.21.1-1.0.1.jar'
           test -f "$source_jar"
           cp "$source_jar" "$published_jar"
           git config user.name 'github-actions[bot]'

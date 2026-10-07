@@ -6,9 +6,9 @@
   "autopackager.mode.hybrid2": "3×3, then 2×2",
   "autopackager.mode.small": "2×2 only",
   "autopackager.mode.large": "3×3 only",
-  "autopackager.mode.hollow": "3×3 hollow (eight items)",
+  "autopackager.mode.hollow": "3×3 hollow (eight ingredients)",
   "autopackager.mode.unpackage": "1×1 only",
   "autopackager.hint": "Sneak + right-click to cycle modes",
-  "autopackager.input_side": "Input: left side; output: right side",
-  "autopackager.energy": "Uses 1,000 FE per successful operation"
+  "autopackager.input_output": "Items can enter and leave through any side",
+  "autopackager.recipes": "Uses registered vanilla and modded crafting recipes"
 }

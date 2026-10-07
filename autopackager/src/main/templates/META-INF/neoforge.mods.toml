@@ -8,7 +8,7 @@ version="${mod_version}"
 displayName="${mod_name}"
 authors="AgentSharik"
 description='''
-A NeoForge 1.21.1 add-on inspired by Auto-Packager. It automatically crafts single-item recipes in 2x2, 3x3, hollow 3x3, and 1x1 modes, with item and energy capabilities for pipe automation.
+Самостоятельный NeoForge-аддон для Functional Storage. Автоматически обрабатывает зарегистрированные рецепты крафта Minecraft и установленных модов; энергия не требуется.
 '''
 
 [[dependencies.${mod_id}]]

@@ -32,10 +32,5 @@ public final class AutoPackagerMod {
                 ModContent.PACKAGER_BLOCK_ENTITY.get(),
                 PackagerBlockEntity::getItemHandlerForSide
         );
-        event.registerBlockEntity(
-                Capabilities.EnergyStorage.BLOCK,
-                ModContent.PACKAGER_BLOCK_ENTITY.get(),
-                (packager, side) -> packager.getEnergyStorage()
-        );
     }
 }
