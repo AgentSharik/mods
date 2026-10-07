@@ -30,4 +30,4 @@ Functional Storage is declared as an optional mod dependency; the add-on does no
 
 ## Build
 
-From this directory, run `./gradlew build` with Java 21. The repository workflow also builds the JAR on pushes affecting this project and uploads it as the `autopackager-neoforge-1.21.1` workflow artifact.
+From this directory, run `./gradlew build` with Java 21. The repository workflow also builds the JAR on pushes affecting this project, uploads it as the `autopackager-neoforge-1.21.1` workflow artifact, and publishes `autopackager-neoforge-1.21.1-1.0.0.jar` at the repository root on the session branch.

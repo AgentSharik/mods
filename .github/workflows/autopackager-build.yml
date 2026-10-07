@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -42,10 +42,28 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
           exit "$result"
 
-      - name: Upload built JAR
-        uses: actions/upload-artifact@v4
+      - name: Upload built JAR artifact
+        uses: actions/upload-artifact@v5
         with:
           name: autopackager-neoforge-1.21.1
           path: autopackager/build/libs/*.jar
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish JAR to the session branch
+        if: github.ref == 'refs/heads/arena/423851f4-mods'
+        shell: bash
+        run: |
+          source_jar='autopackager/build/libs/autopackager-1.0.0.jar'
+          published_jar='autopackager-neoforge-1.21.1-1.0.0.jar'
+          test -f "$source_jar"
+          cp "$source_jar" "$published_jar"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$published_jar"
+          if git diff --cached --quiet; then
+            echo 'The committed JAR is already up to date.'
+          else
+            git commit -m 'Add built Auto-Packager NeoForge 1.21.1 JAR'
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
