@@ -3,7 +3,6 @@ package dev.agentsharik.autopackager;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,11 +16,9 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.crafting.IShapedRecipe;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
@@ -109,58 +106,21 @@ public final class PackagerBlockEntity extends BlockEntity {
             return false;
         }
 
-        if (recipe instanceof IShapedRecipe<?> shapedRecipe) {
-            return tryShapedRecipe(recipe, shapedRecipe, ingredients, plan, availableItems);
+        if (tryUnshapedRecipe(recipe, ingredients, plan, availableItems)) {
+            return true;
         }
-        return tryUnshapedRecipe(recipe, ingredients, plan, availableItems);
-    }
+        if (tryIngredientLayouts(recipe, ingredients, plan, availableItems)) {
+            return true;
+        }
 
-    private boolean tryShapedRecipe(
-            CraftingRecipe recipe,
-            IShapedRecipe<?> shapedRecipe,
-            List<Ingredient> ingredients,
-            GridPlan plan,
-            List<PoolEntry> availableItems) {
-        int recipeWidth = shapedRecipe.getWidth();
-        int recipeHeight = shapedRecipe.getHeight();
-        if (recipeWidth < 1 || recipeHeight < 1 || ingredients.size() < recipeWidth * recipeHeight
-                || recipeWidth > plan.width() || recipeHeight > plan.height()) {
+        List<Ingredient> required = ingredients.stream()
+                .filter(ingredient -> ingredient != null && !ingredient.isEmpty())
+                .toList();
+        if (required.isEmpty() || required.size() > 6 || required.size() > plan.allowedSlots().length) {
             return false;
         }
-
-        for (boolean mirrored : new boolean[]{false, true}) {
-            for (int offsetY = 0; offsetY <= plan.height() - recipeHeight; offsetY++) {
-                for (int offsetX = 0; offsetX <= plan.width() - recipeWidth; offsetX++) {
-                    List<IngredientSlot> requirements = new ArrayList<>();
-                    boolean fitsPlan = true;
-                    for (int y = 0; y < recipeHeight && fitsPlan; y++) {
-                        for (int x = 0; x < recipeWidth; x++) {
-                            int sourceX = mirrored ? recipeWidth - 1 - x : x;
-                            Ingredient ingredient = ingredients.get(y * recipeWidth + sourceX);
-                            if (ingredient == null || ingredient.isEmpty()) {
-                                continue;
-                            }
-
-                            int gridSlot = (offsetY + y) * plan.width() + offsetX + x;
-                            if (!plan.allows(gridSlot)) {
-                                fitsPlan = false;
-                                break;
-                            }
-                            requirements.add(new IngredientSlot(gridSlot, ingredient));
-                        }
-                    }
-                    if (!fitsPlan || requirements.isEmpty()) {
-                        continue;
-                    }
-
-                    CraftingInput input = findMatchingInput(recipe, plan, requirements, availableItems);
-                    if (input != null && craftRecipe(recipe, input)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        return tryCustomPlacements(recipe, required, plan, availableItems, 0,
+                new boolean[plan.allowedSlots().length], new ArrayList<>());
     }
 
     private boolean tryUnshapedRecipe(
@@ -182,18 +142,65 @@ public final class PackagerBlockEntity extends BlockEntity {
         }
 
         CraftingInput input = findMatchingInput(recipe, plan, requirements, availableItems);
-        if (input != null && craftRecipe(recipe, input)) {
-            return true;
-        }
+        return input != null && craftRecipe(recipe, input);
+    }
 
-        // Most modded crafting recipes are standard shaped or shapeless recipes.
-        // For custom recipes with positional rules but no IShapedRecipe marker,
-        // try alternative slot placements when the recipe is small enough.
-        if (recipe instanceof ShapelessRecipe || required.size() > 6) {
+    private boolean tryIngredientLayouts(
+            CraftingRecipe recipe,
+            List<Ingredient> ingredients,
+            GridPlan plan,
+            List<PoolEntry> availableItems) {
+        int ingredientCount = ingredients.size();
+        if (ingredientCount > plan.width() * plan.height()) {
             return false;
         }
-        return tryCustomPlacements(recipe, required, plan, availableItems, 0,
-                new boolean[allowedSlots.length], new ArrayList<>());
+
+        // Shaped recipes expose their ingredient slots in row-major order. Their
+        // dimensions are not part of the common recipe API on every NeoForge
+        // 1.21.1 build, so try each possible factorization and let matches()
+        // identify the recipe's actual shape.
+        for (int recipeWidth = 1; recipeWidth <= plan.width(); recipeWidth++) {
+            if (ingredientCount % recipeWidth != 0) {
+                continue;
+            }
+            int recipeHeight = ingredientCount / recipeWidth;
+            if (recipeHeight < 1 || recipeHeight > plan.height()) {
+                continue;
+            }
+
+            for (boolean mirrored : new boolean[]{false, true}) {
+                for (int offsetY = 0; offsetY <= plan.height() - recipeHeight; offsetY++) {
+                    for (int offsetX = 0; offsetX <= plan.width() - recipeWidth; offsetX++) {
+                        List<IngredientSlot> requirements = new ArrayList<>();
+                        boolean fitsPlan = true;
+                        for (int y = 0; y < recipeHeight && fitsPlan; y++) {
+                            for (int x = 0; x < recipeWidth; x++) {
+                                int sourceX = mirrored ? recipeWidth - 1 - x : x;
+                                Ingredient ingredient = ingredients.get(y * recipeWidth + sourceX);
+                                if (ingredient == null || ingredient.isEmpty()) {
+                                    continue;
+                                }
+                                int gridSlot = (offsetY + y) * plan.width() + offsetX + x;
+                                if (!plan.allows(gridSlot)) {
+                                    fitsPlan = false;
+                                    break;
+                                }
+                                requirements.add(new IngredientSlot(gridSlot, ingredient));
+                            }
+                        }
+                        if (!fitsPlan || requirements.isEmpty()) {
+                            continue;
+                        }
+
+                        CraftingInput input = findMatchingInput(recipe, plan, requirements, availableItems);
+                        if (input != null && craftRecipe(recipe, input)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private boolean tryCustomPlacements(
@@ -220,7 +227,7 @@ public final class PackagerBlockEntity extends BlockEntity {
                     ingredientIndex + 1, usedPositions, requirements)) {
                 return true;
             }
-            requirements.removeLast();
+            requirements.remove(requirements.size() - 1);
             usedPositions[position] = false;
         }
         return false;
