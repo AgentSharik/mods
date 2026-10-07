@@ -1,5 +1,6 @@
 package dev.agentsharik.autopackager;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -10,7 +11,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,20 +19,21 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 public final class PackagerBlock extends BaseEntityBlock {
+    public static final MapCodec<PackagerBlock> CODEC = simpleCodec(PackagerBlock::new);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public PackagerBlock() {
-        super(BlockBehaviour.Properties.of()
-                .mapColor(MapColor.METAL)
-                .strength(10.0F, 10.0F)
-                .sound(SoundType.METAL)
-                .requiresCorrectToolForDrops());
+    public PackagerBlock(BlockBehaviour.Properties properties) {
+        super(properties);
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    public MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override
