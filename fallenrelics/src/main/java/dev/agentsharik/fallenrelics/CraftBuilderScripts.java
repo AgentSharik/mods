@@ -61,7 +61,7 @@ public final class CraftBuilderScripts {
     private static final Pattern ZEN_ITEM_BRACKET = Pattern.compile("<item:([^>]+)>");
     private static final Pattern ZEN_ROW = Pattern.compile("\\[([^\\[\\]]*)\\]");
 
-    /** The maps below mirror CraftTweaker's live RecipeManager mutation path without depending on its classes. */
+    /** The maps below mirror the vanilla live RecipeManager mutation path so scripts apply without a full resource reload. */
     @Nullable private static RecipeManager activeManager;
     private static Map<ResourceLocation, RecipeHolder<?>> byName;
     private static Multimap<RecipeType<?>, RecipeHolder<?>> byType;
