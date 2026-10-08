@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "drd",
+    "rgr",
+    "drd"
+  ],
+  "key": {
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "g": {
+      "item": "fallenrelics:gold_upgrade"
+    }
+  },
+  "result": {
+    "id": "fallenrelics:diamond_upgrade",
+    "count": 1
+  }
+}

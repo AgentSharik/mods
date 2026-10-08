@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "grg",
+    "rir",
+    "grg"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "i": {
+      "item": "fallenrelics:iron_upgrade"
+    }
+  },
+  "result": {
+    "id": "fallenrelics:gold_upgrade",
+    "count": 1
+  }
+}

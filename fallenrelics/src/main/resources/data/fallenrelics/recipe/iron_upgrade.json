@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iri",
+    "rtr",
+    "iri"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "t": {
+      "item": "fallenrelics:upgrade_template"
+    }
+  },
+  "result": {
+    "id": "fallenrelics:iron_upgrade",
+    "count": 1
+  }
+}

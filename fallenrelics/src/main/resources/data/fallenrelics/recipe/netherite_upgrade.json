@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "nrn",
+    "rdr",
+    "nrn"
+  ],
+  "key": {
+    "n": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "d": {
+      "item": "fallenrelics:diamond_upgrade"
+    }
+  },
+  "result": {
+    "id": "fallenrelics:netherite_upgrade",
+    "count": 1
+  }
+}

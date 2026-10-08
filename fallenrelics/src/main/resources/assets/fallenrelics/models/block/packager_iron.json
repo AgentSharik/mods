@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "fallenrelics:block/packager_side",
+    "side": "fallenrelics:block/packager_side",
+    "front": "fallenrelics:block/packager_front_iron"
+  }
+}

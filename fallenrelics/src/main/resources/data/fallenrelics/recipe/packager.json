@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ipi",
+    "pcp",
+    "iri"
+  ],
+  "key": {
+    "i": { "item": "minecraft:iron_ingot" },
+    "p": { "item": "minecraft:piston" },
+    "c": { "item": "minecraft:crafter" },
+    "r": { "item": "minecraft:redstone" }
+  },
+  "result": {
+    "id": "fallenrelics:packager",
+    "count": 1
+  }
+}

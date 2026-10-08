@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=north,upgrade_tier=0": { "model": "fallenrelics:block/packager" },
+    "facing=east,upgrade_tier=0": { "model": "fallenrelics:block/packager", "y": 90 },
+    "facing=south,upgrade_tier=0": { "model": "fallenrelics:block/packager", "y": 180 },
+    "facing=west,upgrade_tier=0": { "model": "fallenrelics:block/packager", "y": 270 },
+
+    "facing=north,upgrade_tier=1": { "model": "fallenrelics:block/packager_iron" },
+    "facing=east,upgrade_tier=1": { "model": "fallenrelics:block/packager_iron", "y": 90 },
+    "facing=south,upgrade_tier=1": { "model": "fallenrelics:block/packager_iron", "y": 180 },
+    "facing=west,upgrade_tier=1": { "model": "fallenrelics:block/packager_iron", "y": 270 },
+
+    "facing=north,upgrade_tier=2": { "model": "fallenrelics:block/packager_gold" },
+    "facing=east,upgrade_tier=2": { "model": "fallenrelics:block/packager_gold", "y": 90 },
+    "facing=south,upgrade_tier=2": { "model": "fallenrelics:block/packager_gold", "y": 180 },
+    "facing=west,upgrade_tier=2": { "model": "fallenrelics:block/packager_gold", "y": 270 },
+
+    "facing=north,upgrade_tier=3": { "model": "fallenrelics:block/packager_diamond" },
+    "facing=east,upgrade_tier=3": { "model": "fallenrelics:block/packager_diamond", "y": 90 },
+    "facing=south,upgrade_tier=3": { "model": "fallenrelics:block/packager_diamond", "y": 180 },
+    "facing=west,upgrade_tier=3": { "model": "fallenrelics:block/packager_diamond", "y": 270 },
+
+    "facing=north,upgrade_tier=4": { "model": "fallenrelics:block/packager_netherite" },
+    "facing=east,upgrade_tier=4": { "model": "fallenrelics:block/packager_netherite", "y": 90 },
+    "facing=south,upgrade_tier=4": { "model": "fallenrelics:block/packager_netherite", "y": 180 },
+    "facing=west,upgrade_tier=4": { "model": "fallenrelics:block/packager_netherite", "y": 270 }
+  }
+}
