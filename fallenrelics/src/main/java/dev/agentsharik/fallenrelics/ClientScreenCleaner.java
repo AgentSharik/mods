@@ -1,6 +1,8 @@
 package dev.agentsharik.fallenrelics;
 
+import net.minecraft.client.gui.screens.Screen;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ScreenEvent;
@@ -9,7 +11,8 @@ import net.neoforged.neoforge.client.event.ScreenEvent;
  * Keeps third-party helper buttons (e.g. Crafting Tweaks' rotate/clear row and
  * corner button) off the Fallen Relics editor screens: the window must stay a
  * 1:1 copy of the vanilla crafting table / furnace art with only our three
- * icon buttons.
+ * icon buttons. Runs last among screen-init listeners and is re-applied from
+ * the screen tick in case another mod adds widgets late.
  */
 @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class ClientScreenCleaner {
@@ -19,11 +22,14 @@ public final class ClientScreenCleaner {
 
     private ClientScreenCleaner() {}
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onScreenInit(ScreenEvent.Init.Post event) {
-        if (!(event.getScreen() instanceof CraftBuilderScreen screen)) {
-            return;
+        if (event.getScreen() instanceof CraftBuilderScreen) {
+            removeForeignWidgets(event.getScreen());
         }
+    }
+
+    public static void removeForeignWidgets(Screen screen) {
         screen.children().removeIf(child -> isForeign(child.getClass()));
     }
 

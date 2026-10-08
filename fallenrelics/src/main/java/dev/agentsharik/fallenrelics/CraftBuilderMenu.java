@@ -85,10 +85,10 @@ public final class CraftBuilderMenu extends AbstractContainerMenu {
                         29 + column * 18, 16 + row * 18, false));
             }
         }
-        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 122, 33, false));
+        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 124, 35, false));
         addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.FURNACE_INPUT_FIRST, 56, 17, true));
         addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.FURNACE_INPUT_SECOND, 56, 53, true));
-        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 118, 34, true));
+        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 120, 36, true));
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {

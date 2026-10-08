@@ -400,20 +400,14 @@ public final class CraftBuilderScripts {
 
         List<ResourceLocation> ingredients = new ArrayList<>();
         if (shapeless) {
-            // Furnace-style editor: each input stack contributes its item once
-            // per count, so a stack of 3 becomes three shapeless ingredients.
+            // Furnace-style editor: each of the two input stacks contributes its
+            // item once (stack size only helps the player measure amounts, like
+            // a furnace fuel slot), so any stack size is a valid single ingredient.
             for (int slot = CraftBuilderBlockEntity.FURNACE_INPUT_FIRST;
                  slot <= CraftBuilderBlockEntity.FURNACE_INPUT_SECOND; slot++) {
                 ItemStack stack = inventory.getStackInSlot(slot);
-                if (stack.isEmpty()) {
-                    continue;
-                }
-                ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-                for (int copy = 0; copy < stack.getCount(); copy++) {
-                    ingredients.add(id);
-                    if (ingredients.size() > CraftBuilderBlockEntity.INPUT_SLOTS) {
-                        return null;
-                    }
+                if (!stack.isEmpty()) {
+                    ingredients.add(BuiltInRegistries.ITEM.getKey(stack.getItem()));
                 }
             }
             if (ingredients.isEmpty()) {

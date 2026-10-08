@@ -38,6 +38,7 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     private static final int HOVER_COLOR = 0x33FFFFFF;
 
     private IconButton modeButton;
+    private int cleanTicks;
 
     public CraftBuilderScreen(CraftBuilderMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -48,12 +49,11 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     @Override
     protected void init() {
         super.init();
-        // Top-right row, where the vanilla recipe-book controls live in (1)-style
-        // layouts: add, remove, mode.
-        int rowY = topPos + 4;
-        addRenderableWidget(new IconButton(leftPos + 98, rowY, 1));
-        addRenderableWidget(new IconButton(leftPos + 124, rowY, 2));
-        modeButton = addRenderableWidget(new IconButton(leftPos + 150, rowY, 0));
+        // Left decoration column of the pack art: add, remove, mode stacked
+        // vertically over the swirl/dots/arrow pictograms.
+        addRenderableWidget(new IconButton(leftPos + 6, topPos + 16, 1));
+        addRenderableWidget(new IconButton(leftPos + 6, topPos + 36, 2));
+        modeButton = addRenderableWidget(new IconButton(leftPos + 6, topPos + 56, 0));
         refreshModeButton();
     }
 
@@ -76,6 +76,10 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     @Override
     protected void containerTick() {
         super.containerTick();
+        if (cleanTicks < 60) {
+            cleanTicks++;
+            ClientScreenCleaner.removeForeignWidgets(this);
+        }
         refreshModeButton();
     }
 
