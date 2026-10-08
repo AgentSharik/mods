@@ -25,7 +25,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket;
@@ -61,16 +60,6 @@ public final class CraftBuilderScripts {
             Pattern.DOTALL);
     private static final Pattern ZEN_ITEM_BRACKET = Pattern.compile("<item:([^>]+)>");
     private static final Pattern ZEN_ROW = Pattern.compile("\\[([^\\[\\]]*)\\]");
-    private static final Pattern ZEN_SHAPED = Pattern.compile(
-            "\\w+\\.addShaped\\(\\s*\"([^\"]+)\"\\s*,\\s*<item:([^>]+)>\\s*(?:\\*\\s*(\\d+))?\\s*,\\s*\\[(.*?)\\]\\s*\\)\\s*;",
-            Pattern.DOTALL);
-    private static final Pattern ZEN_SHAPELESS = Pattern.compile(
-            "\\w+\\.addShapeless\\(\\s*\"([^\"]+)\"\\s*,\\s*<item:([^>]+)>\\s*(?:\\*\\s*(\\d+))?\\s*,\\s*\\[(.*?)\\]\\s*\\)\\s*;",
-            Pattern.DOTALL);
-    private static final Pattern ZEN_REMOVE_ITEM = Pattern.compile(
-            "\\w+\\.removeRecipe\\(\\s*<item:([^>]+)>\\s*\\)\\s*;");
-    private static final Pattern ZEN_REMOVE_ID = Pattern.compile(
-            "\\w+\\.removeRecipe\\(\\s*\"([^\"]+)\"\\s*\\)\\s*;");
 
     /** The maps below mirror CraftTweaker's live RecipeManager mutation path without depending on its classes. */
     @Nullable private static RecipeManager activeManager;
@@ -78,7 +67,6 @@ public final class CraftBuilderScripts {
     private static Multimap<RecipeType<?>, RecipeHolder<?>> byType;
     private static final Map<ResourceLocation, RecipeHolder<?>> activeScriptRecipes = new LinkedHashMap<>();
     private static final Map<ResourceLocation, RecipeHolder<?>> displacedRecipes = new LinkedHashMap<>();
-    private static final Map<ResourceLocation, RecipeHolder<?>> removedByScript = new LinkedHashMap<>();
     private static final Set<ResourceLocation> migratedLegacyRecipeIds = new LinkedHashSet<>();
 
     private CraftBuilderScripts() {}
@@ -259,9 +247,8 @@ public final class CraftBuilderScripts {
         try {
             RecipeManager manager = server.getRecipeManager();
             ensureMutableManager(manager);
-            CompileResult compiled = compileScripts(server);
-            replaceScriptRecipes(manager, compiled.recipes());
-            applyRemovals(server, compiled.removalOutputs(), compiled.removalIds());
+            List<RecipeHolder<?>> currentScripts = compileScripts(server);
+            replaceScriptRecipes(manager, currentScripts);
 
             if (syncClients) {
                 syncRecipes(server, manager);
@@ -333,15 +320,6 @@ public final class CraftBuilderScripts {
         }
         migratedLegacyRecipeIds.clear();
 
-        // Restore recipes removed by an earlier .zs removeRecipe() pass; the current
-        // pass re-applies whatever removals are still requested below.
-        for (Map.Entry<ResourceLocation, RecipeHolder<?>> entry : removedByScript.entrySet()) {
-            RecipeHolder<?> restored = entry.getValue();
-            byName.put(entry.getKey(), restored);
-            byType.put(restored.value().getType(), restored);
-        }
-        removedByScript.clear();
-
         for (Map.Entry<ResourceLocation, RecipeHolder<?>> entry : activeScriptRecipes.entrySet()) {
             ResourceLocation id = entry.getKey();
             RecipeHolder<?> active = entry.getValue();
@@ -369,223 +347,51 @@ public final class CraftBuilderScripts {
         }
     }
 
-    /** Mirrors CraftTweaker's removeRecipe semantics on the live RecipeManager. */
-    private static void applyRemovals(
-            MinecraftServer server, Set<ResourceLocation> removalOutputs, Set<ResourceLocation> removalIds) {
-        if (removalOutputs.isEmpty() && removalIds.isEmpty()) {
-            return;
-        }
-        HolderLookup.Provider registries = server.registryAccess();
-        byName.entrySet().removeIf(entry -> {
-            if (activeScriptRecipes.containsKey(entry.getKey())) {
-                return false;
-            }
-            RecipeHolder<?> holder = entry.getValue();
-            boolean remove = removalIds.contains(entry.getKey());
-            if (!remove && !removalOutputs.isEmpty()) {
-                ItemStack output = holder.value().getResultItem(registries);
-                remove = !output.isEmpty()
-                        && removalOutputs.contains(BuiltInRegistries.ITEM.getKey(output.getItem()));
-            }
-            if (remove) {
-                removedByScript.put(entry.getKey(), holder);
-                byType.remove(holder.value().getType(), holder);
-            }
-            return remove;
-        });
-    }
-
     private static void syncRecipes(MinecraftServer server, RecipeManager manager) {
         for (ServerPlayer connected : server.getPlayerList().getPlayers()) {
             connected.connection.send(new ClientboundUpdateRecipesPacket(manager.getOrderedRecipes()));
         }
     }
 
-    private static CompileResult compileScripts(MinecraftServer server) throws IOException {
+    private static List<RecipeHolder<?>> compileScripts(MinecraftServer server) throws IOException {
         Path scripts = scriptDirectory();
         Files.createDirectories(scripts);
         RegistryOps<com.google.gson.JsonElement> registryOps =
                 server.registryAccess().createSerializationContext(JsonOps.INSTANCE);
         List<RecipeHolder<?>> recipes = new ArrayList<>();
         Set<ResourceLocation> recipeIds = new LinkedHashSet<>();
-        Set<ResourceLocation> removalOutputs = new LinkedHashSet<>();
-        Set<ResourceLocation> removalIds = new LinkedHashSet<>();
 
         try (Stream<Path> scriptFiles = Files.walk(scripts)) {
             for (Path scriptFile : scriptFiles
                     .filter(Files::isRegularFile)
-                    .filter(path -> {
-                        String name = path.getFileName().toString();
-                        return name.endsWith(SCRIPT_EXTENSION) || name.endsWith(".zs");
-                    })
+                    .filter(path -> path.getFileName().toString().endsWith(SCRIPT_EXTENSION))
                     .sorted()
                     .toList()) {
                 try {
-                    String source = Files.readString(scriptFile, StandardCharsets.UTF_8);
-                    if (source.contains("addShaped(") || source.contains("addShapeless(")
-                            || source.contains("removeRecipe(")) {
-                        ZenScriptResult zen = parseZenScript(source);
-                        removalOutputs.addAll(zen.removalOutputs());
-                        removalIds.addAll(zen.removalIds());
-                        for (ZenAddition addition : zen.additions()) {
-                            addCompiledRecipe(recipes, recipeIds, scriptFile, registryOps,
-                                    addition.id(), addition.recipe());
-                        }
+                    RecipeScript script = parseScript(Files.readString(scriptFile, StandardCharsets.UTF_8));
+                    String path = recipeIdFromScriptPath(scripts.relativize(scriptFile));
+                    ResourceLocation id = ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, path);
+                    Recipe<?> recipe = Recipe.CODEC.parse(registryOps, compileRecipe(script))
+                            .resultOrPartial(error -> LOGGER.error("Invalid recipe script {}: {}", scriptFile, error))
+                            .orElse(null);
+                    if (recipe == null) {
                         continue;
                     }
-                    RecipeScript script = parseScript(source);
-                    String path = recipeIdFromScriptPath(scripts.relativize(scriptFile));
-                    addCompiledRecipe(recipes, recipeIds, scriptFile, registryOps, path, script);
+                    if (recipe.getType() != RecipeType.CRAFTING) {
+                        LOGGER.error("Ignoring non-crafting recipe in script {}", scriptFile);
+                        continue;
+                    }
+                    if (!recipeIds.add(id)) {
+                        LOGGER.error("Ignoring duplicate recipe id {} in script {}", id, scriptFile);
+                        continue;
+                    }
+                    recipes.add(new RecipeHolder<>(id, recipe));
                 } catch (RuntimeException exception) {
                     LOGGER.error("Ignoring invalid Fallen Relics script {}", scriptFile, exception);
                 }
             }
         }
-        return new CompileResult(recipes, removalOutputs, removalIds);
-    }
-
-    private static void addCompiledRecipe(
-            List<RecipeHolder<?>> recipes,
-            Set<ResourceLocation> recipeIds,
-            Path scriptFile,
-            RegistryOps<com.google.gson.JsonElement> registryOps,
-            String path,
-            RecipeScript script) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, path);
-        Recipe<?> recipe = Recipe.CODEC.parse(registryOps, compileRecipe(script))
-                .resultOrPartial(error -> LOGGER.error("Invalid recipe script {}: {}", scriptFile, error))
-                .orElse(null);
-        if (recipe == null) {
-            return;
-        }
-        if (recipe.getType() != RecipeType.CRAFTING) {
-            LOGGER.error("Ignoring non-crafting recipe in script {}", scriptFile);
-            return;
-        }
-        if (!recipeIds.add(id)) {
-            LOGGER.error("Ignoring duplicate recipe id {} in script {}", id, scriptFile);
-            return;
-        }
-        recipes.add(new RecipeHolder<>(id, recipe));
-    }
-
-    /** Parses the CraftTweaker ZenScript subset that Fallen Relics executes natively. */
-    private static ZenScriptResult parseZenScript(String source) {
-        List<ZenAddition> additions = new ArrayList<>();
-        Set<ResourceLocation> removalOutputs = new LinkedHashSet<>();
-        Set<ResourceLocation> removalIds = new LinkedHashSet<>();
-        Set<String> usedIds = new LinkedHashSet<>();
-
-        Matcher shaped = ZEN_SHAPED.matcher(source);
-        while (shaped.find()) {
-            additions.add(new ZenAddition(uniqueId(shaped.group(1), usedIds),
-                    parseZenShaped(shaped.group(1), shaped.group(2), shaped.group(3), shaped.group(4))));
-        }
-        Matcher shapeless = ZEN_SHAPELESS.matcher(source);
-        while (shapeless.find()) {
-            additions.add(new ZenAddition(uniqueId(shapeless.group(1), usedIds),
-                    parseZenShapeless(shapeless.group(1), shapeless.group(2), shapeless.group(3), shapeless.group(4))));
-        }
-        Matcher removeItem = ZEN_REMOVE_ITEM.matcher(source);
-        while (removeItem.find()) {
-            removalOutputs.add(parseItemId(removeItem.group(1)));
-        }
-        Matcher removeId = ZEN_REMOVE_ID.matcher(source);
-        while (removeId.find()) {
-            removalIds.add(parseItemId(removeId.group(1)));
-        }
-        return new ZenScriptResult(additions, removalOutputs, removalIds);
-    }
-
-    private static String uniqueId(String name, Set<String> usedIds) {
-        String id = "ct_" + name.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9_/-]+", "_");
-        if (id.length() > 190) {
-            id = id.substring(0, 190);
-        }
-        if (ResourceLocation.tryParse(FallenRelicsMod.MOD_ID + ":" + id) == null) {
-            id = "ct_recipe_" + hash(name);
-        }
-        String unique = id;
-        for (int suffix = 2; !usedIds.add(unique); suffix++) {
-            unique = id + "_" + suffix;
-        }
-        return unique;
-    }
-
-    private static RecipeScript parseZenShaped(
-            String name, String result, String count, String gridSource) {
-        List<ResourceLocation> ingredients = new ArrayList<>();
-        Matcher rowMatcher = ZEN_ROW.matcher(gridSource);
-        int rowCount = 0;
-        while (rowMatcher.find()) {
-            if (rowCount >= 3) {
-                throw new IllegalArgumentException("CraftTweaker shaped recipe '" + name + "' has more than 3 rows");
-            }
-            String[] cells = rowMatcher.group(1).split(",");
-            if (cells.length < 1 || cells.length > 3) {
-                throw new IllegalArgumentException("CraftTweaker shaped recipe '" + name
-                        + "' row must have 1-3 cells");
-            }
-            for (int column = 0; column < 3; column++) {
-                if (column < cells.length) {
-                    ingredients.add(parseZenCell(cells[column].trim(), name));
-                } else {
-                    ingredients.add(null);
-                }
-            }
-            rowCount++;
-        }
-        while (rowCount < 3) {
-            ingredients.add(null);
-            ingredients.add(null);
-            ingredients.add(null);
-            rowCount++;
-        }
-        if (ingredients.stream().allMatch(java.util.Objects::isNull)) {
-            throw new IllegalArgumentException("CraftTweaker shaped recipe '" + name + "' has no ingredients");
-        }
-        return new RecipeScript(false, parseItemId(result), zenCount(count), ingredients);
-    }
-
-    private static RecipeScript parseZenShapeless(
-            String name, String result, String count, String listSource) {
-        List<ResourceLocation> ingredients = new ArrayList<>();
-        for (String cell : listSource.split(",")) {
-            ResourceLocation item = parseZenCell(cell.trim(), name);
-            if (item != null) {
-                ingredients.add(item);
-            }
-        }
-        if (ingredients.isEmpty() || ingredients.size() > CraftBuilderBlockEntity.INPUT_SLOTS) {
-            throw new IllegalArgumentException("CraftTweaker shapeless recipe '" + name
-                    + "' needs between 1 and 9 ingredients");
-        }
-        return new RecipeScript(true, parseItemId(result), zenCount(count), ingredients);
-    }
-
-    @Nullable
-    private static ResourceLocation parseZenCell(String cell, String name) {
-        if (cell.isEmpty() || cell.equals("null")) {
-            return null;
-        }
-        Matcher item = ZEN_ITEM_BRACKET.matcher(cell);
-        if (item.matches()) {
-            ResourceLocation id = parseItemId(item.group(1));
-            return id.toString().equals("minecraft:air") ? null : id;
-        }
-        throw new IllegalArgumentException("Unsupported ingredient '" + cell
-                + "' in CraftTweaker recipe '" + name + "'");
-    }
-
-    private static int zenCount(String count) {
-        if (count == null) {
-            return 1;
-        }
-        int parsed = Integer.parseInt(count);
-        if (parsed < 1 || parsed > 64) {
-            throw new IllegalArgumentException("Result count must be between 1 and 64");
-        }
-        return parsed;
+        return recipes;
     }
 
     private static GeneratedRecipe generateRecipe(ItemStackHandler inventory, boolean shapeless) {
@@ -918,15 +724,6 @@ public final class CraftBuilderScripts {
         return FMLPaths.GAMEDIR.get().resolve("scripts").resolve(SCRIPT_SUBDIRECTORY);
     }
 
-    private record CompileResult(
-            List<RecipeHolder<?>> recipes,
-            Set<ResourceLocation> removalOutputs,
-            Set<ResourceLocation> removalIds) {}
-    private record ZenAddition(String id, RecipeScript recipe) {}
-    private record ZenScriptResult(
-            List<ZenAddition> additions,
-            Set<ResourceLocation> removalOutputs,
-            Set<ResourceLocation> removalIds) {}
     private record GeneratedRecipe(String id, String source, String fingerprint) {}
     private record RecipeScript(
             boolean shapeless,
