@@ -80,11 +80,13 @@ public final class CraftBuilderMenu extends AbstractContainerMenu {
     private void addSlots(Inventory playerInventory) {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
-                addSlot(new SlotItemHandler(itemHandler, row * 3 + column,
-                        30 + column * 18, 17 + row * 18));
+                addSlot(new ModeSlot(itemHandler, row * 3 + column,
+                        30 + column * 18, 17 + row * 18, false));
             }
         }
         addSlot(new SlotItemHandler(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 122, 36));
+        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.FURNACE_INPUT_FIRST, 56, 17, true));
+        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.FURNACE_INPUT_SECOND, 56, 53, true));
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
@@ -97,6 +99,32 @@ public final class CraftBuilderMenu extends AbstractContainerMenu {
         }
 
         addDataSlots(data);
+    }
+
+    /** Grid slots exist only in shaped mode, furnace-style inputs only in shapeless mode. */
+    private final class ModeSlot extends SlotItemHandler {
+        private final boolean furnaceSide;
+
+        private ModeSlot(net.neoforged.neoforge.items.IItemHandler handler, int index, int x, int y,
+                         boolean furnaceSide) {
+            super(handler, index, x, y);
+            this.furnaceSide = furnaceSide;
+        }
+
+        @Override
+        public boolean isActive() {
+            return furnaceSide == isShapeless();
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return isActive() && super.mayPlace(stack);
+        }
+
+        @Override
+        public boolean mayPickup(Player player) {
+            return isActive() && super.mayPickup(player);
+        }
     }
 
     private void addPlayerSlot(Inventory playerInventory, int inventoryIndex, int x, int y) {

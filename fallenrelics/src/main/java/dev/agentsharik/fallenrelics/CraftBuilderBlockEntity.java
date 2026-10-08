@@ -12,7 +12,10 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 public final class CraftBuilderBlockEntity extends BlockEntity {
     public static final int INPUT_SLOTS = 9;
     public static final int RESULT_SLOT = 9;
-    public static final int SLOT_COUNT = 10;
+    /** Shapeless "furnace-style" editor inputs: two stacks whose counts become ingredient counts. */
+    public static final int FURNACE_INPUT_FIRST = 10;
+    public static final int FURNACE_INPUT_SECOND = 11;
+    public static final int SLOT_COUNT = 12;
 
     private final ItemStackHandler inventory = new ItemStackHandler(SLOT_COUNT) {
         @Override

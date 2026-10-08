@@ -27,8 +27,8 @@ import org.jetbrains.annotations.Nullable;
 public final class PackagerBlockEntity extends BlockEntity {
     private static final int INPUT_SLOTS = 9;
     private static final int OUTPUT_SLOTS = 9;
-    private static final int NORMAL_DELAY = 1;
-    private static final int IDLE_DELAY = 20;
+    private static final int NORMAL_DELAY = 10;
+    private static final int IDLE_DELAY = 200;
     /** Hard wall-clock budget for one crafting cycle so big modpacks never stall a tick. */
     private static final long MAX_CYCLE_NANOS = 4_000_000L;
     /** Per recipe-attempt cap on backtracking nodes. */
@@ -42,7 +42,38 @@ public final class PackagerBlockEntity extends BlockEntity {
             recipeScanIndex = 0;
             markDirtyAndNotify();
         }
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return super.isItemValid(slot, stack) && matchesInputLock(stack);
+        }
+
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            if (!matchesInputLock(stack)) {
+                return stack;
+            }
+            return super.insertItem(slot, stack, simulate);
+        }
     };
+
+    /**
+     * The machine compresses a single resource: once items of one type are in,
+     * only more of the same type may enter (any amount), other types bounce off
+     * pipes and manual clicks alike. The lock frees when the input runs empty.
+     */
+    private boolean matchesInputLock(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return true;
+        }
+        for (int slot = 0; slot < inputInventory.getSlots(); slot++) {
+            ItemStack existing = inputInventory.getStackInSlot(slot);
+            if (!existing.isEmpty()) {
+                return ItemStack.isSameItemSameComponents(existing, stack);
+            }
+        }
+        return true;
+    }
 
     private final ItemStackHandler outputInventory = new ItemStackHandler(OUTPUT_SLOTS) {
         @Override

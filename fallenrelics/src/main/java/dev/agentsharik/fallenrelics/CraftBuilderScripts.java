@@ -394,12 +394,34 @@ public final class CraftBuilderScripts {
         }
 
         List<ResourceLocation> ingredients = new ArrayList<>();
-        for (int slot = 0; slot < CraftBuilderBlockEntity.INPUT_SLOTS; slot++) {
-            ItemStack stack = inventory.getStackInSlot(slot);
-            ingredients.add(stack.isEmpty() ? null : BuiltInRegistries.ITEM.getKey(stack.getItem()));
-        }
-        if (ingredients.stream().allMatch(java.util.Objects::isNull)) {
-            return null;
+        if (shapeless) {
+            // Furnace-style editor: each input stack contributes its item once
+            // per count, so a stack of 3 becomes three shapeless ingredients.
+            for (int slot = CraftBuilderBlockEntity.FURNACE_INPUT_FIRST;
+                 slot <= CraftBuilderBlockEntity.FURNACE_INPUT_SECOND; slot++) {
+                ItemStack stack = inventory.getStackInSlot(slot);
+                if (stack.isEmpty()) {
+                    continue;
+                }
+                ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+                for (int copy = 0; copy < stack.getCount(); copy++) {
+                    ingredients.add(id);
+                    if (ingredients.size() > CraftBuilderBlockEntity.INPUT_SLOTS) {
+                        return null;
+                    }
+                }
+            }
+            if (ingredients.isEmpty()) {
+                return null;
+            }
+        } else {
+            for (int slot = 0; slot < CraftBuilderBlockEntity.INPUT_SLOTS; slot++) {
+                ItemStack stack = inventory.getStackInSlot(slot);
+                ingredients.add(stack.isEmpty() ? null : BuiltInRegistries.ITEM.getKey(stack.getItem()));
+            }
+            if (ingredients.stream().allMatch(java.util.Objects::isNull)) {
+                return null;
+            }
         }
 
         RecipeScript recipe = new RecipeScript(

@@ -24,25 +24,14 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
             ResourceLocation.withDefaultNamespace("textures/gui/container/crafting_table.png");
     private static final ResourceLocation PACK_FURNACE =
             ResourceLocation.withDefaultNamespace("textures/gui/container/furnace.png");
-    /** Vanilla slot frame, drawn for the 3x3 grid on the furnace background. */
-    private static final ResourceLocation SLOT_SPRITE =
-            ResourceLocation.withDefaultNamespace("textures/gui/sprites/container/slot.png");
     /** Mode pictograms: the machine the current mode will switch to. */
     private static final ResourceLocation FURNACE_ICON =
             ResourceLocation.withDefaultNamespace("textures/block/furnace_front.png");
     private static final ResourceLocation CRAFTING_TABLE_ICON =
             ResourceLocation.withDefaultNamespace("textures/block/crafting_table_front.png");
 
-    /** 3x3 grid position, identical to the vanilla crafting table layout. */
-    private static final int GRID_X = 30;
-    private static final int GRID_Y = 17;
-    /** Furnace wall area (right of the output frame) copied over the printed input slots. */
-    private static final int PATCH_SRC_X = 146;
-    private static final int PATCH_SRC_Y = 15;
-    private static final int PATCH_WIDTH = 22;
-    private static final int PATCH_HEIGHT = 58;
-    private static final int PATCH_DST_X = 54;
-    private static final int PATCH_DST_Y = 15;
+    /** Vanilla container label grey, drawn exactly where vanilla draws it. */
+    private static final int LABEL_COLOR = 0xFF404040;
 
     private static final int CHECK_COLOR = 0xFF55C955;
     private static final int CROSS_COLOR = 0xFFD14949;
@@ -91,25 +80,17 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        if (menu.isShapeless()) {
-            graphics.blit(PACK_FURNACE, leftPos, topPos, 0, 0f, 0f, imageWidth, imageHeight, 256, 256);
-            // Cover the printed ingredient/fuel slots and flame with clean wall.
-            graphics.blit(PACK_FURNACE, leftPos + PATCH_DST_X, topPos + PATCH_DST_Y, 0,
-                    PATCH_SRC_X, PATCH_SRC_Y, PATCH_WIDTH, PATCH_HEIGHT, 256, 256);
-            for (int row = 0; row < 3; row++) {
-                for (int column = 0; column < 3; column++) {
-                    graphics.blit(SLOT_SPRITE, leftPos + GRID_X + column * 18, topPos + GRID_Y + row * 18,
-                            0, 0f, 0f, 18, 18, 18, 18);
-                }
-            }
-        } else {
-            graphics.blit(PACK_CRAFTING_TABLE, leftPos, topPos, 0, 0f, 0f, imageWidth, imageHeight, 256, 256);
-        }
+        // 1:1 with the vanilla screens: the pack's crafting table art in shaped
+        // mode, the pack's furnace art in shapeless mode. Slots that do not
+        // belong to the active mode are hidden by the menu.
+        graphics.blit(menu.isShapeless() ? PACK_FURNACE : PACK_CRAFTING_TABLE,
+                leftPos, topPos, 0, 0f, 0f, imageWidth, imageHeight, 256, 256);
     }
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        // Deliberately empty: the window carries no block caption at all.
+        // No block caption, only the vanilla inventory label, same spot and colour.
+        graphics.drawString(font, inventory, 8, imageHeight - 94, LABEL_COLOR, false);
     }
 
     @Override
