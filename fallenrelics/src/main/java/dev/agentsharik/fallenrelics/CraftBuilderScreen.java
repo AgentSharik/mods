@@ -9,24 +9,36 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 /**
- * Renders exactly like a vanilla Minecraft container screen: the same
- * #C6C6C6 panel, the same recessed slots and the same widget buttons,
- * matching the reference screenshots the user provided.
+ * The screen no longer carries its own baked GUI art: the whole Colourful
+ * Containers texture pack is bundled with the mod, so the background is
+ * composed at render time from the pack's crafting table texture (wooden
+ * header on top, grey panel below) exactly like the pack draws it, with a
+ * row of widget buttons in between. Future Fallen Relics windows should be
+ * composed from the bundled pack textures the same way.
  */
 public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuilderMenu> {
-    private static final ResourceLocation TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/craft_builder.png");
+    /** Bundled Colourful Containers (Kingybu) override of the vanilla texture. */
+    private static final ResourceLocation PACK_CRAFTING_TABLE =
+            ResourceLocation.withDefaultNamespace("textures/gui/container/crafting_table.png");
     private static final ResourceLocation WIDGET_BUTTON =
-            ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/widget/button.png");
+            ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/button.png");
     private static final ResourceLocation WIDGET_BUTTON_HIGHLIGHTED =
-            ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/widget/button_highlighted.png");
+            ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/button_highlighted.png");
     private static final ResourceLocation WIDGET_BUTTON_DISABLED =
-            ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/widget/button_disabled.png");
+            ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/button_disabled.png");
 
     /** Vanilla widget nine-slice border, see button.png.mcmeta. */
     private static final int WIDGET_BORDER = 3;
     private static final int WIDGET_WIDTH = 200;
     private static final int WIDGET_HEIGHT = 20;
+
+    /** Height of the wooden header copied from the pack texture. */
+    private static final int HEADER_HEIGHT = 76;
+    /** Vertical position of a plain panel row inside the pack texture. */
+    private static final int PANEL_ROW = 80;
+    /** First row of the pack's lower panel. */
+    private static final int LOWER_TOP = 76;
+    private static final int LOWER_HEIGHT = 90;
 
     /** Vanilla container label grey for the light lower panel. */
     private static final int LABEL_COLOR = 0xFF404040;
@@ -36,7 +48,7 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     public CraftBuilderScreen(CraftBuilderMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = 176;
-        imageHeight = 190;
+        imageHeight = HEADER_HEIGHT + 24 + LOWER_HEIGHT;
     }
 
     @Override
@@ -74,7 +86,15 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
+        // Wooden header, 1:1 from the bundled pack texture.
+        graphics.blit(PACK_CRAFTING_TABLE, leftPos, topPos, 0, 0f, 0f,
+                imageWidth, HEADER_HEIGHT, 256, 256);
+        // Button band: one plain panel row stretched to 24 px.
+        graphics.blit(PACK_CRAFTING_TABLE, leftPos, topPos + HEADER_HEIGHT, 0, 0f, PANEL_ROW,
+                imageWidth, 24, 256, 256);
+        // Lower inventory panel, shifted below the button row.
+        graphics.blit(PACK_CRAFTING_TABLE, leftPos, topPos + HEADER_HEIGHT + 24, 0, 0f, LOWER_TOP,
+                imageWidth, LOWER_HEIGHT, 256, 256);
     }
 
     @Override
@@ -116,12 +136,10 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
 
         @Override
         protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            // The button bodies are baked into the background texture so the
-            // controls stay visible even in the raw GUI file; at runtime we add
-            // only the hover glow, the pictogram and the label.
-            if (isHoveredOrFocused()) {
-                graphics.fill(getX() + 1, getY() + 1, getX() + width - 1, getY() + height - 1, 0x26FFFFFF);
-            }
+            ResourceLocation sprite = !active
+                    ? WIDGET_BUTTON_DISABLED
+                    : isHoveredOrFocused() ? WIDGET_BUTTON_HIGHLIGHTED : WIDGET_BUTTON;
+            blitWidget(graphics, sprite, getX(), getY(), width, height);
             int textColor = !active ? 0xFFA0A0A0 : isHoveredOrFocused() ? 0xFFFFA0 : 0xFFFFFFFF;
             if (menuButtonId == 0) {
                 // A tiny pictogram left of the label: a 3x3 grid for shaped,
