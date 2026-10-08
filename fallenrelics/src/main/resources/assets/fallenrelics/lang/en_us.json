@@ -12,8 +12,6 @@
   "fallenrelics.mode.hybrid2": "3×3, then 2×2",
   "fallenrelics.mode.small": "2×2 only",
   "fallenrelics.mode.large": "3×3 only",
-  "fallenrelics.mode.hollow": "3×3 hollow (eight ingredients)",
-  "fallenrelics.mode.unpackage": "1×1 only",
   "fallenrelics.hint": "Sneak + right-click to cycle modes",
   "fallenrelics.input_output": "Items can enter and leave through any side",
   "fallenrelics.recipes": "Uses crafting recipes registered by the game",

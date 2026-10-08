@@ -4,9 +4,7 @@ public enum PackagerMode {
     HYBRID("fallenrelics.mode.hybrid"),
     HYBRID2("fallenrelics.mode.hybrid2"),
     SMALL("fallenrelics.mode.small"),
-    LARGE("fallenrelics.mode.large"),
-    HOLLOW("fallenrelics.mode.hollow"),
-    UNPACKAGE("fallenrelics.mode.unpackage");
+    LARGE("fallenrelics.mode.large");
 
     private final String translationKey;
 

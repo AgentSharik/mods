@@ -124,8 +124,31 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
                     : isHoveredOrFocused() ? WIDGET_BUTTON_HIGHLIGHTED : WIDGET_BUTTON;
             blitWidget(graphics, sprite, getX(), getY(), width, height);
             int textColor = !active ? 0xFFA0A0A0 : isHoveredOrFocused() ? 0xFFFFA0 : 0xFFFFFFFF;
-            int textX = getX() + (width - font.width(getMessage())) / 2;
-            graphics.drawString(font, getMessage(), textX, getY() + (height - 8) / 2, textColor, true);
+            if (menuButtonId == 0) {
+                // A tiny pictogram left of the label: a 3x3 grid for shaped,
+                // scattered dots for shapeless.
+                boolean shaped = !menu.isShapeless();
+                int gx = getX() + 6;
+                int gy = getY() + (height - 9) / 2;
+                if (shaped) {
+                    for (int row = 0; row < 3; row++) {
+                        for (int column = 0; column < 3; column++) {
+                            graphics.fill(gx + column * 3, gy + row * 3,
+                                    gx + column * 3 + 2, gy + row * 3 + 2, textColor);
+                        }
+                    }
+                } else {
+                    graphics.fill(gx, gy + 4, gx + 2, gy + 6, textColor);
+                    graphics.fill(gx + 3, gy, gx + 5, gy + 2, textColor);
+                    graphics.fill(gx + 6, gy + 5, gx + 8, gy + 7, textColor);
+                    graphics.fill(gx + 5, gy + 2, gx + 7, gy + 4, textColor);
+                }
+                int textX = getX() + 18 + (width - 18 - font.width(getMessage())) / 2;
+                graphics.drawString(font, getMessage(), textX, getY() + (height - 8) / 2, textColor, true);
+            } else {
+                int textX = getX() + (width - font.width(getMessage())) / 2;
+                graphics.drawString(font, getMessage(), textX, getY() + (height - 8) / 2, textColor, true);
+            }
         }
 
         @Override

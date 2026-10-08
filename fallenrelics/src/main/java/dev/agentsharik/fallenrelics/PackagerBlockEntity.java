@@ -19,6 +19,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
@@ -78,7 +79,8 @@ public final class PackagerBlockEntity extends BlockEntity {
         while (craftsCompleted < craftsPerCycle && System.nanoTime() < deadline && tryCraft(deadline)) {
             craftsCompleted++;
         }
-        tickDelay = craftsCompleted > 0 ? NORMAL_DELAY : IDLE_DELAY;
+        boolean pushed = pushOutputToAdjacent();
+        tickDelay = craftsCompleted > 0 || pushed ? NORMAL_DELAY : IDLE_DELAY;
     }
 
     private int getCraftsPerCycle(BlockState state) {
@@ -138,6 +140,21 @@ public final class PackagerBlockEntity extends BlockEntity {
         List<Ingredient> ingredients = recipe.getIngredients();
         if (ingredients.isEmpty()) {
             return false;
+        }
+
+        if (plan.width() == 3) {
+            // A 3x3 cycle only ever crafts recipes that fill the whole grid,
+            // centre included (like a coal block). Anything else is skipped
+            // before any layout work happens.
+            int nonEmpty = 0;
+            for (Ingredient ingredient : ingredients) {
+                if (ingredient != null && !ingredient.isEmpty()) {
+                    nonEmpty++;
+                }
+            }
+            if (nonEmpty != plan.allowedSlots().length) {
+                return false;
+            }
         }
 
         if (tryUnshapedRecipe(recipe, ingredients, plan, availableItems, deadline)) {
@@ -424,14 +441,52 @@ public final class PackagerBlockEntity extends BlockEntity {
         }
     }
 
+    /**
+     * Drains finished products into an adjacent inventory (a chest and the like).
+     * Only the OUTPUT side ever leaves the machine this way; inputs still arrive
+     * through the machine's own slots.
+     */
+    private boolean pushOutputToAdjacent() {
+        if (level == null || level.isClientSide) {
+            return false;
+        }
+        boolean movedAnything = false;
+        for (int slot = 0; slot < outputInventory.getSlots(); slot++) {
+            ItemStack stack = outputInventory.getStackInSlot(slot);
+            if (stack.isEmpty()) {
+                continue;
+            }
+            for (Direction side : Direction.values()) {
+                if (stack.isEmpty()) {
+                    break;
+                }
+                IItemHandler target = level.getCapability(
+                        Capabilities.ItemHandler.BLOCK, worldPosition.relative(side), side.getOpposite());
+                if (target == null) {
+                    continue;
+                }
+                for (int targetSlot = 0; targetSlot < target.getSlots() && !stack.isEmpty(); targetSlot++) {
+                    if (!target.isItemValid(targetSlot, stack)) {
+                        continue;
+                    }
+                    stack = target.insertItem(targetSlot, stack, false);
+                }
+            }
+            if (!ItemStack.isSameItemSameComponents(stack, outputInventory.getStackInSlot(slot))
+                    || stack.getCount() != outputInventory.getStackInSlot(slot).getCount()) {
+                outputInventory.setStackInSlot(slot, stack);
+                movedAnything = true;
+            }
+        }
+        return movedAnything;
+    }
+
     private List<GridPlan> getPlansForMode() {
         return switch (mode) {
             case HYBRID -> List.of(GridPlan.square(2), GridPlan.square(3));
             case HYBRID2 -> List.of(GridPlan.square(3), GridPlan.square(2));
             case SMALL -> List.of(GridPlan.square(2));
             case LARGE -> List.of(GridPlan.square(3));
-            case HOLLOW -> List.of(GridPlan.hollowThreeByThree());
-            case UNPACKAGE -> List.of(GridPlan.single());
         };
     }
 
@@ -509,14 +564,6 @@ public final class PackagerBlockEntity extends BlockEntity {
                 slots[i] = i;
             }
             return new GridPlan(size, size, slots);
-        }
-
-        private static GridPlan hollowThreeByThree() {
-            return new GridPlan(3, 3, new int[]{0, 1, 2, 3, 5, 6, 7, 8});
-        }
-
-        private static GridPlan single() {
-            return new GridPlan(1, 1, new int[]{0});
         }
 
         private boolean allows(int slot) {

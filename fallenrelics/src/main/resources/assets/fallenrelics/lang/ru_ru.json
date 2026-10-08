@@ -12,8 +12,6 @@
   "fallenrelics.mode.hybrid2": "Сначала 3×3, затем 2×2",
   "fallenrelics.mode.small": "Только 2×2",
   "fallenrelics.mode.large": "Только 3×3",
-  "fallenrelics.mode.hollow": "Полая 3×3 (8 ингредиентов)",
-  "fallenrelics.mode.unpackage": "Только 1×1",
   "fallenrelics.hint": "Shift + ПКМ — сменить режим",
   "fallenrelics.input_output": "Предметы можно вводить и извлекать с любой стороны",
   "fallenrelics.recipes": "Использует рецепты крафта, зарегистрированные в игре",
