@@ -28,8 +28,8 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     private static final int WIDGET_WIDTH = 200;
     private static final int WIDGET_HEIGHT = 20;
 
-    /** Vanilla container label grey. */
-    private static final int LABEL_COLOR = 0xFF404040;
+    /** Light lavender matching the Craft Builder block's pale trim, readable on the tinted background. */
+    private static final int LABEL_COLOR = 0xFFD3CCDC;
 
     private ActionWidget modeButton;
 
@@ -119,11 +119,22 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
 
         @Override
         protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            ResourceLocation sprite = !active
-                    ? WIDGET_BUTTON_DISABLED
-                    : isHoveredOrFocused() ? WIDGET_BUTTON_HIGHLIGHTED : WIDGET_BUTTON;
-            blitWidget(graphics, sprite, getX(), getY(), width, height);
-            int textColor = !active ? 0xFFA0A0A0 : isHoveredOrFocused() ? 0xFFFFA0 : 0xFFFFFFFF;
+            if (menuButtonId == 0) {
+                // The recessed toggle well is baked into the background texture,
+                // so the switch stays visible even in the raw GUI file; at runtime
+                // we only add a hover glow, the pictogram and the label.
+                if (isHoveredOrFocused()) {
+                    graphics.fill(getX() + 1, getY() + 1, getX() + width - 1, getY() + height - 1, 0x26FFFFFF);
+                }
+            } else {
+                ResourceLocation sprite = !active
+                        ? WIDGET_BUTTON_DISABLED
+                        : isHoveredOrFocused() ? WIDGET_BUTTON_HIGHLIGHTED : WIDGET_BUTTON;
+                blitWidget(graphics, sprite, getX(), getY(), width, height);
+            }
+            int textColor = menuButtonId == 0
+                    ? (!active ? 0xFF8A8096 : isHoveredOrFocused() ? 0xFFFFA0 : 0xFFE9E2F4)
+                    : (!active ? 0xFFA0A0A0 : isHoveredOrFocused() ? 0xFFFFA0 : 0xFFFFFFFF);
             if (menuButtonId == 0) {
                 // A tiny pictogram left of the label: a 3x3 grid for shaped,
                 // scattered dots for shapeless.

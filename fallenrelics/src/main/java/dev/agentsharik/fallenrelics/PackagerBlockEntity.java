@@ -143,24 +143,57 @@ public final class PackagerBlockEntity extends BlockEntity {
         }
 
         if (plan.width() == 3) {
-            // A 3x3 cycle only ever crafts recipes that fill the whole grid,
-            // centre included (like a coal block). Anything else is skipped
-            // before any layout work happens.
-            int nonEmpty = 0;
-            for (Ingredient ingredient : ingredients) {
-                if (ingredient != null && !ingredient.isEmpty()) {
-                    nonEmpty++;
-                }
-            }
-            if (nonEmpty != plan.allowedSlots().length) {
-                return false;
-            }
+            return tryFullGridRecipe(recipe, ingredients, availableItems);
         }
 
         if (tryUnshapedRecipe(recipe, ingredients, plan, availableItems, deadline)) {
             return true;
         }
         return tryIngredientLayouts(recipe, ingredients, plan, availableItems, deadline);
+    }
+
+    /**
+     * A 3x3 cycle only compresses nine identical resources into their block
+     * form, exactly like the coal block recipe: same full-grid shape, same
+     * single ingredient in every slot. The check is a direct scan over the
+     * input pools and never backtracks, so it cannot stall the server tick.
+     */
+    private boolean tryFullGridRecipe(CraftingRecipe recipe, List<Ingredient> ingredients, List<PoolEntry> availableItems) {
+        int nonEmpty = 0;
+        for (Ingredient ingredient : ingredients) {
+            if (ingredient != null && !ingredient.isEmpty()) {
+                nonEmpty++;
+            }
+        }
+        if (nonEmpty != 9) {
+            return false;
+        }
+
+        for (PoolEntry pool : availableItems) {
+            if (pool.count() < 9) {
+                continue;
+            }
+            boolean allMatch = true;
+            for (Ingredient ingredient : ingredients) {
+                if (ingredient == null || ingredient.isEmpty() || !ingredient.test(pool.stack())) {
+                    allMatch = false;
+                    break;
+                }
+            }
+            if (!allMatch) {
+                continue;
+            }
+
+            NonNullList<ItemStack> grid = NonNullList.withSize(9, ItemStack.EMPTY);
+            for (int i = 0; i < 9; i++) {
+                grid.set(i, pool.stack().copyWithCount(1));
+            }
+            CraftingInput input = CraftingInput.of(3, 3, grid);
+            if (recipe.matches(input, level) && craftRecipe(recipe, input)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean tryUnshapedRecipe(
