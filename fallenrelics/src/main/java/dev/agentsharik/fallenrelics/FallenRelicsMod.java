@@ -1,5 +1,6 @@
 package dev.agentsharik.fallenrelics;
 
+import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
@@ -13,6 +14,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 
@@ -28,12 +30,23 @@ public final class FallenRelicsMod {
 
         modEventBus.addListener(this::addCreativeContent);
         modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(CraftBuilderScripts::addRecipePack);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onPackagerRightClick);
         NeoForge.EVENT_BUS.addListener(this::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(this::registerCommands);
     }
 
     private void onServerStarted(ServerStartedEvent event) {
         CraftBuilderScripts.migrateLegacyDatapack(event.getServer());
+    }
+
+    private void registerCommands(RegisterCommandsEvent event) {
+        event.getDispatcher().register(Commands.literal("fallenrelics")
+                .requires(source -> source.hasPermission(2))
+                .then(Commands.literal("reload").executes(context -> {
+                    CraftBuilderScripts.reloadFromCommand(context.getSource().getServer(), context.getSource());
+                    return 1;
+                })));
     }
 
     private void addCreativeContent(BuildCreativeModeTabContentsEvent event) {

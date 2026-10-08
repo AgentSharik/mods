@@ -31,10 +31,3 @@ type="optional"
 versionRange="[1,)"
 ordering="AFTER"
 side="BOTH"
-
-[[dependencies.${mod_id}]]
-modId="crafttweaker"
-type="required"
-versionRange="[1,)"
-ordering="AFTER"
-side="BOTH"

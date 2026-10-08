@@ -35,10 +35,10 @@
   "gui.fallenrelics.craft_builder.add": "Добавить",
   "gui.fallenrelics.craft_builder.remove": "Удалить",
   "fallenrelics.craft_builder.invalid": "Заполните хотя бы один ингредиент и слот результата.",
-  "fallenrelics.craft_builder.saved": "Скрипт рецепта %s перезагружен и отправлен игрокам.",
-  "fallenrelics.craft_builder.removed": "Рецепт %s удалён.",
+  "fallenrelics.craft_builder.saved": "Скрипт %s скомпилирован; рецепт отправлен игрокам.",
+  "fallenrelics.craft_builder.removed": "Скрипт рецепта %s удалён.",
   "fallenrelics.craft_builder.not_found": "Такой скрипт рецепта не найден.",
-  "fallenrelics.craft_builder.crafttweaker_required": "Для работы Крафтбилдера необходим CraftTweaker.",
+  "fallenrelics.craft_builder.reloaded": "Скрипты Fallen Relics перезагружены; рецепты отправлены игрокам.",
   "fallenrelics.craft_builder.reload_error": "Не удалось перезагрузить скрипты. Проверьте журнал сервера.",
-  "fallenrelics.craft_builder.error": "Не удалось сохранить ZenScript-файл. Проверьте права на папку scripts сервера."
+  "fallenrelics.craft_builder.error": "Не удалось сохранить файл .frs. Проверьте права на папку scripts сервера."
 }
