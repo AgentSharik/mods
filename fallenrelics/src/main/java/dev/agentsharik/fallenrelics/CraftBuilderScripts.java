@@ -211,8 +211,9 @@ public final class CraftBuilderScripts {
         }
     }
 
-    private static boolean isActive(ResourceLocation id) {
-        return activeScriptRecipes.containsKey(id);
+    private static boolean isActive(String recipeId) {
+        return activeScriptRecipes.containsKey(
+                ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, recipeId));
     }
 
     /** Inserts (or updates) all scripted recipes into the live RecipeManager and syncs clients. */
