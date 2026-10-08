@@ -34,6 +34,7 @@ public final class PackagerBlockEntity extends BlockEntity {
         protected void onContentsChanged(int slot) {
             tickCounter = 0;
             tickDelay = NORMAL_DELAY;
+            searchCooldown = 0;
             markDirtyAndNotify();
         }
     };
@@ -41,6 +42,8 @@ public final class PackagerBlockEntity extends BlockEntity {
     private final ItemStackHandler outputInventory = new ItemStackHandler(OUTPUT_SLOTS) {
         @Override
         protected void onContentsChanged(int slot) {
+            tickCounter = 0;
+            searchCooldown = 0;
             markDirtyAndNotify();
         }
     };
@@ -50,6 +53,7 @@ public final class PackagerBlockEntity extends BlockEntity {
     private PackagerMode mode = PackagerMode.HYBRID;
     private int tickCounter;
     private int tickDelay = NORMAL_DELAY;
+    private int searchCooldown;
 
     public PackagerBlockEntity(BlockPos pos, BlockState state) {
         super(ModContent.PACKAGER_BLOCK_ENTITY.get(), pos, state);
@@ -66,13 +70,45 @@ public final class PackagerBlockEntity extends BlockEntity {
             return;
         }
         tickCounter = 0;
+        if (searchCooldown > 0) {
+            // An earlier search burned its whole budget without crafting anything;
+            // pause the search instead of re-running the expensive scan every cycle.
+            searchCooldown--;
+            tickDelay = IDLE_DELAY;
+            return;
+        }
+        if (isOutputFull()) {
+            tickDelay = IDLE_DELAY;
+            return;
+        }
 
         int craftsCompleted = 0;
+        boolean searchAborted = false;
         int craftsPerCycle = getCraftsPerCycle(state);
-        while (craftsCompleted < craftsPerCycle && tryCraft()) {
+        List<RecipeHolder<CraftingRecipe>> recipes = level.getRecipeManager()
+                .getAllRecipesFor(RecipeType.CRAFTING);
+        while (craftsCompleted < craftsPerCycle) {
+            SearchBudget budget = new SearchBudget();
+            if (!tryCraft(recipes, budget)) {
+                searchAborted = budget.exhausted;
+                break;
+            }
             craftsCompleted++;
         }
+        if (searchAborted) {
+            searchCooldown = 100;
+        }
         tickDelay = craftsCompleted > 0 ? NORMAL_DELAY : IDLE_DELAY;
+    }
+
+    private boolean isOutputFull() {
+        for (int slot = 0; slot < outputInventory.getSlots(); slot++) {
+            ItemStack stack = outputInventory.getStackInSlot(slot);
+            if (stack.isEmpty() || stack.getCount() < stack.getMaxStackSize()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private int getCraftsPerCycle(BlockState state) {
@@ -86,7 +122,7 @@ public final class PackagerBlockEntity extends BlockEntity {
         };
     }
 
-    private boolean tryCraft() {
+    private boolean tryCraft(List<RecipeHolder<CraftingRecipe>> recipes, SearchBudget budget) {
         if (level == null || level.isClientSide) {
             return false;
         }
@@ -96,15 +132,16 @@ public final class PackagerBlockEntity extends BlockEntity {
             return false;
         }
 
-        List<RecipeHolder<CraftingRecipe>> recipes = level.getRecipeManager()
-                .getAllRecipesFor(RecipeType.CRAFTING);
         for (GridPlan plan : getPlansForMode()) {
             for (RecipeHolder<CraftingRecipe> holder : recipes) {
+                if (!budget.spend()) {
+                    return false;
+                }
                 CraftingRecipe recipe = holder.value();
                 if (!recipe.canCraftInDimensions(plan.width(), plan.height())) {
                     continue;
                 }
-                if (tryRecipe(recipe, plan, availableItems)) {
+                if (tryRecipe(recipe, plan, availableItems, budget)) {
                     return true;
                 }
             }
@@ -112,34 +149,28 @@ public final class PackagerBlockEntity extends BlockEntity {
         return false;
     }
 
-    private boolean tryRecipe(CraftingRecipe recipe, GridPlan plan, List<PoolEntry> availableItems) {
+    private boolean tryRecipe(
+            CraftingRecipe recipe, GridPlan plan, List<PoolEntry> availableItems, SearchBudget budget) {
         List<Ingredient> ingredients = recipe.getIngredients();
         if (ingredients.isEmpty()) {
             return false;
         }
 
-        if (tryUnshapedRecipe(recipe, ingredients, plan, availableItems)) {
+        // Shapeless recipes match any placement, so one canonical layout is enough,
+        // and shaped recipes are covered by the offset scan below. Permuting slots
+        // like older builds did is exactly what froze the world on 3x3 crafts.
+        if (tryUnshapedRecipe(recipe, ingredients, plan, availableItems, budget)) {
             return true;
         }
-        if (tryIngredientLayouts(recipe, ingredients, plan, availableItems)) {
-            return true;
-        }
-
-        List<Ingredient> required = ingredients.stream()
-                .filter(ingredient -> ingredient != null && !ingredient.isEmpty())
-                .toList();
-        if (required.isEmpty() || required.size() > 6 || required.size() > plan.allowedSlots().length) {
-            return false;
-        }
-        return tryCustomPlacements(recipe, required, plan, availableItems, 0,
-                new boolean[plan.allowedSlots().length], new ArrayList<>());
+        return tryIngredientLayouts(recipe, ingredients, plan, availableItems, budget);
     }
 
     private boolean tryUnshapedRecipe(
             CraftingRecipe recipe,
             List<Ingredient> ingredients,
             GridPlan plan,
-            List<PoolEntry> availableItems) {
+            List<PoolEntry> availableItems,
+            SearchBudget budget) {
         List<Ingredient> required = ingredients.stream()
                 .filter(ingredient -> ingredient != null && !ingredient.isEmpty())
                 .toList();
@@ -153,7 +184,7 @@ public final class PackagerBlockEntity extends BlockEntity {
             requirements.add(new IngredientSlot(allowedSlots[i], required.get(i)));
         }
 
-        CraftingInput input = findMatchingInput(recipe, plan, requirements, availableItems);
+        CraftingInput input = findMatchingInput(recipe, plan, requirements, availableItems, budget);
         return input != null && craftRecipe(recipe, input);
     }
 
@@ -161,7 +192,8 @@ public final class PackagerBlockEntity extends BlockEntity {
             CraftingRecipe recipe,
             List<Ingredient> ingredients,
             GridPlan plan,
-            List<PoolEntry> availableItems) {
+            List<PoolEntry> availableItems,
+            SearchBudget budget) {
         int ingredientCount = ingredients.size();
         if (ingredientCount > plan.width() * plan.height()) {
             return false;
@@ -183,6 +215,9 @@ public final class PackagerBlockEntity extends BlockEntity {
             for (boolean mirrored : new boolean[]{false, true}) {
                 for (int offsetY = 0; offsetY <= plan.height() - recipeHeight; offsetY++) {
                     for (int offsetX = 0; offsetX <= plan.width() - recipeWidth; offsetX++) {
+                        if (!budget.spend()) {
+                            return false;
+                        }
                         List<IngredientSlot> requirements = new ArrayList<>();
                         boolean fitsPlan = true;
                         for (int y = 0; y < recipeHeight && fitsPlan; y++) {
@@ -204,7 +239,7 @@ public final class PackagerBlockEntity extends BlockEntity {
                             continue;
                         }
 
-                        CraftingInput input = findMatchingInput(recipe, plan, requirements, availableItems);
+                        CraftingInput input = findMatchingInput(recipe, plan, requirements, availableItems, budget);
                         if (input != null && craftRecipe(recipe, input)) {
                             return true;
                         }
@@ -215,42 +250,13 @@ public final class PackagerBlockEntity extends BlockEntity {
         return false;
     }
 
-    private boolean tryCustomPlacements(
-            CraftingRecipe recipe,
-            List<Ingredient> ingredients,
-            GridPlan plan,
-            List<PoolEntry> availableItems,
-            int ingredientIndex,
-            boolean[] usedPositions,
-            List<IngredientSlot> requirements) {
-        if (ingredientIndex == ingredients.size()) {
-            CraftingInput input = findMatchingInput(recipe, plan, requirements, availableItems);
-            return input != null && craftRecipe(recipe, input);
-        }
-
-        int[] allowedSlots = plan.allowedSlots();
-        for (int position = 0; position < allowedSlots.length; position++) {
-            if (usedPositions[position]) {
-                continue;
-            }
-            usedPositions[position] = true;
-            requirements.add(new IngredientSlot(allowedSlots[position], ingredients.get(ingredientIndex)));
-            if (tryCustomPlacements(recipe, ingredients, plan, availableItems,
-                    ingredientIndex + 1, usedPositions, requirements)) {
-                return true;
-            }
-            requirements.remove(requirements.size() - 1);
-            usedPositions[position] = false;
-        }
-        return false;
-    }
-
     @Nullable
     private CraftingInput findMatchingInput(
             CraftingRecipe recipe,
             GridPlan plan,
             List<IngredientSlot> requirements,
-            List<PoolEntry> availableItems) {
+            List<PoolEntry> availableItems,
+            SearchBudget budget) {
         List<IngredientSlot> orderedRequirements = new ArrayList<>(requirements);
         orderedRequirements.sort(Comparator.comparingInt(slot -> countCompatiblePools(slot.ingredient(), availableItems)));
         for (IngredientSlot requirement : orderedRequirements) {
@@ -266,7 +272,7 @@ public final class PackagerBlockEntity extends BlockEntity {
         }
         InputHolder matchedInput = new InputHolder();
         if (assignIngredients(recipe, plan, orderedRequirements, availableItems,
-                remainingCounts, grid, 0, matchedInput)) {
+                remainingCounts, grid, 0, matchedInput, budget)) {
             return matchedInput.input;
         }
         return null;
@@ -280,7 +286,11 @@ public final class PackagerBlockEntity extends BlockEntity {
             int[] remainingCounts,
             NonNullList<ItemStack> grid,
             int requirementIndex,
-            InputHolder matchedInput) {
+            InputHolder matchedInput,
+            SearchBudget budget) {
+        if (!budget.spend()) {
+            return false;
+        }
         if (requirementIndex == requirements.size()) {
             NonNullList<ItemStack> gridCopy = NonNullList.withSize(grid.size(), ItemStack.EMPTY);
             for (int i = 0; i < grid.size(); i++) {
@@ -304,7 +314,7 @@ public final class PackagerBlockEntity extends BlockEntity {
             remainingCounts[itemIndex]--;
             grid.set(requirement.gridSlot(), item.stack().copyWithCount(1));
             if (assignIngredients(recipe, plan, requirements, availableItems,
-                    remainingCounts, grid, requirementIndex + 1, matchedInput)) {
+                    remainingCounts, grid, requirementIndex + 1, matchedInput, budget)) {
                 return true;
             }
             grid.set(requirement.gridSlot(), ItemStack.EMPTY);
@@ -539,6 +549,22 @@ public final class PackagerBlockEntity extends BlockEntity {
     }
 
     private record IngredientSlot(int gridSlot, Ingredient ingredient) {}
+
+    /** Caps the amount of search work per craft attempt so a tick can never hang. */
+    private static final class SearchBudget {
+        private static final int NODE_LIMIT = 20000;
+
+        private int remaining = NODE_LIMIT;
+        private boolean exhausted;
+
+        private boolean spend() {
+            if (remaining-- <= 0) {
+                exhausted = true;
+                return false;
+            }
+            return true;
+        }
+    }
 
     private static final class PoolEntry {
         private final ItemStack stack;

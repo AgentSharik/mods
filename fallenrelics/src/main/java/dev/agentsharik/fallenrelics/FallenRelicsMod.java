@@ -14,6 +14,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
@@ -30,14 +31,19 @@ public final class FallenRelicsMod {
 
         modEventBus.addListener(this::addCreativeContent);
         modEventBus.addListener(this::registerCapabilities);
-        modEventBus.addListener(CraftBuilderScripts::addRecipePack);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onPackagerRightClick);
         NeoForge.EVENT_BUS.addListener(this::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(this::onDatapackSync);
         NeoForge.EVENT_BUS.addListener(this::registerCommands);
     }
 
     private void onServerStarted(ServerStartedEvent event) {
         CraftBuilderScripts.migrateLegacyDatapack(event.getServer());
+        CraftBuilderScripts.loadForServer(event.getServer());
+    }
+
+    private void onDatapackSync(OnDatapackSyncEvent event) {
+        CraftBuilderScripts.refreshBeforeDatapackSync(event.getPlayerList().getServer());
     }
 
     private void registerCommands(RegisterCommandsEvent event) {
