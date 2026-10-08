@@ -33,9 +33,9 @@
   "gui.fallenrelics.craft_builder.add": "Add recipe",
   "gui.fallenrelics.craft_builder.remove": "Remove recipe",
   "fallenrelics.craft_builder.invalid": "Add at least one ingredient and a result item.",
-  "fallenrelics.craft_builder.saved": "Recipe %s saved; the recipe list is reloading…",
-  "fallenrelics.craft_builder.removed": "Recipe %s removed; the recipe list is reloading…",
+  "fallenrelics.craft_builder.saved": "Recipe %s saved.",
+  "fallenrelics.craft_builder.removed": "Recipe %s removed.",
   "fallenrelics.craft_builder.not_found": "That recipe script was not found.",
-  "fallenrelics.craft_builder.reloaded": "Recipe datapack recompiled; the recipe list is reloading…",
+  "fallenrelics.craft_builder.reloaded": "Fallen Relics scripts reloaded; recipes updated.",
   "fallenrelics.craft_builder.error": "Could not save the recipe file. Check the server scripts-folder permissions."
 }

@@ -3,7 +3,10 @@ package dev.agentsharik.fallenrelics;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.JsonOps;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -12,9 +15,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HexFormat;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,23 +27,34 @@ import java.util.stream.Stream;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.packs.repository.PackRepository;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 /**
- * Fallen Relics .frs script storage. Scripts are compiled to plain recipe JSON
- * inside a generated datapack in the world folder, and datapacks are reloaded
- * through the vanilla resource-reload path — exactly what /reload does — so the
- * recipes flow through RecipeManager the same way KubeJS and other datapack
- * content do. No live reflection mutation of the recipe manager is performed.
+ * Fallen Relics .frs script storage.
+ *
+ * Scripts are compiled twice: into plain recipe JSON inside a generated
+ * datapack in the world folder (loaded by the vanilla datapack machinery on
+ * startup and on any /reload, exactly like KubeJS content), and — for instant
+ * feedback — directly into the live RecipeManager maps (exposed through the
+ * mod access transformer) followed by the vanilla recipe-sync packet. No full
+ * resource reload is triggered when a recipe is added or removed, so the
+ * window never freezes and no "Reloaded" toasts appear.
  */
 public final class CraftBuilderScripts {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -55,6 +71,13 @@ public final class CraftBuilderScripts {
             Pattern.DOTALL);
     private static final Pattern ZEN_ITEM_BRACKET = Pattern.compile("<item:([^>]+)>");
     private static final Pattern ZEN_ROW = Pattern.compile("\\[([^\\[\\]]*)\\]");
+
+    /** Live RecipeManager mutation state (fields opened by the access transformer). */
+    @Nullable private static RecipeManager activeManager;
+    @Nullable private static Map<ResourceLocation, RecipeHolder<?>> byName;
+    @Nullable private static Multimap<RecipeType<?>, RecipeHolder<?>> byType;
+    private static final Map<ResourceLocation, RecipeHolder<?>> activeScriptRecipes = new LinkedHashMap<>();
+    private static final Map<ResourceLocation, RecipeHolder<?>> displacedRecipes = new LinkedHashMap<>();
 
     private CraftBuilderScripts() {}
 
@@ -75,9 +98,9 @@ public final class CraftBuilderScripts {
             Files.createDirectories(script.getParent());
             Files.writeString(script, generated.source(), StandardCharsets.UTF_8);
             compileDatapack(server);
+            applyLive(server);
             player.displayClientMessage(
                     Component.translatable("fallenrelics.craft_builder.saved", generated.id()), true);
-            requestReload(server);
         } catch (IOException | RuntimeException exception) {
             LOGGER.error("Could not save Fallen Relics recipe script for {}",
                     player.getGameProfile().getName(), exception);
@@ -121,9 +144,9 @@ public final class CraftBuilderScripts {
                 return;
             }
             compileDatapack(server);
+            applyLive(server);
             player.displayClientMessage(
                     Component.translatable("fallenrelics.craft_builder.removed", generated.id()), true);
-            requestReload(server);
         } catch (IOException | RuntimeException exception) {
             LOGGER.error("Could not remove Fallen Relics recipe script {}", generated.id(), exception);
             player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.error"), true);
@@ -131,25 +154,8 @@ public final class CraftBuilderScripts {
     }
 
     /**
-     * Async vanilla datapack reload, identical to /reload; recipes sync to
-     * clients on completion. The generated pack is (re)selected explicitly so a
-     * datapack created mid-session is picked up without restarting the world.
-     */
-    private static void requestReload(MinecraftServer server) {
-        PackRepository packRepository = server.getPackRepository();
-        packRepository.reload();
-        List<String> selected = new ArrayList<>(packRepository.getSelectedIds());
-        String packId = "file/" + DATAPACK_FOLDER;
-        if (packRepository.getAvailableIds().contains(packId) && !selected.contains(packId)) {
-            selected.add(packId);
-        }
-        server.reloadResources(selected);
-    }
-
-    /**
      * Recompiles every .frs script into the generated datapack inside the world
-     * folder. Called before the server loads its datapacks (at startup) and after
-     * every script change, before the vanilla reload picks the files up.
+     * folder so startup and any vanilla /reload see the same recipes KubeJS sees.
      */
     public static void compileDatapack(MinecraftServer server) {
         Path packRoot = datapackRoot(server);
@@ -196,6 +202,110 @@ public final class CraftBuilderScripts {
         } catch (IOException | RuntimeException exception) {
             LOGGER.error("Could not compile the Fallen Relics recipe datapack", exception);
         }
+    }
+
+    /** Inserts (or updates) all scripted recipes into the live RecipeManager and syncs clients. */
+    private static void applyLive(MinecraftServer server) {
+        try {
+            RecipeManager manager = server.getRecipeManager();
+            ensureMutableManager(manager);
+            replaceScriptRecipes(compileScripts(server));
+            syncRecipes(server, manager);
+        } catch (IOException | RuntimeException exception) {
+            LOGGER.error("Could not apply Fallen Relics scripts to the live recipe manager", exception);
+        }
+    }
+
+    private static void ensureMutableManager(RecipeManager manager) {
+        if (activeManager == manager && manager.byName == byName && manager.byType == byType) {
+            return;
+        }
+        // A vanilla (re)load replaced the maps with immutable ones; rewrap and
+        // reapply so scripted recipes survive /reload as well.
+        Multimap<RecipeType<?>, RecipeHolder<?>> mutableByType = LinkedHashMultimap.create(manager.byType);
+        Map<ResourceLocation, RecipeHolder<?>> mutableByName = new LinkedHashMap<>(manager.byName);
+        manager.byType = mutableByType;
+        manager.byName = mutableByName;
+        byType = mutableByType;
+        byName = mutableByName;
+        activeManager = manager;
+        activeScriptRecipes.clear();
+        displacedRecipes.clear();
+    }
+
+    private static void replaceScriptRecipes(List<RecipeHolder<?>> replacements) {
+        for (Map.Entry<ResourceLocation, RecipeHolder<?>> entry : activeScriptRecipes.entrySet()) {
+            ResourceLocation id = entry.getKey();
+            RecipeHolder<?> active = entry.getValue();
+            byName.remove(id, active);
+            byType.remove(active.value().getType(), active);
+
+            RecipeHolder<?> displaced = displacedRecipes.remove(id);
+            if (displaced != null) {
+                byName.put(id, displaced);
+                byType.put(displaced.value().getType(), displaced);
+            }
+        }
+        activeScriptRecipes.clear();
+
+        for (RecipeHolder<?> replacement : replacements) {
+            ResourceLocation id = replacement.id();
+            RecipeHolder<?> old = byName.get(id);
+            if (old != null && old != replacement) {
+                displacedRecipes.put(id, old);
+                byType.remove(old.value().getType(), old);
+            }
+            byName.put(id, replacement);
+            byType.put(replacement.value().getType(), replacement);
+            activeScriptRecipes.put(id, replacement);
+        }
+    }
+
+    private static void syncRecipes(MinecraftServer server, RecipeManager manager) {
+        for (ServerPlayer connected : server.getPlayerList().getPlayers()) {
+            connected.connection.send(new ClientboundUpdateRecipesPacket(manager.getOrderedRecipes()));
+        }
+    }
+
+    private static List<RecipeHolder<?>> compileScripts(MinecraftServer server) throws IOException {
+        Path scripts = scriptDirectory();
+        Files.createDirectories(scripts);
+        RegistryOps<com.google.gson.JsonElement> registryOps =
+                server.registryAccess().createSerializationContext(JsonOps.INSTANCE);
+        List<RecipeHolder<?>> recipes = new ArrayList<>();
+        Set<ResourceLocation> recipeIds = new LinkedHashSet<>();
+
+        try (Stream<Path> scriptFiles = Files.walk(scripts)) {
+            for (Path scriptFile : scriptFiles
+                    .filter(Files::isRegularFile)
+                    .filter(path -> path.getFileName().toString().endsWith(SCRIPT_EXTENSION))
+                    .sorted()
+                    .toList()) {
+                try {
+                    RecipeScript script = parseScript(Files.readString(scriptFile, StandardCharsets.UTF_8));
+                    String path = recipeIdFromScriptPath(scripts.relativize(scriptFile));
+                    ResourceLocation id = ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, path);
+                    Recipe<?> recipe = Recipe.CODEC.parse(registryOps, compileRecipe(script))
+                            .resultOrPartial(error -> LOGGER.error("Invalid recipe script {}: {}", scriptFile, error))
+                            .orElse(null);
+                    if (recipe == null) {
+                        continue;
+                    }
+                    if (recipe.getType() != RecipeType.CRAFTING) {
+                        LOGGER.error("Ignoring non-crafting recipe in script {}", scriptFile);
+                        continue;
+                    }
+                    if (!recipeIds.add(id)) {
+                        LOGGER.error("Ignoring duplicate recipe id {} in script {}", id, scriptFile);
+                        continue;
+                    }
+                    recipes.add(new RecipeHolder<>(id, recipe));
+                } catch (RuntimeException exception) {
+                    LOGGER.error("Ignoring invalid Fallen Relics script {}", scriptFile, exception);
+                }
+            }
+        }
+        return recipes;
     }
 
     /** Converts scripts and recipes from earlier CraftBuilder builds to the standalone .frs format. */
@@ -266,10 +376,11 @@ public final class CraftBuilderScripts {
         return changed;
     }
 
+    /** Recompiles the datapack and refreshes the live manager without a full reload. */
     public static void reloadFromCommand(MinecraftServer server, CommandSourceStack source) {
         compileDatapack(server);
+        applyLive(server);
         source.sendSuccess(() -> Component.translatable("fallenrelics.craft_builder.reloaded"), true);
-        requestReload(server);
     }
 
     private static Path datapackRoot(MinecraftServer server) {
@@ -444,7 +555,7 @@ public final class CraftBuilderScripts {
                     .forEach(ingredient -> ingredients.add(ingredient.toString()));
             json.add("ingredients", ingredients);
         } else {
-            java.util.Map<ResourceLocation, Character> symbols = new java.util.LinkedHashMap<>();
+            Map<ResourceLocation, Character> symbols = new LinkedHashMap<>();
             JsonArray pattern = new JsonArray();
             for (int row = 0; row < 3; row++) {
                 StringBuilder line = new StringBuilder(3);
@@ -460,7 +571,7 @@ public final class CraftBuilderScripts {
                 pattern.add(line.toString());
             }
             JsonObject key = new JsonObject();
-            for (java.util.Map.Entry<ResourceLocation, Character> entry : symbols.entrySet()) {
+            for (Map.Entry<ResourceLocation, Character> entry : symbols.entrySet()) {
                 JsonObject ingredient = new JsonObject();
                 ingredient.addProperty("item", entry.getKey().toString());
                 key.add(String.valueOf(entry.getValue()), ingredient);
@@ -569,9 +680,8 @@ public final class CraftBuilderScripts {
 
     /**
      * Finds scripts to delete: exact id, then the same fingerprint in either
-     * crafting mode (so a recipe saved as shaped can be removed while the screen
-     * is in shapeless mode and vice versa), then any script with the same output
-     * item as a last resort for recipes saved by older mod versions.
+     * crafting mode, then any script with the same output item as a last resort
+     * for recipes saved by older mod versions.
      */
     private static Set<Path> findMatchingScripts(String outputPrefix, Set<String> fingerprints) throws IOException {
         Set<Path> matches = new LinkedHashSet<>();

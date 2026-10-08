@@ -33,9 +33,9 @@
   "gui.fallenrelics.craft_builder.add": "Добавить рецепт",
   "gui.fallenrelics.craft_builder.remove": "Удалить рецепт",
   "fallenrelics.craft_builder.invalid": "Заполните хотя бы один ингредиент и слот результата.",
-  "fallenrelics.craft_builder.saved": "Рецепт %s сохранён; список рецептов обновляется…",
-  "fallenrelics.craft_builder.removed": "Рецепт %s удалён; список рецептов обновляется…",
+  "fallenrelics.craft_builder.saved": "Рецепт %s сохранён.",
+  "fallenrelics.craft_builder.removed": "Рецепт %s удалён.",
   "fallenrelics.craft_builder.not_found": "Такой скрипт рецепта не найден.",
-  "fallenrelics.craft_builder.reloaded": "Датапак рецептов пересобран; список рецептов обновляется…",
+  "fallenrelics.craft_builder.reloaded": "Скрипты Fallen Relics перечитаны; рецепты обновлены.",
   "fallenrelics.craft_builder.error": "Не удалось сохранить файл рецепта. Проверьте права на папку scripts сервера."
 }

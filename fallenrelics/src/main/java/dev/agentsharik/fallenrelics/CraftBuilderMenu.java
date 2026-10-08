@@ -84,16 +84,16 @@ public final class CraftBuilderMenu extends AbstractContainerMenu {
                         30 + column * 18, 17 + row * 18));
             }
         }
-        addSlot(new SlotItemHandler(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 121, 37));
+        addSlot(new SlotItemHandler(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 122, 36));
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
                 addPlayerSlot(playerInventory, column + row * 9 + 9,
-                        8 + column * 18, 108 + row * 18);
+                        8 + column * 18, 84 + row * 18);
             }
         }
         for (int column = 0; column < 9; column++) {
-            addPlayerSlot(playerInventory, column, 8 + column * 18, 166);
+            addPlayerSlot(playerInventory, column, 8 + column * 18, 144);
         }
 
         addDataSlots(data);

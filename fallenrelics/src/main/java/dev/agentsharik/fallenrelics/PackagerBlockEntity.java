@@ -74,9 +74,11 @@ public final class PackagerBlockEntity extends BlockEntity {
         }
         tickCounter = 0;
 
-        long deadline = System.nanoTime() + MAX_CYCLE_NANOS;
-        int craftsCompleted = 0;
+        // The time budget grows with the upgrade tier so higher tiers really can
+        // find and finish several crafts in one cycle instead of stalling in the scan.
         int craftsPerCycle = getCraftsPerCycle(state);
+        long deadline = System.nanoTime() + Math.min(12_000_000L, MAX_CYCLE_NANOS + 1_000_000L * craftsPerCycle);
+        int craftsCompleted = 0;
         while (craftsCompleted < craftsPerCycle && System.nanoTime() < deadline && tryCraft(deadline)) {
             craftsCompleted++;
         }
@@ -122,16 +124,18 @@ public final class PackagerBlockEntity extends BlockEntity {
                 recipeScanIndex = index;
                 return false;
             }
-            CraftingRecipe recipe = recipes.get(index).value();
-            for (GridPlan plan : plans) {
-                if (!recipe.canCraftInDimensions(plan.width(), plan.height())) {
-                    continue;
+                CraftingRecipe recipe = recipes.get(index).value();
+                for (GridPlan plan : plans) {
+                    if (!recipe.canCraftInDimensions(plan.width(), plan.height())) {
+                        continue;
+                    }
+                    if (tryRecipe(recipe, plan, availableItems, deadline)) {
+                        // Keep the index on this recipe: pipes usually keep feeding
+                        // the same items, so the next cycle crafts it again at once.
+                        recipeScanIndex = index;
+                        return true;
+                    }
                 }
-                if (tryRecipe(recipe, plan, availableItems, deadline)) {
-                    recipeScanIndex = (index + 1) % total;
-                    return true;
-                }
-            }
         }
         recipeScanIndex = 0;
         return false;

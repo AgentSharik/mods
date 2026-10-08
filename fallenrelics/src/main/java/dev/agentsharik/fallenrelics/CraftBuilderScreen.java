@@ -2,6 +2,7 @@ package dev.agentsharik.fallenrelics;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -9,11 +10,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 /**
- * The window is the bundled Colourful Containers (Kingybu) pack art, drawn
- * 1:1 with no custom chrome: shaped mode shows the pack's crafting table GUI,
- * shapeless mode shows the pack's furnace GUI. No block title is drawn.
- * The three action buttons (add / remove / mode) live in a vertical column
- * right of the window, icon-only, like the vanilla recipe-book button spot.
+ * The window is the bundled Colourful Containers (Kingybu) pack art drawn 1:1,
+ * exactly like the vanilla screens: shaped mode is the crafting table GUI,
+ * shapeless mode is the furnace GUI (its printed input slots and flame are
+ * covered by a wall patch and the 3x3 editor grid is drawn in their place).
+ * No block caption is drawn. The three actions (add / remove / mode) are
+ * border-less icon buttons in a column right of the window, mirroring the
+ * vanilla recipe-book button spot.
  */
 public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuilderMenu> {
     /** Bundled Colourful Containers (Kingybu) overrides of the vanilla textures. */
@@ -24,27 +27,26 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     /** Vanilla slot frame, drawn for the 3x3 grid on the furnace background. */
     private static final ResourceLocation SLOT_SPRITE =
             ResourceLocation.withDefaultNamespace("textures/gui/sprites/container/slot.png");
-    private static final ResourceLocation WIDGET_BUTTON =
-            ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/button.png");
-    private static final ResourceLocation WIDGET_BUTTON_HIGHLIGHTED =
-            ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/button_highlighted.png");
     /** Mode pictograms: the machine the current mode will switch to. */
     private static final ResourceLocation FURNACE_ICON =
             ResourceLocation.withDefaultNamespace("textures/block/furnace_front.png");
     private static final ResourceLocation CRAFTING_TABLE_ICON =
             ResourceLocation.withDefaultNamespace("textures/block/crafting_table_front.png");
 
-    /** Vanilla widget nine-slice border, see button.png.mcmeta. */
-    private static final int WIDGET_BORDER = 3;
-    private static final int WIDGET_WIDTH = 200;
-    private static final int WIDGET_HEIGHT = 20;
-
     /** 3x3 grid position, identical to the vanilla crafting table layout. */
     private static final int GRID_X = 30;
     private static final int GRID_Y = 17;
+    /** Furnace wall area (right of the output frame) copied over the printed input slots. */
+    private static final int PATCH_SRC_X = 146;
+    private static final int PATCH_SRC_Y = 15;
+    private static final int PATCH_WIDTH = 22;
+    private static final int PATCH_HEIGHT = 58;
+    private static final int PATCH_DST_X = 54;
+    private static final int PATCH_DST_Y = 15;
 
     private static final int CHECK_COLOR = 0xFF55C955;
     private static final int CROSS_COLOR = 0xFFD14949;
+    private static final int HOVER_COLOR = 0x33FFFFFF;
 
     private IconButton modeButton;
 
@@ -69,7 +71,7 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         if (modeButton == null) {
             return;
         }
-        modeButton.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable(
+        modeButton.setTooltip(Tooltip.create(Component.translatable(
                 menu.isShapeless()
                         ? "gui.fallenrelics.craft_builder.to_shaped"
                         : "gui.fallenrelics.craft_builder.to_shapeless")));
@@ -91,6 +93,9 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         if (menu.isShapeless()) {
             graphics.blit(PACK_FURNACE, leftPos, topPos, 0, 0f, 0f, imageWidth, imageHeight, 256, 256);
+            // Cover the printed ingredient/fuel slots and flame with clean wall.
+            graphics.blit(PACK_FURNACE, leftPos + PATCH_DST_X, topPos + PATCH_DST_Y, 0,
+                    PATCH_SRC_X, PATCH_SRC_Y, PATCH_WIDTH, PATCH_HEIGHT, 256, 256);
             for (int row = 0; row < 3; row++) {
                 for (int column = 0; column < 3; column++) {
                     graphics.blit(SLOT_SPRITE, leftPos + GRID_X + column * 18, topPos + GRID_Y + row * 18,
@@ -112,31 +117,14 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         return false;
     }
 
-    /** Nine-slice blit of the vanilla widget texture, identical to gui scaling "nine_slice" border 3. */
-    private static void blitWidget(GuiGraphics graphics, ResourceLocation texture,
-                                   int x, int y, int width, int height) {
-        int b = WIDGET_BORDER;
-        int tw = WIDGET_WIDTH;
-        int th = WIDGET_HEIGHT;
-        graphics.blit(texture, x, y, 0, 0, b, b, tw, th);
-        graphics.blit(texture, x + width - b, y, tw - b, 0, b, b, tw, th);
-        graphics.blit(texture, x, y + height - b, 0, th - b, b, b, tw, th);
-        graphics.blit(texture, x + width - b, y + height - b, tw - b, th - b, b, b, tw, th);
-        graphics.blit(texture, x + b, y, width - 2 * b, b, b, 0, tw - 2 * b, b, tw, th);
-        graphics.blit(texture, x + b, y + height - b, width - 2 * b, b, b, th - b, tw - 2 * b, b, tw, th);
-        graphics.blit(texture, x, y + b, b, height - 2 * b, 0, b, b, th - 2 * b, tw, th);
-        graphics.blit(texture, x + width - b, y + b, b, height - 2 * b, tw - b, b, b, th - 2 * b, tw, th);
-        graphics.blit(texture, x + b, y + b, width - 2 * b, height - 2 * b, b, b, tw - 2 * b, th - 2 * b, tw, th);
-    }
-
-    /** Square icon-only button: checkmark = save recipe, cross = remove, pictogram = mode. */
+    /** Border-less icon button: checkmark = save, cross = remove, pictogram = mode. */
     private final class IconButton extends AbstractWidget {
         private final int menuButtonId;
 
         private IconButton(int x, int y, int menuButtonId) {
             super(x, y, 20, 20, Component.empty());
             this.menuButtonId = menuButtonId;
-            setTooltip(net.minecraft.client.gui.components.Tooltip.create(label()));
+            setTooltip(Tooltip.create(label()));
         }
 
         private Component label() {
@@ -151,8 +139,9 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
 
         @Override
         protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            ResourceLocation sprite = isHoveredOrFocused() ? WIDGET_BUTTON_HIGHLIGHTED : WIDGET_BUTTON;
-            blitWidget(graphics, sprite, getX(), getY(), width, height);
+            if (isHoveredOrFocused()) {
+                graphics.fill(getX(), getY(), getX() + width, getY() + height, HOVER_COLOR);
+            }
             int ox = getX() + 2;
             int oy = getY() + 2;
             switch (menuButtonId) {
