@@ -1,5 +1,6 @@
 package dev.agentsharik.fallenrelics;
 
+import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -7,67 +8,102 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 
 /**
- * The screen no longer carries its own baked GUI art: the whole Colourful
- * Containers texture pack is bundled with the mod, so the background is
- * composed at render time from the pack's crafting table texture (wooden
- * header on top, grey panel below) exactly like the pack draws it, with a
- * row of widget buttons in between. Future Fallen Relics windows should be
- * composed from the bundled pack textures the same way.
+ * The window is the bundled Colourful Containers (Kingybu) pack art, drawn
+ * 1:1 with no custom chrome: shaped mode shows the pack's crafting table GUI,
+ * shapeless mode shows the pack's furnace GUI. No block title is drawn.
+ * The three action buttons (add / remove / mode) live in a vertical column
+ * right of the window, icon-only, like the vanilla recipe-book button spot.
  */
 public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuilderMenu> {
-    /** Bundled Colourful Containers (Kingybu) override of the vanilla texture. */
+    /** Bundled Colourful Containers (Kingybu) overrides of the vanilla textures. */
     private static final ResourceLocation PACK_CRAFTING_TABLE =
             ResourceLocation.withDefaultNamespace("textures/gui/container/crafting_table.png");
+    private static final ResourceLocation PACK_FURNACE =
+            ResourceLocation.withDefaultNamespace("textures/gui/container/furnace.png");
+    /** Vanilla slot frame, drawn for the 3x3 grid on the furnace background. */
+    private static final ResourceLocation SLOT_SPRITE =
+            ResourceLocation.withDefaultNamespace("textures/gui/sprites/container/slot.png");
     private static final ResourceLocation WIDGET_BUTTON =
             ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/button.png");
     private static final ResourceLocation WIDGET_BUTTON_HIGHLIGHTED =
             ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/button_highlighted.png");
-    private static final ResourceLocation WIDGET_BUTTON_DISABLED =
-            ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/button_disabled.png");
+    /** Mode pictograms: the machine the current mode will switch to. */
+    private static final ResourceLocation FURNACE_ICON =
+            ResourceLocation.withDefaultNamespace("textures/block/furnace_front.png");
+    private static final ResourceLocation CRAFTING_TABLE_ICON =
+            ResourceLocation.withDefaultNamespace("textures/block/crafting_table_front.png");
 
     /** Vanilla widget nine-slice border, see button.png.mcmeta. */
     private static final int WIDGET_BORDER = 3;
     private static final int WIDGET_WIDTH = 200;
     private static final int WIDGET_HEIGHT = 20;
 
-    /** Height of the wooden header copied from the pack texture. */
-    private static final int HEADER_HEIGHT = 76;
-    /** Vertical position of a plain panel row inside the pack texture. */
-    private static final int PANEL_ROW = 80;
-    /** First row of the pack's lower panel. */
-    private static final int LOWER_TOP = 76;
-    private static final int LOWER_HEIGHT = 90;
+    /** 3x3 grid position, identical to the vanilla crafting table layout. */
+    private static final int GRID_X = 30;
+    private static final int GRID_Y = 17;
+    /** Result slot on the crafting-table art (inside its big output frame). */
+    private static final int RESULT_SHAPED_X = 123;
+    private static final int RESULT_SHAPED_Y = 34;
+    /** Result slot centered inside the furnace art's big output frame. */
+    private static final int RESULT_SHAPELESS_X = 120;
+    private static final int RESULT_SHAPELESS_Y = 39;
 
-    /** Vanilla container label grey for the light lower panel. */
-    private static final int LABEL_COLOR = 0xFF404040;
+    private static final int CHECK_COLOR = 0xFF55C955;
+    private static final int CROSS_COLOR = 0xFFD14949;
 
-    private ActionWidget modeButton;
+    private IconButton modeButton;
+    private boolean lastShapeless;
 
     public CraftBuilderScreen(CraftBuilderMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = 176;
-        imageHeight = HEADER_HEIGHT + 24 + LOWER_HEIGHT;
+        imageHeight = 166;
+        lastShapeless = menu.isShapeless();
     }
 
     @Override
     protected void init() {
         super.init();
-        modeButton = addRenderableWidget(new ActionWidget(
-                leftPos + 100, topPos + 78, 68, 20, modeLabel(), 0));
-        addRenderableWidget(new ActionWidget(
-                leftPos + 8, topPos + 78, 44, 20,
-                Component.translatable("gui.fallenrelics.craft_builder.add"), 1));
-        addRenderableWidget(new ActionWidget(
-                leftPos + 56, topPos + 78, 40, 20,
-                Component.translatable("gui.fallenrelics.craft_builder.remove"), 2));
+        int buttonX = leftPos + imageWidth + 4;
+        int columnTop = topPos + (imageHeight - (20 * 3 + 4 * 2)) / 2;
+        addRenderableWidget(new IconButton(buttonX, columnTop, 1));
+        addRenderableWidget(new IconButton(buttonX, columnTop + 24, 2));
+        modeButton = addRenderableWidget(new IconButton(buttonX, columnTop + 48, 0));
+        refreshModeButton();
+        applyModeLayout();
     }
 
-    private Component modeLabel() {
-        return Component.translatable(menu.isShapeless()
-                ? "gui.fallenrelics.craft_builder.mode_shapeless"
-                : "gui.fallenrelics.craft_builder.mode_shaped");
+    /** Moves the result slot to match the background art; the server ignores slot coordinates. */
+    private void applyModeLayout() {
+        List<Slot> slots = menu.slots;
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 3; column++) {
+                Slot slot = slots.get(row * 3 + column);
+                slot.x = GRID_X + column * 18;
+                slot.y = GRID_Y + row * 18;
+            }
+        }
+        Slot result = slots.get(CraftBuilderBlockEntity.RESULT_SLOT);
+        if (menu.isShapeless()) {
+            result.x = RESULT_SHAPELESS_X;
+            result.y = RESULT_SHAPELESS_Y;
+        } else {
+            result.x = RESULT_SHAPED_X;
+            result.y = RESULT_SHAPED_Y;
+        }
+    }
+
+    private void refreshModeButton() {
+        if (modeButton == null) {
+            return;
+        }
+        modeButton.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable(
+                menu.isShapeless()
+                        ? "gui.fallenrelics.craft_builder.to_shaped"
+                        : "gui.fallenrelics.craft_builder.to_shapeless")));
     }
 
     private void sendMenuButton(int buttonId) {
@@ -79,29 +115,31 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     @Override
     protected void containerTick() {
         super.containerTick();
-        if (modeButton != null) {
-            modeButton.setMessage(modeLabel());
+        if (menu.isShapeless() != lastShapeless) {
+            lastShapeless = menu.isShapeless();
+            applyModeLayout();
+            refreshModeButton();
         }
     }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        // Wooden header, 1:1 from the bundled pack texture.
-        graphics.blit(PACK_CRAFTING_TABLE, leftPos, topPos, 0, 0f, 0f,
-                imageWidth, HEADER_HEIGHT, 256, 256);
-        // Button band: one plain panel row stretched to 24 px.
-        graphics.blit(PACK_CRAFTING_TABLE, leftPos, topPos + HEADER_HEIGHT, 0, 0f, PANEL_ROW,
-                imageWidth, 24, 256, 256);
-        // Lower inventory panel, shifted below the button row.
-        graphics.blit(PACK_CRAFTING_TABLE, leftPos, topPos + HEADER_HEIGHT + 24, 0, 0f, LOWER_TOP,
-                imageWidth, LOWER_HEIGHT, 256, 256);
+        if (menu.isShapeless()) {
+            graphics.blit(PACK_FURNACE, leftPos, topPos, 0, 0f, 0f, imageWidth, imageHeight, 256, 256);
+            for (int row = 0; row < 3; row++) {
+                for (int column = 0; column < 3; column++) {
+                    graphics.blit(SLOT_SPRITE, leftPos + GRID_X + column * 18, topPos + GRID_Y + row * 18,
+                            0, 0f, 0f, 18, 18, 18, 18);
+                }
+            }
+        } else {
+            graphics.blit(PACK_CRAFTING_TABLE, leftPos, topPos, 0, 0f, 0f, imageWidth, imageHeight, 256, 256);
+        }
     }
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        // Dark plank-brown reads well on the wooden header, like the pack's own titles.
-        graphics.drawString(font, title, 8, 6, 0xFF3A2008, false);
-        graphics.drawString(font, Component.translatable("container.inventory"), 8, 100, LABEL_COLOR, false);
+        // Deliberately empty: the window carries no block caption at all.
     }
 
     @Override
@@ -126,45 +164,54 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         graphics.blit(texture, x + b, y + b, width - 2 * b, height - 2 * b, b, b, tw - 2 * b, th - 2 * b, tw, th);
     }
 
-    private final class ActionWidget extends AbstractWidget {
+    /** Square icon-only button: checkmark = save recipe, cross = remove, pictogram = mode. */
+    private final class IconButton extends AbstractWidget {
         private final int menuButtonId;
 
-        private ActionWidget(int x, int y, int width, int height, Component label, int menuButtonId) {
-            super(x, y, width, height, label);
+        private IconButton(int x, int y, int menuButtonId) {
+            super(x, y, 20, 20, Component.empty());
             this.menuButtonId = menuButtonId;
+            setTooltip(net.minecraft.client.gui.components.Tooltip.create(label()));
+        }
+
+        private Component label() {
+            return switch (menuButtonId) {
+                case 1 -> Component.translatable("gui.fallenrelics.craft_builder.add");
+                case 2 -> Component.translatable("gui.fallenrelics.craft_builder.remove");
+                default -> Component.translatable(menu.isShapeless()
+                        ? "gui.fallenrelics.craft_builder.mode_shapeless"
+                        : "gui.fallenrelics.craft_builder.mode_shaped");
+            };
         }
 
         @Override
         protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            ResourceLocation sprite = !active
-                    ? WIDGET_BUTTON_DISABLED
-                    : isHoveredOrFocused() ? WIDGET_BUTTON_HIGHLIGHTED : WIDGET_BUTTON;
+            ResourceLocation sprite = isHoveredOrFocused() ? WIDGET_BUTTON_HIGHLIGHTED : WIDGET_BUTTON;
             blitWidget(graphics, sprite, getX(), getY(), width, height);
-            int textColor = !active ? 0xFFA0A0A0 : isHoveredOrFocused() ? 0xFFFFA0 : 0xFFFFFFFF;
-            if (menuButtonId == 0) {
-                // A tiny pictogram left of the label: a 3x3 grid for shaped,
-                // scattered dots for shapeless.
-                boolean shaped = !menu.isShapeless();
-                int gx = getX() + 6;
-                int gy = getY() + (height - 9) / 2;
-                if (shaped) {
-                    for (int row = 0; row < 3; row++) {
-                        for (int column = 0; column < 3; column++) {
-                            graphics.fill(gx + column * 3, gy + row * 3,
-                                    gx + column * 3 + 2, gy + row * 3 + 2, textColor);
-                        }
-                    }
-                } else {
-                    graphics.fill(gx, gy + 4, gx + 2, gy + 6, textColor);
-                    graphics.fill(gx + 3, gy, gx + 5, gy + 2, textColor);
-                    graphics.fill(gx + 6, gy + 5, gx + 8, gy + 7, textColor);
-                    graphics.fill(gx + 5, gy + 2, gx + 7, gy + 4, textColor);
-                }
-                int textX = getX() + 18 + (width - 18 - font.width(getMessage())) / 2;
-                graphics.drawString(font, getMessage(), textX, getY() + (height - 8) / 2, textColor, true);
-            } else {
-                int textX = getX() + (width - font.width(getMessage())) / 2;
-                graphics.drawString(font, getMessage(), textX, getY() + (height - 8) / 2, textColor, true);
+            int ox = getX() + 2;
+            int oy = getY() + 2;
+            switch (menuButtonId) {
+                case 1 -> drawCheck(graphics, ox, oy);
+                case 2 -> drawCross(graphics, ox, oy);
+                default -> graphics.blit(menu.isShapeless() ? CRAFTING_TABLE_ICON : FURNACE_ICON,
+                        ox, oy, 0, 0f, 0f, 16, 16, 16, 16);
+            }
+        }
+
+        private void drawCheck(GuiGraphics graphics, int ox, int oy) {
+            int[][] pixels = {
+                    {2, 8}, {3, 9}, {4, 10}, {5, 11}, {6, 10}, {7, 9},
+                    {8, 8}, {9, 7}, {10, 6}, {11, 5}, {12, 4}
+            };
+            for (int[] pixel : pixels) {
+                graphics.fill(ox + pixel[0], oy + pixel[1], ox + pixel[0] + 2, oy + pixel[1] + 2, CHECK_COLOR);
+            }
+        }
+
+        private void drawCross(GuiGraphics graphics, int ox, int oy) {
+            for (int i = 0; i < 10; i++) {
+                graphics.fill(ox + 3 + i, oy + 3 + i, ox + 5 + i, oy + 5 + i, CROSS_COLOR);
+                graphics.fill(ox + 12 - i, oy + 3 + i, ox + 14 - i, oy + 5 + i, CROSS_COLOR);
             }
         }
 
@@ -175,6 +222,7 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
 
         @Override
         protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+            defaultButtonNarrationText(narrationElementOutput);
         }
     }
 }

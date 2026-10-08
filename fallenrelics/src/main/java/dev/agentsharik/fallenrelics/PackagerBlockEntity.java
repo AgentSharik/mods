@@ -27,8 +27,8 @@ import org.jetbrains.annotations.Nullable;
 public final class PackagerBlockEntity extends BlockEntity {
     private static final int INPUT_SLOTS = 9;
     private static final int OUTPUT_SLOTS = 9;
-    private static final int NORMAL_DELAY = 10;
-    private static final int IDLE_DELAY = 200;
+    private static final int NORMAL_DELAY = 1;
+    private static final int IDLE_DELAY = 20;
     /** Hard wall-clock budget for one crafting cycle so big modpacks never stall a tick. */
     private static final long MAX_CYCLE_NANOS = 4_000_000L;
     /** Per recipe-attempt cap on backtracking nodes. */
@@ -39,6 +39,7 @@ public final class PackagerBlockEntity extends BlockEntity {
         protected void onContentsChanged(int slot) {
             tickCounter = 0;
             tickDelay = NORMAL_DELAY;
+            recipeScanIndex = 0;
             markDirtyAndNotify();
         }
     };
@@ -139,6 +140,9 @@ public final class PackagerBlockEntity extends BlockEntity {
     private boolean tryRecipe(CraftingRecipe recipe, GridPlan plan, List<PoolEntry> availableItems, long deadline) {
         List<Ingredient> ingredients = recipe.getIngredients();
         if (ingredients.isEmpty()) {
+            return false;
+        }
+        if (!allIngredientsAvailable(ingredients, availableItems)) {
             return false;
         }
 
@@ -352,6 +356,26 @@ public final class PackagerBlockEntity extends BlockEntity {
             remainingCounts[itemIndex]++;
         }
         return false;
+    }
+
+    /** Cheap pre-filter: every required ingredient must exist in the input pools. */
+    private boolean allIngredientsAvailable(List<Ingredient> ingredients, List<PoolEntry> availableItems) {
+        for (Ingredient ingredient : ingredients) {
+            if (ingredient == null || ingredient.isEmpty()) {
+                continue;
+            }
+            boolean any = false;
+            for (PoolEntry pool : availableItems) {
+                if (pool.count() > 0 && ingredient.test(pool.stack())) {
+                    any = true;
+                    break;
+                }
+            }
+            if (!any) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private int countCompatiblePools(Ingredient ingredient, List<PoolEntry> availableItems) {

@@ -14,10 +14,9 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 
 @Mod(FallenRelicsMod.MOD_ID)
 public final class FallenRelicsMod {
@@ -32,18 +31,14 @@ public final class FallenRelicsMod {
         modEventBus.addListener(this::addCreativeContent);
         modEventBus.addListener(this::registerCapabilities);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onPackagerRightClick);
-        NeoForge.EVENT_BUS.addListener(this::onServerStarted);
-        NeoForge.EVENT_BUS.addListener(this::onDatapackSync);
+        NeoForge.EVENT_BUS.addListener(this::onServerAboutToStart);
         NeoForge.EVENT_BUS.addListener(this::registerCommands);
     }
 
-    private void onServerStarted(ServerStartedEvent event) {
+    /** Runs before the level loads its datapacks, so compiled scripts are picked up on startup. */
+    private void onServerAboutToStart(ServerAboutToStartEvent event) {
         CraftBuilderScripts.migrateLegacyDatapack(event.getServer());
-        CraftBuilderScripts.loadForServer(event.getServer());
-    }
-
-    private void onDatapackSync(OnDatapackSyncEvent event) {
-        CraftBuilderScripts.refreshBeforeDatapackSync(event.getPlayerList().getServer());
+        CraftBuilderScripts.compileDatapack(event.getServer());
     }
 
     private void registerCommands(RegisterCommandsEvent event) {

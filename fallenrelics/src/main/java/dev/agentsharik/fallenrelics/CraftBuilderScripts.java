@@ -4,9 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
-import com.mojang.serialization.JsonOps;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -15,11 +12,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HexFormat;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,30 +22,29 @@ import java.util.stream.Stream;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.fml.loading.FMLPaths;
-import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-/** Standalone Fallen Relics .frs compiler and live recipe-manager bridge. */
+/**
+ * Fallen Relics .frs script storage. Scripts are compiled to plain recipe JSON
+ * inside a generated datapack in the world folder, and datapacks are reloaded
+ * through the vanilla resource-reload path — exactly what /reload does — so the
+ * recipes flow through RecipeManager the same way KubeJS and other datapack
+ * content do. No live reflection mutation of the recipe manager is performed.
+ */
 public final class CraftBuilderScripts {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final String SCRIPT_SUBDIRECTORY = "fallenrelics";
     private static final String SCRIPT_EXTENSION = ".frs";
+    private static final String DATAPACK_FOLDER = "fallenrelics_craftbuilder";
+    private static final int DATAPACK_PACK_FORMAT = 48; // Minecraft 1.21 / 1.21.1
     private static final String LEGACY_DATAPACK_FOLDER = "fallenrelics_scripts";
     private static final Pattern LEGACY_SHAPED_ZEN = Pattern.compile(
             "craftingTable\\.addShaped\\(\"[^\"]+\",\\s*<item:([^>]+)>(?:\\s*\\*\\s*(\\d+))?,\\s*\\[(.*)\\]\\s*\\);",
@@ -60,14 +54,6 @@ public final class CraftBuilderScripts {
             Pattern.DOTALL);
     private static final Pattern ZEN_ITEM_BRACKET = Pattern.compile("<item:([^>]+)>");
     private static final Pattern ZEN_ROW = Pattern.compile("\\[([^\\[\\]]*)\\]");
-
-    /** The maps below mirror the vanilla live RecipeManager mutation path so scripts apply without a full resource reload. */
-    @Nullable private static RecipeManager activeManager;
-    private static Map<ResourceLocation, RecipeHolder<?>> byName;
-    private static Multimap<RecipeType<?>, RecipeHolder<?>> byType;
-    private static final Map<ResourceLocation, RecipeHolder<?>> activeScriptRecipes = new LinkedHashMap<>();
-    private static final Map<ResourceLocation, RecipeHolder<?>> displacedRecipes = new LinkedHashMap<>();
-    private static final Set<ResourceLocation> migratedLegacyRecipeIds = new LinkedHashSet<>();
 
     private CraftBuilderScripts() {}
 
@@ -82,12 +68,15 @@ public final class CraftBuilderScripts {
             return;
         }
 
+        MinecraftServer server = level.getServer();
         try {
             Path script = scriptFile(generated.id());
             Files.createDirectories(script.getParent());
             Files.writeString(script, generated.source(), StandardCharsets.UTF_8);
-            reloadGeneratedRecipes(level.getServer(), player,
-                    Component.translatable("fallenrelics.craft_builder.saved", generated.id()));
+            compileDatapack(server);
+            player.displayClientMessage(
+                    Component.translatable("fallenrelics.craft_builder.saved", generated.id()), true);
+            requestReload(server);
         } catch (IOException | RuntimeException exception) {
             LOGGER.error("Could not save Fallen Relics recipe script for {}",
                     player.getGameProfile().getName(), exception);
@@ -106,12 +95,15 @@ public final class CraftBuilderScripts {
             return;
         }
 
+        MinecraftServer server = level.getServer();
         try {
-            Set<Path> matches = findMatchingScripts(generated);
-            Path exact = scriptFile(generated.id());
-            if (Files.isRegularFile(exact)) {
-                matches.add(exact);
+            GeneratedRecipe otherMode = generateRecipe(inventory, !shapeless);
+            Set<String> fingerprints = new LinkedHashSet<>();
+            fingerprints.add(generated.fingerprint());
+            if (otherMode != null) {
+                fingerprints.add(otherMode.fingerprint());
             }
+            Set<Path> matches = findMatchingScripts(generated.outputPrefix(), fingerprints);
             if (matches.isEmpty()) {
                 player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.not_found"), true);
                 return;
@@ -127,11 +119,70 @@ public final class CraftBuilderScripts {
                 player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.not_found"), true);
                 return;
             }
-            reloadGeneratedRecipes(level.getServer(), player,
-                    Component.translatable("fallenrelics.craft_builder.removed", generated.id()));
+            compileDatapack(server);
+            player.displayClientMessage(
+                    Component.translatable("fallenrelics.craft_builder.removed", generated.id()), true);
+            requestReload(server);
         } catch (IOException | RuntimeException exception) {
             LOGGER.error("Could not remove Fallen Relics recipe script {}", generated.id(), exception);
             player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.error"), true);
+        }
+    }
+
+    /** Async vanilla datapack reload, identical to /reload; recipes sync to clients on completion. */
+    private static void requestReload(MinecraftServer server) {
+        server.reloadResources();
+    }
+
+    /**
+     * Recompiles every .frs script into the generated datapack inside the world
+     * folder. Called before the server loads its datapacks (at startup) and after
+     * every script change, before the vanilla reload picks the files up.
+     */
+    public static void compileDatapack(MinecraftServer server) {
+        Path packRoot = datapackRoot(server);
+        Path recipeDir = packRoot.resolve("data").resolve(FallenRelicsMod.MOD_ID).resolve("recipe");
+        try {
+            Files.createDirectories(recipeDir);
+            JsonObject pack = new JsonObject();
+            JsonObject meta = new JsonObject();
+            meta.addProperty("pack_format", DATAPACK_PACK_FORMAT);
+            meta.addProperty("description", "Fallen Relics CraftBuilder recipes");
+            pack.add("pack", meta);
+            Files.writeString(packRoot.resolve("pack.mcmeta"), pack.toString(), StandardCharsets.UTF_8);
+
+            try (Stream<Path> stale = Files.list(recipeDir)) {
+                for (Path file : stale.filter(Files::isRegularFile).toList()) {
+                    Files.deleteIfExists(file);
+                }
+            }
+
+            Path scripts = scriptDirectory();
+            if (!Files.isDirectory(scripts)) {
+                return;
+            }
+            int written = 0;
+            try (Stream<Path> scriptFiles = Files.walk(scripts)) {
+                for (Path scriptFile : scriptFiles
+                        .filter(Files::isRegularFile)
+                        .filter(path -> path.getFileName().toString().endsWith(SCRIPT_EXTENSION))
+                        .sorted()
+                        .toList()) {
+                    try {
+                        RecipeScript script = parseScript(Files.readString(scriptFile, StandardCharsets.UTF_8));
+                        String path = recipeIdFromScriptPath(scripts.relativize(scriptFile));
+                        Files.writeString(recipeDir.resolve(path + ".json"),
+                                compileRecipe(script).toString(), StandardCharsets.UTF_8);
+                        written++;
+                    } catch (RuntimeException exception) {
+                        LOGGER.error("Ignoring invalid Fallen Relics script {}", scriptFile, exception);
+                    }
+                }
+            }
+            LOGGER.info("Compiled {} Fallen Relics recipe script(s) into the {} datapack",
+                    written, DATAPACK_FOLDER);
+        } catch (IOException | RuntimeException exception) {
+            LOGGER.error("Could not compile the Fallen Relics recipe datapack", exception);
         }
     }
 
@@ -151,18 +202,12 @@ public final class CraftBuilderScripts {
                     try {
                         RecipeScript migrated = convertLegacyRecipe(
                                 JsonParser.parseString(Files.readString(file)).getAsJsonObject());
-                        String migratedId = recipeId(migrated);
-                        Path destination = scriptFile(migratedId);
+                        Path destination = scriptFile(recipeId(migrated));
                         Files.createDirectories(destination.getParent());
                         if (!Files.exists(destination)) {
                             Files.writeString(destination, serializeScript(migrated), StandardCharsets.UTF_8);
                         }
-                        boolean removedLegacyFile = Files.deleteIfExists(file);
-                        changed |= removedLegacyFile;
-                        if (removedLegacyFile || !Files.exists(file)) {
-                            migratedLegacyRecipeIds.add(ResourceLocation.fromNamespaceAndPath(
-                                    FallenRelicsMod.MOD_ID, migratedId));
-                        }
+                        changed |= Files.deleteIfExists(file);
                     } catch (RuntimeException | IOException exception) {
                         LOGGER.warn("Could not migrate old CraftBuilder recipe {}", file, exception);
                     }
@@ -204,194 +249,19 @@ public final class CraftBuilderScripts {
                 }
             }
         } catch (IOException exception) {
-            LOGGER.error("Could not scan old CraftBuilder scripts", exception);
+            LOGGER.error("Could not scan old generated CraftBuilder scripts", exception);
         }
         return changed;
     }
 
-    /** Called after the server has loaded its datapacks. No datapack reload is needed. */
-    public static void loadForServer(MinecraftServer server) {
-        applyScripts(server, false, null, null);
-    }
-
-    /** The NeoForge datapack-sync event fires before recipes are sent to joining/reloading clients. */
-    public static void refreshBeforeDatapackSync(MinecraftServer server) {
-        if (activeManager != server.getRecipeManager()) {
-            applyScripts(server, false, null, null);
-        }
-    }
-
     public static void reloadFromCommand(MinecraftServer server, CommandSourceStack source) {
-        applyScripts(server, true, null, null, source);
+        compileDatapack(server);
+        source.sendSuccess(() -> Component.translatable("fallenrelics.craft_builder.reloaded"), true);
+        requestReload(server);
     }
 
-    private static void reloadGeneratedRecipes(
-            MinecraftServer server, @Nullable Player player, @Nullable Component successMessage) {
-        applyScripts(server, true, player, successMessage, null);
-    }
-
-    private static void applyScripts(
-            MinecraftServer server,
-            boolean syncClients,
-            @Nullable Player player,
-            @Nullable Component successMessage) {
-        applyScripts(server, syncClients, player, successMessage, null);
-    }
-
-    private static void applyScripts(
-            MinecraftServer server,
-            boolean syncClients,
-            @Nullable Player player,
-            @Nullable Component successMessage,
-            @Nullable CommandSourceStack commandSource) {
-        try {
-            RecipeManager manager = server.getRecipeManager();
-            ensureMutableManager(manager);
-            List<RecipeHolder<?>> currentScripts = compileScripts(server);
-            replaceScriptRecipes(manager, currentScripts);
-
-            if (syncClients) {
-                syncRecipes(server, manager);
-            }
-            if (player != null && successMessage != null) {
-                player.displayClientMessage(successMessage, true);
-            }
-            if (commandSource != null) {
-                commandSource.sendSuccess(
-                        () -> Component.translatable("fallenrelics.craft_builder.reloaded"), true);
-            }
-        } catch (IOException | RuntimeException exception) {
-            LOGGER.error("Could not compile or apply Fallen Relics scripts", exception);
-            if (player != null) {
-                player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.reload_error"), true);
-            }
-            if (commandSource != null) {
-                commandSource.sendFailure(Component.translatable("fallenrelics.craft_builder.reload_error"));
-            }
-        }
-    }
-
-    private static void ensureMutableManager(RecipeManager manager) {
-        if (activeManager == manager) {
-            return;
-        }
-
-        try {
-            Multimap<RecipeType<?>, RecipeHolder<?>> mutableByType =
-                    LinkedHashMultimap.create(getByType(manager));
-            Map<ResourceLocation, RecipeHolder<?>> mutableByName =
-                    new LinkedHashMap<>(getByName(manager));
-            ObfuscationReflectionHelper.setPrivateValue(RecipeManager.class, manager, mutableByType, "byType");
-            ObfuscationReflectionHelper.setPrivateValue(RecipeManager.class, manager, mutableByName, "byName");
-            byType = mutableByType;
-            byName = mutableByName;
-            activeManager = manager;
-            activeScriptRecipes.clear();
-            displacedRecipes.clear();
-        } catch (RuntimeException exception) {
-            throw new IllegalStateException("Could not access the live RecipeManager maps", exception);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private static Multimap<RecipeType<?>, RecipeHolder<?>> getByType(RecipeManager manager) {
-        return (Multimap<RecipeType<?>, RecipeHolder<?>>)
-                ObfuscationReflectionHelper.getPrivateValue(RecipeManager.class, manager, "byType");
-    }
-
-    @SuppressWarnings("unchecked")
-    private static Map<ResourceLocation, RecipeHolder<?>> getByName(RecipeManager manager) {
-        return (Map<ResourceLocation, RecipeHolder<?>>)
-                ObfuscationReflectionHelper.getPrivateValue(RecipeManager.class, manager, "byName");
-    }
-
-    private static void replaceScriptRecipes(RecipeManager manager, List<RecipeHolder<?>> replacements) {
-        for (ResourceLocation migratedId : migratedLegacyRecipeIds) {
-            RecipeHolder<?> active = activeScriptRecipes.remove(migratedId);
-            if (active != null) {
-                byName.remove(migratedId, active);
-                byType.remove(active.value().getType(), active);
-            }
-            displacedRecipes.remove(migratedId);
-            RecipeHolder<?> staleLegacy = byName.remove(migratedId);
-            if (staleLegacy != null) {
-                byType.remove(staleLegacy.value().getType(), staleLegacy);
-            }
-        }
-        migratedLegacyRecipeIds.clear();
-
-        for (Map.Entry<ResourceLocation, RecipeHolder<?>> entry : activeScriptRecipes.entrySet()) {
-            ResourceLocation id = entry.getKey();
-            RecipeHolder<?> active = entry.getValue();
-            byName.remove(id, active);
-            byType.remove(active.value().getType(), active);
-
-            RecipeHolder<?> displaced = displacedRecipes.remove(id);
-            if (displaced != null) {
-                byName.put(id, displaced);
-                byType.put(displaced.value().getType(), displaced);
-            }
-        }
-        activeScriptRecipes.clear();
-
-        for (RecipeHolder<?> replacement : replacements) {
-            ResourceLocation id = replacement.id();
-            RecipeHolder<?> old = byName.get(id);
-            if (old != null) {
-                displacedRecipes.put(id, old);
-                byType.remove(old.value().getType(), old);
-            }
-            byName.put(id, replacement);
-            byType.put(replacement.value().getType(), replacement);
-            activeScriptRecipes.put(id, replacement);
-        }
-    }
-
-    private static void syncRecipes(MinecraftServer server, RecipeManager manager) {
-        for (ServerPlayer connected : server.getPlayerList().getPlayers()) {
-            connected.connection.send(new ClientboundUpdateRecipesPacket(manager.getOrderedRecipes()));
-        }
-    }
-
-    private static List<RecipeHolder<?>> compileScripts(MinecraftServer server) throws IOException {
-        Path scripts = scriptDirectory();
-        Files.createDirectories(scripts);
-        RegistryOps<com.google.gson.JsonElement> registryOps =
-                server.registryAccess().createSerializationContext(JsonOps.INSTANCE);
-        List<RecipeHolder<?>> recipes = new ArrayList<>();
-        Set<ResourceLocation> recipeIds = new LinkedHashSet<>();
-
-        try (Stream<Path> scriptFiles = Files.walk(scripts)) {
-            for (Path scriptFile : scriptFiles
-                    .filter(Files::isRegularFile)
-                    .filter(path -> path.getFileName().toString().endsWith(SCRIPT_EXTENSION))
-                    .sorted()
-                    .toList()) {
-                try {
-                    RecipeScript script = parseScript(Files.readString(scriptFile, StandardCharsets.UTF_8));
-                    String path = recipeIdFromScriptPath(scripts.relativize(scriptFile));
-                    ResourceLocation id = ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, path);
-                    Recipe<?> recipe = Recipe.CODEC.parse(registryOps, compileRecipe(script))
-                            .resultOrPartial(error -> LOGGER.error("Invalid recipe script {}: {}", scriptFile, error))
-                            .orElse(null);
-                    if (recipe == null) {
-                        continue;
-                    }
-                    if (recipe.getType() != RecipeType.CRAFTING) {
-                        LOGGER.error("Ignoring non-crafting recipe in script {}", scriptFile);
-                        continue;
-                    }
-                    if (!recipeIds.add(id)) {
-                        LOGGER.error("Ignoring duplicate recipe id {} in script {}", id, scriptFile);
-                        continue;
-                    }
-                    recipes.add(new RecipeHolder<>(id, recipe));
-                } catch (RuntimeException exception) {
-                    LOGGER.error("Ignoring invalid Fallen Relics script {}", scriptFile, exception);
-                }
-            }
-        }
-        return recipes;
+    private static Path datapackRoot(MinecraftServer server) {
+        return server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(DATAPACK_FOLDER);
     }
 
     private static GeneratedRecipe generateRecipe(ItemStackHandler inventory, boolean shapeless) {
@@ -415,12 +285,16 @@ public final class CraftBuilderScripts {
                 result.getCount(),
                 ingredients);
         String id = recipeId(recipe);
-        return new GeneratedRecipe(id, serializeScript(recipe), fingerprint(recipe));
+        return new GeneratedRecipe(id, serializeScript(recipe), fingerprint(recipe), outputPrefix(recipe));
     }
 
     private static String recipeId(RecipeScript recipe) {
+        return outputPrefix(recipe) + hash(fingerprint(recipe));
+    }
+
+    private static String outputPrefix(RecipeScript recipe) {
         String outputName = recipe.result().getNamespace() + "_" + recipe.result().getPath().replace('/', '_');
-        return "craftbuilder_" + outputName + "_" + hash(fingerprint(recipe));
+        return "craftbuilder_" + outputName + "_";
     }
 
     private static String fingerprint(RecipeScript recipe) {
@@ -555,10 +429,10 @@ public final class CraftBuilderScripts {
             JsonArray ingredients = new JsonArray();
             recipe.ingredients().stream()
                     .filter(java.util.Objects::nonNull)
-                    .forEach(ingredient -> ingredients.add(ingredientJson(ingredient)));
+                    .forEach(ingredient -> ingredients.add(ingredient.toString()));
             json.add("ingredients", ingredients);
         } else {
-            Map<ResourceLocation, Character> symbols = new LinkedHashMap<>();
+            java.util.Map<ResourceLocation, Character> symbols = new java.util.LinkedHashMap<>();
             JsonArray pattern = new JsonArray();
             for (int row = 0; row < 3; row++) {
                 StringBuilder line = new StringBuilder(3);
@@ -574,8 +448,10 @@ public final class CraftBuilderScripts {
                 pattern.add(line.toString());
             }
             JsonObject key = new JsonObject();
-            for (Map.Entry<ResourceLocation, Character> entry : symbols.entrySet()) {
-                key.add(String.valueOf(entry.getValue()), ingredientJson(entry.getKey()));
+            for (java.util.Map.Entry<ResourceLocation, Character> entry : symbols.entrySet()) {
+                JsonObject ingredient = new JsonObject();
+                ingredient.addProperty("item", entry.getKey().toString());
+                key.add(String.valueOf(entry.getValue()), ingredient);
             }
             json.add("pattern", pattern);
             json.add("key", key);
@@ -586,12 +462,6 @@ public final class CraftBuilderScripts {
         result.addProperty("count", recipe.resultCount());
         json.add("result", result);
         return json;
-    }
-
-    private static JsonObject ingredientJson(ResourceLocation itemId) {
-        JsonObject ingredient = new JsonObject();
-        ingredient.addProperty("item", itemId.toString());
-        return ingredient;
     }
 
     private static RecipeScript convertLegacyZenScript(String source) {
@@ -648,7 +518,8 @@ public final class CraftBuilderScripts {
         if (shapeless) {
             JsonArray legacyIngredients = recipe.getAsJsonArray("ingredients");
             for (var ingredient : legacyIngredients) {
-                ingredients.add(parseItemId(ingredient.getAsJsonObject().get("item").getAsString()));
+                var element = ingredient.getAsJsonObject().get("item");
+                ingredients.add(parseItemId(element.getAsString()));
             }
         } else if (type.endsWith("crafting_shaped")) {
             JsonArray pattern = recipe.getAsJsonArray("pattern");
@@ -660,8 +531,11 @@ public final class CraftBuilderScripts {
                     if (symbol == ' ') {
                         ingredients.add(null);
                     } else {
-                        JsonObject ingredient = key.get(String.valueOf(symbol)).getAsJsonObject();
-                        ingredients.add(parseItemId(ingredient.get("item").getAsString()));
+                        var entry = key.get(String.valueOf(symbol));
+                        String item = entry.isJsonObject()
+                                ? entry.getAsJsonObject().get("item").getAsString()
+                                : entry.getAsString();
+                        ingredients.add(parseItemId(item));
                     }
                 }
             }
@@ -673,11 +547,49 @@ public final class CraftBuilderScripts {
 
     private static String recipeIdFromScriptPath(Path relativeScriptPath) {
         String relative = relativeScriptPath.toString().replace('\\', '/');
-        String path = relative.substring(0, relative.length() - SCRIPT_EXTENSION.length()).toLowerCase(Locale.ROOT);
+        String path = relative.substring(0, relative.length() - SCRIPT_EXTENSION.length())
+                .toLowerCase(Locale.ROOT);
         if (ResourceLocation.tryParse(FallenRelicsMod.MOD_ID + ":" + path) == null) {
             throw new IllegalArgumentException("Script filename is not a valid recipe id: " + relative);
         }
         return path;
+    }
+
+    /**
+     * Finds scripts to delete: exact id, then the same fingerprint in either
+     * crafting mode (so a recipe saved as shaped can be removed while the screen
+     * is in shapeless mode and vice versa), then any script with the same output
+     * item as a last resort for recipes saved by older mod versions.
+     */
+    private static Set<Path> findMatchingScripts(String outputPrefix, Set<String> fingerprints) throws IOException {
+        Set<Path> matches = new LinkedHashSet<>();
+        Path scripts = scriptDirectory();
+        if (!Files.isDirectory(scripts)) {
+            return matches;
+        }
+
+        List<Path> sameOutput = new ArrayList<>();
+        try (Stream<Path> files = Files.walk(scripts)) {
+            for (Path file : files.filter(Files::isRegularFile)
+                    .filter(path -> path.getFileName().toString().endsWith(SCRIPT_EXTENSION)).toList()) {
+                String name = file.getFileName().toString();
+                if (name.startsWith(outputPrefix)) {
+                    sameOutput.add(file);
+                }
+                try {
+                    RecipeScript candidate = parseScript(Files.readString(file, StandardCharsets.UTF_8));
+                    if (fingerprints.contains(fingerprint(candidate))) {
+                        matches.add(file);
+                    }
+                } catch (RuntimeException exception) {
+                    LOGGER.warn("Skipping invalid script while searching for removal: {}", file, exception);
+                }
+            }
+        }
+        if (matches.isEmpty()) {
+            matches.addAll(sameOutput);
+        }
+        return matches;
     }
 
     private static String hash(String content) {
@@ -698,33 +610,11 @@ public final class CraftBuilderScripts {
         return script;
     }
 
-    private static Set<Path> findMatchingScripts(GeneratedRecipe generated) throws IOException {
-        Set<Path> matches = new LinkedHashSet<>();
-        Path scripts = scriptDirectory();
-        if (!Files.isDirectory(scripts)) {
-            return matches;
-        }
-        try (Stream<Path> files = Files.walk(scripts)) {
-            for (Path file : files.filter(Files::isRegularFile)
-                    .filter(path -> path.getFileName().toString().endsWith(SCRIPT_EXTENSION)).toList()) {
-                try {
-                    RecipeScript candidate = parseScript(Files.readString(file, StandardCharsets.UTF_8));
-                    if (fingerprint(candidate).equals(generated.fingerprint())) {
-                        matches.add(file);
-                    }
-                } catch (RuntimeException exception) {
-                    LOGGER.warn("Skipping invalid script while searching for removal: {}", file, exception);
-                }
-            }
-        }
-        return matches;
-    }
-
     private static Path scriptDirectory() {
         return FMLPaths.GAMEDIR.get().resolve("scripts").resolve(SCRIPT_SUBDIRECTORY);
     }
 
-    private record GeneratedRecipe(String id, String source, String fingerprint) {}
+    private record GeneratedRecipe(String id, String source, String fingerprint, String outputPrefix) {}
     private record RecipeScript(
             boolean shapeless,
             ResourceLocation result,
