@@ -33,7 +33,7 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     private static final int CHECK_SHADOW = 0xFF2E6B2E;
     private static final int CROSS_COLOR = 0xFFD14949;
     private static final int CROSS_SHADOW = 0xFF6B2430;
-    private static final int ICON_SHADOW = 0xFF3A3A3A;
+    private static final int ICON_SHADOW = 0xFF585858;
     private static final int HOVER_COLOR = 0x33FFFFFF;
     private static final ResourceLocation FURNACE_ICON =
             ResourceLocation.withDefaultNamespace("textures/block/furnace_front.png");
@@ -54,9 +54,9 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         super.init();
         // Left decoration column of the pack art: add, remove, mode stacked
         // vertically over the swirl/dots/arrow pictograms.
-        modeButton = addRenderableWidget(new IconButton(leftPos + 14, topPos + 17, 0));
-        addRenderableWidget(new IconButton(leftPos + 14, topPos + 33, 1));
-        addRenderableWidget(new IconButton(leftPos + 14, topPos + 49, 2));
+        modeButton = addRenderableWidget(new IconButton(leftPos + 16, topPos + 19, 0));
+        addRenderableWidget(new IconButton(leftPos + 16, topPos + 35, 1));
+        addRenderableWidget(new IconButton(leftPos + 16, topPos + 51, 2));
         refreshModeButton();
     }
 
@@ -148,7 +148,7 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
 
         private void drawCheck(GuiGraphics graphics, int ox, int oy) {
             int[][] pixels = {
-                    {1, 6}, {2, 7}, {3, 8}, {4, 8}, {5, 7}, {6, 6}, {7, 5}, {8, 4}, {9, 3}
+                    {0, 6}, {1, 7}, {2, 8}, {3, 9}, {4, 9}, {5, 8}, {6, 7}, {7, 6}, {8, 5}, {9, 4}, {10, 3}
             };
             for (int[] pixel : pixels) {
                 graphics.fill(ox + pixel[0] + 1, oy + pixel[1] + 1, ox + pixel[0] + 3, oy + pixel[1] + 3, CHECK_SHADOW);
