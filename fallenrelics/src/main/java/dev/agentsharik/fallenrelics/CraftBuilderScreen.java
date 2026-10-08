@@ -28,27 +28,27 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     private static final int WIDGET_WIDTH = 200;
     private static final int WIDGET_HEIGHT = 20;
 
-    /** Light lavender matching the Craft Builder block's pale trim, readable on the tinted background. */
-    private static final int LABEL_COLOR = 0xFFD3CCDC;
+    /** Vanilla container label grey for the light lower panel. */
+    private static final int LABEL_COLOR = 0xFF404040;
 
     private ActionWidget modeButton;
 
     public CraftBuilderScreen(CraftBuilderMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
-        imageWidth = 200;
-        imageHeight = 180;
+        imageWidth = 176;
+        imageHeight = 190;
     }
 
     @Override
     protected void init() {
         super.init();
         modeButton = addRenderableWidget(new ActionWidget(
-                leftPos + 124, topPos + 76, 69, 20, modeLabel(), 0));
+                leftPos + 100, topPos + 78, 68, 20, modeLabel(), 0));
         addRenderableWidget(new ActionWidget(
-                leftPos + 92, topPos + 6, 50, 20,
+                leftPos + 8, topPos + 78, 44, 20,
                 Component.translatable("gui.fallenrelics.craft_builder.add"), 1));
         addRenderableWidget(new ActionWidget(
-                leftPos + 144, topPos + 6, 50, 20,
+                leftPos + 56, topPos + 78, 40, 20,
                 Component.translatable("gui.fallenrelics.craft_builder.remove"), 2));
     }
 
@@ -79,12 +79,9 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, title, 8, 7, LABEL_COLOR, false);
-        graphics.drawString(font, Component.translatable("gui.fallenrelics.craft_builder.ingredients"),
-                14, 19, LABEL_COLOR, false);
-        graphics.drawString(font, Component.translatable("gui.fallenrelics.craft_builder.result"),
-                160, 33, LABEL_COLOR, false);
-        graphics.drawString(font, Component.translatable("container.inventory"), 8, 88, LABEL_COLOR, false);
+        // Dark plank-brown reads well on the wooden header, like the pack's own titles.
+        graphics.drawString(font, title, 8, 6, 0xFF3A2008, false);
+        graphics.drawString(font, Component.translatable("container.inventory"), 8, 100, LABEL_COLOR, false);
     }
 
     @Override
@@ -119,22 +116,13 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
 
         @Override
         protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            if (menuButtonId == 0) {
-                // The recessed toggle well is baked into the background texture,
-                // so the switch stays visible even in the raw GUI file; at runtime
-                // we only add a hover glow, the pictogram and the label.
-                if (isHoveredOrFocused()) {
-                    graphics.fill(getX() + 1, getY() + 1, getX() + width - 1, getY() + height - 1, 0x26FFFFFF);
-                }
-            } else {
-                ResourceLocation sprite = !active
-                        ? WIDGET_BUTTON_DISABLED
-                        : isHoveredOrFocused() ? WIDGET_BUTTON_HIGHLIGHTED : WIDGET_BUTTON;
-                blitWidget(graphics, sprite, getX(), getY(), width, height);
+            // The button bodies are baked into the background texture so the
+            // controls stay visible even in the raw GUI file; at runtime we add
+            // only the hover glow, the pictogram and the label.
+            if (isHoveredOrFocused()) {
+                graphics.fill(getX() + 1, getY() + 1, getX() + width - 1, getY() + height - 1, 0x26FFFFFF);
             }
-            int textColor = menuButtonId == 0
-                    ? (!active ? 0xFF8A8096 : isHoveredOrFocused() ? 0xFFFFA0 : 0xFFE9E2F4)
-                    : (!active ? 0xFFA0A0A0 : isHoveredOrFocused() ? 0xFFFFA0 : 0xFFFFFFFF);
+            int textColor = !active ? 0xFFA0A0A0 : isHoveredOrFocused() ? 0xFFFFA0 : 0xFFFFFFFF;
             if (menuButtonId == 0) {
                 // A tiny pictogram left of the label: a 3x3 grid for shaped,
                 // scattered dots for shapeless.
