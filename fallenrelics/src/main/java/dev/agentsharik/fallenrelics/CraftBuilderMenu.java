@@ -87,7 +87,7 @@ public final class CraftBuilderMenu extends AbstractContainerMenu {
                         30 + column * 18, 17 + row * 18, false));
             }
         }
-        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 120, 35, false));
+        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 124, 35, false));
         addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.FURNACE_INPUT_FIRST, 56, 17, true));
         addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.FURNACE_INPUT_SECOND, 56, 53, true));
         addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 116, 35, true));

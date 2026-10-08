@@ -51,9 +51,9 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         super.init();
         // Left decoration column of the pack art: add, remove, mode stacked
         // vertically over the swirl/dots/arrow pictograms.
-        addRenderableWidget(new IconButton(leftPos + 6, topPos + 16, 1));
-        addRenderableWidget(new IconButton(leftPos + 6, topPos + 36, 2));
-        modeButton = addRenderableWidget(new IconButton(leftPos + 6, topPos + 56, 0));
+        addRenderableWidget(new IconButton(leftPos + 6, topPos + 6, 1));
+        addRenderableWidget(new IconButton(leftPos + 6, topPos + 26, 2));
+        modeButton = addRenderableWidget(new IconButton(leftPos + 6, topPos + 46, 0));
         refreshModeButton();
     }
 
@@ -109,7 +109,7 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         private final int menuButtonId;
 
         private IconButton(int x, int y, int menuButtonId) {
-            super(x, y, 20, 20, Component.empty());
+            super(x, y, 16, 16, Component.empty());
             this.menuButtonId = menuButtonId;
             setTooltip(Tooltip.create(label()));
         }
@@ -129,8 +129,8 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
             if (isHoveredOrFocused()) {
                 graphics.fill(getX(), getY(), getX() + width, getY() + height, HOVER_COLOR);
             }
-            int ox = getX() + 2;
-            int oy = getY() + 2;
+            int ox = getX();
+            int oy = getY();
             switch (menuButtonId) {
                 case 1 -> drawCheck(graphics, ox, oy);
                 case 2 -> drawCross(graphics, ox, oy);
