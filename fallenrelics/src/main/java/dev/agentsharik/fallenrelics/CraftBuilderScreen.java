@@ -51,9 +51,9 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         super.init();
         // Left decoration column of the pack art: add, remove, mode stacked
         // vertically over the swirl/dots/arrow pictograms.
-        addRenderableWidget(new IconButton(leftPos + 6, topPos + 6, 1));
-        addRenderableWidget(new IconButton(leftPos + 6, topPos + 26, 2));
-        modeButton = addRenderableWidget(new IconButton(leftPos + 6, topPos + 46, 0));
+        addRenderableWidget(new IconButton(leftPos + 7, topPos + 5, 1));
+        addRenderableWidget(new IconButton(leftPos + 7, topPos + 21, 2));
+        modeButton = addRenderableWidget(new IconButton(leftPos + 7, topPos + 37, 0));
         refreshModeButton();
     }
 
@@ -109,7 +109,7 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         private final int menuButtonId;
 
         private IconButton(int x, int y, int menuButtonId) {
-            super(x, y, 16, 16, Component.empty());
+            super(x, y, 12, 12, Component.empty());
             this.menuButtonId = menuButtonId;
             setTooltip(Tooltip.create(label()));
         }
@@ -135,24 +135,24 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
                 case 1 -> drawCheck(graphics, ox, oy);
                 case 2 -> drawCross(graphics, ox, oy);
                 default -> graphics.blit(menu.isShapeless() ? CRAFTING_TABLE_ICON : FURNACE_ICON,
-                        ox, oy, 0, 0f, 0f, 16, 16, 16, 16);
+                        ox, oy, 12, 12, 0f, 0f, 16, 16, 16, 16);
             }
         }
 
         private void drawCheck(GuiGraphics graphics, int ox, int oy) {
             int[][] pixels = {
-                    {2, 8}, {3, 9}, {4, 10}, {5, 11}, {6, 10}, {7, 9},
-                    {8, 8}, {9, 7}, {10, 6}, {11, 5}, {12, 4}
+                    {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 8}, {6, 7},
+                    {7, 6}, {8, 5}, {9, 4}, {10, 3}
             };
             for (int[] pixel : pixels) {
-                graphics.fill(ox + pixel[0], oy + pixel[1], ox + pixel[0] + 2, oy + pixel[1] + 2, CHECK_COLOR);
+                graphics.fill(ox + pixel[0], oy + pixel[1], ox + pixel[0] + 1, oy + pixel[1] + 1, CHECK_COLOR);
             }
         }
 
         private void drawCross(GuiGraphics graphics, int ox, int oy) {
             for (int i = 0; i < 10; i++) {
-                graphics.fill(ox + 3 + i, oy + 3 + i, ox + 5 + i, oy + 5 + i, CROSS_COLOR);
-                graphics.fill(ox + 12 - i, oy + 3 + i, ox + 14 - i, oy + 5 + i, CROSS_COLOR);
+                graphics.fill(ox + 1 + i, oy + 1 + i, ox + 2 + i, oy + 2 + i, CROSS_COLOR);
+                graphics.fill(ox + 10 - i, oy + 1 + i, ox + 11 - i, oy + 2 + i, CROSS_COLOR);
             }
         }
 

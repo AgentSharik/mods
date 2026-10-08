@@ -497,7 +497,7 @@ public final class CraftBuilderScripts {
                 .map(String::trim)
                 .filter(line -> !line.isEmpty() && !line.startsWith("#") && !line.startsWith("//"))
                 .toList();
-        if (lines.size() < 4) {
+        if (lines.size() < 3) {
             throw new IllegalArgumentException("Script is incomplete");
         }
 
@@ -524,7 +524,7 @@ public final class CraftBuilderScripts {
 
         List<ResourceLocation> ingredients = new ArrayList<>();
         if (smelting) {
-            if (lines.size() != 4 || !lines.get(2).startsWith("ingredient")) {
+            if (lines.size() != 3 || !lines.get(2).startsWith("ingredient")) {
                 throw new IllegalArgumentException("A smelting script needs 'ingredient <item_id>' after the result line");
             }
             ingredients.add(parseItemId(words(lines.get(2))[1]));
