@@ -29,10 +29,13 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     /** Vanilla container label grey, drawn exactly where vanilla draws it. */
     private static final int LABEL_COLOR = 0xFF404040;
 
-    private static final int CYCLE_COLOR = 0xFF3EC8E8;
-    private static final int DOTS_COLOR = 0xFFE8B820;
-    private static final int ARROW_COLOR = 0xFFC82864;
+    private static final int CHECK_COLOR = 0xFF55C955;
+    private static final int CROSS_COLOR = 0xFFD14949;
     private static final int HOVER_COLOR = 0x33FFFFFF;
+    private static final ResourceLocation FURNACE_ICON =
+            ResourceLocation.withDefaultNamespace("textures/block/furnace_front.png");
+    private static final ResourceLocation CRAFTING_TABLE_ICON =
+            ResourceLocation.withDefaultNamespace("textures/block/crafting_table_front.png");
 
     private IconButton modeButton;
     private int cleanTicks;
@@ -129,37 +132,28 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
             int ox = getX();
             int oy = getY();
             switch (menuButtonId) {
-                case 1 -> drawDots(graphics, ox, oy);
-                case 2 -> drawDownArrow(graphics, ox, oy);
-                default -> drawCycle(graphics, ox, oy);
+                case 1 -> drawCheck(graphics, ox, oy);
+                case 2 -> drawCross(graphics, ox, oy);
+                default -> graphics.blit(menu.isShapeless() ? CRAFTING_TABLE_ICON : FURNACE_ICON,
+                        ox, oy, 12, 12, 0f, 0f, 16, 16, 16, 16);
             }
         }
 
-        private void drawCycle(GuiGraphics graphics, int ox, int oy) {
+        private void drawCheck(GuiGraphics graphics, int ox, int oy) {
             int[][] pixels = {
-                    {4, 1}, {5, 1}, {6, 1}, {7, 2}, {8, 3}, {8, 4}, {8, 5},
-                    {7, 6}, {6, 7}, {5, 7}, {4, 7}, {3, 6}, {2, 5}, {2, 4}, {2, 3},
-                    {2, 1}, {3, 2}, {1, 2}, {2, 2}
+                    {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 8}, {6, 7},
+                    {7, 6}, {8, 5}, {9, 4}, {10, 3}
             };
             for (int[] pixel : pixels) {
-                graphics.fill(ox + pixel[0], oy + pixel[1], ox + pixel[0] + 1, oy + pixel[1] + 1, CYCLE_COLOR);
+                graphics.fill(ox + pixel[0], oy + pixel[1], ox + pixel[0] + 1, oy + pixel[1] + 1, CHECK_COLOR);
             }
         }
 
-        private void drawDots(GuiGraphics graphics, int ox, int oy) {
-            for (int row = 0; row < 3; row++) {
-                for (int column = 0; column < 3; column++) {
-                    graphics.fill(ox + 1 + column * 4, oy + 1 + row * 4,
-                            ox + 3 + column * 4, oy + 3 + row * 4, DOTS_COLOR);
-                }
+        private void drawCross(GuiGraphics graphics, int ox, int oy) {
+            for (int i = 0; i < 10; i++) {
+                graphics.fill(ox + 1 + i, oy + 1 + i, ox + 2 + i, oy + 2 + i, CROSS_COLOR);
+                graphics.fill(ox + 10 - i, oy + 1 + i, ox + 11 - i, oy + 2 + i, CROSS_COLOR);
             }
-        }
-
-        private void drawDownArrow(GuiGraphics graphics, int ox, int oy) {
-            graphics.fill(ox + 5, oy + 1, ox + 7, oy + 7, ARROW_COLOR);
-            graphics.fill(ox + 3, oy + 7, ox + 9, oy + 8, ARROW_COLOR);
-            graphics.fill(ox + 4, oy + 8, ox + 8, oy + 9, ARROW_COLOR);
-            graphics.fill(ox + 5, oy + 9, ox + 7, oy + 10, ARROW_COLOR);
         }
 
         @Override
