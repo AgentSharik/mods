@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "fallenrelics:block/craft_builder"
+    },
+    "facing=east": {
+      "model": "fallenrelics:block/craft_builder",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "fallenrelics:block/craft_builder",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "fallenrelics:block/craft_builder",
+      "y": 270
+    }
+  }
+}

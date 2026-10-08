@@ -54,8 +54,8 @@ jobs:
         if: github.ref == 'refs/heads/arena/423851f4-mods'
         shell: bash
         run: |
-          source_jar='fallenrelics/build/libs/fallen-relics-1.1.0.jar'
-          published_jar='fallen-relics-neoforge-1.21.1-1.1.0.jar'
+          source_jar='fallenrelics/build/libs/fallen-relics-1.2.0.jar'
+          published_jar='fallen-relics-neoforge-1.21.1-1.2.0.jar'
           test -f "$source_jar"
           cp "$source_jar" "$published_jar"
           find . -maxdepth 1 -type f -name 'fallen-relics-neoforge-1.21.1-*.jar' ! -name "$(basename "$published_jar")" -delete

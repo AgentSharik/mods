@@ -23,6 +23,7 @@ public final class FallenRelicsMod {
         ModContent.BLOCKS.register(modEventBus);
         ModContent.ITEMS.register(modEventBus);
         ModContent.BLOCK_ENTITIES.register(modEventBus);
+        ModContent.MENUS.register(modEventBus);
 
         modEventBus.addListener(this::addCreativeContent);
         modEventBus.addListener(this::registerCapabilities);
@@ -32,6 +33,7 @@ public final class FallenRelicsMod {
     private void addCreativeContent(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS) {
             event.accept(ModContent.PACKAGER_ITEM);
+            event.accept(ModContent.CRAFT_BUILDER_ITEM);
             event.accept(ModContent.UPGRADE_TEMPLATE);
             event.accept(ModContent.IRON_UPGRADE);
             event.accept(ModContent.GOLD_UPGRADE);

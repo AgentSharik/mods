@@ -23,5 +23,19 @@
   "fallenrelics.upgrade.none": "Без улучшения",
   "fallenrelics.upgrade.installed": "Установлено улучшение: %s",
   "fallenrelics.upgrade.not_higher": "На упаковщике уже установлено такое или более мощное улучшение.",
-  "fallenrelics.upgrade.failed": "Не удалось установить улучшение на упаковщик."
+  "fallenrelics.upgrade.failed": "Не удалось установить улучшение на упаковщик.",
+  "block.fallenrelics.craft_builder": "Крафтбилдер",
+  "container.fallenrelics.craft_builder": "Крафтбилдер — редактор рецептов",
+  "gui.fallenrelics.craft_builder.ingredients": "Ингредиенты",
+  "gui.fallenrelics.craft_builder.result": "Результат",
+  "gui.fallenrelics.craft_builder.mode_shaped": "Шаблонный",
+  "gui.fallenrelics.craft_builder.mode_shapeless": "Без формы",
+  "gui.fallenrelics.craft_builder.add": "Добавить",
+  "gui.fallenrelics.craft_builder.remove": "Удалить",
+  "fallenrelics.craft_builder.invalid": "Заполните хотя бы один ингредиент и слот результата.",
+  "fallenrelics.craft_builder.saved": "Рецепт %s добавлен и отправлен всем игрокам.",
+  "fallenrelics.craft_builder.removed": "Рецепт %s удалён.",
+  "fallenrelics.craft_builder.not_found": "Такой рецепт не найден.",
+  "fallenrelics.craft_builder.reload_error": "Не удалось перезагрузить рецепты. Проверьте журнал сервера.",
+  "fallenrelics.craft_builder.error": "Не удалось сохранить файл рецепта. Проверьте права на запись мира."
 }

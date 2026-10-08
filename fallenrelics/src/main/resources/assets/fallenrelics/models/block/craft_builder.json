@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "fallenrelics:block/craft_builder_top",
+    "side": "fallenrelics:block/craft_builder_side",
+    "front": "fallenrelics:block/craft_builder_front"
+  }
+}

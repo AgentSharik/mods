@@ -1,12 +1,14 @@
 package dev.agentsharik.fallenrelics;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -17,6 +19,8 @@ public final class ModContent {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FallenRelicsMod.MOD_ID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
             DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, FallenRelicsMod.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> MENUS =
+            DeferredRegister.create(Registries.MENU, FallenRelicsMod.MOD_ID);
 
     public static final DeferredBlock<PackagerBlock> PACKAGER = BLOCKS.register("packager", () -> new PackagerBlock(
             BlockBehaviour.Properties.of()
@@ -30,6 +34,21 @@ public final class ModContent {
             BLOCK_ENTITIES.register("packager", () -> BlockEntityType.Builder
                     .of(PackagerBlockEntity::new, PACKAGER.get())
                     .build(null));
+
+    public static final DeferredBlock<CraftBuilderBlock> CRAFT_BUILDER = BLOCKS.register("craft_builder", () ->
+            new CraftBuilderBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL)
+                    .strength(6.0F, 8.0F)
+                    .sound(SoundType.METAL)
+                    .requiresCorrectToolForDrops()));
+    public static final DeferredItem<BlockItem> CRAFT_BUILDER_ITEM =
+            ITEMS.registerSimpleBlockItem("craft_builder", CRAFT_BUILDER);
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CraftBuilderBlockEntity>> CRAFT_BUILDER_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("craft_builder", () -> BlockEntityType.Builder
+                    .of(CraftBuilderBlockEntity::new, CRAFT_BUILDER.get())
+                    .build(null));
+    public static final DeferredHolder<MenuType<?>, MenuType<CraftBuilderMenu>> CRAFT_BUILDER_MENU =
+            MENUS.register("craft_builder", () -> IMenuTypeExtension.create(CraftBuilderMenu::new));
 
     public static final DeferredItem<Item> UPGRADE_TEMPLATE =
             ITEMS.registerSimpleItem("upgrade_template", new Item.Properties());

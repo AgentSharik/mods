@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "drd",
+    "cuf",
+    "drd"
+  ],
+  "key": {
+    "d": {
+      "item": "minecraft:diamond_block"
+    },
+    "r": {
+      "item": "minecraft:redstone_block"
+    },
+    "c": {
+      "item": "minecraft:crafting_table"
+    },
+    "u": {
+      "item": "fallenrelics:diamond_upgrade"
+    },
+    "f": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "id": "fallenrelics:craft_builder",
+    "count": 1
+  }
+}

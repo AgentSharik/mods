@@ -23,5 +23,19 @@
   "fallenrelics.upgrade.none": "No upgrade",
   "fallenrelics.upgrade.installed": "Installed upgrade: %s",
   "fallenrelics.upgrade.not_higher": "The packager already has this or a stronger upgrade.",
-  "fallenrelics.upgrade.failed": "Could not install the upgrade on the packager."
+  "fallenrelics.upgrade.failed": "Could not install the upgrade on the packager.",
+  "block.fallenrelics.craft_builder": "Craft Builder",
+  "container.fallenrelics.craft_builder": "Craft Builder — Recipe Editor",
+  "gui.fallenrelics.craft_builder.ingredients": "Ingredients",
+  "gui.fallenrelics.craft_builder.result": "Result",
+  "gui.fallenrelics.craft_builder.mode_shaped": "Shaped",
+  "gui.fallenrelics.craft_builder.mode_shapeless": "Shapeless",
+  "gui.fallenrelics.craft_builder.add": "Add",
+  "gui.fallenrelics.craft_builder.remove": "Remove",
+  "fallenrelics.craft_builder.invalid": "Add at least one ingredient and a result item.",
+  "fallenrelics.craft_builder.saved": "Recipe %s was added and synced to all players.",
+  "fallenrelics.craft_builder.removed": "Recipe %s was removed.",
+  "fallenrelics.craft_builder.not_found": "That recipe was not found.",
+  "fallenrelics.craft_builder.reload_error": "Could not reload recipes. Check the server log.",
+  "fallenrelics.craft_builder.error": "Could not save the recipe file. Check world-folder write permissions."
 }
