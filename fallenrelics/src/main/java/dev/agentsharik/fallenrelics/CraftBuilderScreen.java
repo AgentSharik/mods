@@ -48,11 +48,12 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     @Override
     protected void init() {
         super.init();
-        int buttonX = leftPos + imageWidth + 4;
-        int columnTop = topPos + (imageHeight - (20 * 3 + 4 * 2)) / 2;
-        addRenderableWidget(new IconButton(buttonX, columnTop, 1));
-        addRenderableWidget(new IconButton(buttonX, columnTop + 24, 2));
-        modeButton = addRenderableWidget(new IconButton(buttonX, columnTop + 48, 0));
+        // Top-right row, where the vanilla recipe-book controls live in (1)-style
+        // layouts: add, remove, mode.
+        int rowY = topPos + 4;
+        addRenderableWidget(new IconButton(leftPos + 98, rowY, 1));
+        addRenderableWidget(new IconButton(leftPos + 124, rowY, 2));
+        modeButton = addRenderableWidget(new IconButton(leftPos + 150, rowY, 0));
         refreshModeButton();
     }
 

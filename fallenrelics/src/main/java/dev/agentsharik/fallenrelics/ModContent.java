@@ -26,8 +26,7 @@ public final class ModContent {
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)
                     .strength(10.0F, 10.0F)
-                    .sound(SoundType.METAL)
-                    .requiresCorrectToolForDrops()));
+                    .sound(SoundType.METAL)));
     public static final DeferredItem<BlockItem> PACKAGER_ITEM =
             ITEMS.registerSimpleBlockItem("packager", PACKAGER);
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PackagerBlockEntity>> PACKAGER_BLOCK_ENTITY =
@@ -39,8 +38,7 @@ public final class ModContent {
             new CraftBuilderBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)
                     .strength(6.0F, 8.0F)
-                    .sound(SoundType.METAL)
-                    .requiresCorrectToolForDrops()));
+                    .sound(SoundType.METAL)));
     public static final DeferredItem<BlockItem> CRAFT_BUILDER_ITEM =
             ITEMS.registerSimpleBlockItem("craft_builder", CRAFT_BUILDER);
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CraftBuilderBlockEntity>> CRAFT_BUILDER_BLOCK_ENTITY =

@@ -98,7 +98,7 @@ public final class CraftBuilderScripts {
             Files.createDirectories(script.getParent());
             Files.writeString(script, generated.source(), StandardCharsets.UTF_8);
             compileDatapack(server);
-            applyLive(server);
+            applyLive(server, player);
             player.displayClientMessage(
                     Component.translatable("fallenrelics.craft_builder.saved", generated.id()), true);
         } catch (IOException | RuntimeException exception) {
@@ -144,7 +144,7 @@ public final class CraftBuilderScripts {
                 return;
             }
             compileDatapack(server);
-            applyLive(server);
+            applyLive(server, player);
             player.displayClientMessage(
                     Component.translatable("fallenrelics.craft_builder.removed", generated.id()), true);
         } catch (IOException | RuntimeException exception) {
@@ -205,7 +205,7 @@ public final class CraftBuilderScripts {
     }
 
     /** Inserts (or updates) all scripted recipes into the live RecipeManager and syncs clients. */
-    private static void applyLive(MinecraftServer server) {
+    private static void applyLive(MinecraftServer server, @Nullable Player player) {
         try {
             RecipeManager manager = server.getRecipeManager();
             ensureMutableManager(manager);
@@ -213,6 +213,9 @@ public final class CraftBuilderScripts {
             syncRecipes(server, manager);
         } catch (IOException | RuntimeException exception) {
             LOGGER.error("Could not apply Fallen Relics scripts to the live recipe manager", exception);
+            if (player != null) {
+                player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.error"), true);
+            }
         }
     }
 
@@ -262,8 +265,10 @@ public final class CraftBuilderScripts {
     }
 
     private static void syncRecipes(MinecraftServer server, RecipeManager manager) {
+        ClientboundUpdateRecipesPacket packet =
+                new ClientboundUpdateRecipesPacket(manager.getOrderedRecipes());
         for (ServerPlayer connected : server.getPlayerList().getPlayers()) {
-            connected.connection.send(new ClientboundUpdateRecipesPacket(manager.getOrderedRecipes()));
+            connected.connection.send(packet);
         }
     }
 
@@ -379,7 +384,7 @@ public final class CraftBuilderScripts {
     /** Recompiles the datapack and refreshes the live manager without a full reload. */
     public static void reloadFromCommand(MinecraftServer server, CommandSourceStack source) {
         compileDatapack(server);
-        applyLive(server);
+        applyLive(server, null);
         source.sendSuccess(() -> Component.translatable("fallenrelics.craft_builder.reloaded"), true);
     }
 

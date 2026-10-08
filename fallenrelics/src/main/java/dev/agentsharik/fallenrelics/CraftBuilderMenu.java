@@ -16,7 +16,8 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 public final class CraftBuilderMenu extends AbstractContainerMenu {
-    private static final int BUILDER_SLOTS = CraftBuilderBlockEntity.SLOT_COUNT;
+    /** Container slots: 9 grid + shaped result + 2 furnace inputs + shapeless result. */
+    private static final int BUILDER_SLOTS = CraftBuilderBlockEntity.SLOT_COUNT + 1;
     private static final int PLAYER_INVENTORY_START = BUILDER_SLOTS;
 
     @Nullable private final BlockPos blockPos;
@@ -81,21 +82,22 @@ public final class CraftBuilderMenu extends AbstractContainerMenu {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
                 addSlot(new ModeSlot(itemHandler, row * 3 + column,
-                        30 + column * 18, 17 + row * 18, false));
+                        29 + column * 18, 16 + row * 18, false));
             }
         }
-        addSlot(new SlotItemHandler(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 122, 36));
+        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 122, 33, false));
         addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.FURNACE_INPUT_FIRST, 56, 17, true));
         addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.FURNACE_INPUT_SECOND, 56, 53, true));
+        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 118, 34, true));
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
                 addPlayerSlot(playerInventory, column + row * 9 + 9,
-                        8 + column * 18, 84 + row * 18);
+                        7 + column * 18, 83 + row * 18);
             }
         }
         for (int column = 0; column < 9; column++) {
-            addPlayerSlot(playerInventory, column, 8 + column * 18, 144);
+            addPlayerSlot(playerInventory, column, 7 + column * 18, 141);
         }
 
         addDataSlots(data);
