@@ -54,9 +54,9 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         super.init();
         // Left decoration column of the pack art: add, remove, mode stacked
         // vertically over the swirl/dots/arrow pictograms.
-        modeButton = addRenderableWidget(new IconButton(leftPos + 11, topPos + 17, 0));
-        addRenderableWidget(new IconButton(leftPos + 11, topPos + 33, 1));
-        addRenderableWidget(new IconButton(leftPos + 11, topPos + 49, 2));
+        modeButton = addRenderableWidget(new IconButton(leftPos + 14, topPos + 17, 0));
+        addRenderableWidget(new IconButton(leftPos + 14, topPos + 33, 1));
+        addRenderableWidget(new IconButton(leftPos + 14, topPos + 49, 2));
         refreshModeButton();
     }
 
@@ -138,8 +138,8 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
                 case 1 -> drawCheck(graphics, ox, oy);
                 case 2 -> drawCross(graphics, ox, oy);
                 default -> {
-                    graphics.fill(ox + 1, oy + 13, ox + 13, oy + 14, ICON_SHADOW);
-                    graphics.fill(ox + 13, oy + 1, ox + 14, oy + 14, ICON_SHADOW);
+                    graphics.fill(ox + 1, oy + 12, ox + 13, oy + 13, ICON_SHADOW);
+                    graphics.fill(ox + 12, oy + 1, ox + 13, oy + 13, ICON_SHADOW);
                     graphics.blit(menu.isShapeless() ? CRAFTING_TABLE_ICON : FURNACE_ICON,
                             ox, oy, 12, 12, 0f, 0f, 16, 16, 16, 16);
                 }
