@@ -1,7 +1,5 @@
 package dev.agentsharik.fallenrelics;
 
-import java.util.List;
-import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -26,11 +24,7 @@ public final class ClientScreenCleaner {
         if (!(event.getScreen() instanceof CraftBuilderScreen screen)) {
             return;
         }
-        for (GuiEventListener child : List.copyOf(screen.children())) {
-            if (isForeign(child.getClass())) {
-                screen.removeWidget(child);
-            }
-        }
+        screen.children().removeIf(child -> isForeign(child.getClass()));
     }
 
     private static boolean isForeign(Class<?> type) {
