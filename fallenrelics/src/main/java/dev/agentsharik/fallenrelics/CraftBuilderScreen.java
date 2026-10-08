@@ -90,7 +90,8 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         // No block caption, only the vanilla inventory label, same spot and colour.
-        graphics.drawString(font, inventory, 8, imageHeight - 94, LABEL_COLOR, false);
+        graphics.drawString(font, Component.translatable("container.inventory"),
+                8, imageHeight - 94, LABEL_COLOR, false);
     }
 
     @Override
