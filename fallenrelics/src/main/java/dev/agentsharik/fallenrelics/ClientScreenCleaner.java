@@ -26,10 +26,11 @@ public final class ClientScreenCleaner {
         if (!(event.getScreen() instanceof CraftBuilderScreen screen)) {
             return;
         }
-        List<GuiEventListener> foreign = screen.children().stream()
-                .filter(child -> isForeign(child.getClass()))
-                .toList();
-        foreign.forEach(screen::removeWidget);
+        for (GuiEventListener child : List.copyOf(screen.children())) {
+            if (isForeign(child.getClass())) {
+                screen.removeWidget(child);
+            }
+        }
     }
 
     private static boolean isForeign(Class<?> type) {
