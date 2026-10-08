@@ -95,9 +95,17 @@ public final class CraftBuilderScripts {
         MinecraftServer server = level.getServer();
         try {
             Path script = scriptFile(generated.id());
+            boolean unchanged = Files.exists(script)
+                    && Files.readString(script, StandardCharsets.UTF_8).equals(generated.source());
             Files.createDirectories(script.getParent());
-            Files.writeString(script, generated.source(), StandardCharsets.UTF_8);
-            compileDatapack(server);
+            if (!unchanged) {
+                Files.writeString(script, generated.source(), StandardCharsets.UTF_8);
+            }
+            if (unchanged && isActive(generated.id())) {
+                player.displayClientMessage(
+                        Component.translatable("fallenrelics.craft_builder.saved", generated.id()), true);
+                return;
+            }
             applyLive(server, player);
             player.displayClientMessage(
                     Component.translatable("fallenrelics.craft_builder.saved", generated.id()), true);
@@ -143,7 +151,6 @@ public final class CraftBuilderScripts {
                 player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.not_found"), true);
                 return;
             }
-            compileDatapack(server);
             applyLive(server, player);
             player.displayClientMessage(
                     Component.translatable("fallenrelics.craft_builder.removed", generated.id()), true);
@@ -202,6 +209,10 @@ public final class CraftBuilderScripts {
         } catch (IOException | RuntimeException exception) {
             LOGGER.error("Could not compile the Fallen Relics recipe datapack", exception);
         }
+    }
+
+    private static boolean isActive(ResourceLocation id) {
+        return activeScriptRecipes.containsKey(id);
     }
 
     /** Inserts (or updates) all scripted recipes into the live RecipeManager and syncs clients. */
