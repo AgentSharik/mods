@@ -30,7 +30,10 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     private static final int LABEL_COLOR = 0xFF404040;
 
     private static final int CHECK_COLOR = 0xFF55C955;
+    private static final int CHECK_SHADOW = 0xFF2E6B2E;
     private static final int CROSS_COLOR = 0xFFD14949;
+    private static final int CROSS_SHADOW = 0xFF6B2430;
+    private static final int ICON_SHADOW = 0xFF3A3A3A;
     private static final int HOVER_COLOR = 0x33FFFFFF;
     private static final ResourceLocation FURNACE_ICON =
             ResourceLocation.withDefaultNamespace("textures/block/furnace_front.png");
@@ -51,9 +54,9 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         super.init();
         // Left decoration column of the pack art: add, remove, mode stacked
         // vertically over the swirl/dots/arrow pictograms.
-        modeButton = addRenderableWidget(new IconButton(leftPos + 11, topPos + 15, 0));
-        addRenderableWidget(new IconButton(leftPos + 11, topPos + 31, 1));
-        addRenderableWidget(new IconButton(leftPos + 11, topPos + 47, 2));
+        modeButton = addRenderableWidget(new IconButton(leftPos + 11, topPos + 17, 0));
+        addRenderableWidget(new IconButton(leftPos + 11, topPos + 33, 1));
+        addRenderableWidget(new IconButton(leftPos + 11, topPos + 49, 2));
         refreshModeButton();
     }
 
@@ -134,8 +137,12 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
             switch (menuButtonId) {
                 case 1 -> drawCheck(graphics, ox, oy);
                 case 2 -> drawCross(graphics, ox, oy);
-                default -> graphics.blit(menu.isShapeless() ? CRAFTING_TABLE_ICON : FURNACE_ICON,
-                        ox, oy, 12, 12, 0f, 0f, 16, 16, 16, 16);
+                default -> {
+                    graphics.fill(ox + 1, oy + 13, ox + 13, oy + 14, ICON_SHADOW);
+                    graphics.fill(ox + 13, oy + 1, ox + 14, oy + 14, ICON_SHADOW);
+                    graphics.blit(menu.isShapeless() ? CRAFTING_TABLE_ICON : FURNACE_ICON,
+                            ox, oy, 12, 12, 0f, 0f, 16, 16, 16, 16);
+                }
             }
         }
 
@@ -144,11 +151,18 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
                     {1, 6}, {2, 7}, {3, 8}, {4, 8}, {5, 7}, {6, 6}, {7, 5}, {8, 4}, {9, 3}
             };
             for (int[] pixel : pixels) {
+                graphics.fill(ox + pixel[0] + 1, oy + pixel[1] + 1, ox + pixel[0] + 3, oy + pixel[1] + 3, CHECK_SHADOW);
+            }
+            for (int[] pixel : pixels) {
                 graphics.fill(ox + pixel[0], oy + pixel[1], ox + pixel[0] + 2, oy + pixel[1] + 2, CHECK_COLOR);
             }
         }
 
         private void drawCross(GuiGraphics graphics, int ox, int oy) {
+            for (int i = 0; i < 9; i++) {
+                graphics.fill(ox + 2 + i, oy + 2 + i, ox + 4 + i, oy + 4 + i, CROSS_SHADOW);
+                graphics.fill(ox + 10 - i, oy + 2 + i, ox + 12 - i, oy + 4 + i, CROSS_SHADOW);
+            }
             for (int i = 0; i < 9; i++) {
                 graphics.fill(ox + 1 + i, oy + 1 + i, ox + 3 + i, oy + 3 + i, CROSS_COLOR);
                 graphics.fill(ox + 9 - i, oy + 1 + i, ox + 11 - i, oy + 3 + i, CROSS_COLOR);
