@@ -6,6 +6,7 @@
   "item.fallenrelics.gold_upgrade": "Золотое улучшение упаковщика",
   "item.fallenrelics.diamond_upgrade": "Алмазное улучшение упаковщика",
   "item.fallenrelics.netherite_upgrade": "Незеритовое улучшение упаковщика",
+  "item.fallenrelics.pocket_craft_builder": "Карманный Крафтбилдер",
   "fallenrelics.mode.current": "Текущий режим: %s",
   "fallenrelics.mode.hybrid": "Сначала 2×2, затем 3×3",
   "fallenrelics.mode.hybrid2": "Сначала 3×3, затем 2×2",
@@ -26,6 +27,7 @@
   "fallenrelics.upgrade.failed": "Не удалось установить улучшение на упаковщик.",
   "block.fallenrelics.craft_builder": "Крафтбилдер",
   "container.fallenrelics.craft_builder": "Крафтбилдер — редактор рецептов",
+  "container.fallenrelics.pocket_craft_builder": "Карманный Крафтбилдер — редактор рецептов",
   "gui.fallenrelics.craft_builder.ingredients": "Ингредиенты",
   "gui.fallenrelics.craft_builder.result": "Результат",
   "gui.fallenrelics.craft_builder.mode_shaped": "Шаблонный",
@@ -33,9 +35,10 @@
   "gui.fallenrelics.craft_builder.add": "Добавить",
   "gui.fallenrelics.craft_builder.remove": "Удалить",
   "fallenrelics.craft_builder.invalid": "Заполните хотя бы один ингредиент и слот результата.",
-  "fallenrelics.craft_builder.saved": "Рецепт %s добавлен и отправлен всем игрокам.",
+  "fallenrelics.craft_builder.saved": "Скрипт рецепта %s перезагружен и отправлен игрокам.",
   "fallenrelics.craft_builder.removed": "Рецепт %s удалён.",
-  "fallenrelics.craft_builder.not_found": "Такой рецепт не найден.",
-  "fallenrelics.craft_builder.reload_error": "Не удалось перезагрузить рецепты. Проверьте журнал сервера.",
-  "fallenrelics.craft_builder.error": "Не удалось сохранить файл рецепта. Проверьте права на запись мира."
+  "fallenrelics.craft_builder.not_found": "Такой скрипт рецепта не найден.",
+  "fallenrelics.craft_builder.crafttweaker_required": "Для работы Крафтбилдера необходим CraftTweaker.",
+  "fallenrelics.craft_builder.reload_error": "Не удалось перезагрузить скрипты. Проверьте журнал сервера.",
+  "fallenrelics.craft_builder.error": "Не удалось сохранить ZenScript-файл. Проверьте права на папку scripts сервера."
 }

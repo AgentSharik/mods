@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "b",
+    "s"
+  ],
+  "key": {
+    "b": {
+      "item": "fallenrelics:craft_builder"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "id": "fallenrelics:pocket_craft_builder",
+    "count": 1
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "fallenrelics:item/pocket_craft_builder"
+  }
+}

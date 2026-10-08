@@ -1,7 +1,9 @@
 package dev.agentsharik.fallenrelics;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -10,11 +12,8 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.HexFormat;
-import net.minecraft.core.BlockPos;
+import java.util.List;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,67 +23,122 @@ import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.LevelResource;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-/** Saves in-game recipes as a normal world datapack so Minecraft syncs them to every player. */
+/** Persists generated ZenScript files in the same scripts directory CraftTweaker reloads. */
 public final class CraftBuilderScripts {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String SCRIPT_PACK_FOLDER = "fallenrelics_scripts";
-    private static final String SCRIPT_PACK_ID = "file/" + SCRIPT_PACK_FOLDER;
+    private static final String LEGACY_DATAPACK_FOLDER = "fallenrelics_scripts";
     private static final String NAMESPACE = FallenRelicsMod.MOD_ID;
-    private static final String PACK_METADATA = "{\n  \"pack\": {\n    \"pack_format\": 48,\n    \"description\": \"Fallen Relics CraftBuilder recipes\"\n  }\n}\n";
+    private static final String SCRIPT_SUBDIRECTORY = "fallenrelics";
 
     private CraftBuilderScripts() {}
 
-    public static void saveRecipe(Player player, BlockPos pos, CraftBuilderBlockEntity builder) {
+    public static void saveRecipe(Player player, ItemStackHandler inventory, boolean shapeless) {
         if (!(player.level() instanceof ServerLevel level)) {
             return;
         }
+        if (!requireCraftTweaker(player)) {
+            return;
+        }
 
-        GeneratedRecipe recipe = generateRecipe(builder.getInventory(), builder.isShapeless());
+        GeneratedRecipe recipe = generateRecipe(inventory, shapeless);
         if (recipe == null) {
             player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.invalid"), true);
             return;
         }
 
-        Path file = recipeFile(level.getServer(), recipe.id());
         try {
-            ensureScriptPack(level.getServer());
-            Files.createDirectories(file.getParent());
-            Files.writeString(file, recipe.json().toString() + "\n", StandardCharsets.UTF_8);
-            reloadScriptPack(level.getServer(), player,
+            Path script = scriptFile(recipe.id());
+            Files.createDirectories(script.getParent());
+            Files.writeString(script, recipe.script(), StandardCharsets.UTF_8);
+            reloadScripts(level.getServer(), player,
                     Component.translatable("fallenrelics.craft_builder.saved", recipe.id()));
         } catch (IOException | RuntimeException exception) {
-            LOGGER.error("Could not save CraftBuilder recipe at {}", pos, exception);
+            LOGGER.error("Could not save CraftBuilder script for {}", player.getGameProfile().getName(), exception);
             player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.error"), true);
         }
     }
 
-    public static void removeRecipe(
-            Player player, BlockPos pos, CraftBuilderBlockEntity builder, boolean shapeless) {
+    public static void removeRecipe(Player player, ItemStackHandler inventory, boolean shapeless) {
         if (!(player.level() instanceof ServerLevel level)) {
             return;
         }
+        if (!requireCraftTweaker(player)) {
+            return;
+        }
 
-        GeneratedRecipe recipe = generateRecipe(builder.getInventory(), shapeless);
+        GeneratedRecipe recipe = generateRecipe(inventory, shapeless);
         if (recipe == null) {
             player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.invalid"), true);
             return;
         }
 
-        Path file = recipeFile(level.getServer(), recipe.id());
         try {
-            if (!Files.deleteIfExists(file)) {
+            if (!Files.deleteIfExists(scriptFile(recipe.id()))) {
                 player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.not_found"), true);
                 return;
             }
-            reloadScriptPack(level.getServer(), player,
+            reloadScripts(level.getServer(), player,
                     Component.translatable("fallenrelics.craft_builder.removed", recipe.id()));
         } catch (IOException | RuntimeException exception) {
-            LOGGER.error("Could not remove CraftBuilder recipe at {}", pos, exception);
+            LOGGER.error("Could not remove CraftBuilder script {}", recipe.id(), exception);
             player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.error"), true);
         }
+    }
+
+    /** Converts scripts saved by the previous JSON-datapack version without losing recipes. */
+    public static void migrateLegacyDatapack(MinecraftServer server) {
+        if (!ModList.get().isLoaded("crafttweaker")) {
+            return;
+        }
+
+        Path legacyRecipes = server.getWorldPath(LevelResource.DATAPACK_DIR)
+                .resolve(LEGACY_DATAPACK_FOLDER)
+                .resolve("data")
+                .resolve(NAMESPACE)
+                .resolve("recipe");
+        if (!Files.isDirectory(legacyRecipes)) {
+            return;
+        }
+
+        boolean changed = false;
+        try (var files = Files.list(legacyRecipes)) {
+            for (Path file : files.filter(path -> path.getFileName().toString().startsWith("craftbuilder_")
+                    && path.getFileName().toString().endsWith(".json")).toList()) {
+                try {
+                    GeneratedRecipe migrated = convertLegacyRecipe(
+                            JsonParser.parseString(Files.readString(file)).getAsJsonObject());
+                    Path destination = scriptFile(migrated.id());
+                    Files.createDirectories(destination.getParent());
+                    if (!Files.exists(destination)) {
+                        Files.writeString(destination, migrated.script(), StandardCharsets.UTF_8);
+                    }
+                    changed |= Files.deleteIfExists(file);
+                } catch (RuntimeException | IOException exception) {
+                    LOGGER.warn("Could not migrate legacy CraftBuilder recipe {}", file, exception);
+                }
+            }
+        } catch (IOException exception) {
+            LOGGER.error("Could not scan the legacy CraftBuilder datapack", exception);
+        }
+
+        if (changed) {
+            LOGGER.info("Migrated legacy CraftBuilder recipes to CraftTweaker scripts");
+            reloadScripts(server, null, null);
+        }
+    }
+
+    private static boolean requireCraftTweaker(Player player) {
+        if (ModList.get().isLoaded("crafttweaker")) {
+            return true;
+        }
+        player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.crafttweaker_required"), true);
+        return false;
     }
 
     private static GeneratedRecipe generateRecipe(ItemStackHandler inventory, boolean shapeless) {
@@ -102,57 +156,121 @@ public final class CraftBuilderScripts {
             return null;
         }
 
-        JsonObject recipe = new JsonObject();
-        recipe.addProperty("type", shapeless ? "minecraft:crafting_shapeless" : "minecraft:crafting_shaped");
-        recipe.addProperty("group", "fallenrelics:craftbuilder");
-
-        if (shapeless) {
-            JsonArray ingredients = new JsonArray();
-            for (ResourceLocation ingredientId : ingredientIds) {
-                if (ingredientId != null) {
-                    ingredients.add(ingredient(ingredientId));
-                }
-            }
-            recipe.add("ingredients", ingredients);
-        } else {
-            Map<ResourceLocation, Character> symbols = new LinkedHashMap<>();
-            JsonArray pattern = new JsonArray();
-            for (int row = 0; row < 3; row++) {
-                StringBuilder line = new StringBuilder(3);
-                for (int column = 0; column < 3; column++) {
-                    ResourceLocation ingredientId = ingredientIds.get(row * 3 + column);
-                    if (ingredientId == null) {
-                        line.append(' ');
-                    } else {
-                        char symbol = symbols.computeIfAbsent(ingredientId, key -> (char) ('A' + symbols.size()));
-                        line.append(symbol);
-                    }
-                }
-                pattern.add(line.toString());
-            }
-            JsonObject key = new JsonObject();
-            for (Map.Entry<ResourceLocation, Character> entry : symbols.entrySet()) {
-                key.add(String.valueOf(entry.getValue()), ingredient(entry.getKey()));
-            }
-            recipe.add("pattern", pattern);
-            recipe.add("key", key);
-        }
-
         ResourceLocation resultId = BuiltInRegistries.ITEM.getKey(result.getItem());
-        JsonObject resultJson = new JsonObject();
-        resultJson.addProperty("id", resultId.toString());
-        resultJson.addProperty("count", result.getCount());
-        recipe.add("result", resultJson);
-
-        String json = recipe.toString();
+        String fingerprint = fingerprint(ingredientIds, resultId, result.getCount(), shapeless);
         String outputName = resultId.getNamespace() + "_" + resultId.getPath().replace('/', '_');
-        return new GeneratedRecipe("craftbuilder_" + outputName + "_" + hash(json), recipe);
+        String id = "craftbuilder_" + outputName + "_" + hash(fingerprint);
+        return new GeneratedRecipe(id,
+                createCraftTweakerScript(id, resultId, result.getCount(), ingredientIds, shapeless));
     }
 
-    private static JsonObject ingredient(ResourceLocation itemId) {
-        JsonObject ingredient = new JsonObject();
-        ingredient.addProperty("item", itemId.toString());
-        return ingredient;
+    private static String fingerprint(
+            List<ResourceLocation> ingredientIds, ResourceLocation resultId, int resultCount, boolean shapeless) {
+        StringBuilder fingerprint = new StringBuilder(shapeless ? "shapeless|" : "shaped|");
+        fingerprint.append(resultId).append('*').append(resultCount).append('|');
+        if (shapeless) {
+            ingredientIds.stream()
+                    .filter(java.util.Objects::nonNull)
+                    .map(ResourceLocation::toString)
+                    .sorted()
+                    .forEach(id -> fingerprint.append(id).append('|'));
+        } else {
+            for (ResourceLocation ingredientId : ingredientIds) {
+                fingerprint.append(ingredientId == null ? "-" : ingredientId.toString()).append('|');
+            }
+        }
+        return fingerprint.toString();
+    }
+
+    private static String createCraftTweakerScript(
+            String recipeId, ResourceLocation resultId, int resultCount,
+            List<ResourceLocation> ingredientIds, boolean shapeless) {
+        StringBuilder script = new StringBuilder();
+        script.append("// Generated by Fallen Relics CraftBuilder.\n")
+                .append("// This is a normal CraftTweaker ZenScript recipe.\n");
+        script.append(shapeless ? "craftingTable.addShapeless(\"" : "craftingTable.addShaped(\"")
+                .append(recipeId).append("\", ")
+                .append(craftTweakerItem(resultId, resultCount)).append(", ");
+
+        if (shapeless) {
+            script.append("[ ");
+            boolean first = true;
+            for (ResourceLocation ingredientId : ingredientIds) {
+                if (ingredientId == null) {
+                    continue;
+                }
+                if (!first) {
+                    script.append(", ");
+                }
+                script.append(craftTweakerItem(ingredientId, 1));
+                first = false;
+            }
+            script.append(" ]);\n");
+        } else {
+            script.append("[\n");
+            for (int row = 0; row < 3; row++) {
+                script.append("    [");
+                for (int column = 0; column < 3; column++) {
+                    if (column > 0) {
+                        script.append(", ");
+                    }
+                    ResourceLocation ingredientId = ingredientIds.get(row * 3 + column);
+                    script.append(ingredientId == null
+                            ? "<item:minecraft:air>"
+                            : craftTweakerItem(ingredientId, 1));
+                }
+                script.append(row == 2 ? "]\n" : "],\n");
+            }
+            script.append("]);\n");
+        }
+        return script.toString();
+    }
+
+    private static GeneratedRecipe convertLegacyRecipe(JsonObject recipe) {
+        JsonObject result = recipe.getAsJsonObject("result");
+        ResourceLocation resultId = ResourceLocation.parse(result.get("id").getAsString());
+        int resultCount = result.has("count") ? result.get("count").getAsInt() : 1;
+        String type = recipe.get("type").getAsString();
+        boolean shapeless = type.endsWith("crafting_shapeless");
+        List<ResourceLocation> ingredientIds = new ArrayList<>();
+
+        if (shapeless) {
+            JsonArray ingredients = recipe.getAsJsonArray("ingredients");
+            for (JsonElement ingredient : ingredients) {
+                ingredientIds.add(ResourceLocation.parse(ingredient.getAsJsonObject().get("item").getAsString()));
+            }
+            while (ingredientIds.size() < CraftBuilderBlockEntity.INPUT_SLOTS) {
+                ingredientIds.add(null);
+            }
+        } else if (type.endsWith("crafting_shaped")) {
+            JsonArray pattern = recipe.getAsJsonArray("pattern");
+            JsonObject key = recipe.getAsJsonObject("key");
+            for (int row = 0; row < 3; row++) {
+                String line = pattern.get(row).getAsString();
+                for (int column = 0; column < 3; column++) {
+                    char symbol = line.charAt(column);
+                    if (symbol == ' ') {
+                        ingredientIds.add(null);
+                    } else {
+                        JsonObject ingredient = key.get(String.valueOf(symbol)).getAsJsonObject();
+                        ingredientIds.add(ResourceLocation.parse(ingredient.get("item").getAsString()));
+                    }
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("Unsupported old recipe type: " + type);
+        }
+
+        String id = "craftbuilder_" + resultId.getNamespace() + "_"
+                + resultId.getPath().replace('/', '_') + "_"
+                + hash(fingerprint(ingredientIds, resultId, resultCount, shapeless));
+        return new GeneratedRecipe(id,
+                createCraftTweakerScript(id, resultId, resultCount, ingredientIds, shapeless));
+    }
+
+    private static String craftTweakerItem(ResourceLocation itemId, int count) {
+        String item = "<item:" + itemId + ">";
+        return count > 1 ? item + " * " + count : item;
     }
 
     private static String hash(String content) {
@@ -164,47 +282,30 @@ public final class CraftBuilderScripts {
         }
     }
 
-    private static Path recipeFile(MinecraftServer server, String recipeId) {
-        return scriptPackRoot(server)
-                .resolve("data")
-                .resolve(NAMESPACE)
-                .resolve("recipe")
-                .resolve(recipeId + ".json");
+    private static Path scriptFile(String recipeId) {
+        return FMLPaths.GAMEDIR.get()
+                .resolve("scripts")
+                .resolve(SCRIPT_SUBDIRECTORY)
+                .resolve(recipeId + ".zs");
     }
 
-    private static Path scriptPackRoot(MinecraftServer server) {
-        return server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(SCRIPT_PACK_FOLDER);
-    }
-
-    private static void ensureScriptPack(MinecraftServer server) throws IOException {
-        Path root = scriptPackRoot(server);
-        Files.createDirectories(root);
-        Path metadata = root.resolve("pack.mcmeta");
-        if (!Files.exists(metadata)) {
-            Files.writeString(metadata, PACK_METADATA, StandardCharsets.UTF_8);
-        }
-    }
-
-    private static void reloadScriptPack(MinecraftServer server, Player player, Component successMessage) {
+    private static void reloadScripts(
+            MinecraftServer server, @Nullable Player player, @Nullable Component successMessage) {
         PackRepository repository = server.getPackRepository();
-        repository.reload();
-        if (!repository.getAvailableIds().contains(SCRIPT_PACK_ID)) {
-            throw new IllegalStateException("CraftBuilder datapack was not discovered by the server");
-        }
-
         List<String> selectedPacks = new ArrayList<>(repository.getSelectedIds());
-        if (!selectedPacks.contains(SCRIPT_PACK_ID)) {
-            selectedPacks.add(SCRIPT_PACK_ID);
-        }
         server.reloadResources(selectedPacks).whenComplete((ignored, failure) -> server.execute(() -> {
             if (failure == null) {
-                player.displayClientMessage(successMessage, true);
+                if (player != null && successMessage != null) {
+                    player.displayClientMessage(successMessage, true);
+                }
             } else {
-                LOGGER.error("Could not reload the Fallen Relics CraftBuilder datapack", failure);
-                player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.reload_error"), true);
+                LOGGER.error("Could not reload CraftTweaker scripts after a CraftBuilder change", failure);
+                if (player != null) {
+                    player.displayClientMessage(Component.translatable("fallenrelics.craft_builder.reload_error"), true);
+                }
             }
         }));
     }
 
-    private record GeneratedRecipe(String id, JsonObject json) {}
+    private record GeneratedRecipe(String id, String script) {}
 }

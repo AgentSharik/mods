@@ -14,6 +14,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 
 @Mod(FallenRelicsMod.MOD_ID)
 public final class FallenRelicsMod {
@@ -28,12 +29,18 @@ public final class FallenRelicsMod {
         modEventBus.addListener(this::addCreativeContent);
         modEventBus.addListener(this::registerCapabilities);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onPackagerRightClick);
+        NeoForge.EVENT_BUS.addListener(this::onServerStarted);
+    }
+
+    private void onServerStarted(ServerStartedEvent event) {
+        CraftBuilderScripts.migrateLegacyDatapack(event.getServer());
     }
 
     private void addCreativeContent(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS) {
             event.accept(ModContent.PACKAGER_ITEM);
             event.accept(ModContent.CRAFT_BUILDER_ITEM);
+            event.accept(ModContent.POCKET_CRAFT_BUILDER);
             event.accept(ModContent.UPGRADE_TEMPLATE);
             event.accept(ModContent.IRON_UPGRADE);
             event.accept(ModContent.GOLD_UPGRADE);
