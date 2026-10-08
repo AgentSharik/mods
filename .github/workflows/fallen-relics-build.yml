@@ -68,5 +68,7 @@ jobs:
             echo 'The committed JAR is already up to date.'
           else
             git commit -m 'Add built Fallen Relics NeoForge 1.21.1 JAR'
+            git fetch origin "${GITHUB_REF_NAME}"
+            git merge --no-edit "origin/${GITHUB_REF_NAME}" || true
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
