@@ -33,7 +33,6 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     private static final int CHECK_SHADOW = 0xFF2E6B2E;
     private static final int CROSS_COLOR = 0xFFD14949;
     private static final int CROSS_SHADOW = 0xFF6B2430;
-    private static final int ICON_SHADOW = 0xFF585858;
     private static final int HOVER_COLOR = 0x33FFFFFF;
     private static final ResourceLocation FURNACE_ICON =
             ResourceLocation.withDefaultNamespace("textures/block/furnace_front.png");
@@ -54,9 +53,9 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         super.init();
         // Left decoration column of the pack art: add, remove, mode stacked
         // vertically over the swirl/dots/arrow pictograms.
-        modeButton = addRenderableWidget(new IconButton(leftPos + 16, topPos + 19, 0));
-        addRenderableWidget(new IconButton(leftPos + 16, topPos + 35, 1));
-        addRenderableWidget(new IconButton(leftPos + 16, topPos + 51, 2));
+        modeButton = addRenderableWidget(new IconButton(leftPos + 15, topPos + 20, 0));
+        addRenderableWidget(new IconButton(leftPos + 15, topPos + 36, 1));
+        addRenderableWidget(new IconButton(leftPos + 15, topPos + 52, 2));
         refreshModeButton();
     }
 
@@ -137,12 +136,8 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
             switch (menuButtonId) {
                 case 1 -> drawCheck(graphics, ox, oy);
                 case 2 -> drawCross(graphics, ox, oy);
-                default -> {
-                    graphics.fill(ox + 1, oy + 12, ox + 13, oy + 13, ICON_SHADOW);
-                    graphics.fill(ox + 12, oy + 1, ox + 13, oy + 13, ICON_SHADOW);
-                    graphics.blit(menu.isShapeless() ? CRAFTING_TABLE_ICON : FURNACE_ICON,
-                            ox, oy, 12, 12, 0f, 0f, 16, 16, 16, 16);
-                }
+                default -> graphics.blit(menu.isShapeless() ? CRAFTING_TABLE_ICON : FURNACE_ICON,
+                        ox, oy, 12, 12, 0f, 0f, 16, 16, 16, 16);
             }
         }
 
