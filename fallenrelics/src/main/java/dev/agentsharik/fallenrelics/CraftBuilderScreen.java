@@ -1,6 +1,5 @@
 package dev.agentsharik.fallenrelics;
 
-import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -8,7 +7,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.Slot;
 
 /**
  * The window is the bundled Colourful Containers (Kingybu) pack art, drawn
@@ -44,24 +42,16 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     /** 3x3 grid position, identical to the vanilla crafting table layout. */
     private static final int GRID_X = 30;
     private static final int GRID_Y = 17;
-    /** Result slot on the crafting-table art (inside its big output frame). */
-    private static final int RESULT_SHAPED_X = 123;
-    private static final int RESULT_SHAPED_Y = 34;
-    /** Result slot centered inside the furnace art's big output frame. */
-    private static final int RESULT_SHAPELESS_X = 120;
-    private static final int RESULT_SHAPELESS_Y = 39;
 
     private static final int CHECK_COLOR = 0xFF55C955;
     private static final int CROSS_COLOR = 0xFFD14949;
 
     private IconButton modeButton;
-    private boolean lastShapeless;
 
     public CraftBuilderScreen(CraftBuilderMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = 176;
         imageHeight = 166;
-        lastShapeless = menu.isShapeless();
     }
 
     @Override
@@ -73,27 +63,6 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
         addRenderableWidget(new IconButton(buttonX, columnTop + 24, 2));
         modeButton = addRenderableWidget(new IconButton(buttonX, columnTop + 48, 0));
         refreshModeButton();
-        applyModeLayout();
-    }
-
-    /** Moves the result slot to match the background art; the server ignores slot coordinates. */
-    private void applyModeLayout() {
-        List<Slot> slots = menu.slots;
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 3; column++) {
-                Slot slot = slots.get(row * 3 + column);
-                slot.x = GRID_X + column * 18;
-                slot.y = GRID_Y + row * 18;
-            }
-        }
-        Slot result = slots.get(CraftBuilderBlockEntity.RESULT_SLOT);
-        if (menu.isShapeless()) {
-            result.x = RESULT_SHAPELESS_X;
-            result.y = RESULT_SHAPELESS_Y;
-        } else {
-            result.x = RESULT_SHAPED_X;
-            result.y = RESULT_SHAPED_Y;
-        }
     }
 
     private void refreshModeButton() {
@@ -115,11 +84,7 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
     @Override
     protected void containerTick() {
         super.containerTick();
-        if (menu.isShapeless() != lastShapeless) {
-            lastShapeless = menu.isShapeless();
-            applyModeLayout();
-            refreshModeButton();
-        }
+        refreshModeButton();
     }
 
     @Override
