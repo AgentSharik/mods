@@ -296,7 +296,7 @@ public final class CraftBuilderScripts {
                     if (recipe == null) {
                         continue;
                     }
-                    if (recipe.getType() != RecipeType.CRAFTING) {
+                    if (recipe.getType() != RecipeType.CRAFTING && recipe.getType() != RecipeType.SMELTING) {
                         LOGGER.error("Ignoring non-crafting recipe in script {}", scriptFile);
                         continue;
                     }
@@ -399,20 +399,17 @@ public final class CraftBuilderScripts {
         }
 
         List<ResourceLocation> ingredients = new ArrayList<>();
+        boolean smelting = false;
         if (shapeless) {
-            // Furnace-style editor: each of the two input stacks contributes its
-            // item once (stack size only helps the player measure amounts, like
-            // a furnace fuel slot), so any stack size is a valid single ingredient.
-            for (int slot = CraftBuilderBlockEntity.FURNACE_INPUT_FIRST;
-                 slot <= CraftBuilderBlockEntity.FURNACE_INPUT_SECOND; slot++) {
-                ItemStack stack = inventory.getStackInSlot(slot);
-                if (!stack.isEmpty()) {
-                    ingredients.add(BuiltInRegistries.ITEM.getKey(stack.getItem()));
-                }
-            }
-            if (ingredients.isEmpty()) {
+            // Furnace window edits a SMELTING recipe: the top input stack is the
+            // ingredient (the fuel slot is only there for the furnace look), the
+            // output frame holds the smelted result.
+            smelting = true;
+            ItemStack input = inventory.getStackInSlot(CraftBuilderBlockEntity.FURNACE_INPUT_FIRST);
+            if (input.isEmpty()) {
                 return null;
             }
+            ingredients.add(BuiltInRegistries.ITEM.getKey(input.getItem()));
         } else {
             for (int slot = 0; slot < CraftBuilderBlockEntity.INPUT_SLOTS; slot++) {
                 ItemStack stack = inventory.getStackInSlot(slot);
@@ -424,7 +421,8 @@ public final class CraftBuilderScripts {
         }
 
         RecipeScript recipe = new RecipeScript(
-                shapeless,
+                shapeless && !smelting,
+                smelting,
                 BuiltInRegistries.ITEM.getKey(result.getItem()),
                 result.getCount(),
                 ingredients);
@@ -442,7 +440,9 @@ public final class CraftBuilderScripts {
     }
 
     private static String fingerprint(RecipeScript recipe) {
-        StringBuilder fingerprint = new StringBuilder(recipe.shapeless() ? "shapeless|" : "shaped|");
+        StringBuilder fingerprint = new StringBuilder(recipe.smelting()
+                ? "smelting|"
+                : recipe.shapeless() ? "shapeless|" : "shaped|");
         fingerprint.append(recipe.result()).append('*').append(recipe.resultCount()).append('|');
         if (recipe.shapeless()) {
             recipe.ingredients().stream()
@@ -461,8 +461,14 @@ public final class CraftBuilderScripts {
     private static String serializeScript(RecipeScript recipe) {
         StringBuilder source = new StringBuilder();
         source.append("# Fallen Relics standalone recipe script v1\n")
-                .append("type ").append(recipe.shapeless() ? "shapeless" : "shaped").append('\n')
+                .append("type ").append(recipe.smelting()
+                        ? "smelting"
+                        : recipe.shapeless() ? "shapeless" : "shaped").append('\n')
                 .append("result ").append(recipe.result()).append(' ').append(recipe.resultCount()).append('\n');
+        if (recipe.smelting()) {
+            source.append("ingredient ").append(recipe.ingredients().get(0)).append('\n');
+            return source.toString();
+        }
         if (recipe.shapeless()) {
             source.append("ingredients\n");
             for (ResourceLocation ingredient : recipe.ingredients()) {
@@ -499,11 +505,12 @@ public final class CraftBuilderScripts {
         if (typeLine.length != 2 || !typeLine[0].equals("type")) {
             throw new IllegalArgumentException("Expected 'type shaped' or 'type shapeless' on the first line");
         }
-        boolean shapeless = switch (typeLine[1]) {
-            case "shaped" -> false;
-            case "shapeless" -> true;
-            default -> throw new IllegalArgumentException("Unknown recipe type: " + typeLine[1]);
-        };
+        String typeWord = typeLine[1];
+        boolean shapeless = typeWord.equals("shapeless");
+        boolean smelting = typeWord.equals("smelting");
+        if (!typeWord.equals("shaped") && !shapeless && !smelting) {
+            throw new IllegalArgumentException("Unknown recipe type: " + typeWord);
+        }
 
         String[] resultLine = words(lines.get(1));
         if (!resultLine[0].equals("result") || resultLine.length < 2 || resultLine.length > 3) {
@@ -516,7 +523,12 @@ public final class CraftBuilderScripts {
         }
 
         List<ResourceLocation> ingredients = new ArrayList<>();
-        if (shapeless) {
+        if (smelting) {
+            if (lines.size() != 4 || !lines.get(2).startsWith("ingredient")) {
+                throw new IllegalArgumentException("A smelting script needs 'ingredient <item_id>' after the result line");
+            }
+            ingredients.add(parseItemId(words(lines.get(2))[1]));
+        } else if (shapeless) {
             if (!lines.get(2).equals("ingredients")) {
                 throw new IllegalArgumentException("Expected 'ingredients' after the result line");
             }
@@ -547,7 +559,7 @@ public final class CraftBuilderScripts {
                 throw new IllegalArgumentException("A shaped recipe must have at least one ingredient");
             }
         }
-        return new RecipeScript(shapeless, result, resultCount, ingredients);
+        return new RecipeScript(shapeless, smelting, result, resultCount, ingredients);
     }
 
     private static String[] words(String line) {
@@ -564,6 +576,19 @@ public final class CraftBuilderScripts {
 
     private static JsonObject compileRecipe(RecipeScript recipe) {
         JsonObject json = new JsonObject();
+        if (recipe.smelting()) {
+            json.addProperty("type", "minecraft:smelting");
+            JsonObject ingredient = new JsonObject();
+            ingredient.addProperty("item", recipe.ingredients().get(0).toString());
+            json.add("ingredient", ingredient);
+            JsonObject result = new JsonObject();
+            result.addProperty("id", recipe.result().toString());
+            result.addProperty("count", recipe.resultCount());
+            json.add("result", result);
+            json.addProperty("experience", 0.35);
+            json.addProperty("cookingtime", 200);
+            return json;
+        }
         json.addProperty("type", recipe.shapeless()
                 ? "minecraft:crafting_shapeless"
                 : "minecraft:crafting_shaped");
@@ -633,7 +658,7 @@ public final class CraftBuilderScripts {
             if (rowCount != 3) {
                 throw new IllegalArgumentException("Old shaped ZenScript did not contain three rows");
             }
-            return new RecipeScript(false, result, count, ingredients);
+            return new RecipeScript(false, false, result, count, ingredients);
         }
         if (shapelessMatcher.find()) {
             ResourceLocation result = parseItemId(shapelessMatcher.group(1));
@@ -646,7 +671,7 @@ public final class CraftBuilderScripts {
             if (ingredients.isEmpty() || ingredients.size() > CraftBuilderBlockEntity.INPUT_SLOTS) {
                 throw new IllegalArgumentException("Old shapeless ZenScript has an invalid ingredient count");
             }
-            return new RecipeScript(true, result, count, ingredients);
+            return new RecipeScript(true, false, result, count, ingredients);
         }
         throw new IllegalArgumentException("Unrecognized generated recipe script");
     }
@@ -686,7 +711,7 @@ public final class CraftBuilderScripts {
         } else {
             throw new IllegalArgumentException("Unsupported old recipe type: " + type);
         }
-        return new RecipeScript(shapeless, resultId, resultCount, ingredients);
+        return new RecipeScript(shapeless, false, resultId, resultCount, ingredients);
     }
 
     private static String recipeIdFromScriptPath(Path relativeScriptPath) {
@@ -760,6 +785,7 @@ public final class CraftBuilderScripts {
     private record GeneratedRecipe(String id, String source, String fingerprint, String outputPrefix) {}
     private record RecipeScript(
             boolean shapeless,
+            boolean smelting,
             ResourceLocation result,
             int resultCount,
             List<ResourceLocation> ingredients) {}

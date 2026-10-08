@@ -79,25 +79,27 @@ public final class CraftBuilderMenu extends AbstractContainerMenu {
     }
 
     private void addSlots(Inventory playerInventory) {
+        // Exact vanilla coordinates: the bundled pack art is aligned to them,
+        // so items sit pixel-perfect inside the printed frames.
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
                 addSlot(new ModeSlot(itemHandler, row * 3 + column,
-                        29 + column * 18, 16 + row * 18, false));
+                        30 + column * 18, 17 + row * 18, false));
             }
         }
-        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 124, 35, false));
+        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 120, 35, false));
         addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.FURNACE_INPUT_FIRST, 56, 17, true));
         addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.FURNACE_INPUT_SECOND, 56, 53, true));
-        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 120, 36, true));
+        addSlot(new ModeSlot(itemHandler, CraftBuilderBlockEntity.RESULT_SLOT, 116, 35, true));
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
                 addPlayerSlot(playerInventory, column + row * 9 + 9,
-                        7 + column * 18, 83 + row * 18);
+                        8 + column * 18, 84 + row * 18);
             }
         }
         for (int column = 0; column < 9; column++) {
-            addPlayerSlot(playerInventory, column, 7 + column * 18, 141);
+            addPlayerSlot(playerInventory, column, 8 + column * 18, 142);
         }
 
         addDataSlots(data);
