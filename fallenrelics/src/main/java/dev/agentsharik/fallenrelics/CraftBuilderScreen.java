@@ -141,18 +141,17 @@ public final class CraftBuilderScreen extends AbstractContainerScreen<CraftBuild
 
         private void drawCheck(GuiGraphics graphics, int ox, int oy) {
             int[][] pixels = {
-                    {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 8}, {6, 7},
-                    {7, 6}, {8, 5}, {9, 4}, {10, 3}
+                    {1, 6}, {2, 7}, {3, 8}, {4, 8}, {5, 7}, {6, 6}, {7, 5}, {8, 4}, {9, 3}
             };
             for (int[] pixel : pixels) {
-                graphics.fill(ox + pixel[0], oy + pixel[1], ox + pixel[0] + 1, oy + pixel[1] + 1, CHECK_COLOR);
+                graphics.fill(ox + pixel[0], oy + pixel[1], ox + pixel[0] + 2, oy + pixel[1] + 2, CHECK_COLOR);
             }
         }
 
         private void drawCross(GuiGraphics graphics, int ox, int oy) {
-            for (int i = 0; i < 10; i++) {
-                graphics.fill(ox + 1 + i, oy + 1 + i, ox + 2 + i, oy + 2 + i, CROSS_COLOR);
-                graphics.fill(ox + 10 - i, oy + 1 + i, ox + 11 - i, oy + 2 + i, CROSS_COLOR);
+            for (int i = 0; i < 9; i++) {
+                graphics.fill(ox + 1 + i, oy + 1 + i, ox + 3 + i, oy + 3 + i, CROSS_COLOR);
+                graphics.fill(ox + 9 - i, oy + 1 + i, ox + 11 - i, oy + 3 + i, CROSS_COLOR);
             }
         }
 
