@@ -25,6 +25,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.LevelResource;
@@ -129,9 +130,20 @@ public final class CraftBuilderScripts {
         }
     }
 
-    /** Async vanilla datapack reload, identical to /reload; recipes sync to clients on completion. */
+    /**
+     * Async vanilla datapack reload, identical to /reload; recipes sync to
+     * clients on completion. The generated pack is (re)selected explicitly so a
+     * datapack created mid-session is picked up without restarting the world.
+     */
     private static void requestReload(MinecraftServer server) {
-        server.reloadResources();
+        PackRepository packRepository = server.getPackRepository();
+        packRepository.reload();
+        List<String> selected = new ArrayList<>(packRepository.getSelectedIds());
+        String packId = "file/" + DATAPACK_FOLDER;
+        if (packRepository.getAvailableIds().contains(packId) && !selected.contains(packId)) {
+            selected.add(packId);
+        }
+        server.reloadResources(selected);
     }
 
     /**
