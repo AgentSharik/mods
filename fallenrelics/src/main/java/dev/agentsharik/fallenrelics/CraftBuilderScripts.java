@@ -92,7 +92,7 @@ public final class CraftBuilderScripts {
                     Optional.empty());
             Pack pack = Pack.readMetaAndCreate(
                     location,
-                    info -> new PathPackResources(info, currentRoot),
+                    new PathPackResources.PathResourcesSupplier(currentRoot),
                     PackType.SERVER_DATA,
                     new PackSelectionConfig(true, Pack.Position.TOP, false));
             if (pack == null) {
