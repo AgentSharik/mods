@@ -65,7 +65,11 @@
 | `particular-1.21.1-NeoForge-1.5.7.jar` | 111 (+42 legacy) | 111/111 ключей `en_us`; 42 старых русских ключа сохранены; страниц книг в JAR нет |
 | **Итого** | **6 511** | |
 
-Ещё семь уже присутствовавших переводов: `SimpleDiscordRichPresence` (3 строки), `SimpleTeleportersReforged` (43), `SimplyTooltips` (31), `simplemagnets` (38), `simpletomb` (84), `simplylight` (192) и `simplyswords` (2 267).
+Ещё семь уже присутствовавших переводов: `SimpleDiscordRichPresence` (3 строки), `SimpleTeleportersReforged` (43), `SimplyTooltips` (31), `simplemagnets` (38), `simpletomb` (84), `simplylight` (192) и `simplyswords` (2 267 языковых ключей; точная версия — `1.70.2-1.21.1`).
+
+### Simply Swords — вычитка версии 1.70.2-1.21.1
+
+Русская локализация `simplyswords-neoforge-1.70.2-1.21.1.jar` сверена с исходником `Sweenus/SimplySwords` на коммите [`359a8031b1a3243d1a3b013dbaa0cbba70ea8278`](https://github.com/Sweenus/SimplySwords/commit/359a8031b1a3243d1a3b013dbaa0cbba70ea8278). Проверены все 2 267 ключей языка, включая 278 текстовых ключей подсказок предметов, четыре вспомогательных значка подсказок и 23 связанных описания способностей. Механики «Бури» (Tempest) и Искривлённого клинка отдельно сверены с кодом этой версии. Подробности и результаты технических проверок — в [аудите Simply Swords](AUDIT_2026-10-07.md).
 
 ### Результаты ручной вычитки
 
