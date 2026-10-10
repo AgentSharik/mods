@@ -145,14 +145,6 @@ public final class PackagerBlockEntity extends BlockEntity {
         }
     }
 
-    private ItemStack insertIntoOutput(ItemStack stack) {
-        ItemStack remainder = stack;
-        for (int slot = 0; slot < OUTPUT_SLOTS && !remainder.isEmpty(); slot++) {
-            remainder = outputInventory.insertItem(slot, remainder, false);
-        }
-        return remainder;
-    }
-
     private int getCraftsPerCycle(BlockState state) {
         int tier = state.getValue(PackagerBlock.UPGRADE_TIER);
         return switch (tier) {
@@ -559,7 +551,7 @@ public final class PackagerBlockEntity extends BlockEntity {
         return true;
     }
 
-    private void insertIntoOutput(ItemStack stack) {
+    private ItemStack insertIntoOutput(ItemStack stack) {
         ItemStack remaining = stack;
         for (int slot = 0; slot < outputInventory.getSlots() && !remaining.isEmpty(); slot++) {
             remaining = outputInventory.insertItem(slot, remaining, false);
@@ -567,6 +559,7 @@ public final class PackagerBlockEntity extends BlockEntity {
         if (!remaining.isEmpty()) {
             setChanged();
         }
+        return remaining;
     }
 
     /**
