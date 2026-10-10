@@ -88,13 +88,10 @@ public final class PackagerBlock extends BaseEntityBlock {
         }
 
         if (player.isShiftKeyDown()) {
-            packager.cycleMode();
+            packager.cycleModeWithMessage(player);
+            return InteractionResult.CONSUME;
         }
-        player.displayClientMessage(
-                Component.translatable("fallenrelics.mode.current",
-                        Component.translatable(packager.getMode().translationKey())),
-                true
-        );
+        player.openMenu(packager, buffer -> buffer.writeBlockPos(pos));
         return InteractionResult.CONSUME;
     }
 

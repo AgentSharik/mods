@@ -37,5 +37,10 @@
   "fallenrelics.craft_builder.removed": "Recipe %s removed.",
   "fallenrelics.craft_builder.not_found": "That recipe script was not found.",
   "fallenrelics.craft_builder.reloaded": "Fallen Relics scripts reloaded; recipes updated.",
-  "fallenrelics.craft_builder.error": "Could not save the recipe file. Check the server scripts-folder permissions."
+  "fallenrelics.craft_builder.error": "Could not save the recipe file. Check the server scripts-folder permissions.",
+  "gui.fallenrelics.packager.apply": "Install this craft for the packager",
+  "gui.fallenrelics.packager.clear": "Clear the recipe: the packager scans recipes automatically",
+  "gui.fallenrelics.packager.mode": "Cycle the automatic recipe scan mode",
+  "fallenrelics.packager.recipe_set": "Recipe installed: the packager will perform this craft",
+  "fallenrelics.packager.recipe_not_found": "No recipe found: nothing crafts with this layout"
 }

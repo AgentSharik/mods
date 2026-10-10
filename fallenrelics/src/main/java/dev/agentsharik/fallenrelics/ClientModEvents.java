@@ -13,5 +13,6 @@ public final class ClientModEvents {
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModContent.CRAFT_BUILDER_MENU.get(), CraftBuilderScreen::new);
         event.register(ModContent.POCKET_CRAFT_BUILDER_MENU.get(), CraftBuilderScreen::new);
+        event.register(ModContent.PACKAGER_MENU.get(), PackagerScreen::new);
     }
 }

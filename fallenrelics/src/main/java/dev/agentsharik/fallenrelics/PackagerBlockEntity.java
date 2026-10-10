@@ -10,6 +10,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Containers;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -24,7 +31,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
-public final class PackagerBlockEntity extends BlockEntity {
+public final class PackagerBlockEntity extends BlockEntity implements MenuProvider {
     private static final int INPUT_SLOTS = 9;
     private static final int OUTPUT_SLOTS = 9;
     private static final int NORMAL_DELAY = 10;
@@ -66,6 +73,15 @@ public final class PackagerBlockEntity extends BlockEntity {
         if (stack.isEmpty()) {
             return true;
         }
+        List<ItemStack> allowed = patternTypes();
+        if (!allowed.isEmpty()) {
+            for (ItemStack entry : allowed) {
+                if (ItemStack.isSameItemSameComponents(entry, stack)) {
+                    return true;
+                }
+            }
+            return false;
+        }
         for (int slot = 0; slot < inputInventory.getSlots(); slot++) {
             ItemStack existing = inputInventory.getStackInSlot(slot);
             if (!existing.isEmpty()) {
@@ -81,6 +97,17 @@ public final class PackagerBlockEntity extends BlockEntity {
             markDirtyAndNotify();
         }
     };
+
+    /** Template of the craft the player taught the machine; empty = auto scan. */
+    private final ItemStackHandler patternInventory = new ItemStackHandler(9) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            recomputeCustomRecipe();
+            markDirtyAndNotify();
+        }
+    };
+    private final ItemStackHandler patternResultInventory = new ItemStackHandler(1);
+    private boolean patternDirty;
 
     private final IItemHandler pipeView = new CombinedItemHandler();
 
@@ -104,6 +131,9 @@ public final class PackagerBlockEntity extends BlockEntity {
             return;
         }
         tickCounter = 0;
+        if (patternDirty) {
+            recomputeCustomRecipe();
+        }
         sanitizeInput();
 
         // The time budget grows with the upgrade tier so higher tiers really can
@@ -126,23 +156,179 @@ public final class PackagerBlockEntity extends BlockEntity {
      * allowed to pull from the input as well.
      */
     private void sanitizeInput() {
+        List<ItemStack> allowed = patternTypes();
         ItemStack locked = ItemStack.EMPTY;
-        for (int slot = 0; slot < INPUT_SLOTS; slot++) {
-            ItemStack stack = inputInventory.getStackInSlot(slot);
-            if (!stack.isEmpty()) {
-                locked = stack;
-                break;
+        if (allowed.isEmpty()) {
+            for (int slot = 0; slot < INPUT_SLOTS; slot++) {
+                ItemStack stack = inputInventory.getStackInSlot(slot);
+                if (!stack.isEmpty()) {
+                    locked = stack;
+                    break;
+                }
             }
         }
-        if (locked.isEmpty()) {
+        if (allowed.isEmpty() && locked.isEmpty()) {
             return;
         }
         for (int slot = 0; slot < INPUT_SLOTS; slot++) {
             ItemStack stack = inputInventory.getStackInSlot(slot);
-            if (!stack.isEmpty() && !ItemStack.isSameItemSameComponents(locked, stack)) {
+            if (stack.isEmpty()) {
+                continue;
+            }
+            boolean ok = !allowed.isEmpty()
+                    ? allowed.stream().anyMatch(entry -> ItemStack.isSameItemSameComponents(entry, stack))
+                    : ItemStack.isSameItemSameComponents(locked, stack);
+            if (!ok) {
                 inputInventory.setStackInSlot(slot, insertIntoOutput(stack));
             }
         }
+    }
+
+
+    /** Player-taught recipe support: the packager crafts exactly what is shown in its window. */
+    public ItemStackHandler getPatternInventory() {
+        return patternInventory;
+    }
+
+    public ItemStackHandler getPatternResultInventory() {
+        return patternResultInventory;
+    }
+
+    public boolean isPatternSet() {
+        for (int slot = 0; slot < patternInventory.getSlots(); slot++) {
+            if (!patternInventory.getStackInSlot(slot).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<ItemStack> patternTypes() {
+        List<ItemStack> types = new ArrayList<>();
+        for (int slot = 0; slot < patternInventory.getSlots(); slot++) {
+            ItemStack stack = patternInventory.getStackInSlot(slot);
+            if (stack.isEmpty()) {
+                continue;
+            }
+            boolean known = false;
+            for (ItemStack entry : types) {
+                if (ItemStack.isSameItemSameComponents(entry, stack)) {
+                    known = true;
+                    break;
+                }
+            }
+            if (!known) {
+                types.add(stack);
+            }
+        }
+        return types;
+    }
+
+    private static final AbstractContainerMenu PATTERN_LOOKUP_MENU = new AbstractContainerMenu(null, 0) {
+        @Override
+        public ItemStack quickMoveStack(Player player, int index) {
+            return ItemStack.EMPTY;
+        }
+
+        @Override
+        public boolean stillValid(Player player) {
+            return false;
+        }
+    };
+
+    /** Resolves the pattern grid against the live recipe manager and caches the result. */
+    public void recomputeCustomRecipe() {
+        if (level == null || level.isClientSide) {
+            patternDirty = true;
+            return;
+        }
+        patternDirty = false;
+        ItemStack result = ItemStack.EMPTY;
+        if (isPatternSet()) {
+            CraftingContainer container = new CraftingContainer(PATTERN_LOOKUP_MENU, 3, 3);
+            for (int slot = 0; slot < 9; slot++) {
+                container.setItem(slot, patternInventory.getStackInSlot(slot).copy());
+            }
+            result = level.getRecipeManager()
+                    .getRecipeFor(RecipeType.CRAFTING, container, level)
+                    .map(holder -> holder.value().assemble(container, level.registryAccess()))
+                    .orElse(ItemStack.EMPTY);
+        }
+        patternResultInventory.setStackInSlot(0, result);
+    }
+
+    private boolean tryPatternCraft() {
+        ItemStack result = patternResultInventory.getStackInSlot(0);
+        if (result.isEmpty()) {
+            return false;
+        }
+        int[] take = new int[INPUT_SLOTS];
+        for (int cell = 0; cell < patternInventory.getSlots(); cell++) {
+            ItemStack need = patternInventory.getStackInSlot(cell);
+            if (need.isEmpty()) {
+                continue;
+            }
+            boolean found = false;
+            for (int slot = 0; slot < INPUT_SLOTS; slot++) {
+                ItemStack have = inputInventory.getStackInSlot(slot);
+                if (have.isEmpty() || !ItemStack.isSameItemSameComponents(have, need)) {
+                    continue;
+                }
+                if (have.getCount() - take[slot] > 0) {
+                    take[slot]++;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                return false;
+            }
+        }
+        ItemStack probe = result.copy();
+        for (int slot = 0; slot < OUTPUT_SLOTS && !probe.isEmpty(); slot++) {
+            probe = outputInventory.insertItem(slot, probe, true);
+        }
+        if (!probe.isEmpty()) {
+            return false;
+        }
+        for (int slot = 0; slot < INPUT_SLOTS; slot++) {
+            if (take[slot] > 0) {
+                inputInventory.extractItem(slot, take[slot], false);
+            }
+        }
+        insertIntoOutput(result.copy());
+        return true;
+    }
+
+    public void applyPattern(Player player) {
+        recomputeCustomRecipe();
+        boolean ok = !patternResultInventory.getStackInSlot(0).isEmpty();
+        player.displayClientMessage(Component.translatable(
+                ok ? "fallenrelics.packager.recipe_set" : "fallenrelics.packager.recipe_not_found"), true);
+    }
+
+    public void clearPattern() {
+        for (int slot = 0; slot < patternInventory.getSlots(); slot++) {
+            patternInventory.setStackInSlot(slot, ItemStack.EMPTY);
+        }
+        recomputeCustomRecipe();
+        markDirtyAndNotify();
+    }
+
+    public void cycleModeWithMessage(Player player) {
+        cycleMode();
+        player.displayClientMessage(Component.translatable("fallenrelics.mode.current",
+                Component.translatable(getMode().translationKey())), true);
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return ModContent.PACKAGER.get().getName();
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
+        return new PackagerMenu(containerId, inventory, worldPosition);
     }
 
     private int getCraftsPerCycle(BlockState state) {
@@ -159,6 +345,10 @@ public final class PackagerBlockEntity extends BlockEntity {
     private boolean tryCraft(long deadline) {
         if (level == null || level.isClientSide) {
             return false;
+        }
+
+        if (isPatternSet()) {
+            return tryPatternCraft();
         }
 
         List<PoolEntry> availableItems = collectAvailableItems();
@@ -632,6 +822,7 @@ public final class PackagerBlockEntity extends BlockEntity {
         }
         dropInventory(inputInventory);
         dropInventory(outputInventory);
+        dropInventory(patternInventory);
         if (installedTier > 0) {
             ItemStack upgrade = new ItemStack(ModContent.getUpgradeItem(installedTier));
             Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), upgrade);
@@ -653,6 +844,7 @@ public final class PackagerBlockEntity extends BlockEntity {
         super.saveAdditional(tag, registries);
         tag.put("InputInventory", inputInventory.serializeNBT(registries));
         tag.put("OutputInventory", outputInventory.serializeNBT(registries));
+        tag.put("Pattern", patternInventory.serializeNBT(registries));
         tag.putInt("Mode", mode.ordinal());
         tag.putInt("TickDelay", tickDelay);
     }
@@ -666,6 +858,10 @@ public final class PackagerBlockEntity extends BlockEntity {
         if (tag.contains("OutputInventory")) {
             outputInventory.deserializeNBT(registries, tag.getCompound("OutputInventory"));
         }
+        if (tag.contains("Pattern")) {
+            patternInventory.deserializeNBT(registries, tag.getCompound("Pattern"));
+        }
+        patternDirty = true;
         mode = PackagerMode.fromId(tag.getInt("Mode"));
         tickDelay = tag.getInt("TickDelay") == IDLE_DELAY ? IDLE_DELAY : NORMAL_DELAY;
     }

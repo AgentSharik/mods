@@ -51,6 +51,8 @@ public final class ModContent {
             ITEMS.register("pocket_craft_builder", () -> new PocketCraftBuilderItem(new Item.Properties().stacksTo(1)));
     public static final DeferredHolder<MenuType<?>, MenuType<CraftBuilderMenu>> POCKET_CRAFT_BUILDER_MENU =
             MENUS.register("pocket_craft_builder", () -> IMenuTypeExtension.create(CraftBuilderMenu::createPocketFromNetwork));
+    public static final DeferredHolder<MenuType<?>, MenuType<PackagerMenu>> PACKAGER_MENU =
+            MENUS.register("packager", () -> IMenuTypeExtension.create(PackagerMenu::new));
 
     public static final DeferredItem<Item> UPGRADE_TEMPLATE =
             ITEMS.registerSimpleItem("upgrade_template", new Item.Properties());

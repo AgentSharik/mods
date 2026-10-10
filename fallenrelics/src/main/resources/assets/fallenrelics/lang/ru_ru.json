@@ -37,5 +37,10 @@
   "fallenrelics.craft_builder.removed": "Рецепт %s удалён.",
   "fallenrelics.craft_builder.not_found": "Такой скрипт рецепта не найден.",
   "fallenrelics.craft_builder.reloaded": "Скрипты Fallen Relics перечитаны; рецепты обновлены.",
-  "fallenrelics.craft_builder.error": "Не удалось сохранить файл рецепта. Проверьте права на папку scripts сервера."
+  "fallenrelics.craft_builder.error": "Не удалось сохранить файл рецепта. Проверьте права на папку scripts сервера.",
+  "gui.fallenrelics.packager.apply": "Установить этот крафт для автоупаковщика",
+  "gui.fallenrelics.packager.clear": "Сбросить рецепт: автоупаковщик сам подбирает рецепты",
+  "gui.fallenrelics.packager.mode": "Переключить режим автоподбора рецептов",
+  "fallenrelics.packager.recipe_set": "Рецепт установлен: автоупаковщик будет выполнять этот крафт",
+  "fallenrelics.packager.recipe_not_found": "Рецепт не найден: такой раскладкой ничего не крафтится"
 }
