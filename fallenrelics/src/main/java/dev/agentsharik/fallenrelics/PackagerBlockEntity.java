@@ -14,7 +14,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -224,18 +223,6 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
         return types;
     }
 
-    private static final AbstractContainerMenu PATTERN_LOOKUP_MENU = new AbstractContainerMenu(null, 0) {
-        @Override
-        public ItemStack quickMoveStack(Player player, int index) {
-            return ItemStack.EMPTY;
-        }
-
-        @Override
-        public boolean stillValid(Player player) {
-            return false;
-        }
-    };
-
     /** Resolves the pattern grid against the live recipe manager and caches the result. */
     public void recomputeCustomRecipe() {
         if (level == null || level.isClientSide) {
@@ -245,14 +232,18 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
         patternDirty = false;
         ItemStack result = ItemStack.EMPTY;
         if (isPatternSet()) {
-            CraftingContainer container = new CraftingContainer(PATTERN_LOOKUP_MENU, 3, 3);
+            List<ItemStack> grid = new ArrayList<>();
             for (int slot = 0; slot < 9; slot++) {
-                container.setItem(slot, patternInventory.getStackInSlot(slot).copy());
+                grid.add(patternInventory.getStackInSlot(slot).copy());
             }
-            result = level.getRecipeManager()
-                    .getRecipeFor(RecipeType.CRAFTING, container, level)
-                    .map(holder -> holder.value().assemble(container, level.registryAccess()))
-                    .orElse(ItemStack.EMPTY);
+            CraftingInput input = CraftingInput.of(3, 3, grid);
+            for (RecipeHolder<CraftingRecipe> holder : level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)) {
+                CraftingRecipe recipe = holder.value();
+                if (recipe.matches(input, level)) {
+                    result = recipe.assemble(input, level.registryAccess());
+                    break;
+                }
+            }
         }
         patternResultInventory.setStackInSlot(0, result);
     }
