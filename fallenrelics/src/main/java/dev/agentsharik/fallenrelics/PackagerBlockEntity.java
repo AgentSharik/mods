@@ -104,6 +104,7 @@ public final class PackagerBlockEntity extends BlockEntity {
             return;
         }
         tickCounter = 0;
+        sanitizeInput();
 
         // The time budget grows with the upgrade tier so higher tiers really can
         // find and finish several crafts in one cycle instead of stalling in the scan.
@@ -115,6 +116,41 @@ public final class PackagerBlockEntity extends BlockEntity {
         }
         boolean pushed = pushOutputToAdjacent();
         tickDelay = craftsCompleted > 0 || pushed ? NORMAL_DELAY : IDLE_DELAY;
+    }
+
+    /**
+     * The input may only ever hold one item type. Legacy saves or exotic pipe
+     * behaviour could leave a foreign type behind, which used to jam the machine
+     * forever; now the packager simply ejects anything that does not match the
+     * locked type into its output (and from there into the chest), and pipes are
+     * allowed to pull from the input as well.
+     */
+    private void sanitizeInput() {
+        ItemStack locked = ItemStack.EMPTY;
+        for (int slot = 0; slot < INPUT_SLOTS; slot++) {
+            ItemStack stack = inputInventory.getStackInSlot(slot);
+            if (!stack.isEmpty()) {
+                locked = stack;
+                break;
+            }
+        }
+        if (locked.isEmpty()) {
+            return;
+        }
+        for (int slot = 0; slot < INPUT_SLOTS; slot++) {
+            ItemStack stack = inputInventory.getStackInSlot(slot);
+            if (!stack.isEmpty() && !ItemStack.isSameItemSameComponents(locked, stack)) {
+                inputInventory.setStackInSlot(slot, insertIntoOutput(stack));
+            }
+        }
+    }
+
+    private ItemStack insertIntoOutput(ItemStack stack) {
+        ItemStack remainder = stack;
+        for (int slot = 0; slot < OUTPUT_SLOTS && !remainder.isEmpty(); slot++) {
+            remainder = outputInventory.insertItem(slot, remainder, false);
+        }
+        return remainder;
     }
 
     private int getCraftsPerCycle(BlockState state) {
@@ -735,8 +771,11 @@ public final class PackagerBlockEntity extends BlockEntity {
 
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if (slot < INPUT_SLOTS || slot >= INPUT_SLOTS + OUTPUT_SLOTS) {
+            if (slot < 0 || slot >= INPUT_SLOTS + OUTPUT_SLOTS) {
                 return ItemStack.EMPTY;
+            }
+            if (slot < INPUT_SLOTS) {
+                return inputInventory.extractItem(slot, amount, simulate);
             }
             return outputInventory.extractItem(slot - INPUT_SLOTS, amount, simulate);
         }
