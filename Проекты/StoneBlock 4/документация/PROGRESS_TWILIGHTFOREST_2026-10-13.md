@@ -41,5 +41,6 @@
   `assets/twilightforest/lang/ru_ru.json`, записей 11 184, проверка архива
   чистая. В игру не запускался. Готовый файл (27 142 953 байт,
   sha256 `4d05e6f5548a4e8f57476bcd0ce3552a8ede32a767314b93130e7740deab1c7c`)
-  загружен на Google Диск в папку `Translate` (id `1fUBhtONLFyKI6CYYcviXcIOJ1-2aXi8E`);
-  в GitHub-ветку не кладётся, так как больше 25 МБ.
+  загружен на Google Диск в папку `Translate` (id `1fUBhtONLFyKI6CYYcviXcIOJ1-2aXi8E`),
+  а по прямому указанию пользователя также добавлен в папку проекта StoneBlock 4
+  в GitHub-ветке: `Проекты/StoneBlock 4/twilightforest-1.21.1-4.8.3345-universal.jar`.

@@ -7,7 +7,7 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-93-4a7c3f?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-94-4a7c3f?style=flat-square)
 ![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-37%20550-2b6cb0?style=flat-square)
 ![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-0-b8862b?style=flat-square)
 
@@ -58,7 +58,7 @@ mods/
 
 ### StoneBlock 4
 
-**Моды из сборки.** 96 мод: 38 в первой волне, 23 во второй, 35 в третьей (с дозагруженными библиотеками). **93 JAR готово**,
+**Моды из сборки.** 96 мод: 38 в первой волне, 23 во второй, 35 в третьей (с дозагруженными библиотеками). **94 JAR готово**,
 39 611 ключей переведено; третья волна закрыта полностью (35 из 35).
 порядку аудита. → [папка проекта](Проекты/StoneBlock%204/)
 
@@ -284,7 +284,7 @@ JustEnough-аддонов, потому что они берут у него «�
 | `Morph-o-Tool-1.8-39.jar` | 12 | 3 | нет | **Готово** (13.10.2026): допереведено 10 ключей конфигурации, вычитан весь файл |
 | `ftb-ez-crystals-21.1.1.jar` | — | — | нет | Языковых файлов нет: переводить нечего, JAR не собирался |
 | `ftb-xmod-compat-neoforge-21.1.12.jar` | — | — | нет | Языковых файлов нет: переводить нечего, JAR не собирался |
-| `twilightforest-1.21.1-4.8.3345-universal.jar` | 2 061 | 1 482 (72 %) | нет | **Готово** (13.10.2026): допереведено 585 ключей, вычитан весь файл. Готовый JAR (больше 25 МБ) — на Google Диске в папке `Translate` |
+| `twilightforest-1.21.1-4.8.3345-universal.jar` | 2 061 | 1 482 (72 %) | нет | **Готово** (13.10.2026): допереведено 585 ключей, вычитан весь файл. Готовый JAR — в папке проекта и на Google Диске в папке `Translate` |
 | **Итого** | **12 378** (+621 CrashAssistant) | | | **Готово 35 из 35** |
 
 \* CrashAssistant: ключи лежат в `crash_assistant_localization/en_us.json` в корне JAR,
