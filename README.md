@@ -306,7 +306,7 @@ JustEnough-аддонов, потому что они берут у него «�
 
 Порядок — по зависимостям: кластер AE2 (ядро, библиотеки, аддоны), кластер
 Refined Storage, кластер Iron's Spells, ftb-materials, Replication с мостами
-и одиночки. Гайды GuideME (≈460 страниц) — подэтапом после lang кластера AE2.
+и одиночки. Гайды GuideME кластера AE2 (224 страницы) переведены подэтапом после lang.
 Аудит волны выполнен целиком и до начала перевода:
 [`AUDIT_WAVE4_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_WAVE4_2026-10-13.md) — объём,
 качество существующего русского (официальные переводы AE2, RS2, Iron's, IE —
@@ -331,17 +331,17 @@ baubley-heart-canisters → routers → stonechest → repeatable_trial_vaults.
 
 | Мод | Ключей lang | Было в `ru_ru` | Книги и гайды | Статус |
 |---|---:|---|---|---|
-| `appliedenergistics2-19.2.17.jar` | 1021 | 1018 (100 %) | GuideME: 125 стр. | Готово (lang); гайд — подэтапом |
+| `appliedenergistics2-19.2.17.jar` | 1021 | 1018 (100 %) | GuideME: 125 стр. переведено | Готово |
 | `AE2AddonLib-1.0.3-1.21.1.jar` | 11 | 8 (73 %) | нет | Готово |
-| `ae2wtlib-19.5.1.jar` | 46 | 29 (63 %) | GuideME: 8 стр. | Готово (lang); гайд — подэтапом |
-| `AdvancedAE-1.6.12-1.21.1.jar` | 246 | 246 (100 %) | GuideME: 39 стр. | Готово (lang); гайд — подэтапом |
-| `ExtendedAE-1.21-2.2.38-neoforge.jar` | 264 | 252 (95 %) | GuideME: 230 стр. | Готово (lang); гайд — подэтапом |
-| `megacells-4.11.0.jar` | 134 | 78 (58 %) | GuideME: 21 стр. | Готово (lang); гайд — подэтапом |
-| `AppliedFlux-1.21-2.1.5-neoforge.jar` | 57 | 57 (100 %) | GuideME: 12 стр. | Готово (lang); гайд — подэтапом |
-| `AE2NetworkAnalyzer-1.21-2.1.5-neoforge.jar` | 38 | 24 (63 %) | GuideME: 2 стр. | Готово (lang); гайд — подэтапом |
+| `ae2wtlib-19.5.1.jar` | 46 | 29 (63 %) | GuideME: 8 стр. переведено | Готово |
+| `AdvancedAE-1.6.12-1.21.1.jar` | 246 | 246 (100 %) | GuideME: 13 стр. переведено | Готово |
+| `ExtendedAE-1.21-2.2.38-neoforge.jar` | 264 | 252 (95 %) | GuideME: 47 стр. переведено | Готово |
+| `megacells-4.11.0.jar` | 134 | 78 (58 %) | GuideME: 7 стр. переведено | Готово |
+| `AppliedFlux-1.21-2.1.5-neoforge.jar` | 57 | 57 (100 %) | GuideME: 12 стр. переведено | Готово |
+| `AE2NetworkAnalyzer-1.21-2.1.5-neoforge.jar` | 38 | 24 (63 %) | GuideME: 2 стр. переведено | Готово |
 | `ae2ct-1.21.1-1.1.1.jar` | 38 | 0 (0 %) | нет | Готово |
-| `me_beam_former-1.21.1-1.3.0.jar` | 26 | 0 (0 %) | GuideME: 14 стр. | Готово (lang); гайд — подэтапом |
-| `enderdrives-neoforge-1.21.1-1.5.23.jar` | 140 | 56 (40 %) | GuideME: 6 стр. | Готово (lang); гайд — подэтапом |
+| `me_beam_former-1.21.1-1.3.0.jar` | 26 | 0 (0 %) | GuideME: 7 стр. переведено | Готово |
+| `enderdrives-neoforge-1.21.1-1.5.23.jar` | 140 | 56 (40 %) | GuideME: 3 стр. переведено | Готово |
 | `AE2-Things-1.4.2-beta.jar` | 12 | 11 (92 %) | нет | Готово |
 | `Applied-Mekanistics-1.6.3.jar` | 15 | 15 (100 %) | нет | Готово |
 | `appliedcooking-6.2.1.jar` | 28 | 28 (100 %) | Patchouli: книга | Готово |
