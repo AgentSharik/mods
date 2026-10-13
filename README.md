@@ -34,7 +34,8 @@
 ```
 mods/
 ├── Проекты/                       ← переведённые моды
-│   ├── StoneBlock 4/                  моды из сборки + документация
+│   ├── StoneBlock 4/                  моды из сборки
+│   │   └── документация/              журналы и аудиты этой сборки
 │   └── Отдельные моды/                моды вне сборок
 ├── Исходные моды для перевода/    ← оригиналы, не изменяются
 └── README.md
@@ -55,13 +56,13 @@ mods/
 
 ## Проекты
 
-| Проект | Состав | Состояние |
-|---|---|---|
-| **[StoneBlock 4](Проекты/StoneBlock%204/)** | 61 мод сборки: 38 в первой волне, 14 во второй, 9 в третьей | **57 JAR готово**, 22 643 ключа переведено, 4 мода в очереди |
-| **[Отдельные моды](Проекты/%D0%9E%D1%82%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%BE%D0%B4%D1%8B/)** | моды вне сборок: отдельные просьбы, моды из других сборок | категория открыта, список заполняется по мере появления модов |
+### StoneBlock 4
+
+**Моды из сборки.** 61 мод: 38 в первой волне, 14 во второй, 9 в третьей. **57 JAR готово**,
+22 643 ключа переведено, 4 мода в очереди. → [папка проекта](Проекты/StoneBlock%204/)
 
 <details>
-<summary><b>StoneBlock 4 — состояние перевода сборки</b></summary>
+<summary><b>Состояние перевода сборки</b></summary>
 
 ![StoneBlock 4](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/images/stoneblock4.jpg)
 
@@ -230,6 +231,54 @@ JustEnough-аддонов, потому что они берут у него «�
 
 </details>
 
+### Журналы и аудиты StoneBlock 4
+
+Относятся **только к этой сборке**. У каждой сборки и у категории «Отдельные моды» своя
+документация: она заводится вместе с первым переведённым модом, в папке `документация`
+внутри папки проекта.
+
+<details>
+<summary><b>Открыть список</b></summary>
+
+| Файл | О чём |
+|---|---|
+| [`PROGRESS_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_2026-10-10.md) | Вторая волна: аудит, план, ход работ |
+| [`PROGRESS_BIG3_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_BIG3_2026-10-10.md) | Oracle Index и L_Ender’s Cataclysm |
+| [`PROGRESS_CATACLYSM_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_CATACLYSM_2026-10-10.md) | L_Ender’s Cataclysm: доперевод и вычитка |
+| [`PROGRESS_JEMM_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEMM_2026-10-11.md) | JustEnoughMekanismMultiblocks |
+| [`PROGRESS_JH_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JH_2026-10-11.md) | Just Hammers |
+| [`PROGRESS_JZ_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JZ_2026-10-11.md) | Just Zoom |
+| [`PROGRESS_JEB_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEB_2026-10-11.md) | Just Enough Breeding |
+| [`PROGRESS_JEP_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEP_2026-10-11.md) | Just Enough Professions |
+| [`PROGRESS_JDF_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JDF_2026-10-11.md) | JustDireFuels |
+| [`PROGRESS_MALUM_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_MALUM_2026-10-10.md) | Malum: перевод с нуля, глоссарий, спорные места |
+| [`PROGRESS_GAZE_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_GAZE_2026-10-11.md) | Gaze: перевод с нуля, стыковка с Malum |
+| [`PROGRESS_JEI_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEI_2026-10-11.md) | JEI: новый экран конфигурации, вычитка |
+| [`PROGRESS_JDT_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JDT_2026-10-11.md) | JustDireThings: lang и книга Patchouli целиком |
+| [`PROGRESS_JDYN_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JDYN_2026-10-11.md) | JustDynaThings: lang, книга Patchouli, гайд GuideME |
+| [`PROGRESS_GUIDEME_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_GUIDEME_2026-10-11.md) | GuideME: перевод с нуля |
+| [`PROGRESS_WAVE3_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_WAVE3_2026-10-13.md) | Третья волна: OctoLib, Not Enough Recipe Book, OmniTools, Farmer’s Delight, Collective |
+| [`AUDIT_2026-10-07.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_2026-10-07.md) | Статический аудит первой волны и очерёдность вычитки |
+| [`AUDIT_FINAL_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_FINAL_2026-10-10.md) | Сводный аудит и итоги контроля качества |
+| [`AUDIT_WAVE3_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_WAVE3_2026-10-13.md) | Третья волна: аудит 9 модов до начала перевода, порядок работ |
+| [`Mekanism_GLOSSARY.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/Mekanism_GLOSSARY.md) | Глоссарий Mekanism: термины и единицы |
+
+</details>
+
+---
+
+### Отдельные моды
+
+Моды **вне сборок**: отдельная просьба, мод из другой сборки или просто мод, который захотелось
+перевести. Правила работы и результат те же, что у модов из сборки: готовый JAR в папке категории,
+ход работы — в её собственной документации.
+
+| Мод | Ключей lang | Что сделано | Журнал |
+|---|---:|---|---|
+| — | — | категория открыта, модов пока нет | — |
+
+→ [папка категории](Проекты/%D0%9E%D1%82%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%BE%D0%B4%D1%8B/)
+
 ---
 
 ## Как идёт работа
@@ -275,38 +324,6 @@ JustEnough-аддонов, потому что они берут у него «�
 - Названия модов, бренды и технические идентификаторы не переводятся.
 - Пустые значения не заполняются догадками; массовые автоподстановки не применяются.
 - В переведённых JAR `en_us.json` служит резервной копией `ru_ru.json`.
-
-</details>
-
----
-
-## Журналы и аудиты
-
-<details>
-<summary><b>Открыть список</b></summary>
-
-| Файл | О чём |
-|---|---|
-| [`PROGRESS_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_2026-10-10.md) | Вторая волна: аудит, план, ход работ |
-| [`PROGRESS_BIG3_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_BIG3_2026-10-10.md) | Oracle Index и L_Ender’s Cataclysm |
-| [`PROGRESS_CATACLYSM_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_CATACLYSM_2026-10-10.md) | L_Ender’s Cataclysm: доперевод и вычитка |
-| [`PROGRESS_JEMM_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEMM_2026-10-11.md) | JustEnoughMekanismMultiblocks |
-| [`PROGRESS_JH_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JH_2026-10-11.md) | Just Hammers |
-| [`PROGRESS_JZ_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JZ_2026-10-11.md) | Just Zoom |
-| [`PROGRESS_JEB_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEB_2026-10-11.md) | Just Enough Breeding |
-| [`PROGRESS_JEP_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEP_2026-10-11.md) | Just Enough Professions |
-| [`PROGRESS_JDF_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JDF_2026-10-11.md) | JustDireFuels |
-| [`PROGRESS_MALUM_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_MALUM_2026-10-10.md) | Malum: перевод с нуля, глоссарий, спорные места |
-| [`PROGRESS_GAZE_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_GAZE_2026-10-11.md) | Gaze: перевод с нуля, стыковка с Malum |
-| [`PROGRESS_JEI_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEI_2026-10-11.md) | JEI: новый экран конфигурации, вычитка |
-| [`PROGRESS_JDT_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JDT_2026-10-11.md) | JustDireThings: lang и книга Patchouli целиком |
-| [`PROGRESS_JDYN_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JDYN_2026-10-11.md) | JustDynaThings: lang, книга Patchouli, гайд GuideME |
-| [`PROGRESS_GUIDEME_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_GUIDEME_2026-10-11.md) | GuideME: перевод с нуля |
-| [`PROGRESS_WAVE3_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_WAVE3_2026-10-13.md) | Третья волна: OctoLib, Not Enough Recipe Book, OmniTools, Farmer’s Delight, Collective |
-| [`AUDIT_2026-10-07.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_2026-10-07.md) | Статический аудит первой волны и очерёдность вычитки |
-| [`AUDIT_FINAL_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_FINAL_2026-10-10.md) | Сводный аудит и итоги контроля качества |
-| [`AUDIT_WAVE3_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_WAVE3_2026-10-13.md) | Третья волна: аудит 9 модов до начала перевода, порядок работ |
-| [`Mekanism_GLOSSARY.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/Mekanism_GLOSSARY.md) | Глоссарий Mekanism: термины и единицы |
 
 </details>
 
