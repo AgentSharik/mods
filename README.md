@@ -7,9 +7,9 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-101-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-41%20690-2b6cb0?style=flat-square)
-![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-40-b8862b?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-117-4a7c3f?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-42%20781-2b6cb0?style=flat-square)
+![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-24-b8862b?style=flat-square)
 
 </div>
 
@@ -61,8 +61,8 @@ mods/
 
 **Моды из сборки.** 147 модов: 38 в первой волне, 23 во второй, 35 в третьей (с дозагруженными библиотеками),
 Carbon Config из пачки исправлений и 50 в четвёртой волне (с дозагруженными библиотеками; аудит 13.10.2026, перевод начат).
-**101 JAR готово**,
-41 690 ключей переведено; третья волна закрыта полностью (35 из 35). После проверки тестового
+**117 JAR готово**,
+42 781 ключ переведён; третья волна закрыта полностью (35 из 35). После проверки тестового
 релиза дополнительно переведён Collapsible Groups, пересобраны JAR с повреждённым английским,
 пропатчены Ars Elemental (красная строка брони) и Carbon Config (экран настроек JEI) —
 см. [`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md).
@@ -302,7 +302,7 @@ JustEnough-аддонов, потому что они берут у него «�
 </details>
 
 <details>
-<summary><b>Четвёртая волна — 50 модов, 9 014 ключей (готово 5, закрыто актом 5, в очереди 40)</b></summary>
+<summary><b>Четвёртая волна — 50 модов, 9 014 ключей (готово 21, закрыто актом 5, в очереди 24)</b></summary>
 
 Порядок — по зависимостям: кластер AE2 (ядро, библиотеки, аддоны), кластер
 Refined Storage, кластер Iron's Spells, ftb-materials, Replication с мостами
@@ -332,22 +332,22 @@ baubley-heart-canisters → routers → stonechest → repeatable_trial_vaults.
 | Мод | Ключей lang | Было в `ru_ru` | Книги и гайды | Статус |
 |---|---:|---|---|---|
 | `appliedenergistics2-19.2.17.jar` | 1021 | 1018 (100 %) | GuideME: 125 стр. | Готово (lang); гайд — подэтапом |
-| `AE2AddonLib-1.0.3-1.21.1.jar` | 11 | 8 (73 %) | нет | В очереди |
-| `ae2wtlib-19.5.1.jar` | 46 | 29 (63 %) | GuideME: 8 стр. | В очереди |
-| `AdvancedAE-1.6.12-1.21.1.jar` | 246 | 246 (100 %) | GuideME: 39 стр. | В очереди |
-| `ExtendedAE-1.21-2.2.38-neoforge.jar` | 264 | 252 (95 %) | GuideME: 230 стр. | В очереди |
-| `megacells-4.11.0.jar` | 134 | 78 (58 %) | GuideME: 21 стр. | В очереди |
-| `AppliedFlux-1.21-2.1.5-neoforge.jar` | 57 | 57 (100 %) | GuideME: 12 стр. | В очереди |
-| `AE2NetworkAnalyzer-1.21-2.1.5-neoforge.jar` | 38 | 24 (63 %) | GuideME: 2 стр. | В очереди |
-| `ae2ct-1.21.1-1.1.1.jar` | 38 | 0 (0 %) | нет | В очереди |
-| `me_beam_former-1.21.1-1.3.0.jar` | 26 | 0 (0 %) | GuideME: 14 стр. | В очереди |
-| `enderdrives-neoforge-1.21.1-1.5.23.jar` | 140 | 56 (40 %) | GuideME: 6 стр. | В очереди |
-| `AE2-Things-1.4.2-beta.jar` | 12 | 11 (92 %) | нет | В очереди |
-| `Applied-Mekanistics-1.6.3.jar` | 15 | 15 (100 %) | нет | В очереди |
-| `appliedcooking-6.2.1.jar` | 28 | 28 (100 %) | Patchouli: книга | В очереди |
-| `applieddelight-1.1.0.jar` | 24 | 24 (100 %) | Patchouli: книга | В очереди |
-| `applied-experienced-1.21.1-1.3.2.jar` | 24 | 23 (96 %) | нет | В очереди |
-| `appliedsticks-1.21.1-1.2.1.jar` | 2 | 0 (0 %) | нет | В очереди |
+| `AE2AddonLib-1.0.3-1.21.1.jar` | 11 | 8 (73 %) | нет | Готово |
+| `ae2wtlib-19.5.1.jar` | 46 | 29 (63 %) | GuideME: 8 стр. | Готово (lang); гайд — подэтапом |
+| `AdvancedAE-1.6.12-1.21.1.jar` | 246 | 246 (100 %) | GuideME: 39 стр. | Готово (lang); гайд — подэтапом |
+| `ExtendedAE-1.21-2.2.38-neoforge.jar` | 264 | 252 (95 %) | GuideME: 230 стр. | Готово (lang); гайд — подэтапом |
+| `megacells-4.11.0.jar` | 134 | 78 (58 %) | GuideME: 21 стр. | Готово (lang); гайд — подэтапом |
+| `AppliedFlux-1.21-2.1.5-neoforge.jar` | 57 | 57 (100 %) | GuideME: 12 стр. | Готово (lang); гайд — подэтапом |
+| `AE2NetworkAnalyzer-1.21-2.1.5-neoforge.jar` | 38 | 24 (63 %) | GuideME: 2 стр. | Готово (lang); гайд — подэтапом |
+| `ae2ct-1.21.1-1.1.1.jar` | 38 | 0 (0 %) | нет | Готово |
+| `me_beam_former-1.21.1-1.3.0.jar` | 26 | 0 (0 %) | GuideME: 14 стр. | Готово (lang); гайд — подэтапом |
+| `enderdrives-neoforge-1.21.1-1.5.23.jar` | 140 | 56 (40 %) | GuideME: 6 стр. | Готово (lang); гайд — подэтапом |
+| `AE2-Things-1.4.2-beta.jar` | 12 | 11 (92 %) | нет | Готово |
+| `Applied-Mekanistics-1.6.3.jar` | 15 | 15 (100 %) | нет | Готово |
+| `appliedcooking-6.2.1.jar` | 28 | 28 (100 %) | Patchouli: книга | Готово |
+| `applieddelight-1.1.0.jar` | 24 | 24 (100 %) | Patchouli: книга | Готово |
+| `applied-experienced-1.21.1-1.3.2.jar` | 24 | 23 (96 %) | нет | Готово |
+| `appliedsticks-1.21.1-1.2.1.jar` | 2 | 0 (0 %) | нет | Готово |
 | `refinedstorage-neoforge-2.0.9.jar` | 788 | 778 (99 %) | нет | В очереди |
 | `refined-types-1.21.1-0.3.2.jar` | 164 | 0 (0 %) | нет | В очереди |
 | `cabletiers-neoforge-1.21.1-0.6.14.jar` | 190 | 0 (0 %) | нет | В очереди |

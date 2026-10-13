@@ -71,3 +71,13 @@ AE2. Каждый мод закрывается отдельным коммит�
   85 кабелей и 32 шариков, флюис вместо «токового», сопроцессоры, терминал
   доступа к шаблонам. Заведён AE2_GLOSSARY.md — обязателен для аддонов
   кластера. Коммит ddcc409.
+- **15.10.2026 — кластер AE2: lang-часть закрыта полностью (16 модов).**
+  appliedenergistics2 (вычитка), AE2AddonLib, ae2wtlib (+nested api),
+  AdvancedAE (жёсткая вычитка, nested ae2addonlib/api по-русски), ExtendedAE,
+  megacells, AppliedFlux, AE2NetworkAnalyzer, ae2ct, me_beam_former,
+  enderdrives, AE2-Things, Applied-Mekanistics, appliedcooking,
+  applieddelight, applied-experienced, appliedsticks. У каждого — отдельный
+  коммит и пуш; суммарно 1 091 ключ сверх ядра AE2. Книги appliedcooking и
+  applieddelight целиком на lang-ключах (Patchouli i18n) — закрыты lang.
+  Терминология — по AE2_GLOSSARY.md. Остаётся подэтап гайдов GuideME
+  (≈460 страниц).
