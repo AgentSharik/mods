@@ -1,0 +1,5 @@
+{
+ "createenderstorage.ponder.mounted_ender_chest.header": "Совместимостью с Ender Storage",
+ "createenderstorage.ponder.mounted_ender_chest.text_1": "Эндер-сундуки Ender Storage с одинаковыми цветовыми частотами используют один общий инвентарь.",
+ "createenderstorage.ponder.mounted_ender_chest.text_2": "В том числе на штуковинах. К блокам из Ender Storage есть доступ у акторов штуковин — ради автоматизации."
+}
