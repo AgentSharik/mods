@@ -57,5 +57,6 @@
   "book.occultengineering.encyclopedia_of_souls.getting_started.spirit_solution.name": "Раствор духов",
   "book.occultengineering.encyclopedia_of_souls.getting_started.spirit_solution.intro.title": "Раствор духов",
   "ritual.occultengineering.craft_otherworld_detector.finished": "Детектор потустороннего мира успешно изготовлен.",
-  "ritual.occultengineering.craft_otherworld_detector.started": "Начато связывание Пуки в детектор потустороннего мира."
+  "ritual.occultengineering.craft_otherworld_detector.started": "Начато связывание Пуки в детектор потустороннего мира.",
+  "book.occultengineering.encyclopedia_of_souls.getting_started.chalks.chalks.text": "В дополнение к стандартному мелу из Occultism, вам может понадобиться изготовить 3 новых вида мела.\n\\\n\\\nСтоимость мела масштабируется вместе со стоимостью ритуала: самым дешевым является медный, затем цинковый и,\nнаконец, латунный.\n"
 }
