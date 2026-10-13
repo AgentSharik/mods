@@ -1,0 +1,41 @@
+{
+  "name": "Ранняя игра",
+  "icon": "irons_spellbooks:inscription_table",
+  "category": "irons_spellbooks:root",
+  "sortnum": -3,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Обзор",
+      "text": "В ранней игре развитие определяют исследование и добыча. Мир полон магической добычи, особенно в новых магических структурах, которые можно найти рассеянными по землям. Но будьте осторожны! Каждая магическая структура — дом могущественного мага, который не будет рад вашему приходу."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "irons_spellbooks:scroll",
+      "title": "Свитки",
+      "text": "Свитки будут вашим первым вкусом магии. Хотя их можно потратить, чтобы сотворить заклинание, которое они хранят, лучше сохранить их, пока вы не сможете вписать его в книгу заклинаний на Начертательном столе, где его можно использовать многократно >>>"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Начертательный стол",
+      "text": "Чтобы правильно использовать Книгу заклинаний, вы должны вписывать в неё заклинания на Начертательном столе, используя свитки. Свитки можно извлечь, после того как они были помещены в Книгу заклинаний, но это удалит заклинание. Книги заклинаний для начинающих можно создать из базовых материалов."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "irons_spellbooks:inscription_table",
+      "recipe2": "irons_spellbooks:copper_spell_book"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "irons_spellbooks:arcane_essence",
+      "title": "Базовые материалы",
+      "text": "Некоторые базовые материалы можно даже редко найти в обычных структурах.$(br2)Эссенцию волшебства можно объединить с кожаной бронёй, чтобы создать броню Странствующего мага — ранний источник дополнительной максимальной маны."
+    },
+    {
+      "type": "patchouli:entity",
+      "name": "Броня Странствующего мага",
+      "entity": "minecraft:armor_stand{ArmorItems:[{id:'irons_spellbooks:wandering_magician_boots',Count:1b},{id:'irons_spellbooks:wandering_magician_leggings',Count:1b},{id:'irons_spellbooks:wandering_magician_chestplate',Count:1b},{id:'irons_spellbooks:wandering_magician_helmet',Count:1b}],NoBasePlate:1b}"
+    }
+  ]
+}

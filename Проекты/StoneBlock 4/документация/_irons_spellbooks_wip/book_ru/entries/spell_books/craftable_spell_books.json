@@ -1,0 +1,54 @@
+{
+  "name": "Базовые книги заклинаний",
+  "icon": "irons_spellbooks:iron_spell_book",
+  "category": "irons_spellbooks:root",
+  "sortnum": 1,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Создаваемые книги заклинаний",
+      "text": "Многие книги заклинаний можно создать из комбинации обычных и волшебных материалов. Каждый следующий созданный уровень увеличивает количество слотов книги заклинаний и часто идёт с дополнительными бонусами, увеличивая силу и количество заклинаний, которые она может содержать."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "irons_spellbooks:copper_spell_book",
+      "recipe2": "irons_spellbooks:iron_spell_book"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "irons_spellbooks:gold_spell_book",
+      "recipe2": "irons_spellbooks:diamond_spell_book"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "irons_spellbooks:netherite_spell_book",
+      "recipe2": "irons_spellbooks:dragonskin_spell_book"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Именные книги заклинаний",
+      "text": "Именные книги заклинаний можно найти приютившимися во многих уголках мира, они часто предлагают бонусы удачливым искателям приключений, ищущим в правильных местах."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "irons_spellbooks:rotten_spell_book",
+      "text": "То, что когда-то могло быть более мощной книгой, с тех пор сгнило, оставив лишь три страницы. И всё же она сильнее большинства книг заклинаний Верхнего мира. Их можно добыть из не менее гнилых мест по всему Верхнему миру."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "irons_spellbooks:villager_spell_book",
+      "text": "Обычная книга с небольшим благословением становится подходящим каналом для божественной магии. Создание репутации с крестьянами, особенно освобождая пленников Архивызывателя, обеспечит, что одна в конце концов попадёт вам в руки."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "irons_spellbooks:blaze_spell_book",
+      "text": "Каждый Ифрит, сам того не зная, носит одну такую припрятанную. Хитрость — убить его и надеяться, что книга не превратится в пепел."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "irons_spellbooks:druidic_spell_book",
+      "text": "Сильная магическая энергия всё ещё сохраняется внутри Сгнившей книги заклинаний. Книгу можно благословить заново, если применить надлежащее средство."
+    }
+  ]
+}
