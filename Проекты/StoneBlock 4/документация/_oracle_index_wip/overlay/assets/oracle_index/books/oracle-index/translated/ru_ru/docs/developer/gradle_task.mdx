@@ -1,0 +1,21 @@
+---
+title: (Необязательно) Автоматическая синхронизация вики через Gradle
+---
+
+Рекомендуется добавить задачу Gradle, которая автоматически синхронизирует содержимое каталога «wiki» с собранным модом. Простая задача для проекта на Architectury может выглядеть так:
+
+```
+tasks.named('processResources') {
+    from("$rootDir/wiki") {
+        into "assets/oracle_index/books/oritech"
+        exclude 'assets/item/**'   // items are rendered ingame as actual item components, no need to include them here
+    }
+    doLast {
+        println "processResources executed: wiki folder copied into assets/oracle_index"
+    }
+}
+```
+
+Файлы попадают в каталог «common/build/resources».
+
+Обратите внимание: пример рассчитан на мультиплатформенные проекты Architectury и добавляется в файл build.gradle проекта «common». В зависимости от устройства вашего мода его, возможно, придётся подправить.

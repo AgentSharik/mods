@@ -1,0 +1,14 @@
+{
+  "user_guide.mdx": {
+    "name": "📗 Руководство пользователя",
+    "icon": null
+  },
+  "search.mdx": {
+    "name": "🔍 Умный поиск",
+    "icon": null
+  },
+  "developer": {
+    "name": "⌨ Руководство разработчика модов",
+    "icon": null
+  }
+}
