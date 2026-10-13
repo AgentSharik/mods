@@ -322,3 +322,31 @@ station, train, factory_panel, logistics, schematicannon, boiler, hints, death.a
   `assets/create_pattern_schematics/lang/ru_ru.json` (testzip ok).
   Готовый файл: `create_pattern_schematics-2.0.10.jar` (0,21 МБ,
   sha256 ad3dbbc49017e3a19ac129da2d001ebd0673833a6bb769f7cab285a3fde9e3b2).
+
+## 13. EnderStorage 2.13.0.191 — закрыт 13.10.2026
+
+- **Аудит:** en 8 = ru 8; пропусков и английского под видом русского нет
+  (имена эндер-хранилищ и команды частоты). Библиотека перед createenderstorage.
+- **Сделано:** вычитаны все 8 ключей; 1 правка — «Эндер-резервуар» заменён на
+  «Эндер-бак» (бак — термин кластера). В игру не запускался; в архиве изменён
+  только `assets/enderstorage/lang/ru_ru.json` (testzip ok).
+  Готовый файл: `EnderStorage-1.21.1-2.13.0.191.jar` (0,25 МБ,
+  sha256 93a9cb8c6f6569041ff2b36963b8ccdd460ca772e31ed62dc7faaca0c2cb15ea).
+
+## 14. Create: Ender Storage 1.1.1 — закрыт 13.10.2026
+
+- **Аудит:** en 3; русского в поставке нет — 3 строки сцены ponder о
+  совместимости штуковин с эндер-сундуками на общих цветовых частотах.
+- **Сделано:** все 3 ключа переведены; в архиве изменён только
+  `assets/createenderstorage/lang/ru_ru.json` (testzip ok). В игру не запускался.
+  Готовый файл: `createenderstorage-1.1.1.jar` (0,03 МБ,
+  sha256 978c3b22242f894403b11ffaf30417390b9f38bea193192db27912c1e4fa50ac).
+
+## 15. BaguetteLib 2.0.7 — закрыт 13.10.2026
+
+- **Аудит:** en 3; русского в поставке нет — примеры разработчика библиотеки
+  (вкладка, блок-пример и предмет-пример; библиотека идёт перед chisel).
+- **Сделано:** все 3 ключа переведены; в архиве изменён только
+  `assets/baguettelib/lang/ru_ru.json` (testzip ok). В игру не запускался.
+  Готовый файл: `baguettelib-1.21.1-NeoForge-2.0.7.jar` (0,08 МБ,
+  sha256 1b765ae0e446795df7ccae8d2236f3764c0d93c5a319b2e377f7cfac14393aef).
