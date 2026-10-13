@@ -7,9 +7,9 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-117-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-42%20781-2b6cb0?style=flat-square)
-![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-24-b8862b?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-140-4a7c3f?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-47%20268-2b6cb0?style=flat-square)
+![В работе](https://img.shields.io/badge/%D0%92%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B5-1-b8862b?style=flat-square)
 
 </div>
 
@@ -61,12 +61,14 @@ mods/
 
 **Моды из сборки.** 147 модов: 38 в первой волне, 23 во второй, 35 в третьей (с дозагруженными библиотеками),
 Carbon Config из пачки исправлений и 50 в четвёртой волне (с дозагруженными библиотеками; аудит 13.10.2026, перевод начат).
-**117 JAR готово**,
-42 781 ключ переведён; третья волна закрыта полностью (35 из 35). После проверки тестового
+**140 JAR готово**, 47 268 ключей переведено; первые три волны закрыты полностью
+(35 из 35 в третьей). В четвёртой волне готово 44 мода, ещё 5 модов без языковых файлов
+закрыты актом аудита; в работе остаётся ImmersiveEngineering: lang переведён полностью
+(1952/1952), в собственном мануале мода переведено 75 из 114 файлов. После проверки тестового
 релиза дополнительно переведён Collapsible Groups, пересобраны JAR с повреждённым английским,
 пропатчены Ars Elemental (красная строка брони) и Carbon Config (экран настроек JEI) —
 см. [`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md).
-порядку аудита. → [папка проекта](Проекты/StoneBlock%204/)
+→ [папка проекта](Проекты/StoneBlock%204/)
 
 <details>
 <summary><b>Состояние перевода сборки</b></summary>
@@ -302,7 +304,7 @@ JustEnough-аддонов, потому что они берут у него «�
 </details>
 
 <details>
-<summary><b>Четвёртая волна — 50 модов, 9 014 ключей (готово 21, закрыто актом 5, в очереди 24)</b></summary>
+<summary><b>Четвёртая волна — 50 модов, 9 014 ключей (готово 44, закрыто актом 5, в работе 1)</b></summary>
 
 Порядок — по зависимостям: кластер AE2 (ядро, библиотеки, аддоны), кластер
 Refined Storage, кластер Iron's Spells, ftb-materials, Replication с мостами
@@ -313,8 +315,13 @@ Refined Storage, кластер Iron's Spells, ftb-materials, Replication с м�
 вычитка; 16 модов без русского — с нуля), зависимости и порядок. Ход работ —
 в [`PROGRESS_WAVE4_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_WAVE4_2026-10-13.md).
 
+**Текущее состояние:** кластеры AE2 (lang и 224 страницы GuideME), Refined Storage
+и Iron's Spells, ftb-materials, кластер Replication и одиночки
+baubley-heart-canisters, routers, stonechest и repeatable_trial_vaults закрыты.
+Остался только ImmersiveEngineering (lang готов; мануал — 75 из 114 файлов).
 
-**Порядок перевода остатка волны (40 модов).** Кластер AE2 до конца:
+
+**Порядок перевода волны.** Кластер AE2 до конца:
 AE2AddonLib → ae2wtlib → AdvancedAE → ExtendedAE → megacells → AppliedFlux →
 AE2NetworkAnalyzer → ae2ct → me_beam_former → enderdrives → AE2-Things →
 Applied-Mekanistics → appliedcooking → applieddelight → applied-experienced →
@@ -348,32 +355,32 @@ baubley-heart-canisters → routers → stonechest → repeatable_trial_vaults.
 | `applieddelight-1.1.0.jar` | 24 | 24 (100 %) | Patchouli: книга | Готово |
 | `applied-experienced-1.21.1-1.3.2.jar` | 24 | 23 (96 %) | нет | Готово |
 | `appliedsticks-1.21.1-1.2.1.jar` | 2 | 0 (0 %) | нет | Готово |
-| `refinedstorage-neoforge-2.0.9.jar` | 788 | 778 (99 %) | нет | В очереди |
-| `refined-types-1.21.1-0.3.2.jar` | 164 | 0 (0 %) | нет | В очереди |
-| `cabletiers-neoforge-1.21.1-0.6.14.jar` | 190 | 0 (0 %) | нет | В очереди |
-| `ExtraStorage-1.21.1-5.0.10.jar` | 46 | 26 (57 %) | нет | В очереди |
-| `refineddelight-1.1.0.jar` | 27 | 27 (100 %) | Patchouli: книга | В очереди |
-| `refinedsticks-1.21.1-1.2.2.jar` | 2 | 0 (0 %) | нет | В очереди |
-| `refinedstorage-curios-integration-1.0.0.jar` | 1 | 0 (0 %) | нет | В очереди |
-| `refinedstorage-jei-integration-neoforge-1.0.0.jar` | 10 | 10 (100 %) | нет | В очереди |
-| `refinedstorage-mekanism-integration-1.1.1.jar` | 37 | 37 (100 %) | нет | В очереди |
-| `refinedstorage-quartz-arsenal-neoforge-1.0.8.jar` | 22 | 22 (100 %) | нет | В очереди |
-| `irons_lib-1.21.1-2.1.0.jar` | 72 | 0 (0 %) | нет | В очереди |
-| `irons_spellbooks-1.21.1-3.16.3.jar` | 1315 | 1148 (87 %) | Patchouli: книга | В очереди |
-| `irons_jewelry-1.21.1-2.0.2.jar` | 262 | 210 (80 %) | нет | В очереди |
-| `irons_apothic-2.2.4.jar` | 370 | 0 (0 %) | нет | В очереди |
-| `ftb-materials-21.1.4.jar` | 868 | 864 (100 %) | нет | В очереди |
-| `Replication-1.21.1-1.2.7.jar` | 78 | 56 (72 %) | GuideME: 1 стр. | В очереди |
-| `replication_matter_overflow-1.21.1-NeoForge-1.2.1.jar` | 7 | 0 (0 %) | нет | В очереди |
-| `rep_ae2_bridge-1.9.0.0.1-neoforge-1.21.1.jar` | 14 | 0 (0 %) | GuideME: 2 стр. | В очереди |
-| `replication_rs2_bridge-1.21.1-NeoForge-1.2.7.jar` | 5 | 0 (0 %) | нет | В очереди |
-| `ImmersiveEngineering-1.21.1-12.4.2-194.jar` | 1952 | 1058 (54 %) | нет | В очереди |
+| `refinedstorage-neoforge-2.0.9.jar` | 788 | 778 (99 %) | нет | Готово |
+| `refined-types-1.21.1-0.3.2.jar` | 164 | 0 (0 %) | нет | Готово |
+| `cabletiers-neoforge-1.21.1-0.6.14.jar` | 190 | 0 (0 %) | нет | Готово |
+| `ExtraStorage-1.21.1-5.0.10.jar` | 46 | 26 (57 %) | нет | Готово |
+| `refineddelight-1.1.0.jar` | 27 | 27 (100 %) | Patchouli: книга на lang-ключах | Готово |
+| `refinedsticks-1.21.1-1.2.2.jar` | 2 | 0 (0 %) | нет | Готово |
+| `refinedstorage-curios-integration-1.0.0.jar` | 1 | 0 (0 %) | нет | Готово |
+| `refinedstorage-jei-integration-neoforge-1.0.0.jar` | 10 | 10 (100 %) | нет | Готово |
+| `refinedstorage-mekanism-integration-1.1.1.jar` | 37 | 37 (100 %) | нет | Готово |
+| `refinedstorage-quartz-arsenal-neoforge-1.0.8.jar` | 22 | 22 (100 %) | нет | Готово |
+| `irons_lib-1.21.1-2.1.0.jar` | 72 | 0 (0 %) | нет | Готово |
+| `irons_spellbooks-1.21.1-3.16.3.jar` | 1315 | 1184 (90 %) | Patchouli: книга переведена | Готово |
+| `irons_jewelry-1.21.1-2.0.2.jar` | 262 | 211 (81 %) | нет | Готово |
+| `irons_apothic-2.2.4.jar` | 370 | 0 (0 %) | нет | Готово |
+| `ftb-materials-21.1.4.jar` | 868 | 865 (100 %) | нет | Готово |
+| `Replication-1.21.1-1.2.7.jar` | 78 | 56 (72 %) | GuideME: 1 стр. переведено | Готово |
+| `replication_matter_overflow-1.21.1-NeoForge-1.2.1.jar` | 7 | 0 (0 %) | нет | Готово |
+| `rep_ae2_bridge-1.9.0.0.1-neoforge-1.21.1.jar` | 14 | 0 (0 %) | GuideME: 2 стр. переведено | Готово |
+| `replication_rs2_bridge-1.21.1-NeoForge-1.2.7.jar` | 5 | 0 (0 %) | нет | Готово |
+| `ImmersiveEngineering-1.21.1-12.4.2-194.jar` | 1952 | 1228 (63 %) | Собственный мануал: переведено 75 из 114 txt | В работе: lang 1952/1952, мануал 75/114 |
 | `enchdesc-neoforge-1.21.1-21.1.11.jar` | 182 | 67 (37 %) | нет | Готово |
 | `compactmachines-neoforge-7.0.81.jar` | 74 | 64 + 10 из классов | нет | Готово |
-| `baubley-heart-canisters-1.21.1-1.4.2.jar` | 66 | 39 (59 %) | нет | В очереди |
-| `routers-1.21.1-1.1.9.jar` | 62 | 0 (0 %) | нет | В очереди |
-| `stonechest-neoforge-1.21.1-1.3.0.jar` | 80 | 0 (0 %) | нет | В очереди |
-| `repeatable_trial_vaults-neoforge-1.21-1.0.3.jar` | 1 | 0 (0 %) | нет | В очереди |
+| `baubley-heart-canisters-1.21.1-1.4.2.jar` | 66 | 39 (59 %) | нет | Готово |
+| `routers-1.21.1-1.1.9.jar` | 62 | 0 (0 %) | нет | Готово |
+| `stonechest-neoforge-1.21.1-1.3.0.jar` | 80 | 0 (0 %) | нет | Готово |
+| `repeatable_trial_vaults-neoforge-1.21-1.0.3.jar` | 1 | 0 (0 %) | нет | Готово |
 | `titanium-1.21-4.0.50.jar` | 53 | 0 (0 %) | нет | Готово |
 | `bookshelf-neoforge-1.21.1-21.1.81.jar` | 208 | 0 (0 %) | нет | Готово |
 | `prickle-neoforge-1.21.1-21.1.11.jar` | — | — | нет | Языковых файлов нет: переводить нечего |
