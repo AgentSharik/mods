@@ -7,9 +7,9 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-61-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-26%20613-2b6cb0?style=flat-square)
-![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-34-b8862b?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-62-4a7c3f?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-26%20620-2b6cb0?style=flat-square)
+![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-33-b8862b?style=flat-square)
 
 </div>
 
@@ -58,8 +58,9 @@ mods/
 
 ### StoneBlock 4
 
-**Моды из сборки.** 95 мод: 38 в первой волне, 23 во второй, 34 в третьей (с дозагруженными библиотеками). **61 JAR готово**,
-26 613 ключей переведено; третья волна аудирована, перевод впереди. → [папка проекта](Проекты/StoneBlock%204/)
+**Моды из сборки.** 95 мод: 38 в первой волне, 23 во второй, 34 в третьей (с дозагруженными библиотеками). **62 JAR готово**,
+26 620 ключей переведено; третья волна аудирована, в работе — готово CTM, дальше по
+порядку аудита. → [папка проекта](Проекты/StoneBlock%204/)
 
 <details>
 <summary><b>Состояние перевода сборки</b></summary>
@@ -233,11 +234,11 @@ JustEnough-аддонов, потому что они берут у него «�
 этому аудиту уже закрыт: 2 225 английских значений допереведены, остальное вычитано.
 У `occultism_kubejs` языковых файлов нет вовсе — там переведено описание мода, сверенное
 с upstream-тегом `release/v1.21.1-1.11.0`. `occultengineering` вычитан (60 правок, термины согласованы с Occultism), betterblockz
-переведён с нуля (1 748 ключей). Все 61 моды первых двух волн закрыты. Третья волна —
-30 модов и 10 808 ключей — прошла полный аудит до начала перевода:
+переведён с нуля (1 748 ключей). Все 62 моды первых волн закрыты (61 из первых двух и первый мод третьей). Третья волна —
+34 объекта и 10 938 ключей — прошла полный аудит до начала перевода:
 [`AUDIT_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_THIRD_WAVE_2026-10-13.md) —
-объём, качество существующего русского и порядок по зависимостям. Ход работ —
-в [`PROGRESS_WAVE3_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_WAVE3_2026-10-13.md).
+объём, качество существующего русского и порядок по зависимостям. Перевод начат, CTM готов.
+Ход работ — в [`PROGRESS_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8F/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_THIRD_WAVE_2026-10-13.md).
 </details>
 
   <details>
@@ -268,6 +269,8 @@ JustEnough-аддонов, потому что они берут у него «�
   | [`AUDIT_2026-10-07.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_2026-10-07.md) | Статический аудит первой волны и очерёдность вычитки |
   | [`AUDIT_FINAL_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_FINAL_2026-10-10.md) | Сводный аудит и итоги контроля качества |
   | [`AUDIT_WAVE3_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_WAVE3_2026-10-13.md) | Вторая волна: аудит 9 модов до начала перевода, порядок работ |
+  | [`AUDIT_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8F/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_THIRD_WAVE_2026-10-13.md) | Третья волна: аудит 34 объектов, повторные аудиты (библиотеки, ftb-library, Twilight Forest) |
+  | [`PROGRESS_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8F/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_THIRD_WAVE_2026-10-13.md) | Третья волна: журнал перевода, спорные места |
   | [`Mekanism_GLOSSARY.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/Mekanism_GLOSSARY.md) | Глоссарий Mekanism: термины и единицы |
 
   </details>
