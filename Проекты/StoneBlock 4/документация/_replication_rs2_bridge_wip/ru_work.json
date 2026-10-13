@@ -1,0 +1,7 @@
+{
+  "block.replication_rs2_bridge.rep_rs2_bridge": "Мост Репликации RS2",
+  "itemGroup.replication_rs2_bridge": "Мост Репликации RS2",
+  "block.replication_rs2_bridge.rep_rs2_bridge.priority": "Приоритет шаблонов",
+  "block.replication_rs2_bridge.rep_rs2_bridge.priority.help": "Шаблоны с более высоким приоритетом используются в автокрафте в первую очередь. Используйте это, чтобы предпочитать создание из материи обычным рецептам.",
+  "block.replication_rs2_bridge.rep_rs2_bridge.tooltip": "Соединяет сети материи Репликации с Refined Storage 2. Предоставляет шаблоны Репликации как рецепты автокрафта RS2. Нажмите ПКМ, чтобы установить приоритет шаблонов."
+}
