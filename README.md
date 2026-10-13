@@ -8,7 +8,7 @@
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
 ![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-96-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-39%20972-2b6cb0?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-40%20152-2b6cb0?style=flat-square)
 ![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-0-b8862b?style=flat-square)
 
 </div>
@@ -58,9 +58,11 @@ mods/
 
 ### StoneBlock 4
 
-**Моды из сборки.** 96 мод: 38 в первой волне, 23 во второй, 35 в третьей (с дозагруженными библиотеками). **95 JAR готово**,
-39 972 ключа переведено; третья волна закрыта полностью (35 из 35). После проверки тестового
-релиза дополнительно переведён Collapsible Groups и пересобраны JAR с повреждённым английским —
+**Моды из сборки.** 97 модов: 38 в первой волне, 23 во второй, 35 в третьей (с дозагруженными библиотеками)
+и Carbon Config из пачки исправлений. **96 JAR готово**,
+40 152 ключа переведено; третья волна закрыта полностью (35 из 35). После проверки тестового
+релиза дополнительно переведён Collapsible Groups, пересобраны JAR с повреждённым английским,
+пропатчены Ars Elemental (красная строка брони) и Carbon Config (экран настроек JEI) —
 см. [`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md).
 порядку аудита. → [папка проекта](Проекты/StoneBlock%204/)
 
@@ -411,17 +413,6 @@ JustEnough-аддонов, потому что они берут у него «�
 - Названия модов, бренды и технические идентификаторы не переводятся.
 - Пустые значения не заполняются догадками; массовые автоподстановки не применяются.
 - В переведённых JAR `en_us.json` служит резервной копией `ru_ru.json`.
-
-</details>
-
----
-
-<div align="center">
-
-Minecraft 1.21.1 · NeoForge · перевод, вычитка и проверка каждого ключа
-
-</div>
-� копией `ru_ru.json`.
 
 </details>
 
