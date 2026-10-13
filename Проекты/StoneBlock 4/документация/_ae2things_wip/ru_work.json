@@ -1,0 +1,14 @@
+{
+ "command.ae2things.getuuid_fail_notdisk": "Ошибка: указанный предмет не является DISK.",
+ "command.ae2things.getuuid_fail_nouuid": "Ошибка: указанный DISK пуст, UUID не найден.",
+ "command.ae2things.getuuid_success": "UUID указанного DISK: [%s]",
+ "command.ae2things.recover_fail": "Не удалось восстановить DISK-накопитель: UUID [%s] не существует.",
+ "command.ae2things.recover_success": "%s восстановил DISK-накопитель с UUID [%s].",
+ "item.ae2things.disk_drive_16k": "16К МЭ дисковый накопитель",
+ "item.ae2things.disk_drive_1k": "1К МЭ дисковый накопитель",
+ "item.ae2things.disk_drive_256k": "256К МЭ дисковый накопитель",
+ "item.ae2things.disk_drive_4k": "4К МЭ дисковый накопитель",
+ "item.ae2things.disk_drive_64k": "64К МЭ дисковый накопитель",
+ "item.ae2things.disk_housing": "МЭ корпус DISK-накопителя",
+ "text.ae2things.disk_drives": "МЭ DISK-накопители"
+}
