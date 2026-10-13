@@ -7,7 +7,7 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-95-4a7c3f?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-96-4a7c3f?style=flat-square)
 ![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-39%20972-2b6cb0?style=flat-square)
 ![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-0-b8862b?style=flat-square)
 
@@ -411,6 +411,17 @@ JustEnough-аддонов, потому что они берут у него «�
 - Названия модов, бренды и технические идентификаторы не переводятся.
 - Пустые значения не заполняются догадками; массовые автоподстановки не применяются.
 - В переведённых JAR `en_us.json` служит резервной копией `ru_ru.json`.
+
+</details>
+
+---
+
+<div align="center">
+
+Minecraft 1.21.1 · NeoForge · перевод, вычитка и проверка каждого ключа
+
+</div>
+� копией `ru_ru.json`.
 
 </details>
 
