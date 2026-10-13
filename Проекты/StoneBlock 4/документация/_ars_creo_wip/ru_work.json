@@ -1,0 +1,20 @@
+{
+ "block.ars_creo.starbuncle_wheel": "Колесо Звездоуха",
+ "ars_creo.page1.starbuncle_wheel": "Генерирует вращательное усилие для Create. Золотой блок перед колесом увеличивает скорость его вращения.",
+ "ars_creo.page.behaviors": "Ars Creo добавляет блокам Ars Nouveau особые возможности на подвижных конструкциях, включая заклинательные турели и кувшины Источника. Обычная заклинательная турель выпускает заклинание при взаимодействии с ней. Турель с таймером выпускает заклинание через заданные промежутки времени. Зачарованная заклинательная турель выпускает заклинание каждый раз, когда конструкция переходит на новый блок. Турели на конструкции могут расходовать Источник из кувшина.",
+ "itemGroup.ars_creo.general": "Ars Creo",
+ "ars_creo.display_source.turret.not_enough_space": "Недостаточно места ",
+ "ars_creo.display_source.turret.for_turret_status": "для отображения состояния турели",
+ "ars_creo.display_source.turret.no_spell": "Заклинание не задано.",
+ "ars_creo.display_source.turret.spell_name": "Заклинание: %s",
+ "ars_creo.display_source.turret.spell": "%s",
+ "ars_creo.display_source.turret_target": "Заклинательная турель",
+ "ars_creo.display_source.source_count": "Источник: %s",
+ "ars_creo.display_source.for_source_status": "для отображения состояния Источника",
+ "ars_creo.display_source.source_jar": "Количество Источника",
+ "ars_creo.display_source.turret": "Заклинание",
+ "ars_creo.page1.ars_creo.display_link": "Канал отображения можно подключить к кувшину Источника, чтобы отображать количество Источника в кувшине, или к заклинательной турели, чтобы выводить текущее заклинание на табло.",
+ "ars_creo.page1.ars_creo.fluid_tank": "Зелья можно хранить в резервуарах для жидкостей из Create и перекачивать между ними по трубам.",
+ "ars_creo.display_link": "Канал отображения Ars Creo",
+ "ars_creo.fluid_tank": "Резервуар для зелий Ars Creo"
+}
