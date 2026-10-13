@@ -32,6 +32,7 @@ def report(ru, en, label):
 
 
 def build(src, out, lang_dir, ru_path):
+    src, out, ru_path = (os.path.abspath(p) for p in (src, out, ru_path))
     ru = json.load(open(ru_path, encoding='utf-8'))
     tmp = tempfile.mkdtemp(prefix='build_lang_')
     work = os.path.join(tmp, 'work')
