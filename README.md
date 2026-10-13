@@ -9,7 +9,7 @@
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
 ![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-93-4a7c3f?style=flat-square)
 ![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-37%20550-2b6cb0?style=flat-square)
-![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-0-b8862b?style=flat-square)
+![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-1-b8862b?style=flat-square)
 
 </div>
 
@@ -58,8 +58,8 @@ mods/
 
 ### StoneBlock 4
 
-**Моды из сборки.** 95 мод: 38 в первой волне, 23 во второй, 34 в третьей (с дозагруженными библиотеками). **93 JAR готово**,
-37 550 ключей переведено; третья волна закрыта полностью (34 из 34), дальше по
+**Моды из сборки.** 96 мод: 38 в первой волне, 23 во второй, 35 в третьей (с дозагруженными библиотеками). **93 JAR готово**,
+37 550 ключей переведено; в третьей волне готово 34 из 35 — остался Twilight Forest.
 порядку аудита. → [папка проекта](Проекты/StoneBlock%204/)
 
 <details>
@@ -238,7 +238,7 @@ JustEnough-аддонов, потому что они берут у него «�
 </details>
 
 <details>
-<summary><b>Третья волна — 34 объекта, 10 938 ключей (готово 34 из 34)</b></summary>
+<summary><b>Третья волна — 35 объектов, 12 999 ключей (готово 34 из 35)</b></summary>
 
 Порядок — по зависимостям: родители и библиотеки раньше аддонов. Сначала CTM, затем Create
 (здесь составлен глоссарий всего Create-кластера), CreateDragonsPlus и ftb-teams; дальше
@@ -284,7 +284,8 @@ JustEnough-аддонов, потому что они берут у него «�
 | `Morph-o-Tool-1.8-39.jar` | 12 | 3 | нет | **Готово** (13.10.2026): допереведено 10 ключей конфигурации, вычитан весь файл |
 | `ftb-ez-crystals-21.1.1.jar` | — | — | нет | Языковых файлов нет: переводить нечего, JAR не собирался |
 | `ftb-xmod-compat-neoforge-21.1.12.jar` | — | — | нет | Языковых файлов нет: переводить нечего, JAR не собирался |
-| **Итого** | **10 317** (+621 CrashAssistant) | | | **Готово 34 из 34** |
+| `twilightforest-1.21.1-4.8.3345-universal.jar` | 2 061 | 1 482 (72 %) | нет | В очереди: доперевод 585 ключей + вычитка. Исходник и будущий готовый JAR (больше 25 МБ) — на Google Диске в папке `Translate` |
+| **Итого** | **12 378** (+621 CrashAssistant) | | | **Готово 34 из 35** |
 
 \* CrashAssistant: ключи лежат в `crash_assistant_localization/en_us.json` в корне JAR,
 а не в `assets/`, поэтому сборка этого мода идёт не через общий скрипт замены `ru_ru.json`.
@@ -336,8 +337,10 @@ JustEnough-аддонов, потому что они берут у него «�
 
   | Файл | О чём |
   |---|---|
-  | [`AUDIT_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_THIRD_WAVE_2026-10-13.md) | Аудит третьей волны: 34 объекта, повторные аудиты (библиотеки, ftb-library, Twilight Forest) |
+  | [`AUDIT_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_THIRD_WAVE_2026-10-13.md) | Аудит третьей волны: 35 объектов, повторные аудиты (библиотеки, ftb-library, Twilight Forest) |
   | [`PROGRESS_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_THIRD_WAVE_2026-10-13.md) | Журнал перевода третьей волны, спорные места |
+  | [`AUDIT_TWILIGHTFOREST_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_TWILIGHTFOREST_2026-10-13.md) | Twilight Forest: аудит (2 061 ключ, не хватает 585) |
+  | [`PROGRESS_TWILIGHTFOREST_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_TWILIGHTFOREST_2026-10-13.md) | Twilight Forest: журнал перевода |
 
   </details>
 
@@ -349,9 +352,9 @@ JustEnough-аддонов, потому что они берут у него «�
 перевести. Правила работы и результат те же, что у модов из сборки: готовый JAR в папке категории,
 ход работы — в её собственной документации.
 
-| Мод | Ключей lang | Что сделано | Журнал |
-|---|---:|---|---|
-| `twilightforest-1.21.1-4.8.3345-universal.jar` | 2 061 | Аудит выполнен 13.10.2026: переведено 1 482, не хватает 585 — в очереди. Исходник и будущий готовый JAR (больше 25 МБ) — на Google Диске в папке `Translate` | [аудит](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/%D0%9E%D1%82%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%BE%D0%B4%D1%8B/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_TWILIGHTFOREST_2026-10-13.md), [журнал](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/%D0%9E%D1%82%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%BE%D0%B4%D1%8B/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_TWILIGHTFOREST_2026-10-13.md) |
+
+
+Пока пусто: готовых работ в этой категории нет.
 
 → [папка категории](Проекты/%D0%9E%D1%82%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%BE%D0%B4%D1%8B/)
 
