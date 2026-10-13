@@ -7,9 +7,9 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-65-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-30%20727-2b6cb0?style=flat-square)
-![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-30-b8862b?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-66-4a7c3f?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-31%20320-2b6cb0?style=flat-square)
+![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-29-b8862b?style=flat-square)
 
 </div>
 
@@ -58,8 +58,8 @@ mods/
 
 ### StoneBlock 4
 
-**Моды из сборки.** 95 мод: 38 в первой волне, 23 во второй, 34 в третьей (с дозагруженными библиотеками). **65 JAR готово**,
-30 727 ключей переведено; в третьей волне готово 4 из 34 (CTM, Create, CreateDragonsPlus, ftb-teams), дальше по
+**Моды из сборки.** 95 мод: 38 в первой волне, 23 во второй, 34 в третьей (с дозагруженными библиотеками). **66 JAR готово**,
+31 320 ключей переведено; в третьей волне готово 5 из 34 (CTM, Create, CreateDragonsPlus, ftb-teams, Create: Enchantment Industry), дальше по
 порядку аудита. → [папка проекта](Проекты/StoneBlock%204/)
 
 <details>
@@ -238,7 +238,7 @@ JustEnough-аддонов, потому что они берут у него «�
 </details>
 
 <details>
-<summary><b>Третья волна — 34 объекта, 10 938 ключей (готово 4 из 34)</b></summary>
+<summary><b>Третья волна — 34 объекта, 10 938 ключей (готово 5 из 34)</b></summary>
 
 Порядок — по зависимостям: родители и библиотеки раньше аддонов. Сначала CTM, затем Create
 (здесь составлен глоссарий всего Create-кластера), CreateDragonsPlus и ftb-teams; дальше
@@ -254,7 +254,7 @@ JustEnough-аддонов, потому что они берут у него «�
 | `create-1.21.1-6.0.10.jar` | 3 639 | 3 619 (99 %) | Ponder: 1 052 ключа | **Готово** (13.10.2026): вычитан весь официальный перевод, допереведено 20 ключей, исправлено 33 значения; составлен глоссарий кластера |
 | `create-dragons-plus-1.11.9.jar` | 356 | 356 (226 значений по-английски) | Ponder: 35 | **Готово** (13.10.2026): допереведено 226 значений (серии красителей Dye Depot/Dyenamics), вычитка остатка |
 | `ftb-teams-neoforge-2101.1.11.jar` | 112 | 90 (80 %) | нет | **Готово** (13.10.2026): допереведено 22 ключа, вычитан весь файл; заведён глоссарий FTB-кластера (родитель кластера) |
-| `create-enchantment-industry-2.5.4.jar` | 594 | 593 (332 значения по-английски) | Ponder: 201 | В очереди: доперевод + вычитка |
+| `create-enchantment-industry-2.5.4.jar` | 593 | 593 (332 значения по-английски) | Ponder: 201 | **Готово** (13.10.2026): допереведено 332 значения (система аффиксов Apotheosis), вычитан весь файл, исправлен сдвиг строк ponder от старой редакции |
 | `create_connected-1.3.3-mc1.21.1.jar` | 422 | 357 (85 %) | Ponder: 123 | В очереди: доперевод 65 ключей + вычитка |
 | `createaddition-1.6.0.jar` | 261 | 259 (99 %) | Ponder: 50 | В очереди: вычитка |
 | `create-central-kitchen-2.6.1.jar` | 63 | 63 (27 значений по-английски) | Ponder: 55 | В очереди: доперевод + вычитка |
@@ -284,7 +284,7 @@ JustEnough-аддонов, потому что они берут у него «�
 | `Morph-o-Tool-1.8-39.jar` | 12 | 2 (17 %) | нет | В очереди: доперевод 10 ключей + вычитка |
 | `ftb-ez-crystals-21.1.1.jar` | — | — | нет | Языковых файлов нет: описание мода |
 | `ftb-xmod-compat-neoforge-21.1.12.jar` | — | — | нет | Языковых файлов нет: описание мода |
-| **Итого** | **10 317** (+621 CrashAssistant) | | | **Готово 4 из 34** |
+| **Итого** | **10 317** (+621 CrashAssistant) | | | **Готово 5 из 34** |
 
 \* CrashAssistant: ключи лежат в `crash_assistant_localization/en_us.json` в корне JAR,
 а не в `assets/`, поэтому сборка этого мода идёт не через общий скрипт замены `ru_ru.json`.
