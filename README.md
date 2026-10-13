@@ -59,7 +59,7 @@ mods/
 ### StoneBlock 4
 
 **Моды из сборки.** 95 мод: 38 в первой волне, 23 во второй, 34 в третьей (с дозагруженными библиотеками). **62 JAR готово**,
-26 620 ключей переведено; третья волна аудирована, в работе — готово CTM, дальше по
+26 620 ключей переведено; третья волна аудирована, готово 1 из 34 (CTM), дальше по
 порядку аудита. → [папка проекта](Проекты/StoneBlock%204/)
 
 <details>
@@ -86,54 +86,54 @@ mods/
 ключей). Что применено к каждому моду — в таблицах волн ниже.
 
 <details>
-<summary><b>Первая волна — 38 модов, 16 511 ключей (готово)</b></summary>
+<summary><b>Первая волна — 38 модов, 16 511 ключей (готово 38 из 38)</b></summary>
 
 Основа сборки. Работа шла в две стадии: сначала полная вычитка каждого lang-файла по точному
 исходнику, затем второй проход контроля качества, который вернул 81 утраченное значение
 (в Apotheosis — 41, Irregular Implements — 32, MFFS — 7, ApothicEnchanting — 1) и выровнял
 терминологию между модами.
 
-| Мод | Ключей lang | Что сделано |
-|---|---:|---|
-| `Apotheosis-1.21.1-8.8.0.jar` | 779 | Доперевод: +38 ключей; вычитка: 3 правки |
-| `ApothicAttributes-1.21.1-2.10.1.jar` | 272 | Доперевод: +142 ключа; вычитка: 95 правок |
-| `ApothicEnchanting-1.21.1-1.6.2.jar` | 425 | Доперевод: +19 ключей; вычитка: 129 правок |
-| `ApothicSpawners-1.21.1-1.4.0.jar` | 91 | Доперевод: +4 ключа; вычитка: 72 правки |
-| `apothic_compats-0.2.4.3.jar` | 707 | Перевод с нуля: 707 ключей |
-| `ars_affinity-1.21.1-1.1.1.jar` | 162 | Перевод с нуля: 162 ключа |
-| `ars_creo-1.21.1-5.4.0.jar` | 18 | Перевод с нуля: 18 ключей |
-| `ars_elemental-1.21.1-0.7.10.1.jar` | 677 | Доперевод: +2 ключа; вычитка: 566 правок |
-| `ars_hex-1.21.1-5.0.4b.jar` | 45 | Перевод с нуля: 45 ключей |
-| `ars_nouveau-1.21.1-5.13.1.jar` | 2 518 | Доперевод: +1 038 ключей; вычитка: 175 правок |
-| `ars_ocultas-1.21.1-2.6.1.jar` | 1 | Перевод с нуля: 1 ключ |
-| `ars_unification-1.2.21.jar` | 11 | Перевод с нуля: 11 ключей |
-| `artifacts-neoforge-13.2.5.jar` | 448 | Доперевод: +55 ключей; вычитка: 207 правок |
-| `irregular-implements-1.21.1-1.12.1-build.280.jar` | 849 | Доперевод: +16 ключей; вычитка: 53 правки |
-| `Mekanism-1.21.1-10.7.19.85.jar` | 3 239 | Вычитка: 825 правок |
-| `MekanismGenerators-1.21.1-10.7.19.85.jar` | 364 | Вычитка: 126 правок |
-| `mekanismcurios-1.21.1-1.2.1.jar` | 10 | Вычитка: 4 правки |
-| `mekanism_lasers-1.1.10.3-a.jar` | 33 | Вычитка: 11 правок |
-| `mekanism_ponders-1.0.3-1.21.1.jar` | 150 | Вычитка: 79 правок |
-| `mekanism_unleashed-0.3.4.jar` | 3 | Вычитка: 2 правки |
-| `mekanisticrouters-1.2.0.jar` | 13 | Вычитка: 9 правок |
-| `mffs-5.4.44.jar` | 186 | Доперевод: +3 ключа; вычитка: 38 правок |
-| `oritech-neoforge-1.21.1-1.2.12.jar` | 1 256 | Вычитка: 535 правок |
-| `oritechthings-0.0.46.jar` | 138 | Вычитка: 121 правка |
-| `particular-1.21.1-NeoForge-1.5.7.jar` | 153 | Доперевод: +111 ключей |
-| `Patchouli-1.21.1-93-NEOFORGE.jar` | 92 | Вычитка: 28 правок |
-| `Psi-neoforge-1.21.1-110.jar` | 1 102 | Вычитка: 103 правки |
-| `simplemagnets-1.1.12c-neoforge-mc1.21.jar` | 38 | Вычитка: 3 правки |
-| `SimpleDiscordRichPresence-neoforge-88.0.1-build.54+mc1.21.1.jar` | 3 | Вычитка: 1 правка |
-| `SimpleTeleportersReforged-1.21.1-2.2.0.jar` | 43 | Вычитка: 12 правок |
-| `simpletomb-1.21.1-1.4.4.jar` | 84 | Вычитка: 19 правок |
-| `SimplyTooltips-neoforge-0.1.5.jar` | 31 | Вычитка: 7 правок |
-| `simplylight-1.5.3+1.21.1-b4.jar` | 192 | Вычитка: 98 правок |
-| `simplyswords-neoforge-1.70.2-1.21.1.jar` | 2 267 | Вычитка: 1 120 правок |
-| `utilitarian-1.21.1-0.19.2.jar` | 111 | Доперевод: +47 ключей; вычитка: 27 правок |
-| `apothic_compat-2.0.2.jar` | — | Языковых файлов нет: переведено описание мода |
-| `apothic_tooltip_cleanup-1.3.0.jar` | — | Языковых файлов нет: переведены описание мода и подсказка |
-| `architectury-13.0.11-neoforge.jar` | — | Языковых файлов нет: переведено описание мода |
-| **Итого** | **16 511** | |
+| Мод | Ключей lang | Было в `ru_ru` | Книги и гайды | Что сделано |
+|---|---:|---|---|---|
+| `Apotheosis-1.21.1-8.8.0.jar` | 779 | 741 (95 %) | Patchouli — Chronicle of Shadows | Доперевод: +38 ключей; вычитка: 3 правки |
+| `ApothicAttributes-1.21.1-2.10.1.jar` | 272 | 130 (48 %) | нет | Доперевод: +142 ключа; вычитка: 95 правок |
+| `ApothicEnchanting-1.21.1-1.6.2.jar` | 425 | 406 (96 %) | нет | Доперевод: +19 ключей; вычитка: 129 правок |
+| `ApothicSpawners-1.21.1-1.4.0.jar` | 91 | 87 (96 %) | нет | Доперевод: +4 ключа; вычитка: 72 правки |
+| `apothic_compats-0.2.4.3.jar` | 707 | нет | нет | Перевод с нуля: 707 ключей |
+| `ars_affinity-1.21.1-1.1.1.jar` | 162 | нет | нет | Перевод с нуля: 162 ключа |
+| `ars_creo-1.21.1-5.4.0.jar` | 18 | нет | нет | Перевод с нуля: 18 ключей |
+| `ars_elemental-1.21.1-0.7.10.1.jar` | 677 | 675 (99,7 %) | Patchouli — Worn Notebook | Доперевод: +2 ключа; вычитка: 566 правок |
+| `ars_hex-1.21.1-5.0.4b.jar` | 45 | нет | нет | Перевод с нуля: 45 ключей |
+| `ars_nouveau-1.21.1-5.13.1.jar` | 2 518 | 1 480 (59 %) | Patchouli — Worn Notebook | Доперевод: +1 038 ключей; вычитка: 175 правок |
+| `ars_ocultas-1.21.1-2.6.1.jar` | 1 | нет | Patchouli | Перевод с нуля: 1 ключ |
+| `ars_unification-1.2.21.jar` | 11 | нет | нет | Перевод с нуля: 11 ключей |
+| `artifacts-neoforge-13.2.5.jar` | 448 | 393 (88 %) | нет | Доперевод: +55 ключей; вычитка: 207 правок |
+| `irregular-implements-1.21.1-1.12.1-build.280.jar` | 849 | 833 (98 %) | Patchouli + Oracle Index | Доперевод: +16 ключей; вычитка: 53 правки |
+| `Mekanism-1.21.1-10.7.19.85.jar` | 3 239 | 3 239 | нет | Вычитка: 825 правок |
+| `MekanismGenerators-1.21.1-10.7.19.85.jar` | 364 | 364 | нет | Вычитка: 126 правок |
+| `mekanismcurios-1.21.1-1.2.1.jar` | 10 | 10 | нет | Вычитка: 4 правки |
+| `mekanism_lasers-1.1.10.3-a.jar` | 33 | 33 | нет | Вычитка: 11 правок |
+| `mekanism_ponders-1.0.3-1.21.1.jar` | 150 | 150 | Ponder-сцены, текст в lang | Вычитка: 79 правок |
+| `mekanism_unleashed-0.3.4.jar` | 3 | 3 | нет | Вычитка: 2 правки |
+| `mekanisticrouters-1.2.0.jar` | 13 | 13 | нет | Вычитка: 9 правок |
+| `mffs-5.4.44.jar` | 186 | 183 (98 %) | Patchouli + Oracle Index | Доперевод: +3 ключа; вычитка: 38 правок |
+| `oritech-neoforge-1.21.1-1.2.12.jar` | 1 256 | 1 256 | Oracle Index | Вычитка: 535 правок |
+| `oritechthings-0.0.46.jar` | 138 | 138 | нет | Вычитка: 121 правка |
+| `particular-1.21.1-NeoForge-1.5.7.jar` | 153 | 42 (27 %) | нет | Доперевод: +111 ключей |
+| `Patchouli-1.21.1-93-NEOFORGE.jar` | 92 | 92 | нет | Вычитка: 28 правок |
+| `Psi-neoforge-1.21.1-110.jar` | 1 102 | 1 102 | собственная энциклопедия, текст в lang | Вычитка: 103 правки |
+| `simplemagnets-1.1.12c-neoforge-mc1.21.jar` | 38 | 38 | нет | Вычитка: 3 правки |
+| `SimpleDiscordRichPresence-neoforge-88.0.1-build.54+mc1.21.1.jar` | 3 | 3 | нет | Вычитка: 1 правка |
+| `SimpleTeleportersReforged-1.21.1-2.2.0.jar` | 43 | 43 | GuideME | Вычитка: 12 правок |
+| `simpletomb-1.21.1-1.4.4.jar` | 84 | 84 | нет | Вычитка: 19 правок |
+| `SimplyTooltips-neoforge-0.1.5.jar` | 31 | 31 | нет | Вычитка: 7 правок |
+| `simplylight-1.5.3+1.21.1-b4.jar` | 192 | 192 | нет | Вычитка: 98 правок |
+| `simplyswords-neoforge-1.70.2-1.21.1.jar` | 2 267 | 2 267 | Oracle Index | Вычитка: 1 120 правок |
+| `utilitarian-1.21.1-0.19.2.jar` | 111 | 64 (58 %) | нет | Доперевод: +47 ключей; вычитка: 27 правок |
+| `apothic_compat-2.0.2.jar` | — | — | нет | Языковых файлов нет: переведено описание мода |
+| `apothic_tooltip_cleanup-1.3.0.jar` | — | — | нет | Языковых файлов нет: переведены описание мода и подсказка |
+| `architectury-13.0.11-neoforge.jar` | — | — | нет | Языковых файлов нет: переведено описание мода |
+| **Итого** | **16 511** | | | |
 
 **Внутриигровые справочники первой волны**
 
@@ -234,11 +234,64 @@ JustEnough-аддонов, потому что они берут у него «�
 этому аудиту уже закрыт: 2 225 английских значений допереведены, остальное вычитано.
 У `occultism_kubejs` языковых файлов нет вовсе — там переведено описание мода, сверенное
 с upstream-тегом `release/v1.21.1-1.11.0`. `occultengineering` вычитан (60 правок, термины согласованы с Occultism), betterblockz
-переведён с нуля (1 748 ключей). Все 62 моды первых волн закрыты (61 из первых двух и первый мод третьей). Третья волна —
-34 объекта и 10 938 ключей — прошла полный аудит до начала перевода:
-[`AUDIT_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_THIRD_WAVE_2026-10-13.md) —
-объём, качество существующего русского и порядок по зависимостям. Перевод начат, CTM готов.
-Ход работ — в [`PROGRESS_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8F/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_THIRD_WAVE_2026-10-13.md).
+переведён с нуля (1 748 ключей). Вторая волна на этом закрыта целиком (23 из 23).
+</details>
+
+<details>
+<summary><b>Третья волна — 34 объекта, 10 938 ключей (готово 1 из 34)</b></summary>
+
+Порядок — по зависимостям: родители и библиотеки раньше аддонов. Сначала CTM, затем Create
+(здесь составляется глоссарий всего Create-кластера), CreateDragonsPlus и ftb-teams; дальше
+аддоны Create, крупные одиночки, кластер FTB (первой — ftb-library) и хвосты волны.
+Аудит волны выполнен целиком и до начала перевода:
+[`AUDIT_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_THIRD_WAVE_2026-10-13.md) — объём,
+качество существующего русского, зависимости и порядок. Ход работ —
+в [`PROGRESS_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_THIRD_WAVE_2026-10-13.md).
+
+| Мод | Ключей lang | Было в `ru_ru` | Книги и гайды | Что сделано |
+|---|---:|---|---|---|
+| `CTM-1.21-1.2.1+3.jar` | 7 | нет | нет | **Готово** (13.10.2026): перевод с нуля |
+| `create-1.21.1-6.0.10.jar` | 3 639 | 3 619 (99 %) | Ponder: 1 053 ключа | В очереди: вычитка; глоссарий Create-кластера |
+| `CreateDragonsPlus-1.11.9.jar` | 356 | 356 (226 значений по-английски) | Ponder: 35 | В очереди: доперевод + вычитка |
+| `ftb-teams-neoforge-2101.1.11.jar` | 112 | 90 (80 %) | нет | В очереди: доперевод 22 ключей + вычитка; родитель FTB-кластера |
+| `create-enchantment-industry-2.5.4.jar` | 594 | 593 (332 значения по-английски) | Ponder: 201 | В очереди: доперевод + вычитка |
+| `create_connected-1.3.3-mc1.21.1.jar` | 422 | 357 (85 %) | Ponder: 123 | В очереди: доперевод 65 ключей + вычитка |
+| `createaddition-1.6.0.jar` | 261 | 259 (99 %) | Ponder: 50 | В очереди: вычитка |
+| `create-central-kitchen-2.6.1.jar` | 63 | 63 (27 значений по-английски) | Ponder: 55 | В очереди: доперевод + вычитка |
+| `create_hypertube-0.6.0-NEOFORGE.jar` | 64 | 30 (47 %) | Ponder: 27 | В очереди: доперевод 34 ключей + вычитка |
+| `create-shimmer-1.3.1.jar` | 73 | 56 (77 %) | нет | В очереди: доперевод 17 ключей + вычитка |
+| `createenchantablemachinery-3.6.0+mc1.21.1-neoforge.jar` | 56 | 56 | Ponder: все 56 | В очереди: вычитка |
+| `create_pattern_schematics-2.0.10.jar` | 34 | 33 (97 %) | Ponder: 14 | В очереди: вычитка |
+| `EnderStorage-1.21.1-2.13.0.191.jar` | 8 | 8 | нет | В очереди: вычитка (библиотека, перед createenderstorage) |
+| `createenderstorage-1.1.1.jar` | 3 | нет | Ponder: 3 | В очереди: перевод с нуля |
+| `baguettelib-1.21.1-NeoForge-2.0.7.jar` | 3 | нет | нет | В очереди: примеры разработчика (библиотека, перед chisel) |
+| `chisel-1.21.1-NeoForge-1.4.1.jar` | 2 932 | нет | нет | В очереди: перевод с нуля |
+| `Jade-1.21.1-NeoForge-15.10.6.jar` | 410 | 281 (69 %) | нет | В очереди: доперевод 129 ключей + вычитка |
+| `FluxNetworks-1.21.1-8.0.0.jar` | 123 | 123 (16 значений по-английски) | нет | В очереди: вычитка |
+| `Placebo-1.21.1-9.9.2.jar` | 6 | 6 | нет | В очереди: вычитка (библиотека, перед GatewaysToEternity) |
+| `GatewaysToEternity-1.21.1-5.1.0.jar` | 96 | 87 (91 %) | нет | В очереди: доперевод 9 ключей + вычитка |
+| `ftb-library-neoforge-2101.1.36.jar` | 113 | 109 (96 %) | нет | В очереди: доперевод 4 ключей + вычитка; первой в FTB-кластере |
+| `ftb-chunks-neoforge-2101.1.22.jar` | 344 | 330 (96 %) | нет | В очереди: вычитка |
+| `ftb-stuff-things-21.1.19.jar` | 183 | 183 | нет | В очереди: вычитка |
+| `ftb-essentials-neoforge-2101.1.10.jar` | 94 | 94 | нет | В очереди: вычитка |
+| `ftb-ultimine-neoforge-2101.1.15.jar` | 89 | 69 (78 %) | нет | В очереди: доперевод 20 ключей + вычитка |
+| `ftb-backups-3-21.1.5.jar` | 69 | нет | нет | В очереди: перевод с нуля |
+| `ftb-echoes-21.1.10.jar` | 56 | 50 (89 %) | нет | В очереди: доперевод 6 ключей + вычитка |
+| `ftb-team-bases-21.1.18.jar` | 42 | 37 (88 %) | нет | В очереди: доперевод 5 ключей + вычитка |
+| `ftb-unearthed-21.1.10.jar` | 40 | 38 (95 %) | нет | В очереди: вычитка |
+| `ftb-auxilium-neoforge-21.1.6.jar` | 13 | нет | нет | В очереди: перевод с нуля |
+| `CrashAssistant-neoforge-1.20.6-1.21.4-1.11.12.jar` | 621* | 618 (99,5 %) | своя локализация, не lang | В очереди: вычитка; сборка не через общий скрипт |
+| `Morph-o-Tool-1.8-39.jar` | 12 | 2 (17 %) | нет | В очереди: доперевод 10 ключей + вычитка |
+| `ftb-ez-crystals-21.1.1.jar` | — | — | нет | Языковых файлов нет: описание мода |
+| `ftb-xmod-compat-neoforge-21.1.12.jar` | — | — | нет | Языковых файлов нет: описание мода |
+| **Итого** | **10 317** (+621 CrashAssistant) | | | **Готово 1 из 34** |
+
+\* CrashAssistant: ключи лежат в `crash_assistant_localization/en_us.json` в корне JAR,
+а не в `assets/`, поэтому сборка этого мода идёт не через общий скрипт замены `ru_ru.json`.
+
+Отдельных книг (Patchouli, Modonomicon, GuideME, Oracle Index) в третьей волне нет —
+только Ponder-сцены Create-кластера, их текст лежит в lang.
+
 </details>
 
   <details>
@@ -246,32 +299,45 @@ JustEnough-аддонов, потому что они берут у него «�
 
   Относятся **только к этой сборке**. У каждой сборки и у категории «Отдельные моды» своя
   документация: она заводится вместе с первым переведённым модом, в папке `документация`
-  внутри папки проекта.
+  внутри папки проекта. Ниже журналы и аудиты сгруппированы по волнам.
+
+  **Первая волна**
 
   | Файл | О чём |
   |---|---|
-  | [`PROGRESS_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_2026-10-10.md) | Вторая волна: аудит, план, ход работ |
+  | [`AUDIT_2026-10-07.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_2026-10-07.md) | Статический аудит первой волны и очерёдность вычитки |
+  | [`AUDIT_FINAL_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_FINAL_2026-10-10.md) | Сводный аудит первой волны и итоги контроля качества |
+  | [`Mekanism_GLOSSARY.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/Mekanism_GLOSSARY.md) | Глоссарий Mekanism: термины и единицы |
+
+  **Вторая волна**
+
+  | Файл | О чём |
+  |---|---|
+  | [`AUDIT_WAVE3_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_WAVE3_2026-10-13.md) | Аудит второй волны: 9 модов до начала перевода, порядок работ (название файла историческое) |
+  | [`PROGRESS_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_2026-10-10.md) | Вторая волна: план и ход работ |
   | [`PROGRESS_BIG3_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_BIG3_2026-10-10.md) | Oracle Index и L_Ender’s Cataclysm |
   | [`PROGRESS_CATACLYSM_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_CATACLYSM_2026-10-10.md) | L_Ender’s Cataclysm: доперевод и вычитка |
+  | [`PROGRESS_MALUM_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_MALUM_2026-10-10.md) | Malum: перевод с нуля, глоссарий, спорные места |
+  | [`PROGRESS_GAZE_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_GAZE_2026-10-11.md) | Gaze: перевод с нуля, стыковка с Malum |
+  | [`PROGRESS_JEI_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEI_2026-10-11.md) | JEI: новый экран конфигурации, вычитка |
+  | [`PROGRESS_JDT_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JDT_2026-10-11.md) | JustDireThings: lang и книга Patchouli целиком |
+  | [`PROGRESS_JDYN_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JDYN_2026-10-11.md) | JustDynaThings: lang, книга Patchouli, гайд GuideME |
   | [`PROGRESS_JEMM_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEMM_2026-10-11.md) | JustEnoughMekanismMultiblocks |
   | [`PROGRESS_JH_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JH_2026-10-11.md) | Just Hammers |
   | [`PROGRESS_JZ_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JZ_2026-10-11.md) | Just Zoom |
   | [`PROGRESS_JEB_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEB_2026-10-11.md) | Just Enough Breeding |
   | [`PROGRESS_JEP_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEP_2026-10-11.md) | Just Enough Professions |
   | [`PROGRESS_JDF_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JDF_2026-10-11.md) | JustDireFuels |
-  | [`PROGRESS_MALUM_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_MALUM_2026-10-10.md) | Malum: перевод с нуля, глоссарий, спорные места |
-  | [`PROGRESS_GAZE_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_GAZE_2026-10-11.md) | Gaze: перевод с нуля, стыковка с Malum |
-  | [`PROGRESS_JEI_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JEI_2026-10-11.md) | JEI: новый экран конфигурации, вычитка |
-  | [`PROGRESS_JDT_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JDT_2026-10-11.md) | JustDireThings: lang и книга Patchouli целиком |
-  | [`PROGRESS_JDYN_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_JDYN_2026-10-11.md) | JustDynaThings: lang, книга Patchouli, гайд GuideME |
   | [`PROGRESS_GUIDEME_2026-10-11.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_GUIDEME_2026-10-11.md) | GuideME: перевод с нуля |
-  | [`PROGRESS_WAVE3_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_WAVE3_2026-10-13.md) | Вторая волна: OctoLib, Not Enough Recipe Book, OmniTools, Farmer’s Delight, Collective |
-  | [`AUDIT_2026-10-07.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_2026-10-07.md) | Статический аудит первой волны и очерёдность вычитки |
-  | [`AUDIT_FINAL_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_FINAL_2026-10-10.md) | Сводный аудит и итоги контроля качества |
-  | [`AUDIT_WAVE3_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_WAVE3_2026-10-13.md) | Вторая волна: аудит 9 модов до начала перевода, порядок работ |
-  | [`AUDIT_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8F/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_THIRD_WAVE_2026-10-13.md) | Третья волна: аудит 34 объектов, повторные аудиты (библиотеки, ftb-library, Twilight Forest) |
-  | [`PROGRESS_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8F/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_THIRD_WAVE_2026-10-13.md) | Третья волна: журнал перевода, спорные места |
-  | [`Mekanism_GLOSSARY.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/Mekanism_GLOSSARY.md) | Глоссарий Mekanism: термины и единицы |
+  | [`PROGRESS_OCCULTISM_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_OCCULTISM_2026-10-13.md) | Occultism: журнал перевода и вычитки |
+  | [`PROGRESS_WAVE3_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_WAVE3_2026-10-13.md) | Вторая волна: OctoLib, Not Enough Recipe Book, OmniTools, Farmer’s Delight, Collective (название файла историческое) |
+
+  **Третья волна**
+
+  | Файл | О чём |
+  |---|---|
+  | [`AUDIT_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_THIRD_WAVE_2026-10-13.md) | Аудит третьей волны: 34 объекта, повторные аудиты (библиотеки, ftb-library, Twilight Forest) |
+  | [`PROGRESS_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_THIRD_WAVE_2026-10-13.md) | Журнал перевода третьей волны, спорные места |
 
   </details>
 
@@ -285,7 +351,7 @@ JustEnough-аддонов, потому что они берут у него «�
 
 | Мод | Ключей lang | Что сделано | Журнал |
 |---|---:|---|---|
-| — | — | категория открыта, модов пока нет | — |
+| `twilightforest-1.21.1-4.8.3345-universal.jar` | 2 061 | Аудит выполнен 13.10.2026: переведено 1 482, не хватает 585 — в очереди. Исходник и будущий готовый JAR (больше 25 МБ) — на Google Диске в папке `Translate` | [аудит](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/%D0%9E%D1%82%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%BE%D0%B4%D1%8B/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_TWILIGHTFOREST_2026-10-13.md), [журнал](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/%D0%9E%D1%82%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%BE%D0%B4%D1%8B/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_TWILIGHTFOREST_2026-10-13.md) |
 
 → [папка категории](Проекты/%D0%9E%D1%82%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%BE%D0%B4%D1%8B/)
 
