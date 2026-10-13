@@ -1,0 +1,18 @@
+{
+  "name": "Модуль против враждебных мобов",
+  "icon": "mffs:anti_hostile_module",
+  "category": "mffs:interdiction_modules",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mffs:anti_hostile_module",
+      "link_recipe": true,
+      "text": "$(5)Модуль против враждебных мобов$() — дополнительный модуль для $(l:mffs:machines/interdiction_matrix)матрицы подавления$(). С установленным модулем матрица автоматически обнаруживает враждебных мобов, попавших в зону сканирования, и почти мгновенно уничтожает их. Игроки и мирные существа, например жители и животные, не пострадают."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mffs:anti_hostile_module",
+      "text": "Создание $(5)модуля против враждебных мобов$()."
+    }
+  ]
+}

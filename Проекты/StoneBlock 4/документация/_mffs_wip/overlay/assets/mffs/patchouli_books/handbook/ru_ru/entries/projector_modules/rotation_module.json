@@ -1,0 +1,18 @@
+{
+  "name": "Модуль вращения",
+  "icon": "mffs:rotation_module",
+  "category": "mffs:projector_modules",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mffs:rotation_module",
+      "link_recipe": true,
+      "text": "$(5)Модуль вращения$() можно поместить в слоты поля $(l:mffs:machines/projector)проектора силового поля$(), чтобы поворачивать проецируемое поле. Установите $(5)модули вращения$() в соответствующие слоты, чтобы вращать поле вокруг осей X, Y или Z: $(li)ВОСТОК, ЗАПАД — поворот по рысканию$(li)ВВЕРХ, ВНИЗ — поворот по тангажу$(li)ЮГ, СЕВЕР — поворот по крену$()."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mffs:rotation_module",
+      "text": "Создание $(5)модуля вращения$()."
+    }
+  ]
+}

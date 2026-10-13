@@ -1,0 +1,18 @@
+{
+  "name": "Модуль губки",
+  "icon": "mffs:sponge_module",
+  "category": "mffs:projector_modules",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mffs:sponge_module",
+      "link_recipe": true,
+      "text": "Если поместить $(5)модуль губки$() в $(l:mffs:machines/projector)проектор силового поля$(), он будет постоянно обнаруживать и удалять жидкости внутри поля. Установив $(l:mffs:upgrade_modules/speed_module)$(5)модули скорости$(), можно ускорить удаление жидкости. Для бесконечных источников, например воды, может понадобиться повысить скорость."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mffs:sponge_module",
+      "text": "Создание $(5)модуля губки$()."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Модуль купола",
+  "icon": "mffs:dome_module",
+  "category": "mffs:projector_modules",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mffs:dome_module",
+      "link_recipe": true,
+      "text": "$(5)Модуль купола$() можно поместить в слоты матрицы $(l:mffs:machines/projector)проектора силового поля$(), чтобы удалить все проецируемые блоки ниже уровня Y проектора и создать купол."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mffs:dome_module",
+      "text": "Создание $(5)модуля купола$()."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Модуль сбора",
+  "icon": "mffs:collection_module",
+  "category": "mffs:projector_modules",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mffs:collection_module",
+      "link_recipe": true,
+      "text": "Когда $(l:mffs:machines/projector)проектор силового поля$() оснащён $(l:mffs:projector_modules/disintegration_module)$(5)модулем разрушения$(), поместите $(5)модуль сбора$() в его слоты матрицы, чтобы предметы, выпавшие из разрушенных блоков, перемещались в инвентари рядом с проектором."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mffs:collection_module",
+      "text": "Создание $(5)модуля сбора$()."
+    }
+  ]
+}

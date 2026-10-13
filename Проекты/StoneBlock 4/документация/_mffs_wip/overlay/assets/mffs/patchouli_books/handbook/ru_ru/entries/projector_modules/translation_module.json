@@ -1,0 +1,18 @@
+{
+  "name": "Модуль смещения",
+  "icon": "mffs:translation_module",
+  "category": "mffs:projector_modules",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mffs:translation_module",
+      "link_recipe": true,
+      "text": "$(5)Модуль смещения$() можно поместить в слоты поля $(l:mffs:machines/projector)проектора силового поля$(), чтобы сдвинуть проецируемое поле. Направление смещения задаётся слотом поля: поместите $(5)модуль смещения$() в слот нужной стороны. Каждый модуль сдвигает поле на 1 блок."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mffs:translation_module",
+      "text": "Создание $(5)модуля смещения$()."
+    }
+  ]
+}

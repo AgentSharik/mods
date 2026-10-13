@@ -1,0 +1,6 @@
+{
+  "name": "Модули подавления",
+  "description": "Модули улучшения для матрицы подавления.",
+  "sortnum": 5,
+  "icon": "mffs:anti_hostile_module"
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Модуль скорости",
+  "icon": "mffs:speed_module",
+  "category": "mffs:upgrade_modules",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mffs:speed_module",
+      "link_recipe": true,
+      "text": "$(5)Модуль скорости$() можно устанавливать в слоты улучшений различных машин MFFS, чтобы повысить их производительность. Эффект зависит от машины, но чаще всего модуль: $(li)ускоряет проецирование силового поля$(li)увеличивает предел передачи $(l:mffs:getting_started/fortron)Фортрона$() через $(l:mffs:machines/fortron_capacitor)конденсатор Фортрона$()$(li)повышает эффективность $(l:mffs:machines/coercion_deriver)генератора Фортрона$()."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mffs:speed_module",
+      "text": "Создание $(5)модуля скорости$()."
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Модуль разрушения",
+  "icon": "mffs:disintegration_module",
+  "category": "mffs:projector_modules",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mffs:disintegration_module",
+      "link_recipe": true,
+      "text": "$(5)Модуль разрушения$() можно использовать в $(l:mffs:machines/projector)проекторе силового поля$(), чтобы изменить воздействие поля на окружающую среду. Поместите $(5)модуль разрушения$() в слоты матрицы проектора: поле будет разрушать блоки, которые ему мешают. Разрушенные блоки выпадают как предметы, и их можно подобрать."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mffs:disintegration_module",
+      "text": "Создание $(5)модуля разрушения$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Использование",
+      "text": "$(5)Модуль разрушения$() совместим со всеми режимами проектора и позволяет обратить эффект $(l:mffs:projector_modules/stabilization_module)$(5)модуля стабилизации поля$(). Установив несколько $(l:mffs:upgrade_modules/speed_module)$(5)модулей скорости$(), можно разрушать сразу несколько блоков. Модуль также можно сочетать с $(l:mffs:projector_modules/collection_module)$(5)модулем сбора$(), чтобы автоматически подбирать разрушенные блоки."
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "mffs:textures/gui/handbook/disintegration_module.png"
+      ],
+      "border": true,
+      "title": "Проекция",
+      "text": "Проектор силового поля разрушает стену с помощью $(5)модуля разрушения$()."
+    }
+  ]
+}

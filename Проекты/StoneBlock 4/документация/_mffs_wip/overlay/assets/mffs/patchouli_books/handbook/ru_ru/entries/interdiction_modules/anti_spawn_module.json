@@ -1,0 +1,18 @@
+{
+  "name": "Модуль блокировки появления",
+  "icon": "mffs:anti_spawn_module",
+  "category": "mffs:interdiction_modules",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mffs:anti_spawn_module",
+      "link_recipe": true,
+      "text": "$(5)Модуль блокировки появления$() — дополнительный модуль для $(l:mffs:machines/interdiction_matrix)матрицы подавления$(). С установленным модулем матрица предотвращает появление мирных и враждебных существ в зоне действия. Если у игрока есть яйцо призыва, он может стоять прямо за границей зоны действия матрицы и призвать существо внутрь защищённой области."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mffs:anti_spawn_module",
+      "text": "Создание $(5)модуля блокировки появления$()."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Модуль тишины",
+  "icon": "mffs:silence_module",
+  "category": "mffs:projector_modules",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mffs:silence_module",
+      "link_recipe": true,
+      "text": "$(5)Модуль тишины$() можно поместить в слоты матрицы $(l:mffs:machines/projector)проектора силового поля$(), чтобы заглушить издаваемые им звуки."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mffs:silence_module",
+      "text": "Создание $(5)модуля тишины$()."
+    }
+  ]
+}
