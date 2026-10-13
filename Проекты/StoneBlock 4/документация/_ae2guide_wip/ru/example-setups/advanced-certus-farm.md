@@ -1,0 +1,149 @@
+---
+navigation:
+  parent: example-setups/example-setups-index.md
+  title: Продвинутая ферма истинного кварца
+  icon: certus_quartz_crystal
+  position: 120
+---
+
+# Продвинутая ферма истинного кварца
+
+Это в основном просто [Полуавтоматическая ферма истинного кварца](semiauto-certus-farm.md), за исключением того, что она полностью интегрирована в вашу
+МЭ-систему.
+
+Вместо того чтобы иметь большой запас цветущих блоков и вручную обновлять их время от времени,
+эта схема использует [Автоматизацию зарядника](charger-automation.md) и [Автоматизацию бросания в воду](throw-in-water-automation.md),
+чтобы делать это автоматически.
+
+Оценки скоростей см. в [Росте истинного кварца](../ae2-mechanics/certus-growth.md).
+
+**ЭТО СЛОЖНАЯ ПОСТРОЙКА С ВЕЩАМИ, СКРЫТЫМИ ЗА ДРУГИМИ ВЕЩАМИ, ВРАЩАЙТЕ, ЧТОБЫ РАССМОТРЕТЬ СО ВСЕХ СТОРОН**
+
+<GameScene zoom="6" interactive={true}>
+  <ImportStructure src="../assets/assemblies/advanced_certus_farm.snbt" />
+
+  <BoxAnnotation color="#ddaaaa" min="3.7 2 1" max="4 3 2">
+        (1) Плоскость уничтожения №1: интерфейса для настройки нет, но можно зачаровать на Удачу.
+  </BoxAnnotation>
+
+  <BoxAnnotation color="#ddaaaa" min="2 2 1.7" max="3 3 2">
+        (2) Шина хранения №1: отфильтрована на Кристалл истинного кварца.
+        <ItemImage id="certus_quartz_crystal" scale="2" />
+  </BoxAnnotation>
+
+  <DiamondAnnotation pos="3 2.5 1.5" color="#ff0000">
+    Подсеть разрушителя кластеров
+  </DiamondAnnotation>
+
+  <BoxAnnotation color="#aaddaa" min="3.7 1 1" max="4 2 2">
+        (3) Плоскость уничтожения №2: интерфейса для настройки нет, но зачарована Шёлковым касанием.
+  </BoxAnnotation>
+
+  <BoxAnnotation color="#aaddaa" min="2 1 1.7" max="3 2 2">
+        (4) Шина хранения №2: отфильтрована на Блок истинного кварца.
+        <BlockImage id="quartz_block" scale="2" />
+  </BoxAnnotation>
+
+  <DiamondAnnotation pos="3 1.5 1.5" color="#00ff00">
+    Подсеть разрушителя блоков истинного кварца
+  </DiamondAnnotation>
+
+  <BoxAnnotation color="#ffddaa" min="4 0.7 1" max="5 1 2">
+        (5) Плоскость формирования: в своей конфигурации по умолчанию.
+  </BoxAnnotation>
+
+  <BoxAnnotation color="#ffddaa" min="2 0.7 2" max="3 1 3">
+        (6) Шина импорта: отфильтрована на Несовершенный цветущий истинный кварц.
+        <BlockImage id="flawed_budding_quartz" scale="2" />
+  </BoxAnnotation>
+
+  <DiamondAnnotation pos="3 0.5 1.5" color="#ddcc00">
+    Подсеть размещателя цветущих блоков
+  </DiamondAnnotation>
+
+  <BoxAnnotation color="#aaaadd" min="1.7 2 2" max="2 3 3">
+        (7) Шина хранения №3: отфильтрована на Кристалл истинного кварца. Установлен приоритет выше вашего главного хранилища.
+        <ItemImage id="certus_quartz_crystal" scale="2" />
+  </BoxAnnotation>
+
+  <BoxAnnotation color="#aaaadd" min="2 1 2" max="3 2 3">
+        (8) Интерфейс: установлен держать 1 Несовершенный цветущий истинный кварц в себе, имеет Карту изготовления.
+        <Row><BlockImage id="flawed_budding_quartz" scale="2" /> <ItemImage id="crafting_card" scale="2" /></Row>
+  </BoxAnnotation>
+
+<DiamondAnnotation pos="1.5 0.5 0" color="#00ff00">
+        К главной сети, автоматизации зарядника и автоматизации бросания в воду
+        <Row>
+        <GameScene zoom="3" background="transparent">
+          <ImportStructure src="../assets/assemblies/charger_automation.snbt" />
+          <IsometricCamera yaw="195" pitch="30" />
+        </GameScene>
+        <GameScene zoom="3" background="transparent">
+          <ImportStructure src="../assets/assemblies/throw_in_water.snbt" />
+          <IsometricCamera yaw="195" pitch="30" />
+        </GameScene>
+        </Row>
+    </DiamondAnnotation>
+
+  <IsometricCamera yaw="165" pitch="5" />
+</GameScene>
+
+## Конфигурации
+
+### Разрушитель кластеров:
+
+* Первая <ItemLink id="annihilation_plane" /> (1) не имеет интерфейса и не может настраиваться, но может быть зачарована на Удачу.
+* Первая <ItemLink id="storage_bus" /> (2) отфильтрована на <ItemLink id="certus_quartz_crystal" />.
+
+### Разрушитель блоков истинного кварца:
+
+* Вторая <ItemLink id="annihilation_plane" /> (3) не имеет интерфейса и не может настраиваться, но должна быть зачарована Шёлковым касанием.
+* Вторая <ItemLink id="storage_bus" /> (4) отфильтрована на <ItemLink id="quartz_block" />.
+
+### Размещатель цветущих блоков:
+
+* <ItemLink id="formation_plane" /> (5) в своей конфигурации по умолчанию.
+* <ItemLink id="import_bus" /> (6) отфильтрована на <ItemLink id="flawed_budding_quartz" />.
+
+### В главной сети:
+
+* Третья <ItemLink id="storage_bus" /> (7) отфильтрована на <ItemLink id="certus_quartz_crystal" /> и у неё
+  [приоритет](../ae2-mechanics/import-export-storage.md#storage-priority) установлен выше вашего главного хранилища.
+* <ItemLink id="interface" /> (8) установлен держать 1 Несовершенный цветущий истинный кварц в себе и имеет <ItemLink id="crafting_card" />.
+
+## Как это работает
+
+### Разрушитель кластеров:
+
+Подсеть разрушителя кластеров работает очень похоже на подсеть в [простой ферме истинного кварца](simple-certus-farm.md).
+
+1. <ItemLink id="annihilation_plane" /> пытается сломать то, что перед ней, но может ломать только <ItemLink id="quartz_cluster" />,
+   потому что единственное хранилище в подсети — <ItemLink id="storage_bus" />, отфильтрованная на <ItemLink id="certus_quartz_crystal" />.
+2. <ItemLink id="storage_bus" /> хранит кристаллы истинного кварца в бочке.
+
+### Разрушитель блоков истинного кварца
+
+Подсеть разрушителя блоков истинного кварца служит для ломания истощённого цветущего блока, когда он превращается в обычный <ItemLink id="quartz_block" />.
+Работает подобно разрушителю кластеров.
+
+1. <ItemLink id="annihilation_plane" /> пытается сломать то, что перед ней, но может ломать только <ItemLink id="quartz_block" />,
+   потому что единственное хранилище в подсети — <ItemLink id="storage_bus" />, отфильтрованная на <ItemLink id="quartz_block" />. 
+   Плоскости нужно шёлковое касание, чтобы цветущий блок не понижался при ломании, и, таким образом, плоскость не сломает его преждевременно.
+2. <ItemLink id="storage_bus" /> хранит блок истинного кварца в <ItemLink id="interface" />, позволяя
+   [Автоматизации бросания в воду](throw-in-water-automation.md) использовать его, чтобы сделать новый <ItemLink id="flawed_budding_quartz" />.
+
+### Размещатель цветущих блоков
+
+Подсеть размещателя цветущих блоков служит для размещения нового <ItemLink id="flawed_budding_quartz" />, когда подсеть разрушителя ломает старый истощённый.
+
+1. <ItemLink id="import_bus" /> импортирует цветущий блок из <ItemLink id="interface" /> в [сетевое хранилище](../ae2-mechanics/import-export-storage.md)
+2. Единственное хранилище в подсети — <ItemLink id="formation_plane" />, который размещает цветущий блок.
+
+### В главной сети
+
+* <ItemLink id="storage_bus" /> даёт главной сети (а также [Автоматизации зарядника](charger-automation.md)) доступ ко всем кристаллам истинного кварца в бочке. Установлен
+  высокий [приоритет](../ae2-mechanics/import-export-storage.md#storage-priority), чтобы кристаллы истинного кварца предпочтительно
+  помещались обратно в бочку вместо вашего главного хранилища.
+* <ItemLink id="interface" /> даёт подсети размещателя цветущих блоков доступ к <ItemLink id="flawed_budding_quartz" />, а
+    даёт подсети разрушителя блоков истинного кварца способ вернуть истощённые блоки в главную сеть. 
+    <ItemLink id="crafting_card" /> позволяет интерфейсу запрашивать новые цветущие блоки из [автоматического изготовления](../ae2-mechanics/autocrafting.md) главной сети.
