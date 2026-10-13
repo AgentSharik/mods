@@ -1,0 +1,14 @@
+{
+ "morphtool.sudo_name": "Инструмент превращения (%s)",
+ "item.morphtool.tool": "Инструмент превращения",
+ "morphtool.misc.shift_for_info": "§7Удерживайте §bSHIFT§7 для подробностей",
+ "morphtool.configuration.title": "Название",
+ "morphtool.configuration.offhand_morph.tooltip": "Превращение во второй руке вместо основной",
+ "morphtool.configuration.section.morphtool.common.toml.title": "Конфигурация Morph-o-Tool",
+ "morphtool.configuration.blacklist_mods": "Чёрный список модов",
+ "morphtool.configuration.offhand_morph": "Превращение во второй руке",
+ "morphtool.configuration.whitelist_items": "Белый список предметов",
+ "morphtool.configuration.whitelist_names": "Белый список имён",
+ "morphtool.configuration.mod_aliasses": "Псевдонимы модов",
+ "morphtool.configuration.allow_all_items": "Разрешить все предметы"
+}
