@@ -1,0 +1,13 @@
+{
+  "name": "Бензопила",
+  "icon": "minecraft:enchanted_book",
+  "category": "apotheosis:enchanting/enchantments",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(2)Бензопила$() — мастерское зачарование для топоров.$(p)Срубив один блок дерева, вы добудете всё дерево целиком.$(p)При этом расходуется прочность топора."
+    }
+  ]
+}

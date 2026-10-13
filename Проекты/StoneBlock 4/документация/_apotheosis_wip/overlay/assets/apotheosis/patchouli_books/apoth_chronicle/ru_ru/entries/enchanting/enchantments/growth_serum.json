@@ -1,0 +1,13 @@
+{
+  "name": "Сыворотка роста",
+  "icon": "minecraft:enchanted_book",
+  "category": "apotheosis:enchanting/enchantments",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(2)Сыворотка роста$() — мастерское зачарование для ножниц.$(p)С ним овца может сразу отрастить шерсть с вероятностью 50%."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Уязвимость",
+  "icon": "apothic_attributes:textures/mob_effect/sundering.png",
+  "category": "apotheosis:potion/effects",
+  "flag": "apotheosis:potion",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Зелье $(c)Уязвимость$() накладывает отрицательный эффект.$(p)Пока он действует, весь получаемый урон увеличивается на 20% за каждый уровень."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Уязвимость напрямую компенсирует сопротивление, а их эффекты складываются при расчёте урона.$(p)При «Уязвимости II» и «Сопротивлении II» вы будете получать обычный урон."
+    }
+  ]
+}

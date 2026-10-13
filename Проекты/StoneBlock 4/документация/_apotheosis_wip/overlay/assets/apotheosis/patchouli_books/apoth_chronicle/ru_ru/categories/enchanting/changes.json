@@ -1,0 +1,7 @@
+{
+  "name": "Изменения ванильной игры",
+  "description": "В этом разделе описаны новые предметы, которые можно зачаровывать, и изменения механик.$(p)Здесь также отмечены небольшие изменения содержимого.",
+  "icon": "minecraft:trident",
+  "flag": "apotheosis:enchanting",
+  "parent": "apotheosis:enchanting/enchanting"
+}

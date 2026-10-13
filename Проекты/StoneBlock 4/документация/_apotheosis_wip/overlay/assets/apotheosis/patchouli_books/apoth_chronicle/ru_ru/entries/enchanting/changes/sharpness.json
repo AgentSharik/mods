@@ -1,0 +1,13 @@
+{
+  "name": "Острота",
+  "icon": "minecraft:netherite_sword",
+  "category": "apotheosis:enchanting/changes",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(9)Острота$() больше не конфликтует с другими зачарованиями на урон.$(p)Теперь можно наложить $(9)Остроту$() вместе с ещё одним зачарованием на урон, которое обычно с ней несовместимо."
+    }
+  ]
+}

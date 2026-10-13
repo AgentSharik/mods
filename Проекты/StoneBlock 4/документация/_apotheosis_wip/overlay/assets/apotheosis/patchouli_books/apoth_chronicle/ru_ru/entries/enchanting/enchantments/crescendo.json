@@ -1,0 +1,13 @@
+{
+  "name": "Нарастающий залп",
+  "icon": "minecraft:enchanted_book",
+  "category": "apotheosis:enchanting/enchantments",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(2)Нарастающий залп$() — мастерское зачарование для арбалетов.$(p)Каждый уровень даёт один дополнительный выстрел за одну перезарядку.$(p)Дополнительные выстрелы не расходуют боеприпасы."
+    }
+  ]
+}

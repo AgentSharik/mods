@@ -1,0 +1,21 @@
+{
+  "name": "Шанс критического удара",
+  "icon": "minecraft:netherite_sword",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Шанс критического удара$() определяет вероятность нанести критический урон. Значение выше 100% позволяет наносить несколько критических ударов за одну атаку.$(p)Эта характеристика встречается у оружия."
+      }
+    },
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "Урон от критических ударов зависит от $(l:apotheosis:adventure/attributes/crit_damage)критического урона$()."
+      }
+    }
+  ]
+}

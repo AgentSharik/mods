@@ -1,0 +1,17 @@
+{
+  "name": "Нерушимые амулеты с эффектом",
+  "icon": "minecraft:enchanting_table",
+  "category": "apotheosis:potion/charms",
+  "flag": "&apotheosis:potion,apotheosis:enchanting",
+  "sortnum": -1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "С помощью $(l:apotheosis:enchanting/table/infusion)чар наполнения$() амулет с эффектом можно сделать нерушимым.$(p)Тогда действие любого зелья будет длиться бесконечно."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Рецепт инфузии для нерушимого амулета довольно сложен.$(p)Чтобы выполнить его, нужно хорошо разбираться в $(l:apotheosis:enchanting/table/stats)параметрах зачарования$()."
+    }
+  ]
+}

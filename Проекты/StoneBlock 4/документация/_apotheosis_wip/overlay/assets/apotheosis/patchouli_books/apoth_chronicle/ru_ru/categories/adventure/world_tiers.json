@@ -1,0 +1,7 @@
+{
+  "name": "Уровни мира",
+  "description": "Чем сильнее вы становитесь, тем сильнее становится мир вокруг.$(p)В этом разделе описаны уровни мира Apotheosis: что они меняют, как их разблокировать и как переключить текущий уровень.",
+  "icon": "apotheosis:textures/gui/book/summit_icon.png",
+  "flag": "apotheosis:adventure",
+  "parent": "apotheosis:adventure/adventure"
+}

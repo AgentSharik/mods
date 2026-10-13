@@ -1,0 +1,15 @@
+{
+  "name": "Пронзание защиты",
+  "icon": "apothic_attributes:textures/mob_effect/sundering.png",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Пронзание защиты$() позволяет при атаке игнорировать фиксированное количество очков защиты цели.$(p)Дополнительное пронзание защиты не может снизить показатель защиты цели ниже нуля."
+      }
+    }
+  ]
+}

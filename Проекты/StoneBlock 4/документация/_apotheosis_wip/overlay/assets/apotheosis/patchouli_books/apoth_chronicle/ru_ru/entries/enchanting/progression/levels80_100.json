@@ -1,0 +1,32 @@
+{
+  "name": "Уровни 80–100",
+  "icon": "apothic_enchanting:endshelf",
+  "category": "apotheosis:enchanting/progression",
+  "flag": "apotheosis:enchanting",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "title": "Уровень 90",
+      "item": "apothic_enchanting:infused_breath",
+      "text": "Чтобы открыть предпоследний уровень, нужен стол зачарования 80-го уровня и $(9)Драконье дыхание$().$(p)С их помощью можно создать $(9)наполненное драконье дыхание$() — основной компонент $(9)книжных полок Края$()."
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Уровень 90",
+      "recipe": "apothic_enchanting:endshelf",
+      "recipe2": "apothic_enchanting:pearl_endshelf"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Уровень 100",
+      "item": "minecraft:dragon_head",
+      "text": "Максимальный уровень стола зачарования — 100, но только одна книжная полка способна обеспечить такую мощность.$(p)Чтобы создать её, отправляйтесь на внешние острова Края и добудьте $(9)голову дракона$()."
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Уровень 100",
+      "recipe": "apothic_enchanting:draconic_endshelf",
+      "text": "Одна $(9)дракониевая книжная полка Края$() даёт достаточно мощности, чтобы повысить максимальный уровень зачарования с 90 до 100.$(p)Однако она не даёт бонусов к другим параметрам."
+    }
+  ]
+}

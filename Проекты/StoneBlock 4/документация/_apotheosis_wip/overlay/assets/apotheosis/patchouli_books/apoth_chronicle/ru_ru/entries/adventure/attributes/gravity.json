@@ -1,0 +1,15 @@
+{
+  "name": "Гравитация",
+  "icon": "minecraft:elytra",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Гравитация$() определяет ускорение падения (в блоках в секунду в квадрате).$(p)Может появиться где угодно — или вовсе ни на чём, кто знает.$(p)Гравитация может быть отрицательной: тогда вы будете парить вверх."
+      }
+    }
+  ]
+}

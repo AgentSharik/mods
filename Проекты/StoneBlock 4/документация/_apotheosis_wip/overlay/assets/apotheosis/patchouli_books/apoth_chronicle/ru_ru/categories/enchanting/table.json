@@ -1,0 +1,8 @@
+{
+  "name": "Стол зачарования",
+  "description": "В этом разделе описаны изменения стола зачарования.",
+  "icon": "minecraft:enchanting_table",
+  "flag": "apotheosis:enchanting",
+  "parent": "apotheosis:enchanting/enchanting",
+  "sortnum": -2
+}

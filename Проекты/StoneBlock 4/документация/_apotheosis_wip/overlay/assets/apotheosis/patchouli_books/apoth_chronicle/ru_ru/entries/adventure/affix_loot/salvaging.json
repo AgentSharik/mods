@@ -1,0 +1,44 @@
+{
+  "name": "Утилизация",
+  "icon": "apotheosis:salvaging_table",
+  "category": "apotheosis:adventure/affix_loot",
+  "flag": "apotheosis:adventure",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "apotheosis:salvaging_table",
+      "text": "$(9)Стол утилизации$() разбирает предметы с аффиксами на соответствующие $(9)материалы редкости$()."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "apotheosis:mysterious_scrap_metal",
+      "link_recipe": true,
+      "text": "Кусок металла причудливой формы, который невозможно опознать.$(p)Получается при утилизации обычных предметов."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "apotheosis:timeworn_fabric",
+      "link_recipe": true,
+      "text": "Ткань невероятной прочности, прошедшая через бесчисленные эпохи; на ней нет ни единого разрыва.$(p)Получается при утилизации необычных предметов."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "apotheosis:luminous_crystal_shard",
+      "link_recipe": true,
+      "text": "Осколок самого яркого кристалла из всех, что когда-либо существовали. Несмотря на небольшой размер, в нём заключена мощная магия.$(p)Получается при утилизации редких предметов."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "apotheosis:arcane_sands",
+      "link_recipe": true,
+      "text": "Песчинки из магического мира, где тайная магия искажает всё живое.$(p)Именно такой материал получается при утилизации эпических предметов."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "apotheosis:godforged_pearl",
+      "link_recipe": true,
+      "text": "Жемчужина, наполненная очищенной божественной энергией. Заключённая в ней огромная сила делает её крайне нестабильной.$(p)Такие материалы можно получить только при утилизации мифических предметов."
+    }
+  ]
+}

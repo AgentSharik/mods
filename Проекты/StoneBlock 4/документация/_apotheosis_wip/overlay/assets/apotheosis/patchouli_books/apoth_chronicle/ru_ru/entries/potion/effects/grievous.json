@@ -1,0 +1,17 @@
+{
+  "name": "Тяжёлые раны",
+  "icon": "apothic_attributes:textures/mob_effect/grievous.png",
+  "category": "apotheosis:potion/effects",
+  "flag": "apotheosis:potion",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Зелье $(c)«Тяжёлые раны»$() накладывает отрицательный эффект.$(p)Под его действием эффективность получаемого лечения снижается."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Получаемое лечение уменьшается на 40% за каждый уровень эффекта.$(p)При уровне III и выше лечение полностью блокируется."
+    }
+  ]
+}

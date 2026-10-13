@@ -1,0 +1,15 @@
+{
+  "name": "Скорость передвижения",
+  "icon": "minecraft:leather_boots",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Скорость передвижения$() определяет, насколько быстро вы перемещаетесь по сравнению с обычной скоростью ходьбы игрока.$(p)Эту характеристику может давать почти любой предмет."
+      }
+    }
+  ]
+}

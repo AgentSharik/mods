@@ -1,0 +1,13 @@
+{
+  "name": "Ножницы",
+  "icon": "minecraft:shears",
+  "category": "apotheosis:enchanting/changes",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Наряду с новыми чарами, на ножницы теперь можно наложить $(9)«Прочность»$(), $(9)«Эффективность»$() и $(9)«Удачу»$()."
+    }
+  ]
+}

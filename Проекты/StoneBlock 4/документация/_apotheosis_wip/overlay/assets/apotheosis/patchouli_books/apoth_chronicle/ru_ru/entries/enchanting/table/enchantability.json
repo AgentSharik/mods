@@ -1,0 +1,12 @@
+{
+  "name": "Зачаровываемость предмета",
+  "icon": "minecraft:golden_sword",
+  "category": "apotheosis:enchanting/table",
+  "flag": "apotheosis:enchanting",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "В ванильном Minecraft зачаровываемость предмета влияет на $(fpower).$(p)Apotheosis перенаправляет этот бонус в $(таинство).$(p)Значение $(таинство) увеличивается на 50% от зачаровываемости предмета."
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Полезные предметы",
+  "description": "В этом разделе описаны различные предметы, которые упрощают зачарование.",
+  "icon": "apothic_enchanting:library",
+  "flag": "apotheosis:enchanting",
+  "parent": "apotheosis:enchanting/enchanting"
+}

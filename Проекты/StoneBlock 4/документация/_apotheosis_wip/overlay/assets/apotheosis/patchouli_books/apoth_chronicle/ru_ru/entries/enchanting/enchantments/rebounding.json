@@ -1,0 +1,13 @@
+{
+  "name": "Отталкивание",
+  "icon": "minecraft:enchanted_book",
+  "category": "apotheosis:enchanting/enchantments",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(9)Отталкивание$() — зачарование для нагрудника и поножей.$(p)Оно отбрасывает от вас всех противников, атакующих в ближнем бою.$(p)С повышением уровня зачарования они отлетают дальше."
+    }
+  ]
+}

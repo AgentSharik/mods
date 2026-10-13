@@ -1,0 +1,15 @@
+{
+  "name": "Скорость плавания",
+  "icon": "minecraft:kelp",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Скорость плавания$() — множитель вашей скорости в воде. При значении 200% вы плывёте вдвое быстрее.$(p)Эта характеристика встречается только у ботинок."
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Том разборки предметов",
+  "icon": "apothic_enchanting:scrap_tome",
+  "category": "apotheosis:enchanting/utility",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Том разборки предметов позволяет извлечь зачарования из предмета.$(p)Объедините том с другим предметом на наковальне: предмет будет уничтожен, а вы получите книгу с несколькими случайно выбранными зачарованиями."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "apothic_enchanting:scrap_tome",
+      "text": "Вы всегда получите половину зачарований, округлённую вверх.$(p)Выбор зависит от вашего $(l:apotheosis:enchanting/table/seed)семени зачарования$()."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Улучшенный том разборки предметов",
+      "item": "apothic_enchanting:improved_scrap_tome",
+      "text": "$(9)Улучшенный том разборки предметов$() — улучшенная версия обычного тома.$(p)Он извлекает все зачарования из предмета, а не только половину."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "apothic_enchanting:extraction_tome",
+      "text": "$(9)Том извлечения чар$() — усовершенствованная версия тома разборки предметов.$(p)Он извлекает все зачарования, не уничтожая сам предмет."
+    }
+  ]
+}

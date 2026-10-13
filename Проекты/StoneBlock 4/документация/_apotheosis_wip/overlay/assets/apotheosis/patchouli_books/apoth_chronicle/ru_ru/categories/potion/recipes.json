@@ -1,0 +1,7 @@
+{
+  "name": "Рецепты зелий",
+  "parent": "apotheosis:potion/potion",
+  "description": "В этом разделе описаны все новые рецепты зелий из ванильной игры.",
+  "icon": "minecraft:nether_wart",
+  "flag": "apotheosis:potion"
+}

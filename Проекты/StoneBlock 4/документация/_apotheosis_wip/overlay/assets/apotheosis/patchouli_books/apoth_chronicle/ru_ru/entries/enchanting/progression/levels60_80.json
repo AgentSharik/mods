@@ -1,0 +1,43 @@
+{
+  "name": "Уровни 60–80",
+  "icon": "apothic_enchanting:dormant_deepshelf",
+  "category": "apotheosis:enchanting/progression",
+  "flag": "apotheosis:enchanting",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "title": "Уровень 70",
+      "recipe": "apothic_enchanting:dormant_deepshelf",
+      "text": "Чтобы открыть 70-й уровень зачарования, нужен стол зачарования с мощностью 60 и доступ к глубинному сланцу."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Уровень 70",
+      "text": "Создав $(9)дремлющую глубинную книжную полку$(), выполните для неё инфузию.$(p)Чтобы достичь требуемого значения параметров, добавьте в рецепт дополнительные блоки.$(p)После инфузии получится $(9)глубинная книжная полка$(), с которой можно повысить уровень зачарования до 70."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Уровень 75",
+      "text": "Чтобы достичь 75-го уровня, улучшите глубинные книжные полки.$(p)Для этого нужны материалы из $(9)Глубокой тьмы$().$(p)$(9)Осколки эха$() можно найти в Древнем городе, а $(9)скалк$() — добыть инструментом с зачарованием «Шёлковое касание»."
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Уровень 75",
+      "recipe": "apothic_enchanting:echoing_deepshelf",
+      "recipe2": "apothic_enchanting:soul_touched_deepshelf"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:warden",
+      "title": "Уровень 80",
+      "scale": 0.95,
+      "text": "Последний шаг к 80-му уровню — победить $(9)Хранителя$(), чтобы получить возможность создавать $(9)скалк-книжные полки$()."
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Уровень 80",
+      "recipe": "apothic_enchanting:echoing_sculkshelf",
+      "recipe2": "apothic_enchanting:soul_touched_sculkshelf"
+    }
+  ]
+}

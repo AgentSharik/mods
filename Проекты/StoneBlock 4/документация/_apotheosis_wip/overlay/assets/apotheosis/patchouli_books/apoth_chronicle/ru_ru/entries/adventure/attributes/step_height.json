@@ -1,0 +1,15 @@
+{
+  "name": "Высота шага",
+  "icon": "minecraft:iron_boots",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Высота шага$() определяет, блоки какой высоты вы можете автоматически преодолевать без прыжка.$(p)Эта характеристика встречается только у ботинок."
+      }
+    }
+  ]
+}

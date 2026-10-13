@@ -1,0 +1,17 @@
+{
+  "name": "Зачаровываемость",
+  "icon": "minecraft:golden_sword",
+  "category": "apotheosis:enchanting/changes",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "В ванильном Minecraft у предметов без явно заданной $(l:apotheosis:enchanting/table/enchantability)зачаровываемости предмета$() значение по умолчанию равно нулю.$(p)Apotheosis меняет значение по умолчанию на единицу.$(p)В результате некоторые предметы можно зачаровывать, хотя это не было задумано."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Это изменение не влияет на зачаровываемость предметов, для которых задано отдельное значение.$(p)Предметы с зачаровываемостью, равной нулю, зачаровать нельзя."
+    }
+  ]
+}

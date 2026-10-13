@@ -1,0 +1,42 @@
+{
+  "name": "Томы",
+  "icon": "apothic_enchanting:other_tome",
+  "category": "apotheosis:enchanting/utility",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Томы — особый тип книг.$(p)Том можно зачаровать так же, как обычную книгу, но на него можно наложить только определённые чары.$(p)Исключение — $(l:apotheosis:enchanting/utility/scrapping)том разборки предметов$(), который служит другой цели."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "apothic_enchanting:other_tome",
+      "text": "После зачарования том превращается в зачарованную книгу."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "apothic_enchanting:helmet_tome",
+      "recipe2": "apothic_enchanting:chestplate_tome",
+      "text": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "apothic_enchanting:leggings_tome",
+      "recipe2": "apothic_enchanting:boots_tome",
+      "text": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "apothic_enchanting:weapon_tome",
+      "recipe2": "apothic_enchanting:pickaxe_tome",
+      "text": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "apothic_enchanting:fishing_tome",
+      "recipe2": "apothic_enchanting:bow_tome",
+      "text": ""
+    }
+  ]
+}

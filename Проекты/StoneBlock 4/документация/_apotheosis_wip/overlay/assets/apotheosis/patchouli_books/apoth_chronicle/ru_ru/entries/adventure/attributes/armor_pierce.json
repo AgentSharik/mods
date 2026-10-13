@@ -1,0 +1,15 @@
+{
+  "name": "Пронзание брони",
+  "icon": "apothic_attributes:textures/mob_effect/sundering.png",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Пронзание брони$() позволяет при атаке игнорировать фиксированное количество брони цели.$(p)Дополнительное пронзание брони может снизить броню цели ниже нуля."
+      }
+    }
+  ]
+}

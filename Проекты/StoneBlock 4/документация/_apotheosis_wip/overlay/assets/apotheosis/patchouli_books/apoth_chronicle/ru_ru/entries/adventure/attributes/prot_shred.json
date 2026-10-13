@@ -1,0 +1,15 @@
+{
+  "name": "Пробивание защиты",
+  "icon": "apothic_attributes:textures/mob_effect/sundering.png",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Пробивание защиты$() позволяет при атаке игнорировать заданный процент очков защиты цели.$(p)$(9)Пробивание защиты$() применяется до $(9)Пронзания защиты$()."
+      }
+    }
+  ]
+}

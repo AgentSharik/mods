@@ -1,0 +1,13 @@
+{
+  "name": "Искушение",
+  "icon": "minecraft:enchanted_book",
+  "category": "apotheosis:enchanting/enchantments",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(9)Искушение$() — зачарование для мотыги.$(p)Держа такую мотыгу, вы будете привлекать животных, как если бы держали в руке предмет, которым их приманивают для размножения."
+    }
+  ]
+}

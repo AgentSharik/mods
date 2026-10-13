@@ -1,0 +1,15 @@
+{
+  "name": "Огненный урон",
+  "icon": "minecraft:blaze_powder",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Огненный урон$() — дополнительный магический урон от атак оружием ближнего боя. Он также поджигает цель на короткое время. Чем выше урон, тем дольше горит цель.$(p)Эта характеристика встречается у оружия ближнего боя."
+      }
+    }
+  ]
+}

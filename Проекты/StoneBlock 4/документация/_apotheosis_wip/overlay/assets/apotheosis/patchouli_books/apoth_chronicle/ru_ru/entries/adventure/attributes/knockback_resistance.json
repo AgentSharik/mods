@@ -1,0 +1,15 @@
+{
+  "name": "Сопротивление отбрасыванию",
+  "icon": "minecraft:shulker_shell",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Сопротивление отбрасыванию$() уменьшает силу, с которой атаки отбрасывают вас. При максимальном значении вы полностью защищены от отбрасывания.$(p)Обычно эту характеристику дают броня или щиты."
+      }
+    }
+  ]
+}

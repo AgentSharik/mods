@@ -1,0 +1,7 @@
+{
+  "name": "Предметы с аффиксами",
+  "description": "Во время приключений вы можете найти предметы с разными бонусами.$(p)Это предметы с аффиксами — реликвии прошлого разной силы.",
+  "icon": "minecraft:chest",
+  "flag": "apotheosis:adventure",
+  "parent": "apotheosis:adventure/adventure"
+}

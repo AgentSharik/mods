@@ -1,0 +1,17 @@
+{
+  "name": "Всплеск жизненной силы",
+  "icon": "apothic_attributes:textures/mob_effect/vitality.png",
+  "category": "apotheosis:potion/effects",
+  "flag": "apotheosis:potion",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Зелье $(9)«Всплеск жизненной силы»$() накладывает положительный эффект.$(p)Пока оно действует, всё получаемое лечение усиливается."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Получаемое лечение увеличивается на 20% за уровень."
+    }
+  ]
+}

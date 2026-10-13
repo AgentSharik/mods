@@ -1,0 +1,15 @@
+{
+  "name": "Дальность досягаемости",
+  "icon": "minecraft:iron_pickaxe",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Дальность досягаемости$() — максимальное расстояние, на котором вы можете взаимодействовать с объектом или ломать блок.$(p)Обычно эту характеристику дают инструменты для добычи: оружию она не нужна."
+      }
+    }
+  ]
+}

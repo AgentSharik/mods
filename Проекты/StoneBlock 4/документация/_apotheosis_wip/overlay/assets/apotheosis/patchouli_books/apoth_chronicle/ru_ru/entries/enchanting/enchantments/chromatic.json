@@ -1,0 +1,13 @@
+{
+  "name": "Хроматическая аберрация",
+  "icon": "minecraft:enchanted_book",
+  "category": "apotheosis:enchanting/enchantments",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(9)Хроматическая аберрация$() — зачарование для ножниц.$(p)Шерсть, состриженная с овцы, окрашивается в случайный цвет."
+    }
+  ]
+}

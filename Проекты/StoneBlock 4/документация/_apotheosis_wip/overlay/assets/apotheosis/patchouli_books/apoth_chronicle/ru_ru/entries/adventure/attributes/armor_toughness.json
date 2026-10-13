@@ -1,0 +1,19 @@
+{
+  "name": "Твёрдость брони",
+  "icon": "minecraft:netherite_chestplate",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(9)Твёрдость брони$() снижает эффективность эффектов, ослабляющих вашу броню.$(p)Обычно её дают броня и щиты."
+    },
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "Каждое очко твёрдости брони снижает эффективность пронзания и пробивания брони на 2%, но не более чем на 60%.$(p)Эта механика есть только в Apotheosis. В ванильном Minecraft твёрдость брони участвует в расчёте снижения получаемого урона."
+      }
+    }
+  ]
+}

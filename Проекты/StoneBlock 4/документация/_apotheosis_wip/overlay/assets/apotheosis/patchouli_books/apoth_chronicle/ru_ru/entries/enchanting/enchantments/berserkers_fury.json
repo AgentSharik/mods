@@ -1,0 +1,17 @@
+{
+  "name": "Ярость берсерка",
+  "icon": "minecraft:enchanted_book",
+  "category": "apotheosis:enchanting/enchantments",
+  "flag": "apotheosis:enchanting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(4)Ярость берсерка$() — проклятое зачарование для нагрудника.$(p)Пока зачарование действует, при получении урона вы будете получать дополнительный урон, а также эффекты Сопротивления, Скорости и Силы."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Получаемый урон и сила эффектов зависят от уровня зачарования."
+    }
+  ]
+}

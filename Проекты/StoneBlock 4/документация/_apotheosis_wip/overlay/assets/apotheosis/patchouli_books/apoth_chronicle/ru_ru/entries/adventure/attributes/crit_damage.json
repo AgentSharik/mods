@@ -1,0 +1,15 @@
+{
+  "name": "Критический урон",
+  "icon": "minecraft:netherite_axe",
+  "category": "apotheosis:adventure/attributes",
+  "flag": "apotheosis:adventure",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": {
+        "text": "$(9)Критический урон$() — множитель урона критических ударов.$(p)Критические удары в прыжке тоже рассчитываются с этим множителем, а не с обычным множителем 1,5.$(p)Эта характеристика встречается у оружия."
+      }
+    }
+  ]
+}

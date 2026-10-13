@@ -1,0 +1,44 @@
+{
+  "name": "Уровни 30–60",
+  "icon": "apothic_enchanting:hellshelf",
+  "category": "apotheosis:enchanting/progression",
+  "flag": "apotheosis:enchanting",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "title": "Уровень 45",
+      "recipe": "apothic_enchanting:hellshelf",
+      "text": "Чтобы поднять максимальный уровень зачарования до 45, создайте несколько $(9)адских книжных полок$() и добавьте их к обычным книжным полкам."
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Уровень 45",
+      "recipe": "apothic_enchanting:seashelf",
+      "text": "Если вам не по душе Незер, отправляйтесь к океану и создайте вместо них $(9)морские книжные полки$()."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Уровень 60",
+      "item": "apothic_enchanting:infused_hellshelf",
+      "text": "Достигнув 45-го уровня, изучите $(l:apotheosis:enchanting/table/infusion)чары наполнения$(), чтобы улучшить книжные полки."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Уровень 60",
+      "item": "apothic_enchanting:infused_seashelf",
+      "text": "Создайте ещё несколько полок того же типа, наложите на них чары наполнения и улучшите их.$(p)Вместе со старыми полками они позволят повысить максимальный уровень зачарования до 60."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Раскрытие чар",
+      "item": "apothic_enchanting:sightshelf",
+      "text": "Теперь доступны дополнительные способы повысить другие параметры.$(p)Помимо бонусов от адских и морских книжных полок, вы можете создать $(9)адские книжные полки видения$(), чтобы повысить значение $(clues)."
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Квантовая стабильность",
+      "recipe": "apothic_enchanting:geode_shelf",
+      "text": "Инфузия для создания Бутона аметиста позволит изготовить $(9)книжную полку стабильности в жеоде$().$(p)С этой полкой не выпадают отрицательные значения квантов."
+    }
+  ]
+}
