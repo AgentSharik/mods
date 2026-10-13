@@ -1,0 +1,13 @@
+{
+ "ars_nouveau.augment_desc.glyph_cut_glyph_aoe": "Увеличивает радиус поиска предметов для обработки.",
+ "ars_nouveau.augment_desc.glyph_cut_glyph_pierce": "Увеличивает количество предметов, обрабатываемых «Резкой».",
+ "ars_nouveau.augment_desc.glyph_cut_glyph_sensitive": "«Резка» будет пытаться обрабатывать находящиеся рядом предметы.",
+ "ars_nouveau.augment_desc.glyph_flatten_glyph_aoe": "Увеличивает радиус поиска предметов для обработки.",
+ "ars_nouveau.augment_desc.glyph_flatten_glyph_pierce": "Увеличивает количество предметов, обрабатываемых «Выравниванием».",
+ "ars_nouveau.augment_desc.glyph_flatten_glyph_sensitive": "«Выравнивание» будет пытаться обрабатывать находящиеся рядом предметы.",
+ "ars_unification.augment_with": "Добавьте к этому глифу %s, чтобы использовать эти рецепты.",
+ "ars_unification.cut_recipe": "Глиф «Резка»",
+ "ars_unification.press_recipe": "Глиф «Выравнивание»",
+ "emi.category.ars_unification.cut": "Глиф «Резка»",
+ "emi.category.ars_unification.press": "Глиф «Выравнивание»"
+}
