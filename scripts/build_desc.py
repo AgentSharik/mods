@@ -12,6 +12,8 @@ TEXT = ('.toml', '.json', '.txt', '.cfg', '.properties', '.mcmeta')
 
 
 def build(src, out, old, new):
+    src = os.path.abspath(src)
+    out = os.path.abspath(out)
     tmp = tempfile.mkdtemp(prefix='build_desc_')
     work = os.path.join(tmp, 'work')
     os.makedirs(work)
