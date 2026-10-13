@@ -81,3 +81,16 @@ create_pattern_schematics, createenderstorage. База — официальны
 | Liquid Dye | жидкий краситель | Dragon's Breath (fluid) — драконье дыхание |
 | dye series (Dye Depot / Dyenamics / Arts and Crafts) | «<прилагательное> краситель <Серия>» | напр. Янтарный краситель Dye Depot; серия не переводится, цвет — русским прилагательным; ведро: «Ведро <род. п.> красителя <Серия>» |
 
+## Create: Enchantment Industry (аддон Create)
+
+| English | Русский | Комментарий |
+|---|---|---|
+| Blaze Enchanter / Forger / Composer | всполох-чародей / всполох-кузнец / всполох-композитор | имена машин исходного перевода сохранены и распространены на Composer |
+| Liquid Experience / Super Experience | жидкий опыт / супер-опыт | Cake o' Enchanting — торт опыта |
+| Enchanting Template | шаблон зачарования | Super — шаблон супер-зачарования |
+| Apotheotic Stats (ETERNA / QUANTA / ARCANA) | апотеотические характеристики (ЭТЕРНА / КВАНТА / АРКАНА) | термины Apotheosis |
+| Affix / Affix Template | аффикс / шаблон аффикса | Brass/Crystal/Apotheotic — латунный/кристальный/апотеотический |
+| Gem / socket / purity | самоцвет / гнездо / чистота | Gem Cutter — огранщик самоцветов |
+| Infuser / Infusing | инфузор / инфузия | атрибут предмета: «можно насытить» |
+| Affix Augmentor | усилитель аффиксов | Salvaging — утилизация (массовая утилизация) |
+| Repair Cost | стоимость ремонта | Ender Woven Bag — плетёный мешок Края |
