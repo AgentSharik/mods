@@ -1,0 +1,21 @@
+{
+ "ae2ct.openscreen.plannull": "Дождитесь завершения расчёта плана изготовления",
+ "ae2ct.screenshot.exception": "ошибка скриншота: %s",
+ "ae2ct.screenshot.noready": "скриншот ещё не готов, попробуйте позже",
+ "gui.ae2ct.CraftingAmount": "изготавливается: %s",
+ "gui.ae2ct.CraftingTreeSettingTitle": "Настройки",
+ "gui.ae2ct.CraftingTreeTitle": "Дерево изготовления",
+ "gui.ae2ct.Info": "Инфо:",
+ "gui.ae2ct.InputAmount": "нужно: %s",
+ "gui.ae2ct.MiddenAmount": "используется: %s",
+ "gui.ae2ct.MissingAmount": "не хватает: %s",
+ "gui.ae2ct.OutputAmount": "на выходе: %s",
+ "gui.ae2ct.ScreenShotShowCountCheckbox": "показывать количество на скриншоте",
+ "gui.ae2ct.Screenshot": "Скриншот",
+ "gui.ae2ct.Setting": "Настройки",
+ "gui.ae2ct.ShowMissingOnly": "Показывать только недостающее",
+ "gui.ae2ct.ShowMissingOnlyByDefault": "по умолчанию показывать только недостающее",
+ "gui.ae2ct.ShowTree": "Показать дерево изготовления",
+ "gui.ae2ct.StoredAmount": "в наличии: %s",
+ "gui.ae2ct.UseCompactTreeCheckbox": "компактное дерево изготовления (бета)"
+}
