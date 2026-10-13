@@ -297,3 +297,25 @@ JSON валиден, `testzip` чистый, записей в архиве 767 
 Следующий по порядку из аудита — **FarmersDelight** (479 ключей, вычитка существующего
 `ru_ru`), затем **collective** (561, с нуля), **occultism** (3 587, доперевод и вычитка),
 его аддоны и в конце **betterblockz** (1 748, шаблонные названия).
+
+---
+
+## occultism_kubejs (1.21.1-neoforge-1.11.0) — в работе, 13.10.2026
+
+**Шаг 1: инвентаризация и сверка с upstream (запушено до перевода — правило 8а).**
+
+- Исходник: `Исходные моды для перевода/occultism_kubejs-1.21.1-neoforge-1.11.0.jar`,
+  36 записей. Каталога `assets/` нет, lang-файлов нет вообще.
+- Весь отображаемый игроку текст — одна строка: `description='''KubeJS Plugin for Occultism'''`
+  в `META-INF/neoforge.mods.toml`. `displayName="Occultism KubeJS"` — имя мода, не переводится;
+  `credits` — ссылка на GitHub, не переводится.
+- `data/occultism/kubejs/recipe_schema/*.json` — машинные схемы рецептов KubeJS
+  (`result`, `ingredient`, `pentacle_id`…): не отображаемый текст, не трогать.
+- **Upstream:** `klikli-dev/occultism-kubejs`, тег `release/v1.21.1-1.11.0` — совпадает
+  с версией JAR. В теге `gradle.properties`: `mod_description=KubeJS Plugin for Occultism` —
+  побайтно совпадает с описанием в JAR (в ветке `version/1.21.1` mods.toml содержит
+  плейсхолдер `${mod_description}`). Источник эталонный, расхождений нет.
+
+**План:** перевести только описание («Плагин KubeJS для Occultism» — имена KubeJS и Occultism
+не переводятся), собрать через `scripts/build_desc.py`, проверить diff архива (измениться
+должен только `neoforge.mods.toml`), README и финальный коммит «Мод готов».
