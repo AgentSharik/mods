@@ -1,0 +1,112 @@
+import json, re
+en = json.load(open('work/betterblockz_en.json', encoding='utf-8'))
+van = json.load(open('work/vanilla_ru_1.21.1.json', encoding='utf-8'))
+print('проверка ванили:', van.get('block.minecraft.cobbled_deepslate'), '|', van.get('block.minecraft.mossy_cobblestone'), '|', van.get('block.minecraft.stonecutter'))
+M = {
+ 'axis.betterblockz.x': 'Горизонтально (восток–запад)',
+ 'axis.betterblockz.y': 'Вертикально',
+ 'axis.betterblockz.z': 'Горизонтально (север–юг)',
+ 'block.betterblockz.aurora_blockz': 'BlockZ: Аврора',
+ 'block.betterblockz.blockz_core': 'BlockZ: Ядро',
+ 'block.betterblockz.cyberlight_cycle_blockz_0': 'Киберсвет: радужный цикл',
+ 'block.betterblockz.dirt_blockz': 'BlockZ: Земля',
+ 'block.betterblockz.flat_lamp': 'Плоская лампа (прозрачная)',
+ 'block.betterblockz.hazard_blockz_0': 'BlockZ: Осторожно',
+ 'block.betterblockz.hazard_blockz_1': 'BlockZ: Осторожно (выцветший)',
+ 'block.betterblockz.hazard_blockz_2': 'BlockZ: Опасно',
+ 'block.betterblockz.hazard_blockz_3': 'BlockZ: Опасно (выцветший)',
+ 'block.betterblockz.hazard_blockz_4': 'BlockZ: Стройка',
+ 'block.betterblockz.hazard_blockz_5': 'BlockZ: Стройка (выцветший)',
+ 'block.betterblockz.hazard_blockz_6': 'BlockZ: Безопасно',
+ 'block.betterblockz.hazard_blockz_7': 'BlockZ: Безопасно (выцветший)',
+ 'block.betterblockz.hazard_blockz_8': 'BlockZ: Информация',
+ 'block.betterblockz.hazard_blockz_9': 'BlockZ: Информация (выцветший)',
+ 'block.betterblockz.number_blockz.tooltip': 'ПКМ, чтобы сменить цифру (0–9)',
+ 'block.betterblockz.stone_blockz': 'BlockZ: Камень',
+ 'block.betterblockz.tank_blockz.tooltip': 'Взрывоустойчивый, и это не бак для жидкостей!',
+ 'block.betterblockz.transmuter_blockz': 'Преобразователь булыжника',
+ 'block.betterblockz.transmuter_blockz.shift.line1': 'Преобразует булыжник поблизости, используя катализаторы ниже:',
+ 'block.betterblockz.transmuter_blockz.shift.line2': 'Лава → ' + van['block.minecraft.cobbled_deepslate'],
+ 'block.betterblockz.transmuter_blockz.shift.line3': 'Вода → ' + van['block.minecraft.mossy_cobblestone'],
+ 'block.betterblockz.transmuter_blockz.tooltip': '§7Нажмите §e[Shift]§7 для информации.',
+ 'block.betterblockz.variant_shuffler': 'Блок перемешивания вариантов',
+ 'block.betterblockz.z_moving': 'Better BlockZ',
+ 'block.betterblockz.ztone_blockz': 'Плитка Ztone',
+ 'creativetab.better_blockz.blockz_blocks': 'BetterBlockZ',
+ 'item.betterblockz.auto_placer': '§6Установщик BlockZ§r',
+ 'item.betterblockz.auto_placer.shift.line1': '§7Shift + ПКМ по блоку, чтобы §aвыбрать§r',
+ 'item.betterblockz.auto_placer.shift.line2': '§7Shift + ПКМ по воздуху, чтобы §bсменить режим§r',
+ 'item.betterblockz.auto_placer.shift.line3': '§7Режимы: §bЛиния§7 7, 21 | §bОбласть§7 7×7, 21×21§r',
+ 'item.betterblockz.auto_placer.shift.line4': '§7Shift + ПКМ по последним блокам, чтобы §cотменить§r',
+ 'item.betterblockz.auto_placer.tooltip': '§7Нажмите §e[Shift]§7 для информации§r',
+ 'item.betterblockz.better_builder': '§6Палитра BlockZ §b(Творческий)§r',
+ 'item.betterblockz.better_builder.shift': '§aСтавит§7 полный набор §bBetterBlockZ§7 мгновенно§r',
+ 'item.betterblockz.better_builder.tooltip': '§7Нажмите §e[Shift]§7 для информации§r',
+ 'item.betterblockz.block_disconnect': '§6Переключатель CTM BlockZ§r',
+ 'item.betterblockz.block_disconnect.shift.line1': '§7Shift + ПКМ по воздуху, чтобы §bсменить режим§r',
+ 'item.betterblockz.block_disconnect.tooltip': '§7Нажмите §e[Shift]§7 для информации§r',
+ 'item.betterblockz.block_extend': '§6Расширитель BlockZ§r',
+ 'item.betterblockz.block_extend.shift.line1': '§7Продлевает §aодинаковые блоки§r',
+ 'item.betterblockz.block_extend.shift.line2': '§7Shift + ПКМ по воздуху, чтобы §bсменить режим§r',
+ 'item.betterblockz.block_extend.tooltip': '§7Нажмите §e[Shift]§7 для информации§r',
+ 'item.betterblockz.block_randomizer': '§6Рандомизатор узоров BlockZ§r',
+ 'item.betterblockz.block_randomizer.shift.line1': '§7ПКМ по блокам, чтобы §aприменить случайные узоры§r',
+ 'item.betterblockz.block_randomizer.shift.line2': '§7Shift + ПКМ по воздуху, чтобы §bсменить режим§r',
+ 'item.betterblockz.block_randomizer.tooltip': '§7Нажмите §e[Shift]§7 для информации§r',
+ 'item.betterblockz.block_replacer': '§6Заменщик BlockZ§r',
+ 'item.betterblockz.block_replacer.shift.line1': '§7Shift + ПКМ по блоку, чтобы §aвыбрать§r',
+ 'item.betterblockz.block_replacer.shift.line2': '§7Shift + ПКМ по воздуху, чтобы §bсменить режим§r',
+ 'item.betterblockz.block_replacer.tooltip': '§7Нажмите §e[Shift]§7 для информации§r',
+ 'item.betterblockz.checkered_builder': '§6Шахматный узор BlockZ §b(Творческий)§r',
+ 'item.betterblockz.checkered_builder.shift': '§aСтавит§7 шахматный §bBetterBlockZ§7-узор§r',
+ 'item.betterblockz.checkered_builder.tooltip': '§7Нажмите §e[Shift]§7 для информации§r',
+ 'item.betterblockz.checkered_spade': '§6Шахматный сменщик BlockZ§r',
+ 'item.betterblockz.checkered_spade.shift.line1': '§7ПКМ по блоку, чтобы §aсменить вариант§r',
+ 'item.betterblockz.checkered_spade.shift.line2': '§7Shift + ПКМ, чтобы §cвернуть вариант§r',
+ 'item.betterblockz.checkered_spade.shift.line3': '§7Shift + ПКМ по воздуху, чтобы §bсменить режим§r',
+ 'item.betterblockz.checkered_spade.tooltip': '§7Нажмите §e[Shift]§7 для информации§r',
+ 'item.betterblockz.cobble_crafter': '§6Крафтер BlockZ§r',
+ 'item.betterblockz.cobble_crafter.shift.line1': '§7ПКМ по воздуху, чтобы §aоткрыть крафт§r',
+ 'item.betterblockz.cobble_crafter.shift.line2': '§7Shift + ПКМ по блоку, чтобы §bсменить режим§r',
+ 'item.betterblockz.cobble_crafter.tooltip': '§7Нажмите §e[Shift]§7 для информации§r',
+ 'item.betterblockz.color_changer': '§6Сменщик цвета BlockZ§r',
+ 'item.betterblockz.color_changer.shift.line1': '§7ПКМ по блоку, чтобы §aсменить цвет§r',
+ 'item.betterblockz.color_changer.shift.line2': '§7Shift + ПКМ, чтобы §cвернуть вариант§r',
+ 'item.betterblockz.color_changer.shift.line3': '§7Shift + ПКМ по воздуху, чтобы §bсменить режим§r',
+ 'item.betterblockz.color_changer.tooltip': '§7Нажмите §e[Shift]§7 для информации§r',
+ 'item.betterblockz.meta_wand': '§6Мастер BlockZ§r',
+ 'item.betterblockz.omni_spade': '§6Сменщик BlockZ§r',
+ 'item.betterblockz.omni_spade.shift.line1': '§7ПКМ по блоку, чтобы §aсменить вариант§r',
+ 'item.betterblockz.omni_spade.shift.line2': '§7Shift + ПКМ, чтобы §cвернуть вариант§r',
+ 'item.betterblockz.omni_spade.shift.line3': '§7Shift + ПКМ по воздуху, чтобы §bсменить режим§r',
+ 'item.betterblockz.omni_spade.shift.line4': '§7Нажмите %s, чтобы §bпереключить ось столба§r',
+ 'item.betterblockz.omni_spade.tooltip': '§7Нажмите §e[Shift]§7 для информации§r',
+ 'key.betterblockz.cycle_pillar_axis': 'Сменщик BlockZ: переключение оси столба',
+ 'key.betterblockz.scroll_modifier': 'BlockZ: модификатор прокрутки мыши',
+ 'key.betterblockz.switch': 'Экран выбора варианта BlockZ',
+ 'key.categories.betterblockz': 'Управление BetterBlockZ',
+ 'message.betterblockz.pillar_axis_set': 'Ось столба установлена: %s',
+ 'tooltip.betterblockz.block': '§7Сменять варианты: §e[Shift]',
+ 'tooltip.betterblockz.block.shift': '§7• Shift + ПКМ (по воздуху)',
+ 'tooltip.betterblockz.block.shift.line2': '§7• §e%s §7+ §eКолесо мыши §7— прокрутка вариантов',
+ 'tooltip.betterblockz.block.shift.line3': '§7• §eНажмите %s§7, чтобы открыть §eвыбор варианта',
+ 'tooltip.betterblockz.block.shift.line4': '§7• Используйте §eСменщик BlockZ §7на поставленных блоках',
+ 'tooltip.betterblockz.block.shift.line5': '§7• Поддерживает §eрецепты камнереза §7для автоматизации',
+ 'tooltip.betterblockz.color_support': 'Зеон, Зено',
+ 'tooltip.betterblockz.supported_sets': 'Поддерживаемые наборы блоков',
+}
+blocks = json.load(open('work/bbz_blocks.json', encoding='utf-8'))
+ru = dict(blocks); ru.update(M)
+print('итого ключей:', len(ru), 'из', len(en), '| пропущено:', [k for k in en if k not in ru])
+# валидация
+SG = re.compile(r'§.'); PH = re.compile(r'%\d*\$?[sd]')
+bad = []
+for k in en:
+    if SG.findall(en[k]) != SG.findall(ru[k]): bad.append((k, '§'))
+    if sorted(PH.findall(en[k])) != sorted(PH.findall(ru[k])): bad.append((k, '%'))
+    if re.findall(r'\d+', en[k].replace('0–9','')) != re.findall(r'\d+', ru[k].replace('0–9','')): bad.append((k, 'цифры'))
+print('нарушений §/%/цифр:', bad)
+json.dump({k: ru[k] for k in en}, open('work/betterblockz_ru.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+uniq = sorted(set(ru.values()))
+open('work/bbz_unique.txt', 'w', encoding='utf-8').write('\n'.join(uniq))
+print('уникальных русских значений:', len(uniq))
