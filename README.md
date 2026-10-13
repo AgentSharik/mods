@@ -7,9 +7,9 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-96-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-40%20152-2b6cb0?style=flat-square)
-![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-0-b8862b?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-101-4a7c3f?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-41%20690-2b6cb0?style=flat-square)
+![В очереди](https://img.shields.io/badge/%D0%92%20%D0%BE%D1%87%D0%B5%D1%80%D0%B5%D0%B4%D0%B8-40-b8862b?style=flat-square)
 
 </div>
 
@@ -38,6 +38,7 @@ mods/
 │   │   └── документация/              журналы и аудиты этой сборки
 │   └── Отдельные моды/                моды вне сборок
 ├── Исходные моды для перевода/    ← оригиналы, не изменяются
+├── scripts/                       патчеры классов (Ars Elemental, Carbon Config)
 └── README.md
 ```
 
@@ -311,6 +312,22 @@ Refined Storage, кластер Iron's Spells, ftb-materials, Replication с м�
 качество существующего русского (официальные переводы AE2, RS2, Iron's, IE —
 вычитка; 16 модов без русского — с нуля), зависимости и порядок. Ход работ —
 в [`PROGRESS_WAVE4_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_WAVE4_2026-10-13.md).
+
+
+**Порядок перевода остатка волны (40 модов).** Кластер AE2 до конца:
+AE2AddonLib → ae2wtlib → AdvancedAE → ExtendedAE → megacells → AppliedFlux →
+AE2NetworkAnalyzer → ae2ct → me_beam_former → enderdrives → AE2-Things →
+Applied-Mekanistics → appliedcooking → applieddelight → applied-experienced →
+appliedsticks; затем гайды GuideME кластера (≈460 страниц). Кластер Refined
+Storage: refinedstorage → refined-types → cabletiers → ExtraStorage →
+refineddelight → refinedsticks → refinedstorage-curios-integration →
+refinedstorage-jei-integration → refinedstorage-mekanism-integration →
+refinedstorage-quartz-arsenal. Кластер Iron's Spells: irons_lib →
+irons_spellbooks (с книгой) → irons_jewelry → irons_apothic. Затем
+ftb-materials. Затем Replication и мосты: Replication →
+replication_matter_overflow → rep_ae2_bridge → replication_rs2_bridge.
+Одиночки: ImmersiveEngineering (с мануалом, 114 txt) →
+baubley-heart-canisters → routers → stonechest → repeatable_trial_vaults.
 
 | Мод | Ключей lang | Было в `ru_ru` | Книги и гайды | Статус |
 |---|---:|---|---|---|
