@@ -120,36 +120,14 @@ mods/
 
 **Как получены итоги**
 
-- Считаются только готовые JAR в папке проекта.
-- Волны дают 145 готовых JAR: первая — 38, вторая — 23, третья — 33, четвёртая — 51.
-- Пачка исправлений после тестового релиза — ещё 1 готовый JAR (CarbonConfig).
-- Дополнения после релиза — ещё 29, итого 175 готовых JAR:
-  - 19 модов вне исходного состава сборки (Modonomicon, Curios, RS Infinity Booster,
-    RS Requestify, Industrial Foregoing Souls, PetRock, Transfer Labels, Energy Meter,
-    ChanceCubes, семейство RFTools Base/Power/Builder/Utility, Super Factory Manager,
-    FDBosses, ConfiguredDefaults, Tooltip Overhaul, Modular Routers, Industrial Foregoing);
-  - 3 библиотеки (SmartBrainLib, GeckoLib, KubeJS Curios);
-  - 7 модов по запросу (GAG, Building Gadgets 2, FTB Pack Companion, Shrink,
-    StarbuncleMania, Tempad, Chipped).
-- По факту содержимого JAR: 63 172 ключа в русских файлах готовых JAR — каждый ключ
-  внутри одного JAR считается один раз, файлы-дубли цифру не раздувают. Цифры
-  пересчитывает `scripts/update_readme_stats.py` из самих JAR.
-- Справочники дополнений тоже переведены: книги Patchouli у Modular Routers (61 файл),
-  Industrial Foregoing (80 файлов), PetRock (10 файлов) и общая книга RFTools
-  в четырёх JAR (82 файла), гайд GuideME у Energy Meter (2 страницы).
+- Готовые JAR в папке проекта: волны — 145 (38 + 23 + 33 + 51), пачка исправлений — 1 (CarbonConfig), дополнения после релиза — 29. Итого 175.
+- Дополнения: 19 модов вне исходного состава сборки, 3 библиотеки и 7 модов по запросу — поименный список в [`RELEASE_CONTENTS.md`](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
+- 63 172 ключа — по факту содержимого JAR (каждый ключ внутри JAR один раз); пересчитывает `scripts/update_readme_stats.py`.
 
 **Последние шаги**
 
-- Последним закрыт **ImmersiveEngineering**: lang — 1952 из 1952 ключей, мануал — 114 из 114 файлов.
-- После тестового релиза: допереведён Collapsible Groups, пересобраны JAR с повреждённым
-  английским, исправлена красная строка брони Ars Elemental, пропатчен экран настроек JEI у Carbon Config.
-- По замечаниям из игры (12 пунктов): переведены все 895 названий групп Collapsible Groups;
-  книгам Oracle Index у Irregular Implements и MFFS возвращён русский; в четвёртую волну
-  добавлены TipsMod, Belts, Crystalix, Schematic Energistics и Supplementaries;
-  имена материалов JustDireThings и JustDynaThings переведены по смыслу.
-
-Подробнее — в
-[`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md).
+- Последним закрыт ImmersiveEngineering: lang 1952/1952, мануал 114/114.
+- После тестового релиза и по замечаниям из игры внесены исправления (12 пунктов) — детали в [`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md).
 
 **Состав по волнам**
 
