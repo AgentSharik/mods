@@ -85,6 +85,11 @@ REPL = {
     'You are sending updates too fast!': 'Вы отправляете обновления слишком быстро!',
     'Cheats are not enabled on this world. Run /axiomenablecheats to enable them': 'Читы не включены в этом мире. Выполните /axiomenablecheats, чтобы включить их',
     "You don't have permission to use Axiom. Give yourself /op or axiom.default (if using a permission plugin)": 'У вас нет разрешения на использование Axiom. Выдайте себе /op или axiom.default (если используете плагин разрешений)',
+    # --- SwitchHotbarScreen: экран панелей со скриншота из игры ---
+    'Switch Toolbar': 'Смена панели инструментов',
+    'Axiom Update Available!': 'Доступно обновление Axiom!',
+    'This capability has been disabled by the server': 'Эта возможность отключена сервером',
+    'Page \x01': 'Страница \x01',
 }
 
 
@@ -126,10 +131,30 @@ def patch(data: bytes) -> bytes:
     return bytes(out)
 
 
+# Отдельный guard, применяется только к LocalizationLoader: Axiom скачивает
+# локализации Weblate и накладывает их поверх ru_ru.json из JAR, из-за чего
+# уже переведённые строки в игре снова видны по-английски. Проверка языка там
+# записана как startsWith("en"); замена константы "en" -> "ru" только в этом
+# классе отключает скачивание и кэш Weblate именно для русского языка.
+LOCALIZATION_GUARD = {'en': 'ru'}
+
+
+def patch_localization_loader(data: bytes) -> bytes:
+    global REPL
+    saved = REPL
+    try:
+        REPL = LOCALIZATION_GUARD
+        return patch(data)
+    finally:
+        REPL = saved
+
+
 if __name__ == '__main__':
     for path in sys.argv[1:]:
         print(path)
         with open(path, 'rb') as f:
-            patched = patch(f.read())
+            data = f.read()
+        patched = (patch_localization_loader(data)
+                   if 'LocalizationLoader' in path else patch(data))
         with open(path, 'wb') as f:
             f.write(patched)
