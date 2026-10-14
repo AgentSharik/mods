@@ -7,8 +7,8 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-147-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-53%20440-2b6cb0?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-155-4a7c3f?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-53%20870-2b6cb0?style=flat-square)
 ![В работе](https://img.shields.io/badge/%D0%92%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B5-0-b8862b?style=flat-square)
 
 </div>
@@ -78,9 +78,12 @@ mods/
 | Четвёртая | 50 | Готово |
 | Вне волн (пачка исправлений) | 7 | Готово |
 
-Волны дают 146 модов — как и число готовых JAR. Отдельной строкой таблицы выше идут
+Волны дают 146 модов. Отдельной строкой таблицы выше идут
 7 модов без языковых файлов: переводить в них нечего, JAR для них не собирался.
-Итого по сборке учитывается 153 мода.
+Итого по сборке учитывается 153 мода; сверх этого переведены и добавлены
+8 модов вне исходного состава сборки (Modonomicon, Curios, RS Infinity Booster,
+RS Requestify, Industrial Foregoing Souls, PetRock, Transfer Labels, Energy Meter) —
+отсюда 154 JAR и 161 мод в сводке.
 
 Состав перевода целиком (все 153 мода, гайды, полнота, качество): [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
 
