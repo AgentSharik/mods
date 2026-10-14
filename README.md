@@ -58,16 +58,16 @@ mods/
 ## Проекты
 
 <details>
-<summary><b>StoneBlock 4</b> — сборка целиком: 174 готовых JAR, 55 907 ключей; все четыре волны закрыты</summary>
+<summary><b>StoneBlock 4</b> — сборка целиком: 175 готовых JAR, 63 172 ключа; все четыре волны закрыты</summary>
 
 ### StoneBlock 4
 
-**Моды из сборки** — 174 готовых JAR, перевод идёт волнами, каждый мод доводится до конца отдельно.
+**Моды из сборки** — 175 готовых JAR, перевод идёт волнами, каждый мод доводится до конца отдельно.
 
 | | |
 |---|---|
-| Готовых JAR | **174** |
-| Ключей переведено | **55 907** |
+| Готовых JAR | **175** |
+| Ключей переведено | **63 172** |
 | Статус | **все четыре волны закрыты** |
 
 | Волна | Готовых JAR | Статус |
@@ -77,20 +77,20 @@ mods/
 | Третья | 33 | Готово |
 | Четвёртая | 51 | Готово |
 | Вне волн (пачка исправлений) | 1 | Готово |
-| Дополнения после релиза | 28 | Готово |
-| **Итого** | **174** | |
+| Дополнения после релиза | 29 | Готово |
+| **Итого** | **175** | |
 
 Считаются только готовые JAR в папке проекта. Волны дают 145 готовых JAR:
 первая — 38, вторая — 23, третья — 33, четвёртая — 51. Пачка исправлений
 после тестового релиза добавляет ещё 1 готовый JAR (CarbonConfig),
-дополнения после релиза — ещё 28, итого 174 готовых JAR.
+дополнения после релиза — ещё 29, итого 175 готовых JAR.
 Дополнения после релиза — 19 модов вне исходного состава сборки (Modonomicon,
 Curios, RS Infinity Booster, RS Requestify, Industrial Foregoing Souls,
 PetRock, Transfer Labels, Energy Meter, ChanceCubes, RFTools Base,
 RFTools Power, RFTools Builder, RFTools Utility, Super Factory Manager,
 FDBosses, ConfiguredDefaults, Tooltip Overhaul, Modular Routers,
-Industrial Foregoing) и 3 библиотеки (SmartBrainLib, GeckoLib, KubeJS Curios), а также 6 модов по запросу (GAG, Building Gadgets 2, FTB Pack Companion, Shrink, StarbuncleMania, Tempad).
-По факту содержимого JAR: 55 907 ключей в русских файлах готовых JAR —
+Industrial Foregoing) и 3 библиотеки (SmartBrainLib, GeckoLib, KubeJS Curios), а также 7 модов по запросу (GAG, Building Gadgets 2, FTB Pack Companion, Shrink, StarbuncleMania, Tempad, Chipped).
+По факту содержимого JAR: 63 172 ключа в русских файлах готовых JAR —
 каждый ключ внутри одного JAR считается один раз, файлы-дубли цифру не раздувают.
 Точные цифры счётчиков пересчитываются скриптом `scripts/update_readme_stats.py` из самих JAR.
 
@@ -98,7 +98,7 @@ Industrial Foregoing) и 3 библиотеки (SmartBrainLib, GeckoLib, KubeJS
 (61 файл), Industrial Foregoing (80 файлов), PetRock (10 файлов) и общая книга семейства
 RFTools во всех четырёх JAR (82 файла), а также гайд GuideME у Energy Meter (2 страницы).
 
-Состав перевода целиком (все 174 готовых JAR, гайды, полнота, качество): [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
+Состав перевода целиком (все 175 готовых JAR, гайды, полнота, качество): [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
 
 Последним закрыт **ImmersiveEngineering**: lang — 1952 из 1952 ключей, собственный
 мануал мода — 114 из 114 файлов.
