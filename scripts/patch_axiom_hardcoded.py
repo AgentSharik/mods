@@ -14,6 +14,96 @@ import struct
 import sys
 
 REPL = {
+    # --- Повторный аудит 2026-10-15: доказанно отображаемые литералы вне ImGui ---
+    # Тосты GeneralGameFeatures
+    'Enabled rotational symmetry': 'Вращательная симметрия включена',
+    'Disabled rotational symmetry': 'Вращательная симметрия отключена',
+    # Подсказки клавиш инструментов (getKeyHints)
+    'Ctrl+R - Rotate': 'Ctrl+R — Повернуть',
+    'Ctrl+F - Flip': 'Ctrl+F — Отразить',
+    'RMB - Edit/Move': 'ПКМ — Редактировать/переместить',
+    'Scroll - Nudge': 'Колесо мыши — Сдвинуть',
+    'Hold Ctrl - Scale All': 'Удерживайте Ctrl — Масштабировать всё',
+    'Hold Ctrl - Inc Snapping': 'Удерживайте Ctrl — Увеличить шаг привязки',
+    'Hold Shift - No Snapping': 'Удерживайте Shift — Без привязки',
+    'Delete - Remove': 'Delete — Удалить',
+    'Ctrl+Z/Y - Undo/Redo': 'Ctrl+Z/Y — Отменить/повторить',
+    'Ctrl+Z - Undo': 'Ctrl+Z — Отменить',
+    'Ctrl+Y - Redo': 'Ctrl+Y — Повторить',
+    # Экраны выбора блоков (CreativeColourScreen / CreativeGradientScreen)
+    'Full Cube': 'Полный куб',
+    'Same Texture': 'Одинаковая текстура',
+    'Must be a full 1x1x1 cube': 'Должен быть полным кубом 1x1x1',
+    'Must be collidable': 'Требуется коллизия',
+    'Must not be transparent': 'Не должен быть прозрачным',
+    'Must have the same texture on all sides': 'Текстура должна быть одинаковой со всех сторон',
+    'Copy to Hotbar': 'Копировать на панель быстрого доступа',
+    'Export to Editor Gradient Painter': 'Экспорт в «Художник градиента» редактора',
+    'Export to Editor Gradient Brush': 'Экспорт в кисть градиента редактора',
+    'Left Click - Next Block': 'ЛКМ — Следующий блок',
+    'Right Click - Previous Block': 'ПКМ — Предыдущий блок',
+    'Refresh (32) (Max)': 'Обновить (32) (макс.)',
+    # Экраны сущностей и маркеров
+    'Translation (Offset)': 'Перенос (смещение)',
+    'Left Rotation (Quaternion)': 'Левое вращение (кватернион)',
+    'Right Rotation (Quaternion)': 'Правое вращение (кватернион)',
+    'Set Pitch': 'Задать наклон',
+    'NBT Data': 'Данные NBT',
+    # Окно выделения строительного инструмента
+    'Copy Air': 'Копировать воздух',
+    'Copy Entities': 'Копировать сущности',
+    'Keep Existing': 'Сохранять существующие',
+    'Switch Tool': 'Смена инструмента',
+    # Инструмент заливки: сообщения на оверлее
+    'No leak detected, area is fully enclosed': 'Утечка не обнаружена: область полностью замкнута',
+    'Leak found, path shown': 'Утечка найдена: путь показан',
+    "Leak found, but path couldn't be retraced": 'Утечка найдена, но путь восстановить не удалось',
+    # Пресеты скриптовой кисти
+    'Terrain: Plains': 'Рельеф: Равнины',
+    'Terrain: Desert': 'Рельеф: Пустыня',
+    'Leafy Bushes': 'Лиственные кусты',
+    'Clear Foliage': 'Очистить листву',
+    # Тултип волшебного выделения
+    'Matches the same block, ignoring block properties': 'Тот же блок, без учёта свойств',
+    # Подписи инструментов (ImGui/оверлей)
+    'Fluid Type': 'Тип жидкости',
+    'Elapsed Time: %02d:%02d': 'Прошедшее время: %02d:%02d',
+    'Mask Mode': 'Режим маски',
+    'Smear Offset: ': 'Смещение размазывания: ',
+    'TrueType Font': 'Шрифт TrueType',
+    'Image Files': 'Файлы изображений',
+    'Set fly speed to: ': 'Скорость полёта: ',
+    'Unlocked rotation failed, no blocks in output': 'Свободный поворот не удался: нет блоков на выходе',
+    # История: предупреждения пользователю
+    'Axiom History': 'История Axiom',
+    'Error: position file has been corrupted or deleted': 'Ошибка: файл позиций повреждён или был удалён',
+    'Axiom will try to recover, however some data may be lost': 'Axiom попытается восстановиться, однако часть данных может быть потеряна',
+    'It is very likely data has been lost': 'Очень вероятно, что часть данных потеряна',
+    # Ограничения и разрешения сервера (уведомления)
+    'If you encounter any issues related to the above, please contact your server administrator': 'Если возникнут проблемы, связанные с вышеперечисленным, обратитесь к администратору вашего сервера',
+    'The server has disallowed switching to spectator, which is required for the Editor': 'Сервер запретил переход в режим наблюдателя, который требуется для редактора',
+    'The server has disallowed the use of blueprints': 'Сервер запретил использование чертежей',
+    "Server hasn't given you permission to place blocks with Axiom": 'Сервер не дал вам разрешение размещать блоки с помощью Axiom',
+    'The server has limited the maximum script brush size to 1000': 'Сервер ограничил максимальный размер скриптовой кисти значением 1000',
+    'Server has not given you permission to download blueprints': 'Сервер не дал вам разрешение скачивать чертежи',
+    'Failed to load blueprint: empty': 'Не удалось загрузить чертёж: пустой',
+    'Unable to request blueprint since server is running a version with a different blueprint format. Please ensure both the client & server are running the most up-to-date versions of Axiom': 'Невозможно запросить чертёж: сервер работает на версии с другим форматом чертежей. Убедитесь, что и клиент, и сервер используют самую свежую версию Axiom',
+    'Unable to upload blueprint since server is running a version with a different blueprint format. Please ensure both the client & server are running the most up-to-date versions of Axiom': 'Невозможно загрузить чертёж на сервер: сервер работает на версии с другим форматом чертежей. Убедитесь, что и клиент, и сервер используют самую свежую версию Axiom',
+    'Schematic appears to be empty :(': 'Схема, похоже, пуста :(',
+    "Server doesn't support (or doesn't allow) deleting entities": 'Сервер не поддерживает (или не разрешает) удаление сущностей',
+    "Server doesn't support (or doesn't allow) manipulating entities": 'Сервер не поддерживает (или не разрешает) изменение сущностей',
+    "Server doesn't support (or doesn't allow) spawning entities": 'Сервер не поддерживает (или не разрешает) создание сущностей',
+    "Server doesn't support requesting marker nbt": 'Сервер не поддерживает запрос NBT маркера',
+    # Команда проверки подключения (обратная связь в чате)
+    'Checking connection to axiom.moulberry.com...': 'Проверка подключения к axiom.moulberry.com...',
+    'Error while checking axiom.moulberry.com connection... see logs for stacktrace': 'Ошибка при проверке подключения к axiom.moulberry.com... стек вызовов — в логе',
+    'Unable to check axiom.moulberry.com, unknown host': 'Не удалось проверить axiom.moulberry.com: неизвестный хост',
+    "The client doesn't support Axiom multiplayer": 'Клиент не поддерживает мультиплеер Axiom',
+    "The client doesn't support Axiom multiplayer (pending)": 'Клиент не поддерживает мультиплеер Axiom (ожидание)',
+    "The client doesn't support Axiom multiplayer (unprocessed)": 'Клиент не поддерживает мультиплеер Axiom (не обработано)',
+    # Тултипы вариантов размещения (PlacementOptionsOverlay)
+    'Merges new blocks with existing blocks based on block shape:\nIf the new block completely overlaps the old block, the new block is used\nOtherwise, the old block is used\n(Inverts if Keep Existing is disabled)': 'Объединяет новые блоки с существующими в зависимости от формы блока:\nЕсли новый блок полностью перекрывает старый, используется новый блок\nВ противном случае используется старый блок\n(Наоборот, если «Сохранять существующие» отключено)',
+    'Merges new blocks with existing blocks based on block shape:\nIf the old block completely overlaps the new block, the old block is used\nOtherwise, the new block is used\n(Inverts if Keep Existing is enabled)': 'Объединяет новые блоки с существующими в зависимости от формы блока:\nЕсли старый блок полностью перекрывает новый, используется старый блок\nВ противном случае используется новый блок\n(Наоборот, если «Сохранять существующие» включено)',
     # --- AxiomIntroductionScreen: мастер первого запуска ---
     'Welcome to Axiom': 'Добро пожаловать в Axiom',
     'Builder Mode': 'Режим строительства',
