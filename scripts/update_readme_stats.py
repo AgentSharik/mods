@@ -115,12 +115,12 @@ def validate(text, st, fname):
             problems.append(f'остался итог по старой методике: «{bad}»')
     if fname == 'README.md':
         m = re.search(
-            r'\| Волна \| Готовых JAR \| Статус \|(?P<body>.*?)\| \*\*Итого\*\* \| \*\*(\d+)\*\* \|',
+            r'\| Волна \| Готовых JAR \| Ключей \| Состав \|(?P<body>.*?)\| \*\*Итого\*\* \| \*\*(\d+)\*\* \|',
             text, re.S)
         if not m:
             problems.append('не найдена сводная таблица волн по готовым JAR')
         else:
-            rows = [int(n) for n in re.findall(r'\|[^|\n]+ \| (\d+) \| Готово \|', m.group('body'))]
+            rows = [int(n) for n in re.findall(r'\|[^|\n]+ \| (\d+) \| [\d ]+ \|', m.group('body'))]
             if sum(rows) != st['sb_jars'] or int(m.group(2)) != st['sb_jars']:
                 problems.append(
                     f"сводная таблица волн: сумма {sum(rows)} и итог {m.group(2)} "
