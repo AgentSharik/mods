@@ -7,7 +7,7 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-166-4a7c3f?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-169-4a7c3f?style=flat-square)
 ![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-55%20295-2b6cb0?style=flat-square)
 ![В работе](https://img.shields.io/badge/%D0%92%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B5-0-b8862b?style=flat-square)
 
@@ -88,6 +88,10 @@ Super Factory Manager, FDBosses, ConfiguredDefaults, Tooltip Overhaul,
 Modular Routers, Industrial Foregoing) и 3 библиотеки без языковых файлов
 (SmartBrainLib, GeckoLib, KubeJS Curios) — отсюда 168 JAR и 175 модов в сводке.
 Учтено ключей сверх исходных 52 206: +3 089 (итого 55 295).
+
+Встроенные справочники добавленных модов также переведены: книги Patchouli у Modular Routers
+(61 файл), Industrial Foregoing (80 файлов), PetRock (10 файлов) и общая книга семейства
+RFTools во всех четырёх JAR (82 файла), а также гайд GuideME у Energy Meter (2 страницы).
 
 Состав перевода целиком (все 153 мода, гайды, полнота, качество): [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
 
