@@ -118,13 +118,19 @@ mods/
 <details>
 <summary><b>Первая волна — 38 модов, 16 511 ключей (готово 38 из 38)</b></summary>
 
-Основа сборки. Работа шла в две стадии: сначала полная вычитка каждого lang-файла по точному
-исходнику, затем второй проход контроля качества, который вернул 81 утраченное значение
-(в Apotheosis — 41, Irregular Implements — 32, MFFS — 7, ApothicEnchanting — 1) и выровнял
-терминологию между модами. Аудит волны выполнен целиком и до начала перевода:
-[`AUDIT_2026-10-07.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_2026-10-07.md),
-итоги контроля качества — в
-[`AUDIT_FINAL_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_FINAL_2026-10-10.md).
+Ядро сборки: Mekanism, Ars Nouveau, Apotheosis, Psi, Oritech, Simply Swords и их
+аддоны. У большинства модов русский перевод уже был, поэтому волна — главным
+образом вычитка и доперевод недостающих ключей, а не перевод с нуля.
+
+Работа шла в две стадии. Сначала — полная вычитка каждого lang-файла по точному
+исходнику. Затем — второй проход контроля качества: он вернул 81 утраченное при
+первом проходе значение (Apotheosis — 41, Irregular Implements — 32, MFFS — 7,
+ApothicEnchanting — 1) и выровнял терминологию между модами.
+
+Документы волны: статический аудит перед началом работ (объём и очерёдность
+вычитки) — [`AUDIT_2026-10-07.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_2026-10-07.md); сводный аудит
+контроля качества по итогам — [`AUDIT_FINAL_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_FINAL_2026-10-10.md).
+
 
 | Мод | Ключей lang | Было в `ru_ru` | Книги и гайды | Что сделано |
 |---|---:|---|---|---|
@@ -189,12 +195,22 @@ mods/
 <details>
 <summary><b>Вторая волна — 23 мода, 11 698 ключей (готово 23 из 23)</b></summary>
 
-Порядок идёт не по размеру, а по зависимостям: **родитель раньше аддона**. Malum переведён раньше
-Gaze, потому что 267 из 343 ключей Gaze — это записи в книгу Malum; JEI идёт раньше
-JustEnough-аддонов, потому что они берут у него «рецепт», «ингредиент» и «применение».
-Библиотеки и родительские моды идут первыми: `collective`, затем `occultism` и только потом его
-аддоны `occultism_kubejs` и `occultengineering`; `betterblockz` замыкает очередь как самый
-шаблонный по тексту.
+Волна аддонов, библиотек и двух крупных модов с собственными книгами: Occultism
+(3 587 ключей) и Malum (2 742). Malum переведён с нуля целиком — вместе с кодексом
+на 1 215 ключей; с нуля также переведены Gaze, Collective и BetterBlockz (1 748
+ключей декоративных блоков).
+
+Порядок — по зависимостям: **родитель раньше аддона**. Malum идёт раньше Gaze,
+потому что 267 из 343 ключей Gaze — записи в книгу Malum; JEI — раньше
+JustEnough-аддонов, потому что они берут у него термины «рецепт», «ингредиент» и
+«применение». Библиотеки и родители — первыми: `collective`, затем `occultism` и
+только потом его аддоны; `betterblockz` замыкает очередь как самый шаблонный по
+тексту.
+
+Документы волны: аудит — [`AUDIT_WAVE3_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_WAVE3_2026-10-13.md)
+(название файла историческое), план и ход работ — [`PROGRESS_2026-10-10.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_2026-10-10.md),
+по крупным модам — отдельные журналы (Malum, Gaze, JEI, Occultism и другие).
+
 
 | Мод | Ключей lang | Было в `ru_ru` | Книги и гайды | Что сделано |
 |---|---:|---:|---|---|
@@ -273,13 +289,20 @@ JustEnough-аддонов, потому что они берут у него «�
 <details>
 <summary><b>Третья волна — 35 модов, 12 999 ключей (готово 35 из 35)</b></summary>
 
-Порядок — по зависимостям: родители и библиотеки раньше аддонов. Сначала CTM, затем Create
-(здесь составлен глоссарий всего Create-кластера), CreateDragonsPlus и ftb-teams; дальше
-аддоны Create, крупные одиночки, кластер FTB (первой — ftb-library) и хвосты волны.
-Аудит волны выполнен целиком и до начала перевода:
-[`AUDIT_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_THIRD_WAVE_2026-10-13.md) — объём,
-качество существующего русского, зависимости и порядок. Ход работ —
-в [`PROGRESS_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_THIRD_WAVE_2026-10-13.md).
+Волна Create и FTB. Ядро — Create (3 639 ключей) и его аддоны, для которых здесь
+составлен общий глоссарий кластера; следом — весь кластер FTB. Крупные одиночки:
+Chisel (2 932 ключа, перевод с нуля словарями материалов и узоров) и Twilight
+Forest (2 061 ключ).
+
+Порядок — по зависимостям: родители и библиотеки раньше аддонов. Сначала CTM,
+затем Create, CreateDragonsPlus и ftb-teams; дальше аддоны Create, крупные
+одиночки, кластер FTB (первой — ftb-library) и хвосты волны.
+
+Документы волны: аудит выполнен целиком и до начала перевода —
+[`AUDIT_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_THIRD_WAVE_2026-10-13.md) (объём,
+качество существующего русского, зависимости, порядок); ход работ —
+[`PROGRESS_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_THIRD_WAVE_2026-10-13.md).
+
 
 | Мод | Ключей lang | Было в `ru_ru` | Книги и гайды | Что сделано |
 |---|---:|---|---|---|
@@ -336,20 +359,28 @@ JustEnough-аддонов, потому что они берут у него «�
 <details>
 <summary><b>Четвёртая волна — 50 модов, 9 082 ключа (готово 50 из 50)</b></summary>
 
-Порядок — по зависимостям: кластер AE2 (ядро, библиотеки, аддоны), кластер
-Refined Storage, кластер Iron's Spells, ftb-materials, Replication с мостами
-и одиночки. Гайды GuideME кластера AE2 (224 страницы) переведены подэтапом после lang.
-Аудит волны выполнен целиком и до начала перевода:
-[`AUDIT_WAVE4_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_WAVE4_2026-10-13.md) — объём,
-качество существующего русского (официальные переводы AE2, RS2, Iron's, IE —
-вычитка; 16 модов без русского — с нуля), зависимости и порядок. Ход работ —
-в [`PROGRESS_WAVE4_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_WAVE4_2026-10-13.md).
+Финальная волна: кластер Applied Energistics 2, кластер Refined Storage,
+кластер Iron's Spells, кластер Replication, ftb-materials и одиночки. У крупных
+модов (AE2, Refined Storage, Iron's, ImmersiveEngineering) официальные русские
+переводы вычитаны; 16 модов без русского переведены с нуля.
+
+Порядок — по зависимостям, кластерами: сначала AE2 целиком, затем Refined
+Storage, Iron's Spells, ftb-materials, Replication с мостами и одиночки;
+последним — ImmersiveEngineering с собственным мануалом (114 файлов).
+Внутренние гайды переведены отдельным подэтапом после lang: GuideME — 227
+страниц, книга Iron's Spellbooks и книги на lang-ключах у кулинарных аддонов.
+
+Документы волны: аудит выполнен целиком и до начала перевода —
+[`AUDIT_WAVE4_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_WAVE4_2026-10-13.md) (объём, качество
+существующего русского, зависимости, порядок); ход работ —
+[`PROGRESS_WAVE4_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_WAVE4_2026-10-13.md).
+
 
 **Порядок перевода волны.** Кластер AE2 до конца:
 AE2AddonLib → ae2wtlib → AdvancedAE → ExtendedAE → megacells → AppliedFlux →
 AE2NetworkAnalyzer → ae2ct → me_beam_former → enderdrives → AE2-Things →
 Applied-Mekanistics → appliedcooking → applieddelight → applied-experienced →
-appliedsticks; затем гайды GuideME кластера (≈460 страниц). Кластер Refined
+appliedsticks; затем гайды GuideME кластера (224 страницы). Кластер Refined
 Storage: refinedstorage → refined-types → cabletiers → ExtraStorage →
 refineddelight → refinedsticks → refinedstorage-curios-integration →
 refinedstorage-jei-integration → refinedstorage-mekanism-integration →
