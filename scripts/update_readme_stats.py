@@ -51,7 +51,7 @@ def apply_rules(text, st, fname):
     if fname == 'README.md':
         rules = [
             (r'(Модов%20готово-)\d+', r'\g<1>' + str(st['total_jars'])),
-            (r'(Ключей%20переведено-)[\d%20]+', lambda m: m.group(1) + fmt(st['total_keys']).replace(' ', '%20')),
+            (r'(%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-)[\d%20]+', lambda m: m.group(1) + str(st['total_keys'])),
             (r'168 готовых JAR \+ 7 модов без языковых файлов \(всего 175 модов\), 55 295 ключей',
              f"{st['sb_jars']} готовых JAR + 7 модов без языковых файлов (всего {st['sb_mods']} модов), {fmt(st['total_keys'])} ключей"),
             (r'175 модов \(168 готовых JAR и 7 модов без языковых файлов\)',
