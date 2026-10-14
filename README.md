@@ -541,7 +541,7 @@ baubley-heart-canisters → routers → stonechest → repeatable_trial_vaults.
   | [`AUDIT_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_THIRD_WAVE_2026-10-13.md) | Аудит третьей волны: 35 объектов, повторные аудиты (библиотеки, ftb-library, Twilight Forest) |
   | [`PROGRESS_THIRD_WAVE_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_THIRD_WAVE_2026-10-13.md) | Журнал перевода третьей волны, спорные места |
   | [`AUDIT_TWILIGHTFOREST_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_TWILIGHTFOREST_2026-10-13.md) | Twilight Forest: аудит (2 061 ключ, не хватает 585) |
-  | [`PROGRESS_TWILIGHTFOREST_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8F/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_TWILIGHTFOREST_2026-10-13.md) | Twilight Forest: журнал перевода |
+  | [`PROGRESS_TWILIGHTFOREST_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_TWILIGHTFOREST_2026-10-13.md) | Twilight Forest: журнал перевода |
 
   **Четвёртая волна**
 
@@ -554,7 +554,7 @@ baubley-heart-canisters → routers → stonechest → repeatable_trial_vaults.
 
   | Файл | О чём |
   |---|---|
-  | [`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8F/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md) | Замечания по проверке в игре: MFFS, JEI, Collapsible Groups и пересборка 34 JAR с повреждённым английским |
+  | [`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md) | Замечания по проверке в игре: MFFS, JEI, Collapsible Groups и пересборка 34 JAR с повреждённым английским |
 
   </details>
 
@@ -620,19 +620,7 @@ baubley-heart-canisters → routers → stonechest → repeatable_trial_vaults.
 - `right-click` → «нажмите ПКМ», `shift-right-click` → «нажмите ПКМ, удерживая Shift».
 - Названия модов, бренды и технические идентификаторы не переводятся.
 - Пустые значения не заполняются догадками; массовые автоподстановки не применяются.
-- В переведённых JAR `en_us.json` служит резервной копией `ru_ru.json`.
-
-</details>
-
----
-
-<div align="center">
-
-Minecraft 1.21.1 · NeoForge · перевод, вычитка и проверка каждого ключа
-
-</div>
-еняются.
-- В переведённых JAR `en_us.json` служит резервной копией `ru_ru.json`.
+- В переведённых JAR заменяется только `ru_ru.json`; `en_us.json` и остальные языки остаются оригинальными.
 
 </details>
 
