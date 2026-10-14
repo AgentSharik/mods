@@ -58,7 +58,7 @@ mods/
 ## Проекты
 
 <details>
-<summary><b>StoneBlock 4</b> — сборка целиком: 168 готовых JAR + 7 модов без языковых файлов (всего 175 модов), 55 295 ключей; все четыре волны закрыты</summary>
+<summary><b>StoneBlock 4</b> — сборка целиком: 168 готовых JAR + 7 модов без языковых файлов (всего 175 модов), 56 540 ключей; все четыре волны закрыты</summary>
 
 ### StoneBlock 4
 
@@ -67,7 +67,7 @@ mods/
 | | |
 |---|---|
 | Готовых JAR | **168** |
-| Ключей переведено | **55 295** |
+| Ключей переведено | **55 306** |
 | Статус | **все четыре волны закрыты** |
 
 | Волна | Модов | Статус |
@@ -87,13 +87,15 @@ ChanceCubes, RFTools Base, RFTools Power, RFTools Builder, RFTools Utility,
 Super Factory Manager, FDBosses, ConfiguredDefaults, Tooltip Overhaul,
 Modular Routers, Industrial Foregoing) и 3 библиотеки без языковых файлов
 (SmartBrainLib, GeckoLib, KubeJS Curios) — отсюда 168 JAR и 175 модов в сводке.
-Учтено ключей сверх исходных 52 206: +3 089 (итого 55 295).
+По факту содержимого JAR: 54 400 английских ключей, все покрыты русскими;
+в русских файлах ключей больше за счёт добавленных сверх оригинала.
+Точные цифры счётчиков пересчитываются скриптом `scripts/update_readme_stats.py` из самих JAR.
 
 Встроенные справочники добавленных модов также переведены: книги Patchouli у Modular Routers
 (61 файл), Industrial Foregoing (80 файлов), PetRock (10 файлов) и общая книга семейства
 RFTools во всех четырёх JAR (82 файла), а также гайд GuideME у Energy Meter (2 страницы).
 
-Состав перевода целиком (все 153 мода, гайды, полнота, качество): [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
+Состав перевода целиком (все 175 мода, гайды, полнота, качество): [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
 
 Последним закрыт **ImmersiveEngineering**: lang — 1952 из 1952 ключей, собственный
 мануал мода — 114 из 114 файлов.
