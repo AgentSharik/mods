@@ -8,7 +8,7 @@
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
 ![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-169-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-56707-2b6cb0?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-57141-2b6cb0?style=flat-square)
 ![В работе](https://img.shields.io/badge/%D0%92%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B5-0-b8862b?style=flat-square)
 
 </div>
@@ -58,16 +58,16 @@ mods/
 ## Проекты
 
 <details>
-<summary><b>StoneBlock 4</b> — сборка целиком: 170 готовых JAR, 55 473 ключей; все четыре волны закрыты</summary>
+<summary><b>StoneBlock 4</b> — сборка целиком: 174 готовых JAR, 55 907 ключей; все четыре волны закрыты</summary>
 
 ### StoneBlock 4
 
-**Моды из сборки** — 170 готовых JAR, перевод идёт волнами, каждый мод доводится до конца отдельно.
+**Моды из сборки** — 174 готовых JAR, перевод идёт волнами, каждый мод доводится до конца отдельно.
 
 | | |
 |---|---|
-| Готовых JAR | **170** |
-| Ключей переведено | **55 473** |
+| Готовых JAR | **174** |
+| Ключей переведено | **55 907** |
 | Статус | **все четыре волны закрыты** |
 
 | Волна | Готовых JAR | Статус |
@@ -77,20 +77,20 @@ mods/
 | Третья | 33 | Готово |
 | Четвёртая | 51 | Готово |
 | Вне волн (пачка исправлений) | 1 | Готово |
-| Дополнения после релиза | 24 | Готово |
-| **Итого** | **170** | |
+| Дополнения после релиза | 28 | Готово |
+| **Итого** | **174** | |
 
 Считаются только готовые JAR в папке проекта. Волны дают 145 готовых JAR:
 первая — 38, вторая — 23, третья — 33, четвёртая — 51. Пачка исправлений
 после тестового релиза добавляет ещё 1 готовый JAR (CarbonConfig),
-дополнения после релиза — ещё 24, итого 170 готовых JAR.
+дополнения после релиза — ещё 28, итого 174 готовых JAR.
 Дополнения после релиза — 19 модов вне исходного состава сборки (Modonomicon,
 Curios, RS Infinity Booster, RS Requestify, Industrial Foregoing Souls,
 PetRock, Transfer Labels, Energy Meter, ChanceCubes, RFTools Base,
 RFTools Power, RFTools Builder, RFTools Utility, Super Factory Manager,
 FDBosses, ConfiguredDefaults, Tooltip Overhaul, Modular Routers,
-Industrial Foregoing) и 3 библиотеки (SmartBrainLib, GeckoLib, KubeJS Curios), а также 2 мода по запросу (GAG, Building Gadgets 2).
-По факту содержимого JAR: 55 473 ключей в русских файлах готовых JAR —
+Industrial Foregoing) и 3 библиотеки (SmartBrainLib, GeckoLib, KubeJS Curios), а также 6 модов по запросу (GAG, Building Gadgets 2, FTB Pack Companion, Shrink, StarbuncleMania, Tempad).
+По факту содержимого JAR: 55 907 ключей в русских файлах готовых JAR —
 каждый ключ внутри одного JAR считается один раз, файлы-дубли цифру не раздувают.
 Точные цифры счётчиков пересчитываются скриптом `scripts/update_readme_stats.py` из самих JAR.
 
@@ -98,7 +98,7 @@ Industrial Foregoing) и 3 библиотеки (SmartBrainLib, GeckoLib, KubeJS
 (61 файл), Industrial Foregoing (80 файлов), PetRock (10 файлов) и общая книга семейства
 RFTools во всех четырёх JAR (82 файла), а также гайд GuideME у Energy Meter (2 страницы).
 
-Состав перевода целиком (все 170 готовых JAR, гайды, полнота, качество): [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
+Состав перевода целиком (все 174 готовых JAR, гайды, полнота, качество): [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
 
 Последним закрыт **ImmersiveEngineering**: lang — 1952 из 1952 ключей, собственный
 мануал мода — 114 из 114 файлов.
