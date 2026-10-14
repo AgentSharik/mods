@@ -7,9 +7,9 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-140-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-47%20268-2b6cb0?style=flat-square)
-![В работе](https://img.shields.io/badge/%D0%92%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B5-1-b8862b?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-141-4a7c3f?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-49%20220-2b6cb0?style=flat-square)
+![В работе](https://img.shields.io/badge/%D0%92%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B5-0-b8862b?style=flat-square)
 
 </div>
 
@@ -61,10 +61,10 @@ mods/
 
 **Моды из сборки.** 147 модов: 38 в первой волне, 23 во второй, 35 в третьей (с дозагруженными библиотеками),
 Carbon Config из пачки исправлений и 50 в четвёртой волне (с дозагруженными библиотеками; аудит 13.10.2026, перевод начат).
-**140 JAR готово**, 47 268 ключей переведено; первые три волны закрыты полностью
-(35 из 35 в третьей). В четвёртой волне готово 44 мода, ещё 5 модов без языковых файлов
-закрыты актом аудита; в работе остаётся ImmersiveEngineering: lang переведён полностью
-(1952/1952), в собственном мануале мода переведено 75 из 114 файлов. После проверки тестового
+**141 JAR готово**, 49 220 ключей переведено; все четыре волны закрыты полностью
+(35 из 35 в третьей, 45 из 45 переводимых в четвёртой, ещё 5 модов без языковых файлов
+закрыты актом аудита). ImmersiveEngineering закрыт последним: lang 1952/1952
+и собственный мануал мода — 114 из 114 файлов. После проверки тестового
 релиза дополнительно переведён Collapsible Groups, пересобраны JAR с повреждённым английским,
 пропатчены Ars Elemental (красная строка брони) и Carbon Config (экран настроек JEI) —
 см. [`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md).
@@ -318,7 +318,7 @@ Refined Storage, кластер Iron's Spells, ftb-materials, Replication с м�
 **Текущее состояние:** кластеры AE2 (lang и 224 страницы GuideME), Refined Storage
 и Iron's Spells, ftb-materials, кластер Replication и одиночки
 baubley-heart-canisters, routers, stonechest и repeatable_trial_vaults закрыты.
-Остался только ImmersiveEngineering (lang готов; мануал — 75 из 114 файлов).
+Четвёртая волна закрыта полностью: ImmersiveEngineering готов (lang 1952/1952, мануал 114/114).
 
 
 **Порядок перевода волны.** Кластер AE2 до конца:
@@ -374,7 +374,7 @@ baubley-heart-canisters → routers → stonechest → repeatable_trial_vaults.
 | `replication_matter_overflow-1.21.1-NeoForge-1.2.1.jar` | 7 | 0 (0 %) | нет | Готово |
 | `rep_ae2_bridge-1.9.0.0.1-neoforge-1.21.1.jar` | 14 | 0 (0 %) | GuideME: 2 стр. переведено | Готово |
 | `replication_rs2_bridge-1.21.1-NeoForge-1.2.7.jar` | 5 | 0 (0 %) | нет | Готово |
-| `ImmersiveEngineering-1.21.1-12.4.2-194.jar` | 1952 | 1228 (63 %) | Собственный мануал: переведено 75 из 114 txt | В работе: lang 1952/1952, мануал 75/114 |
+| `ImmersiveEngineering-1.21.1-12.4.2-194.jar` | 1952 | 1228 (63 %) | Собственный мануал: 114 из 114 txt переведено | Готово |
 | `enchdesc-neoforge-1.21.1-21.1.11.jar` | 182 | 67 (37 %) | нет | Готово |
 | `compactmachines-neoforge-7.0.81.jar` | 74 | 64 + 10 из классов | нет | Готово |
 | `baubley-heart-canisters-1.21.1-1.4.2.jar` | 66 | 39 (59 %) | нет | Готово |
