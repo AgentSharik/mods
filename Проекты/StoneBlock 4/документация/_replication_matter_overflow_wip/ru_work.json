@@ -1,0 +1,9 @@
+{
+  "itemGroup.replication_matter_overflow": "Репликация: Резервуар переполнения материи",
+  "block.replication_matter_overflow.matter_void": "Резервуар переполнения материи",
+  "tooltip.replication_matter_overflow.matter_void.line1": "Хранит материю как обычный резервуар",
+  "tooltip.replication_matter_overflow.matter_void.line2": "Сбрасывает излишки материи при заполнении",
+  "tooltip.replication_matter_overflow.priority.current": "Приоритет: %s",
+  "tooltip.replication_matter_overflow.priority.increase": "Повысить приоритет резервуара",
+  "tooltip.replication_matter_overflow.priority.decrease": "Понизить приоритет резервуара"
+}

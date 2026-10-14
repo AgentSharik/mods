@@ -81,3 +81,89 @@ AE2. Каждый мод закрывается отдельным коммит�
   applieddelight целиком на lang-ключах (Patchouli i18n) — закрыты lang.
   Терминология — по AE2_GLOSSARY.md. Остаётся подэтап гайдов GuideME
   (≈460 страниц).
+
+### 14.10.2026: подэтап гайдов GuideME кластера AE2 ЗАКРЫТ — 224 страницы
+
+Русские страницы лежат в JAR зеркально английским по пути
+`assets/<modid>/ae2guide/_ru_ru/...` (GuideME подхватывает локализованную
+копию автоматически; структура, теги `ItemLink`/`RecipeFor`/`GameScene`,
+id предметов и цели ссылок сохранены один в один — проверено скриптом по
+каждой странице).
+
+| Мод | Страниц | Коммит |
+|---|---:|---|
+| AE2 | 125 | `c4e0273`, `f7b205b`, `656e70e` |
+| ExtendedAE | 47 | `0474719` |
+| AdvancedAE | 13 | `ad745a4` |
+| AppliedFlux | 12 | `0d51b55` |
+| ae2wtlib | 8 (incl. страница-замена AE2 `wireless_terminals`) | `dd48119` |
+| MEGA Cells | 7 | `e62388b` |
+| ME Beam Former | 7 | `1556c28` |
+| EnderDrives | 3 | `0f81bf8` |
+| AE2NetworkAnalyzer | 2 | `d50facd` |
+
+Примечание к объёмам аудита: «230 страниц» у ExtendedAE и т. п. — сумма по
+всем локалям мода (en+es+ja+pt); английских оригиналов 47 — именно столько
+переведено. Аналогично исправлены числа AdvancedAE (13), megacells (7),
+me_beam_former (7), enderdrives (3). Копии страниц — в
+`документация/_*_guide_wip/ru/` по модам (`_ae2guide_wip` — AE2).
+
+### Дополнение: кластеры RS, Iron's, ftb-materials, Replication, одиночки (закрыты)
+
+Записи по этим пачкам вносились в README сразу при закрытии каждого мода
+(по одному коммиту и пушу на мод); здесь — итоговая сводка для журнала.
+
+- **Кластер Refined Storage (10 модов):** refinedstorage (788),
+  refined-types (164), cabletiers (190), ExtraStorage (46), refineddelight
+  (27; книга Patchouli i18n — закрыта lang), refinedsticks (2),
+  curios-integration (1), jei-integration (10), mekanism-integration (37),
+  quartz-arsenal (22). Дублей ключей нет, наборы ключей совпадают с EN.
+  Терминология — глоссарий RS (Терминал, Терминал доступа к шаблонам,
+  Шины импорта/экспорта, Автокрафтер).
+- **Кластер Iron's (4 мода):** irons_lib (72), irons_spellbooks (1315 +
+  книга Patchouli — зеркальная папка `ru_ru/` рядом с `en_us/`, 10 записей
+  и `book.json`), irons_jewelry (262; экран гайда — только lang-ключи,
+  отдельных файлов книги нет), irons_apothic (370).
+- **ftb-materials (868)** — закрыт одним модом.
+- **Кластер Replication (4 мода):** Replication (78 + гайд GuideME 1 стр.),
+  replication_matter_overflow (7), rep_ae2_bridge (14 + 2 стр. GuideME),
+  replication_rs2_bridge (5).
+- **Одиночки:** baubley-heart-canisters (66), routers (62), stonechest (80),
+  repeatable_trial_vaults (1).
+
+### 14.10.2026: аудит внутренних гайдов всей волны
+
+Перед финальным модом выполнен полный аудит внутренних гайдов по всем
+50 модам волны (не только lang): просканированы пути `ae2guide`,
+`patchouli_books`, `modonomicon`, `/guides/`, `/manual/`, файлы
+`.md/.mdx/.txt` и имена с guide/manual/book/codex/lexicon/handbook.
+
+- GuideME: AE2 125/125, ExtendedAE 47/47, AdvancedAE 13/13,
+  AppliedFlux 12/12, ae2wtlib 8/8, megacells 7/7, me_beam_former 7/7,
+  enderdrives 3/3, AE2NetworkAnalyzer 2/2, Replication 1/1,
+  rep_ae2_bridge 2/2 — зеркала полные; скан остаточного английского по
+  RU-страницам после снятия разметки — 0 строк.
+- Patchouli: книга Iron's Spellbooks — 11/11 RU-файлов; книги
+  appliedcooking / applieddelight / refineddelight — i18n, все 46 ключей
+  книг присутствуют и переведены в lang.
+- irons_jewelry: файлов книги нет, содержимое гайда — lang-ключи (262/262).
+- У остальных 33 модов волны внутренних гайдов не найдено.
+
+### 14.10.2026: ImmersiveEngineering — lang закрыт, мануал переведён, JAR готов. Волна 4 ЗАКРЫТА
+
+- Lang: 1952/1952, финал — `документация/_ie_wip/ru_work.json`.
+- Собственный мануал мода: 114 txt (`manual/en_us/`), перевод —
+  114/114. Честная оговорка: первый заход на мануал (75/114) хранился
+  только в /tmp и был потерян при переклонировании песочницы; перевод
+  выполнен заново полностью, на этот раз партии коммитились в
+  `документация/_ie_wip/manual_ru/` по мере готовности (17 коммитов).
+  Разметка (`<np>`, `<br>`, `<link;…>`, `<&…>`, `<config;…>`, §-коды)
+  сверена скриптом по каждому файлу; скан уцелевшего английского — чист
+  (кроме имён собственных и названий модов).
+- JAR собран полной пересборкой: заменён только `ru_ru.json` (1952/1952,
+  missing/extra — 0) и добавлены 114 файлов `manual/ru_ru/*.txt`;
+  остальные записи байт-в-байт совпадают с оригиналом, дублей нет.
+  sha256: `83bd96365da389269cd32695635812972250950187c2bace6b84221bd07772e8`.
+- **Итог волны 4: 45 переводимых модов готово, 5 закрыты актом аудита.
+  Всего по проекту: 141 JAR, 49 220 ключей.** Подтверждения запуском
+  в игре ни по одному моду волны не выполнялось.

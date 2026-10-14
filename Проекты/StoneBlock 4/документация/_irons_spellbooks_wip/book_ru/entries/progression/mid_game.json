@@ -1,0 +1,50 @@
+{
+  "name": "Средняя игра",
+  "icon": "irons_spellbooks:scroll_forge",
+  "category": "irons_spellbooks:root",
+  "sortnum": -2,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Кузница свитков",
+      "text": "Достигнув ресурсов уровня Незера, вы откроете совершенно новую динамику получения силы: Кузницу свитков$(br2)Кузница свитков используется для создания свитков с использованием чернил, бумаги и фокуса. Чернила определяют редкость (и, следовательно, уровень), а фокус определяет школу заклинания."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "irons_spellbooks:scroll_forge"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Новые книги заклинаний",
+      "text": "Кроме того, промежуточные книги заклинаний можно создать из ресурсов Незера",
+      "recipe": "irons_spellbooks:gold_spell_book"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "irons_spellbooks:diamond_spell_book",
+      "text": "Кожа хоглина выпадает с Хоглинов"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "irons_spellbooks:magic_cloth",
+      "title": "Новые материалы",
+      "text": "Вам также стоит начать создавать более сильную броню из волшебной ткани. Чтобы получить много эссенции волшебства, вам нужно будет сосредоточиться на набегах на магические структуры."
+    },
+    {
+      "type": "patchouli:entity",
+      "name": "Броня Пугала",
+      "entity": "minecraft:armor_stand{ArmorItems:[{id:'irons_spellbooks:pumpkin_boots',Count:1b},{id:'irons_spellbooks:pumpkin_leggings',Count:1b},{id:'irons_spellbooks:pumpkin_chestplate',Count:1b},{id:'irons_spellbooks:pumpkin_helmet',Count:1b}],NoBasePlate:1b}"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "irons_spellbooks:blank_rune",
+      "title": "Редкие материалы",
+      "text": "Для продолжения развития следите за рунными камнями в магических структурах. Рунные камни используются для создания ещё более мощной брони. Классовые маги всегда роняют руну своей школы."
+    },
+    {
+      "type": "patchouli:empty",
+      "draw_filler": false
+    }
+  ]
+}

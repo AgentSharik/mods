@@ -1,0 +1,38 @@
+{
+  "name": "Чернила",
+  "icon": "irons_spellbooks:epic_ink",
+  "category": "irons_spellbooks:root",
+  "sortnum": 4,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "irons_spellbooks:common_ink",
+      "text": "Самые распространённые из чернил (отсюда и название), обычные чернила могут создавать заклинания самого низкого уровня. Если самый низкий уровень заклинания выше обычного, его нельзя создать обычными чернилами. То же относится ко всем остальным чернилам."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "irons_spellbooks:uncommon_ink",
+      "text": "Менее распространены, чем обычные, они могут создавать чуть более мощные заклинания."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "irons_spellbooks:rare_ink",
+      "text": "Редкие чернила можно регулярно находить в сундуках с магическими сокровищами или убивая мобов-заклинателей."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "irons_spellbooks:epic_ink",
+      "text": "Лучшее место для эпических чернил и всех других чернил высокой редкости — магические сокровища или убийства мобов-заклинателей."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "irons_spellbooks:legendary_ink",
+      "text": "Самые редкие чернила, они создают самые мощные заклинания. Имейте в виду, у некоторых заклинаний несколько легендарных уровней, и для их получения требуется Волшебная наковальня."
+    },
+    {
+      "type": "patchouli:empty",
+      "draw_filler": false
+    }
+  ]
+}

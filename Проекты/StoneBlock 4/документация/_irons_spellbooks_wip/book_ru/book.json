@@ -1,0 +1,9 @@
+{
+  "name": "Гайд Iron's Spells",
+  "landing_text": "Iron's Spells 'n Spellbooks — вдохновлённый RPG мод заклинаний. Вы можете сражаться с опасными волшебниками, совершать набеги на структуры, спускаться в подземелья, собирать ресурсы и найти мощные магические предметы. $(l:https://iron431.github.io/Irons-Spellbooks-Docs)Внешняя вики здесь$(/l)",
+  "version": 1,
+  "pamphlet": true,
+  "show_progress": false,
+  "model": "irons_spellbooks:patchouli_book",
+  "use_resource_pack": true
+}
