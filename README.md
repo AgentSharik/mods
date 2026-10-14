@@ -57,6 +57,9 @@ mods/
 
 ## Проекты
 
+<details>
+<summary><b>StoneBlock 4</b> — сборка целиком: 153 мода, 146 готовых JAR, 52 206 ключей; все четыре волны закрыты</summary>
+
 ### StoneBlock 4
 
 **Моды из сборки** — 153 мода (146 готовых JAR и 7 модов без языковых файлов), перевод идёт волнами, каждый мод доводится до конца отдельно.
@@ -538,6 +541,8 @@ baubley-heart-canisters → routers → stonechest → repeatable_trial_vaults.
   | [`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8F/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md) | Замечания по проверке в игре: MFFS, JEI, Collapsible Groups и пересборка 34 JAR с повреждённым английским |
 
   </details>
+
+</details>
 
 </details>
 
