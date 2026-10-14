@@ -129,20 +129,10 @@ mods/
 - Последним закрыт ImmersiveEngineering: lang 1952/1952, мануал 114/114.
 - После тестового релиза и по замечаниям из игры внесены исправления (12 пунктов) — детали в [`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md).
 
-**Состав по волнам**
-
 Полные таблицы по каждому моду — ключи, встроенные книги и гайды, полнота
 перевода и примечания по качеству — лежат в одном месте, в
 [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md),
-и здесь не дублируются:
-
-| Волна | Готовых JAR | Ключей | Состав |
-|---|---:|---:|---|
-| Первая | 38 | 16 511 | ядро сборки: Mekanism, Ars Nouveau, Apotheosis, Psi, Oritech |
-| Вторая | 23 | 11 698 | Occultism, Malum, JEI, JustDireThings, BetterBlockz |
-| Третья | 33 | 12 999 | Create и аддоны, кластер FTB, Chisel, Twilight Forest |
-| Четвёртая | 51 | 12 317 | кластеры AE2, Refined Storage, Iron's Spells, Replication, ImmersiveEngineering |
-| Вне волн и дополнения | 30 | — | CarbonConfig, моды вне состава сборки, библиотеки и моды по запросу |
+и здесь не дублируются.
 
 Внутренние справочники переведены вместе с модами: книги Patchouli и
 Modonomicon, гайды GuideME кластеров AE2 (224 страницы) и Replication,
