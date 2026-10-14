@@ -58,16 +58,16 @@ mods/
 ## Проекты
 
 <details>
-<summary><b>StoneBlock 4</b> — сборка целиком: 146 готовых JAR + 7 модов без языковых файлов (всего 153 мода), 52 206 ключей; все четыре волны закрыты</summary>
+<summary><b>StoneBlock 4</b> — сборка целиком: 168 готовых JAR + 7 модов без языковых файлов (всего 175 модов), 55 295 ключей; все четыре волны закрыты</summary>
 
 ### StoneBlock 4
 
-**Моды из сборки** — 172 мода (165 готовых JAR и 7 модов без языковых файлов), перевод идёт волнами, каждый мод доводится до конца отдельно.
+**Моды из сборки** — 175 модов (168 готовых JAR и 7 модов без языковых файлов), перевод идёт волнами, каждый мод доводится до конца отдельно.
 
 | | |
 |---|---|
-| Готовых JAR | **146** |
-| Ключей переведено | **52 206** |
+| Готовых JAR | **168** |
+| Ключей переведено | **55 295** |
 | Статус | **все четыре волны закрыты** |
 
 | Волна | Модов | Статус |
@@ -81,9 +81,13 @@ mods/
 Волны дают 146 модов. Отдельной строкой таблицы выше идут
 7 модов без языковых файлов: переводить в них нечего, JAR для них не собирался.
 Итого по сборке учитывается 153 мода; сверх этого переведены и добавлены
-8 модов вне исходного состава сборки (Modonomicon, Curios, RS Infinity Booster,
-RS Requestify, Industrial Foregoing Souls, PetRock, Transfer Labels, Energy Meter) —
-отсюда 154 JAR и 161 мод в сводке.
+19 модов вне исходного состава сборки (Modonomicon, Curios, RS Infinity Booster,
+RS Requestify, Industrial Foregoing Souls, PetRock, Transfer Labels, Energy Meter,
+ChanceCubes, RFTools Base, RFTools Power, RFTools Builder, RFTools Utility,
+Super Factory Manager, FDBosses, ConfiguredDefaults, Tooltip Overhaul,
+Modular Routers, Industrial Foregoing) и 3 библиотеки без языковых файлов
+(SmartBrainLib, GeckoLib, KubeJS Curios) — отсюда 168 JAR и 175 модов в сводке.
+Учтено ключей сверх исходных 52 206: +3 089 (итого 55 295).
 
 Состав перевода целиком (все 153 мода, гайды, полнота, качество): [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
 
