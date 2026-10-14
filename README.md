@@ -197,7 +197,7 @@ ApothicEnchanting — 1) и выровнял терминологию между
 | `SimpleDiscordRichPresence-neoforge-88.0.1-build.54+mc1.21.1.jar` | 3 | 3 | нет | Вычитка: 1 правка |
 | `SimpleTeleportersReforged-1.21.1-2.2.0.jar` | 43 | 43 | GuideME | Вычитка: 12 правок |
 | `simpletomb-1.21.1-1.4.4.jar` | 84 | 84 | нет | Вычитка: 19 правок |
-| `SimplyTooltips-neoforge-0.1.5.jar` | 31 | 31 | нет | Вычитка: 7 правок |
+| `SimplyTooltips-neoforge-0.1.5.jar` | 31 | 31 | нет | Вычитка: 7 правок; переведены зашитые в код сообщения записи GIF (патч классов) |
 | `simplylight-1.5.3+1.21.1-b4.jar` | 192 | 192 | нет | Вычитка: 98 правок |
 | `simplyswords-neoforge-1.70.2-1.21.1.jar` | 2 267 | 2 267 | Oracle Index | Вычитка: 1 120 правок |
 | `utilitarian-1.21.1-0.19.2.jar` | 111 | 64 (58 %) | нет | Доперевод: +47 ключей; вычитка: 27 правок |
