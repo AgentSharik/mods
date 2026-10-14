@@ -7,8 +7,8 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-169-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-57141-2b6cb0?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-176-4a7c3f?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-64406-2b6cb0?style=flat-square)
 ![В работе](https://img.shields.io/badge/%D0%92%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B5-0-b8862b?style=flat-square)
 
 </div>
@@ -58,11 +58,24 @@ mods/
 ## Проекты
 
 <details>
-<summary><b>StoneBlock 4</b> — сборка целиком: 175 готовых JAR, 63 172 ключа; все четыре волны закрыты</summary>
+<summary><b>StoneBlock 4</b> — сборка целиком: 175 готовых JAR, 63 172 ключей; все четыре волны закрыты</summary>
 
 ### StoneBlock 4
 
 **Моды из сборки** — 175 готовых JAR, перевод идёт волнами, каждый мод доводится до конца отдельно.
+
+**Этапы сборки**
+
+- [x] Анализ объёма работ
+- [x] Аудит состояния перевода «из коробки»
+- [x] Первая волна
+- [x] Вторая волна
+- [x] Третья волна
+- [x] Четвёртая волна
+- [x] Релиз для открытого бета-тестирования
+- [ ] Отлов багов и полировка
+
+**Прогресс:** `█████████░` **88 %** — выполнено 7 из 8 этапов
 
 | | |
 |---|---|
@@ -80,52 +93,12 @@ mods/
 | Дополнения после релиза | 29 | Готово |
 | **Итого** | **175** | |
 
-Считаются только готовые JAR в папке проекта. Волны дают 145 готовых JAR:
-первая — 38, вторая — 23, третья — 33, четвёртая — 51. Пачка исправлений
-после тестового релиза добавляет ещё 1 готовый JAR (CarbonConfig),
-дополнения после релиза — ещё 29, итого 175 готовых JAR.
-Дополнения после релиза — 19 модов вне исходного состава сборки (Modonomicon,
-Curios, RS Infinity Booster, RS Requestify, Industrial Foregoing Souls,
-PetRock, Transfer Labels, Energy Meter, ChanceCubes, RFTools Base,
-RFTools Power, RFTools Builder, RFTools Utility, Super Factory Manager,
-FDBosses, ConfiguredDefaults, Tooltip Overhaul, Modular Routers,
-Industrial Foregoing) и 3 библиотеки (SmartBrainLib, GeckoLib, KubeJS Curios), а также 7 модов по запросу (GAG, Building Gadgets 2, FTB Pack Companion, Shrink, StarbuncleMania, Tempad, Chipped).
-По факту содержимого JAR: 63 172 ключа в русских файлах готовых JAR —
-каждый ключ внутри одного JAR считается один раз, файлы-дубли цифру не раздувают.
-Точные цифры счётчиков пересчитываются скриптом `scripts/update_readme_stats.py` из самих JAR.
-
-Встроенные справочники добавленных модов также переведены: книги Patchouli у Modular Routers
-(61 файл), Industrial Foregoing (80 файлов), PetRock (10 файлов) и общая книга семейства
-RFTools во всех четырёх JAR (82 файла), а также гайд GuideME у Energy Meter (2 страницы).
-
-Состав перевода целиком (все 175 готовых JAR, гайды, полнота, качество): [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
-
-Последним закрыт **ImmersiveEngineering**: lang — 1952 из 1952 ключей, собственный
-мануал мода — 114 из 114 файлов.
-
-После проверки тестового релиза внесены исправления:
-
-- дополнительно переведён Collapsible Groups;
-- пересобраны JAR с повреждённым английским;
-- Ars Elemental — исправлена красная строка брони;
-- Carbon Config — пропатчен экран настроек JEI.
-
-По замечаниям из игры (12 пунктов) дополнительно:
-
-- Collapsible Groups — переведены все 895 названий встроенных групп (`group_lang`);
-- Irregular Implements и MFFS — книги Oracle Index снова на русском;
-- в волну 4 добавлены TipsMod (82/82), Belts (21/21), Crystalix (59/59),
-  Schematic Energistics (39/39 + гайд AE2) и Supplementaries (656 недостающих ключей);
-- JustDireThings и JustDynaThings — имена материалов и слизи переведены по смыслу
-  (Пламенное золото, Слизь мерцания пустоты и т.д.).
-
-Подробнее — в
-[`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md).
+Полный состав перевода (все 175 готовых JAR, гайды, полнота, качество): [RELEASE_CONTENTS.md](Проекты/StoneBlock%204/документация/RELEASE_CONTENTS.md).
 
 → [папка проекта](Проекты/StoneBlock%204/)
 
 <details>
-<summary><b>Состояние перевода сборки</b></summary>
+<summary><b>Состояние перевода</b></summary>
 
 ![StoneBlock 4](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/images/stoneblock4.jpg)
 
@@ -146,6 +119,39 @@ RFTools во всех четырёх JAR (82 файла), а также гайд
 Отсюда три типа работы: **перевод с нуля** (русского нет или он непригоден), **вычитка и
 исправление** (русский есть, но с ошибками) и **доперевод** (русский есть, не хватает новых
 ключей). Что применено к каждому моду — в таблицах волн ниже.
+
+**Как получены итоги**
+
+- Считаются только готовые JAR в папке проекта.
+- Волны дают 145 готовых JAR: первая — 38, вторая — 23, третья — 33, четвёртая — 51.
+- Пачка исправлений после тестового релиза — ещё 1 готовый JAR (CarbonConfig).
+- Дополнения после релиза — ещё 29, итого 175 готовых JAR:
+  - 19 модов вне исходного состава сборки (Modonomicon, Curios, RS Infinity Booster,
+    RS Requestify, Industrial Foregoing Souls, PetRock, Transfer Labels, Energy Meter,
+    ChanceCubes, семейство RFTools Base/Power/Builder/Utility, Super Factory Manager,
+    FDBosses, ConfiguredDefaults, Tooltip Overhaul, Modular Routers, Industrial Foregoing);
+  - 3 библиотеки (SmartBrainLib, GeckoLib, KubeJS Curios);
+  - 7 модов по запросу (GAG, Building Gadgets 2, FTB Pack Companion, Shrink,
+    StarbuncleMania, Tempad, Chipped).
+- По факту содержимого JAR: 63 172 ключа в русских файлах готовых JAR — каждый ключ
+  внутри одного JAR считается один раз, файлы-дубли цифру не раздувают. Цифры
+  пересчитывает `scripts/update_readme_stats.py` из самих JAR.
+- Справочники дополнений тоже переведены: книги Patchouli у Modular Routers (61 файл),
+  Industrial Foregoing (80 файлов), PetRock (10 файлов) и общая книга RFTools
+  в четырёх JAR (82 файла), гайд GuideME у Energy Meter (2 страницы).
+
+**Последние шаги**
+
+- Последним закрыт **ImmersiveEngineering**: lang — 1952 из 1952 ключей, мануал — 114 из 114 файлов.
+- После тестового релиза: допереведён Collapsible Groups, пересобраны JAR с повреждённым
+  английским, исправлена красная строка брони Ars Elemental, пропатчен экран настроек JEI у Carbon Config.
+- По замечаниям из игры (12 пунктов): переведены все 895 названий групп Collapsible Groups;
+  книгам Oracle Index у Irregular Implements и MFFS возвращён русский; в четвёртую волну
+  добавлены TipsMod, Belts, Crystalix, Schematic Energistics и Supplementaries;
+  имена материалов JustDireThings и JustDynaThings переведены по смыслу.
+
+Подробнее — в
+[`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md).
 
 <details>
 <summary><b>Первая волна — 38 готовых JAR, 16 511 ключей (готово 38 из 38)</b></summary>
@@ -400,8 +406,9 @@ Forest (2 061 ключ).
 Порядок — по зависимостям, кластерами: сначала AE2 целиком, затем Refined
 Storage, Iron's Spells, ftb-materials, Replication с мостами и одиночки;
 последним — ImmersiveEngineering с собственным мануалом (114 файлов).
-Внутренние гайды переведены отдельным подэтапом после lang: GuideME — 227
-страниц, книга Iron's Spellbooks и книги на lang-ключах у кулинарных аддонов.
+Внутренние гайды переведены отдельным подэтапом после lang: GuideME — 224
+страницы, книга Iron's Spellbooks и книги на lang-ключах у кулинарных аддонов.
+Точный порядок модов внутри кластеров — по строкам таблицы ниже.
 
 Документы волны: аудит выполнен целиком и до начала перевода —
 [`AUDIT_WAVE4_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/AUDIT_WAVE4_2026-10-13.md) (объём, качество
@@ -572,7 +579,7 @@ baubley-heart-canisters → routers → stonechest → repeatable_trial_vaults.
 
 | Готовый JAR | Ключей lang | Было в `ru_ru` | Книги и гайды | Что сделано |
 |---|---:|---:|---|---|
-| `Axiom-6.1.3-for-MC1.21.1.jar` | 1 234 | 0 (файла не было) | гайдов нет; обучение — ключи `axiom.tutorial` в lang | Полный перевод с нуля по `en_us`: инструменты редактора и строительные инструменты, UI редактора, конфиг, клавиши, обучение (16 ключей), история операций. В JAR добавлен `ru_ru.json`, а также пропатчены классы со строками, зашитыми в коде вне lang: мастер первого запуска, советы при входе, серверные уведомления, причины отключения, экран панелей и 325 подписей окон редактора ImGui (56 классов; ID виджетов, демо Style Editor и примеры кода не тронуты); отключена перезапись русского перевода внешними локализациями Weblate, которые Axiom скачивает поверх JAR: сверка: от исходника отличаются только добавленный `ru_ru.json` и 62 пропатченных класса из 6 371 записи |
+| `Axiom-6.1.3-for-MC1.21.1.jar` | 1 234 | 0 (файла не было) | гайдов нет; обучение — ключи `axiom.tutorial` в lang | Полный перевод с нуля по `en_us`: инструменты редактора и строительные инструменты, UI редактора, конфиг, клавиши, обучение (16 ключей), история операций. В JAR добавлен `ru_ru.json`, а также пропатчены классы со строками, зашитыми в коде вне lang: мастер первого запуска, советы при входе, серверные уведомления, экран панелей и подписи окон редактора ImGui (ID виджетов, демо Style Editor и примеры кода не тронуты); отключена перезапись русского перевода внешними локализациями Weblate, которые Axiom скачивает поверх JAR. Повторный аудит 2026-10-15 (все строки классов и подписей ImGui) доперевёл оставшиеся отображаемые литералы; сверка: от исходника отличаются только добавленный `ru_ru.json` и 83 пропатченных класса из 6 371 записи |
 
 → [папка категории](Проекты/%D0%9E%D1%82%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%BE%D0%B4%D1%8B/)
 

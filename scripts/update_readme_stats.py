@@ -64,7 +64,7 @@ def apply_rules(text, st, fname):
     rules = []
     if fname == 'README.md':
         rules = [
-            (r'(Модов%20готово-)\d+', r'\g<1>' + str(st['total_jars'])),
+            (r'(%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-)\d+', r'\g<1>' + str(st['total_jars'])),
             (r'(%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-)[\d%20]+',
              lambda m: m.group(1) + str(st['total_keys'])),
             (r'<summary><b>StoneBlock 4</b> — сборка целиком: [^<]*</summary>',
@@ -125,6 +125,13 @@ def validate(text, st, fname):
                 problems.append(
                     f"сводная таблица волн: сумма {sum(rows)} и итог {m.group(2)} "
                     f"не равны числу готовых JAR ({st['sb_jars']})")
+    if fname == 'RELEASE_CONTENTS.md':
+        missing = [os.path.basename(p) for p in jars(SB4)
+                   if os.path.basename(p) not in text]
+        if missing:
+            problems.append(
+                'в составе перевода не упомянуты готовые JAR: '
+                + ', '.join(missing))
     return problems
 
 
