@@ -10923,5 +10923,469 @@
  "task.7B71A001741520D3.title": [
   "s",
   "&eУбейте&f: 10x Визер-скелетов"
+ ],
+ "reward.00EC1162EB842D86.title": [
+  "s",
+  "Юг Пустоты"
+ ],
+ "reward.042C6860A26F6057.title": [
+  "s",
+  "Запад Края"
+ ],
+ "reward.053BB94B773511FC.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.07015FDD343B3E88.title": [
+  "s",
+  "Лук виверны"
+ ],
+ "reward.07FDE2A45E2F6200.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.08099C03B0628B39.title": [
+  "s",
+  "Юг Незера"
+ ],
+ "reward.0BED496C8D68C629.title": [
+  "s",
+  "Хаотичная Лопата"
+ ],
+ "reward.0D23EB824CB0A0C2.title": [
+  "s",
+  "Восток Пустоты"
+ ],
+ "reward.0F2B93D49D8DA760.title": [
+  "s",
+  "Вейпоинт архива Змеетворца"
+ ],
+ "reward.12C21B2BC1C5906A.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.13B35A67AAF5C0DF.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.15B421B3ACE269E3.title": [
+  "s",
+  "Север Края"
+ ],
+ "reward.16061432FA49EE66.title": [
+  "s",
+  "Хаотичный Меч"
+ ],
+ "reward.1A219FE0647ED732.title": [
+  "s",
+  "Топор виверны"
+ ],
+ "reward.1A2533930620554A.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.1ADD62DBE8217E40.title": [
+  "s",
+  "Драконья Лопата"
+ ],
+ "reward.1B215A9431DBAF6F.title": [
+  "s",
+  "Лопата виверны"
+ ],
+ "reward.1EA85DCE2A9227C3.title": [
+  "s",
+  "Юг Края"
+ ],
+ "reward.1F113E78DDABE6A6.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.1FC0E512CB219EE5.title": [
+  "s",
+  "Хаотичный Топор"
+ ],
+ "reward.1FEFB160C37A91D4.title": [
+  "s",
+  "Вейпоинт архива Интенданта"
+ ],
+ "reward.20DD8D5AAA044A24.title": [
+  "s",
+  "Меч виверны"
+ ],
+ "reward.238A2E2AEE1B8D6A.title": [
+  "s",
+  "Вейпоинт архива Сгибателя света"
+ ],
+ "reward.2392A43EE7851C85.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.24582F4B1C3E7E1F.title": [
+  "s",
+  "Вейпоинт Сумеречного архива"
+ ],
+ "reward.266BE24BD00654A1.title": [
+  "s",
+  "Хаотичный Лук"
+ ],
+ "reward.27EBCAD2651AD138.title": [
+  "s",
+  "Север Пустоты"
+ ],
+ "reward.2A85D0C9269D0EE5.title": [
+  "s",
+  "Вейпоинт Инфернального архива"
+ ],
+ "reward.2AA4A91EF3A6EE48.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.2B0BC74A9E61D881.title": [
+  "s",
+  "Драконий конденсатор"
+ ],
+ "reward.2CA4C34FFD72EA33.title": [
+  "s",
+  "Восток Сумерек"
+ ],
+ "reward.2D7E2A69C45D8ABD.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.2E85DC3CE143BC3A.title": [
+  "s",
+  "Компас хранилища Машиниста"
+ ],
+ "reward.31A55C1C7979AC74.title": [
+  "s",
+  "Восток Края"
+ ],
+ "reward.31B152CBB7E9CDAD.title": [
+  "s",
+  "Запад Незера"
+ ],
+ "reward.3322D2E72CD06BE1.title": [
+  "s",
+  "Телепортер Mekanism"
+ ],
+ "reward.338E0593C527D311.title": [
+  "s",
+  "Набор Мицелиального реактора"
+ ],
+ "reward.37851CF3F949515A.title": [
+  "s",
+  "Юг Сумерек"
+ ],
+ "reward.397185875416F4D2.title": [
+  "s",
+  "Запад Океана"
+ ],
+ "reward.39A9BA8313470A5D.title": [
+  "s",
+  "Вейпоинт архива Катализатора"
+ ],
+ "reward.3CC21684802E95E5.title": [
+  "s",
+  "Кирка виверны"
+ ],
+ "reward.3E2DC10E8591B9CC.title": [
+  "s",
+  "Конденсатор виверны"
+ ],
+ "reward.3FBE85B391697AA3.title": [
+  "s",
+  "Восток Океана"
+ ],
+ "reward.419A1C4D9279BF50.title": [
+  "s",
+  "Восток Незера"
+ ],
+ "reward.476F60C6DEB324A9.title": [
+  "s",
+  "Драконий лук"
+ ],
+ "reward.495DF49EBBF0B77D.title": [
+  "s",
+  "Благословение земли 5"
+ ],
+ "reward.4A3B5AA97272B2D2.title": [
+  "s",
+  "Драконий топор"
+ ],
+ "reward.4CF243911064BB93.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.4EDE4462114C77EE.title": [
+  "s",
+  "Север Глубинного сланца"
+ ],
+ "reward.4F0943ED6ECF70E6.title": [
+  "s",
+  "Восток Глубинного сланца"
+ ],
+ "reward.53ECA21ACDF436DD.title": [
+  "s",
+  "Вейпоинт архива Машиниста"
+ ],
+ "reward.54DC27E90D2295BC.title": [
+  "s",
+  "Добыча 8"
+ ],
+ "reward.55FBD183C62F244F.title": [
+  "s",
+  "Север Незера"
+ ],
+ "reward.58419DD95D235FD7.title": [
+  "s",
+  "Хаотичный Нагрудник"
+ ],
+ "reward.594E158A9C86929B.title": [
+  "s",
+  "&aГлиф уровня 1"
+ ],
+ "reward.59AD0E3C98FC5EA2.title": [
+  "s",
+  "Запад Пустоты"
+ ],
+ "reward.59E384F5A05211FC.title": [
+  "s",
+  "Юг Глубинного сланца"
+ ],
+ "reward.5BAED70596AA3D1B.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.5EE4C3B77DCAD15A.title": [
+  "s",
+  "{\"translate\": \"ftb.shop.notification\"}"
+ ],
+ "reward.5FEC6723B0F40A00.title": [
+  "s",
+  "Вейпоинт архива Чародея"
+ ],
+ "reward.60A493A83705E5C6.title": [
+  "s",
+  "Вейпоинт Древнего архива"
+ ],
+ "reward.632965F5B615FA8D.title": [
+  "s",
+  "Термоядерный реактор"
+ ],
+ "reward.64CB075D188C05CC.title": [
+  "s",
+  "Юг Океана"
+ ],
+ "reward.68F8EBD48743037D.title": [
+  "s",
+  "Набор простых телепортеров"
+ ],
+ "reward.693E7161A63AA8E7.title": [
+  "s",
+  "Хаотичная Кирка"
+ ],
+ "reward.694311419C81AF7D.title": [
+  "s",
+  "Реактор (Нитро)"
+ ],
+ "reward.6A0011BF8C25D4FA.title": [
+  "s",
+  "Драконий меч"
+ ],
+ "reward.6A7A635D5039E00E.title": [
+  "s",
+  "Запад Глубинного сланца"
+ ],
+ "reward.6AA784677A036A36.title": [
+  "s",
+  "Драконья Кирка"
+ ],
+ "reward.6AE5675C3DAAB1D9.title": [
+  "s",
+  "Север Океана"
+ ],
+ "reward.6B56D274F5BC5918.title": [
+  "s",
+  "&3Компас хранилища Сгибателя света"
+ ],
+ "reward.6B6E3D9E6F38918E.title": [
+  "s",
+  "&dГлиф уровня 3"
+ ],
+ "reward.6E2831AAACB7E9AD.title": [
+  "s",
+  "Драконий нагрудник"
+ ],
+ "reward.70BC62F1A67B859F.title": [
+  "s",
+  "Свиток амулета защиты"
+ ],
+ "reward.729901F3863D27E4.title": [
+  "s",
+  "Вейпоинт архива Изготовителя"
+ ],
+ "reward.72FFFB11B65A0DF3.title": [
+  "s",
+  "Хаотичный конденсатор"
+ ],
+ "reward.742CB3E07E4CCEB1.title": [
+  "s",
+  "&bГлиф уровня 2"
+ ],
+ "reward.7459FD34B6687F30.title": [
+  "s",
+  "Руководство телепада"
+ ],
+ "reward.747CED69FCED45E8.title": [
+  "s",
+  "Вейпоинт архива Мага"
+ ],
+ "reward.7834CF7F86C29EE0.title": [
+  "s",
+  "Север Сумерек"
+ ],
+ "reward.798A5012C244EC87.title": [
+  "s",
+  "Вейпоинт архива Следопыта"
+ ],
+ "reward.7AA9A619B211B53A.title": [
+  "s",
+  "Нагрудник виверны"
+ ],
+ "reward.7DB306ACACBC5FA3.title": [
+  "s",
+  "Запад Сумерек"
+ ],
+ "reward_table.01A8F0EB2209A24F.title": [
+  "s",
+  "Базовое драконье снаряжение"
+ ],
+ "reward_table.0C5DDA99EE8027D3.title": [
+  "s",
+  "Дары камня"
+ ],
+ "reward_table.1320ECC4666318A7.title": [
+  "s",
+  "Глифы"
+ ],
+ "reward_table.135B4037C1A40D88.title": [
+  "s",
+  "Аддоны рюкзака"
+ ],
+ "reward_table.16E7488E801B3DAA.title": [
+  "s",
+  "Драконье снаряжение виверны"
+ ],
+ "reward_table.1892AD44EB5DD99D.title": [
+  "s",
+  "Хаотичное драконье снаряжение"
+ ],
+ "reward_table.1D31E6EC121FF83B.title": [
+  "s",
+  "Пробуждённое драконье снаряжение"
+ ],
+ "reward_table.1DA364008CA08643.title": [
+  "s",
+  "Снаряжение Iron's"
+ ],
+ "reward_table.20D1BF16232BD665.title": [
+  "s",
+  "Источники RF"
+ ],
+ "reward_table.21A38B78E82935CD.title": [
+  "s",
+  "Модели данных"
+ ],
+ "reward_table.28714053C75776A5.title": [
+  "s",
+  "Высшая реликвия исследования"
+ ],
+ "reward_table.2CB2563E52E0EEFC.title": [
+  "s",
+  "Великая боевая реликвия"
+ ],
+ "reward_table.2F1621E7D65D48A1.title": [
+  "s",
+  "Базовый ванильный ресурс"
+ ],
+ "reward_table.30F4E308726EB2AD.title": [
+  "s",
+  "Телепортеры"
+ ],
+ "reward_table.3621231FD4F80730.title": [
+  "s",
+  "Улучшение сундука"
+ ],
+ "reward_table.37F7F856288632A7.title": [
+  "s",
+  "Высшие боевые реликвии"
+ ],
+ "reward_table.3FFF5862073B3D97.title": [
+  "s",
+  "Осколки — Океан"
+ ],
+ "reward_table.54091F8A76F9E488.title": [
+  "s",
+  "Драконье снаряжение"
+ ],
+ "reward_table.5529BA88A208797B.title": [
+  "s",
+  "Осколки — Край"
+ ],
+ "reward_table.56235F58490C3C41.title": [
+  "s",
+  "Малая боевая реликвия"
+ ],
+ "reward_table.5C5A40864844587A.title": [
+  "s",
+  "Осколки — Пустота"
+ ],
+ "reward_table.5E58BEB7F462AA87.title": [
+  "s",
+  "Аддоны усовершенствованного сундука"
+ ],
+ "reward_table.6105D334632923AE.title": [
+  "s",
+  "Осколки — Сумерки"
+ ],
+ "reward_table.61FD9A6CC07465C1.title": [
+  "s",
+  "Случайная печь"
+ ],
+ "reward_table.657A949F0952B7D4.title": [
+  "s",
+  "Осколки — Незер"
+ ],
+ "reward_table.6835AC5E14D58A8C.title": [
+  "s",
+  "Великая реликвия исследования"
+ ],
+ "reward_table.6B1481D18D7F1F24.title": [
+  "s",
+  "Осколки — Глубинный сланец"
+ ],
+ "reward_table.6B9058CED94B574F.title": [
+  "s",
+  "Дар камешков"
+ ],
+ "reward_table.70ADF260F7A38A21.title": [
+  "s",
+  "Мицелиальный RF"
+ ],
+ "reward_table.73C257EFB0D405CE.title": [
+  "s",
+  "Снаряжение ProjectE"
+ ],
+ "reward_table.790A03E65CE8EBE4.title": [
+  "s",
+  "Бабушкино угощение"
+ ],
+ "reward_table.7CDA9FD69979A8C9.title": [
+  "s",
+  "Фолианты Апофеоза"
+ ],
+ "reward_table.7D0A27C985829037.title": [
+  "s",
+  "Малая реликвия исследования"
  ]
 }
