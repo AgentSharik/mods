@@ -106,7 +106,7 @@ mods/
 - [ ] Технологии (General Tech) — 0/133
 - [x] Обработка и автоматизация (Logistics & Automation) — 33/33
 - [ ] Хранение (Storage) — 0/222
-- [ ] Магия (Magic) — 0/149
+- [x] Магия (Magic) — 149/149 ✓
 - [ ] Mekanism — 0/42
 - [ ] Oritech — 0/46
 - [ ] Исследования и бой (Exploration) — 0/65
