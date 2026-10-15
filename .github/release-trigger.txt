@@ -1,2 +1,2 @@
 StoneBlock4-ru-v1.1.4
-# перевыпуск: ссылки книги Psi (invalid link fix)
+# перевыпуск: ALT Psi + экран Ars Affinity
