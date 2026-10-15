@@ -16,6 +16,7 @@ on:
     paths:
       - '.github/workflows/release-stoneblock4.yml'
       - 'Проекты/StoneBlock 4/документация/release/УСТАНОВКА.txt'
+      - 'Проекты/StoneBlock 4/документация/release/kubejs/**'
 
 permissions:
   contents: write
