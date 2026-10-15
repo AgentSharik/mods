@@ -1,0 +1,207 @@
+{
+	autofocus_id: "2F15D918EF183051"
+	default_hide_dependency_lines: false
+	default_min_width: 250
+	default_quest_shape: ""
+	filename: "welcome"
+	group: ""
+	icon: {
+		components: {
+			"minecraft:custom_data": {
+				BaseBlock: "air"
+				Name: ""
+				OffsetY: 0.0d
+				Scale: 4.0d
+				TrophyItem: {
+					id: "ftb:stone_pebble"
+				}
+				TrophyType: "item"
+			}
+		}
+		id: "trophymanager:trophy"
+	}
+	id: "1C63D973F178FD60"
+	images: [
+		{
+			alpha: 50
+			color: 0
+			height: 2.5d
+			id: "57C8A8C176F876F5"
+			image: "ftbquests:textures/shapes/hexagon/shape.png"
+			rotation: 0.0d
+			width: 2.5d
+			x: -1.5d
+			y: -1.0d
+		}
+		{
+			click_action: "open_uri:https://discord.com/invite/X5UGvBs"
+			height: 1.0d
+			id: "58FB752DEB6896EA"
+			image: "ftbpc:textures/gui/discord.png"
+			rotation: 0.0d
+			width: 1.0d
+			x: -3.0d
+			y: 2.5d
+		}
+		{
+			click_action: "open_uri:https://github.com/FTBTeam/FTB-Modpack-Issues/issues"
+			height: 1.0d
+			id: "1B8538AADE27E44F"
+			image: "ftbquests:textures/gui/alert.png"
+			rotation: 0.0d
+			width: 1.0d
+			x: 0.0d
+			y: 2.5d
+		}
+		{
+			height: 5.0d
+			id: "504BC077997FFBC8"
+			image: "ftb:textures/quests/other_titles_and_logos/sb4_logo.png"
+			rotation: 0.0d
+			width: 13.8d
+			x: -1.5d
+			y: -4.5d
+		}
+		{
+			click_action: "open_uri:https://discord.gg/9GWKBVw3Ty"
+			height: 1.0d
+			id: "68D43CA65BE4BA75"
+			image: "ftb:textures/quests/other_titles_and_logos/discord.png"
+			rotation: 0.0d
+			width: 1.0d
+			x: -4.0d
+			y: 4.0d
+		}
+		{
+			click_action: "open_uri:https://t.me/BMProjects"
+			height: 1.0d
+			id: "1AB52F1E1DC21ACC"
+			image: "ftb:textures/quests/other_titles_and_logos/telegram.png"
+			rotation: 0.0d
+			width: 1.0d
+			x: -2.5d
+			y: 5.5d
+		}
+		{
+			click_action: "open_uri:https://github.com/BMProjects-Development"
+			height: 1.0d
+			id: "63556C62E86FCC1D"
+			image: "ftb:textures/quests/other_titles_and_logos/github.png"
+			rotation: 0.0d
+			width: 1.0d
+			x: -0.5d
+			y: 5.5d
+		}
+		{
+			click_action: "open_uri:https://boosty.to/barmaxx"
+			height: 1.0d
+			id: "32005205900401C8"
+			image: "ftb:textures/quests/other_titles_and_logos/boosty.png"
+			rotation: 0.0d
+			width: 1.0d
+			x: 1.0d
+			y: 4.0d
+		}
+	]
+	order_index: 0
+	quest_links: [ ]
+	quests: [
+		{
+			icon: {
+				components: {
+					"minecraft:custom_data": {
+						BaseBlock: "air"
+						Name: ""
+						OffsetY: 0.0d
+						Scale: 4.0d
+						TrophyItem: {
+							id: "ftb:stone_pebble"
+						}
+						TrophyType: "item"
+					}
+				}
+				id: "trophymanager:trophy"
+			}
+			id: "2F15D918EF183051"
+			min_width: 300
+			rewards: [{
+				id: "125B5DADB9F2436C"
+				type: "xp"
+				xp: 10
+			}]
+			shape: "hexagon"
+			size: 2.0d
+			tasks: [{
+				id: "5434F149E894EFA6"
+				type: "checkmark"
+			}]
+			x: -1.5d
+			y: -1.0d
+		}
+		{
+			icon: {
+				components: {
+					"ftbquests:icon": "ftblibrary:icons/notes"
+				}
+				id: "ftbquests:custom_icon"
+			}
+			id: "77FC846DC0EF4ED2"
+			min_width: 350
+			rewards: [{
+				id: "7F17B8B0FADD1AB7"
+				type: "xp"
+				xp: 5
+			}]
+			shape: "rsquare"
+			tasks: [{
+				id: "2988CAF299690CDB"
+				type: "checkmark"
+			}]
+			x: -3.5d
+			y: 0.0d
+		}
+		{
+			icon: {
+				components: {
+					"ftbquests:icon": "ftblibrary:textures/gui/missing_image.png"
+				}
+				id: "ftbquests:custom_icon"
+			}
+			id: "2B02D9425E19F560"
+			rewards: [{
+				id: "6EF52BA195B2C10C"
+				type: "xp"
+				xp: 5
+			}]
+			shape: "rsquare"
+			tasks: [{
+				id: "519E1F80092719D1"
+				type: "checkmark"
+			}]
+			x: 0.5d
+			y: 0.0d
+		}
+		{
+			icon: {
+				components: {
+					"ftbquests:icon": "ftbteams:textures/teams.png"
+				}
+				id: "ftbquests:custom_icon"
+			}
+			id: "261B2184A4839741"
+			rewards: [{
+				id: "613A44B867ED7006"
+				team_reward: false
+				type: "xp"
+				xp: 5
+			}]
+			shape: "rsquare"
+			tasks: [{
+				id: "035C4884AAC6C3AB"
+				type: "checkmark"
+			}]
+			x: -1.5d
+			y: 1.0d
+		}
+	]
+}
