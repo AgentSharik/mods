@@ -37,10 +37,16 @@ jobs:
           mkdir -p pkg/mods pkg/config/ftbquests/quests/lang
           cp "$SB4"/*.jar pkg/mods/
           cp "$SB4/документация/_ftbquests_wip/ru_ru.snbt" pkg/config/ftbquests/quests/lang/ru_ru.snbt
+          mkdir -p pkg/kubejs
+          cp -r "$SB4/документация/release/kubejs/." pkg/kubejs/
           cp "$SB4/документация/release/УСТАНОВКА.txt" pkg/
           echo "JAR в архиве: $(ls pkg/mods/*.jar | wc -l)"
+          echo "Файлов kubejs в архиве: $(find pkg/kubejs -type f | wc -l)"
+          test -f pkg/kubejs/assets/ftb/lang/ru_ru.json
           cd pkg
           zip -0 -q -r ../StoneBlock.4.zip .
+          unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/lang/ru_ru.json"
+          echo "Проверка: kubejs/assets/ftb/lang/ru_ru.json присутствует в архиве"
           cd ..
           ls -la StoneBlock.4.zip
 
