@@ -1,0 +1,45 @@
+name: Build release archive
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Тег существующего релиза (черновика), куда приложить архив"
+        required: true
+        default: "StoneBlock4-ru-v1.1.4"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Assemble archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          SB4="Проекты/StoneBlock 4"
+          DOC="$SB4/документация"
+          mkdir -p staging/mods staging/config/ftbquests/quests/lang staging/config/collapsiblegroups/lang
+          cp "$SB4"/*.jar staging/mods/
+          cp "$DOC/_ftbquests_wip/ru_ru.snbt" staging/config/ftbquests/quests/lang/
+          cp "$DOC/release/config/collapsiblegroups/lang/ru_ru.json" staging/config/collapsiblegroups/lang/
+          cp -r "$DOC/release/kubejs" staging/
+          cp "$DOC/release/УСТАНОВКА.txt" staging/
+          ls staging/mods | wc -l
+          cd staging && zip -qr ../StoneBlock.4.zip . && cd ..
+          ls -la StoneBlock.4.zip
+
+      - name: Upload asset and publish release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          gh release upload "$TAG" StoneBlock.4.zip --clobber
+          gh release edit "$TAG" --draft=false
+          gh release view "$TAG" --json assets --jq '.assets[] | .name + " " + (.size|tostring)'
