@@ -69,7 +69,7 @@ def apply_rules(text, st, fname):
              lambda m: m.group(1) + str(st['total_keys'])),
             (r'<summary><b>StoneBlock 4</b> — сборка целиком: [^<]*</summary>',
              f"<summary><b>StoneBlock 4</b> — сборка целиком: {st['sb_jars']} готовых JAR, "
-             f"{fmt(st['sb_keys'])} ключей; все четыре волны закрыты</summary>"),
+             f"{fmt(st['sb_keys'])} ключей; все четыре волны закрыты, ведётся перевод квестов сборки</summary>"),
             (r'\*\*Моды из сборки\*\* — [^\n]*',
              f"**Моды из сборки** — {st['sb_jars']} готовых JAR, перевод идёт волнами, "
              f"каждый мод доводится до конца отдельно."),
