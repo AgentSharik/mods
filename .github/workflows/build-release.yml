@@ -1,12 +1,17 @@
 name: Build release archive
 
 on:
+  push:
+    branches:
+      - arena/88cc25d2-mods
+    paths:
+      - ".github/release-trigger.txt"
   workflow_dispatch:
     inputs:
       tag:
         description: "Тег существующего релиза (черновика), куда приложить архив"
-        required: true
-        default: "StoneBlock4-ru-v1.1.4"
+        required: false
+        default: ""
 
 jobs:
   build:
@@ -16,6 +21,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Resolve tag
+        id: tag
+        shell: bash
+        run: |
+          TAG="${{ inputs.tag }}"
+          if [ -z "$TAG" ]; then TAG=$(head -n1 .github/release-trigger.txt | tr -d '[:space:]'); fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Релиз: $TAG"
 
       - name: Assemble archive
         shell: bash
@@ -29,7 +43,7 @@ jobs:
           cp "$DOC/release/config/collapsiblegroups/lang/ru_ru.json" staging/config/collapsiblegroups/lang/
           cp -r "$DOC/release/kubejs" staging/
           cp "$DOC/release/УСТАНОВКА.txt" staging/
-          ls staging/mods | wc -l
+          echo "JAR в архиве: $(ls staging/mods | wc -l)"
           cd staging && zip -qr ../StoneBlock.4.zip . && cd ..
           ls -la StoneBlock.4.zip
 
@@ -37,7 +51,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ inputs.tag }}
+          TAG: ${{ steps.tag.outputs.tag }}
         run: |
           set -euo pipefail
           gh release upload "$TAG" StoneBlock.4.zip --clobber
