@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.3'
+        default: 'StoneBlock4-ru-v1.1.4'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -26,7 +26,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.3' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.4' }}
     steps:
       - uses: actions/checkout@v4
 
