@@ -3,12 +3,14 @@
 Опубликован: https://github.com/AgentSharik/mods/releases/tag/StoneBlock4-ru-v1.1.0
 
 ## Ассеты
-- `StoneBlock.4.zip` (509 МиБ) — 182 переведённых JAR в `mods/` +
-  `config/ftbquests/quests/lang/ru_ru.snbt` (квесты FTB 2523/2523) +
-  УСТАНОВКА.txt + RELEASE_CONTENTS.md
-- `StoneBlock.4.sha256.txt` — sha256 архива
-- `RELEASE_CONTENTS.md` — состав перевода отдельным файлом (добавлен после замечания, что в первой публикации релиза он отсутствовал среди ассетов)
-- `Axiom-6.1.3-for-MC1.21.1.jar` — отдельным файлом (не переводится)
+- `StoneBlock.4.zip` (509 МиБ) — единственный файл релиза: 182 переведённых JAR
+  в `mods/` + `config/ftbquests/quests/lang/ru_ru.snbt` (квесты FTB 2523/2523) +
+  УСТАНОВКА.txt
+
+Состав перевода (`RELEASE_CONTENTS.md`) в релиз не входит — он лежит в
+документации проекта (`Проекты/StoneBlock 4/документация/`), и описание релиза
+ссылается на него. Axiom и sha256 из релиза убраны по указанию пользователя
+(Axiom к сборке StoneBlock 4 не относится).
 
 ## Отличия от v1.0.0
 - 182 JAR вместо 168 (новые моды после снимка v1.0.0)

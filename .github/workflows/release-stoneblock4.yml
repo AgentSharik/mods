@@ -36,12 +36,10 @@ jobs:
           cp "$SB4"/*.jar pkg/mods/
           cp "$SB4/документация/_ftbquests_wip/ru_ru.snbt" pkg/config/ftbquests/quests/lang/ru_ru.snbt
           cp "$SB4/документация/release/УСТАНОВКА.txt" pkg/
-          cp "$SB4/документация/RELEASE_CONTENTS.md" pkg/СОСТАВ_ПЕРЕВОДА.md
           echo "JAR в архиве: $(ls pkg/mods/*.jar | wc -l)"
           cd pkg
           zip -0 -q -r ../StoneBlock.4.zip .
           cd ..
-          sha256sum StoneBlock.4.zip > StoneBlock.4.sha256.txt
           ls -la StoneBlock.4.zip
 
       - name: Upload assets to release
@@ -50,10 +48,7 @@ jobs:
         run: |
           set -euo pipefail
           gh release upload "$RELEASE_TAG" --clobber \
-            StoneBlock.4.zip \
-            StoneBlock.4.sha256.txt \
-            "Проекты/StoneBlock 4/документация/RELEASE_CONTENTS.md" \
-            "Проекты/Отдельные моды/Axiom-6.1.3-for-MC1.21.1.jar"
+            StoneBlock.4.zip
 
       - name: Publish release
         env:
