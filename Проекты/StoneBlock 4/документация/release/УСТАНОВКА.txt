@@ -2,8 +2,10 @@ StoneBlock 4 — русская локализация v1.1.3
 ============================================
 
 Состав архива:
-  mods\     — 182 переведённых JAR-файла модов сборки
-  config\   — перевод квестов FTB Quests (ru_ru.snbt)
+  mods\     — 195 переведённых JAR-файлов модов сборки
+  config\   — перевод квестов FTB Quests (ru_ru.snbt) и русские названия
+             групп Collapsible Groups (collapsiblegroups\lang\ru_ru.json)
+  kubejs\   — имена Эхо и русское руководство FTB
 
 Установка
 ---------
@@ -15,6 +17,8 @@ StoneBlock 4 — русская локализация v1.1.3
    папки mods и config), соглашаясь на слияние папок. Файл перевода
    квестов встанет на место:
    config\ftbquests\quests\lang\ru_ru.snbt
+   Вместе с ним встанут русские названия групп JEI:
+   config\collapsiblegroups\lang\ru_ru.json
 5. Скопируйте папку kubejs архива в корень экземпляра сборки (где лежат
    папки mods и kubejs), соглашаясь на слияние папок и замену файлов:
    kubejs\assets\ftb\lang\ru_ru.json и страницы руководства _ru_ru

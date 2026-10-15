@@ -18,6 +18,7 @@ on:
       - '.github/workflows/release-stoneblock4.yml'
       - 'Проекты/StoneBlock 4/документация/release/УСТАНОВКА.txt'
       - 'Проекты/StoneBlock 4/документация/release/kubejs/**'
+      - 'Проекты/StoneBlock 4/документация/release/config/**'
 
 permissions:
   contents: write
@@ -37,6 +38,9 @@ jobs:
           mkdir -p pkg/mods pkg/config/ftbquests/quests/lang
           cp "$SB4"/*.jar pkg/mods/
           cp "$SB4/документация/_ftbquests_wip/ru_ru.snbt" pkg/config/ftbquests/quests/lang/ru_ru.snbt
+          mkdir -p pkg/config/collapsiblegroups/lang
+          cp "$SB4/документация/release/config/collapsiblegroups/lang/ru_ru.json" pkg/config/collapsiblegroups/lang/ru_ru.json
+          test -f pkg/config/collapsiblegroups/lang/ru_ru.json
           mkdir -p pkg/kubejs
           cp -r "$SB4/документация/release/kubejs/." pkg/kubejs/
           cp "$SB4/документация/release/УСТАНОВКА.txt" pkg/
