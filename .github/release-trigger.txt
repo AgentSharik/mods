@@ -1,2 +1,2 @@
 StoneBlock4-ru-v1.1.4
-# перевыпуск: глубокий проход (EnderDrives, Moonlight, тома Ars)
+# перевыпуск: контрольный проход GUI/меню (58 JAR)
