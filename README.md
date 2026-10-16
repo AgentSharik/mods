@@ -236,6 +236,7 @@ RELEASE_CONTENTS у соответствующего мода.
   | Файл | О чём |
   |---|---|
   | [`JOURNAL_WAVE19_CHANCECUBES_PSI_2026-10-15.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/JOURNAL_WAVE19_CHANCECUBES_PSI_2026-10-15.md) | Волна 19: Chance Cubes и Psi глубоко, замечания 2026-10-15, история и правило релизов |
+  | [`JOURNAL_WAVE20_NEW_MODS_2026-10-16.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/JOURNAL_WAVE20_NEW_MODS_2026-10-16.md) | Волна 20: новые моды из инстанса — Actually Additions, Draconic Evolution, малые моды, релиз v1.1.5 |
   | [`JOURNAL_FULL_AUDIT_2026-10-16.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/JOURNAL_FULL_AUDIT_2026-10-16.md) | Полный аудит всех модов: книги AdvancedPeripherals, mods.toml, GUI-строки классов; глубокий и контрольный проходы |
 
   </details>
