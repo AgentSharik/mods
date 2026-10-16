@@ -1,1 +1,2 @@
 StoneBlock4-ru-v1.1.5
+# пересборка: добавлены Brandon's Core и CodeChickenLib (220 JAR)
