@@ -1,2 +1,1 @@
-StoneBlock4-ru-v1.1.4
-# перевыпуск: контрольный проход GUI/меню (58 JAR)
+StoneBlock4-ru-v1.1.5
