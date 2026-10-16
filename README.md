@@ -38,7 +38,7 @@ mods/
 │   │   └── документация/              журналы и аудиты этой сборки
 │   └── Отдельные моды/                моды вне сборок
 ├── Исходные моды для перевода/    ← оригиналы, не изменяются
-├── scripts/                       патчеры классов (Ars Elemental, Carbon Config)
+├── scripts/                       патчеры классов, пересчёт счётчиков, служебные скрипты
 └── README.md
 ```
 
@@ -225,6 +225,13 @@ RELEASE_CONTENTS у соответствующего мода.
   | Файл | О чём |
   |---|---|
   | [`PROGRESS_FIXES_2026-10-13.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/PROGRESS_FIXES_2026-10-13.md) | Замечания по проверке в игре: MFFS, JEI, Collapsible Groups и пересборка 34 JAR с повреждённым английским |
+
+  **Волна 19, релизы и аудиты (октябрь 2026)**
+
+  | Файл | О чём |
+  |---|---|
+  | [`JOURNAL_WAVE19_CHANCECUBES_PSI_2026-10-15.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/JOURNAL_WAVE19_CHANCECUBES_PSI_2026-10-15.md) | Волна 19: Chance Cubes и Psi глубоко, замечания 2026-10-15, история и правило релизов |
+  | [`JOURNAL_FULL_AUDIT_2026-10-16.md`](%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B/StoneBlock%204/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/JOURNAL_FULL_AUDIT_2026-10-16.md) | Полный аудит всех модов: книги AdvancedPeripherals, mods.toml, GUI-строки классов; глубокий и контрольный проходы |
 
   </details>
 
