@@ -42,7 +42,6 @@ jobs:
           cp "$DOC/_ftbquests_wip/ru_ru.snbt" staging/config/ftbquests/quests/lang/
           cp "$DOC/release/config/collapsiblegroups/lang/ru_ru.json" staging/config/collapsiblegroups/lang/
           cp -r "$DOC/release/kubejs" staging/
-          cp "$DOC/release/StoneBlock4-RU-Protect.zip" staging/
           cp "$DOC/release/УСТАНОВКА.txt" staging/
           echo "JAR в архиве: $(ls staging/mods | wc -l)"
           cd staging && zip -qr ../StoneBlock.4.zip . && cd ..
