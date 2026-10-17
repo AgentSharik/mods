@@ -7,7 +7,7 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-222-4a7c3f?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-231-4a7c3f?style=flat-square)
 ![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-73570-2b6cb0?style=flat-square)
 ![В работе](https://img.shields.io/badge/%D0%92%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B5-0-b8862b?style=flat-square)
 
@@ -58,7 +58,7 @@ mods/
 ## Проекты
 
 <details>
-<summary><b>StoneBlock 4</b> — сборка целиком: 221 готовых JAR, 72 336 ключей; переведены гайды и книги всех видов, квесты, GUI и имена Эхо</summary>
+<summary><b>StoneBlock 4</b> — сборка целиком: 230 готовых JAR, 72 336 ключей; переведены гайды и книги всех видов, квесты, GUI и имена Эхо</summary>
 
 ### StoneBlock 4
 
@@ -112,7 +112,7 @@ mods/
 | Вне волн (пачка исправлений) | 1 | 224 | CarbonConfig |
 | Дополнения после релиза | 49 | 14 456 | моды вне состава сборки, библиотеки, моды по запросу и из инстанса пользователя |
 | Дополнения v1.1.4 (присланные моды) | 14 | 870 | LaserIO (с книгой), RGP Client, Trophy Manager, Item Collectors, Relics, reliquified×3 и библиотеки/сервисные моды как есть; сверх того обновлены уже учтённые Psi и Chance Cubes |
-| Дополнения v1.1.5 (новые моды) | 12 | 2 657 | Actually Additions (полностью, с буклетом), Draconic Evolution с зависимостями Brandon's Core и CodeChickenLib, Akashic Tome, AppleSkin, Dummmmmmy, Cosmetic Armor Reworked и библиотеки без текста (Glodium, Aaron, Accelerated Decay); Roost Ultimate — доперевод патча 4.1.0 поверх авторского русского |
+| Дополнения v1.1.5 (новые моды) | 21 | 2 657 | Actually Additions (полностью, с буклетом), Draconic Evolution с зависимостями Brandon's Core и CodeChickenLib, Akashic Tome, AppleSkin, Dummmmmmy, Cosmetic Armor Reworked и библиотеки без текста (Glodium, Aaron, Accelerated Decay); Roost Ultimate — доперевод патча 4.1.0 поверх авторского русского |
 | **Итого** | **221** | **72 336** | все четыре волны закрыты |
 
 Ключи в таблице — по текущему содержимому готовых JAR (уникальные ключи `ru_ru` внутри каждого JAR); после волн часть JAR дополучала ключи в пачках исправлений, поэтому цифры волн отличаются от промежуточных отчётов в журналах.
