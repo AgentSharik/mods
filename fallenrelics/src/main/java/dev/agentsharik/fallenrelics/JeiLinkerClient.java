@@ -78,8 +78,15 @@ public final class JeiLinkerClient {
         }
         double mouseX = minecraft.mouseHandler.xpos();
         double mouseY = minecraft.mouseHandler.ypos();
+        int left = screen.getLeft();
+        int top = screen.getTop();
         for (net.minecraft.world.inventory.Slot slot : screen.getMenu().slots) {
-            if (slot.hasItem() && slot.isMouseOver(mouseX, mouseY)) {
+            if (!slot.hasItem()) {
+                continue;
+            }
+            int slotX = left + slot.x;
+            int slotY = top + slot.y;
+            if (mouseX >= slotX && mouseX < slotX + 16 && mouseY >= slotY && mouseY < slotY + 16) {
                 return slot.getItem();
             }
         }
