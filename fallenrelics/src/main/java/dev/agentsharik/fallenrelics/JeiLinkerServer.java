@@ -39,7 +39,7 @@ public final class JeiLinkerServer {
 
     @SubscribeEvent
     public static void onChat(ServerChatEvent event) {
-        String raw = event.getRawMessage();
+        String raw = event.getMessage().getString();
         if (raw == null || !raw.contains(MARKER_PREFIX)) {
             return;
         }
@@ -59,7 +59,7 @@ public final class JeiLinkerServer {
                 continue;
             }
             result.append(Component.literal("[" + label + "]").withStyle(style -> style
-                    .withColor(stack.getRarity().color)
+                    .withColor(stack.getRarity().color())
                     .withClickEvent(new ClickEvent(
                             ClickEvent.Action.RUN_COMMAND,
                             "/fallenrelics jei_recipe " + id))
@@ -86,7 +86,7 @@ public final class JeiLinkerServer {
 
     private static int sendToClicker(CommandSourceStack source, ResourceLocation item) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
-        PacketDistributor.sendToPlayer(player, JeiRecipePayload.TYPE, new JeiRecipePayload(item));
+        PacketDistributor.sendToPlayer(player, new JeiRecipePayload(item));
         return 1;
     }
 }
