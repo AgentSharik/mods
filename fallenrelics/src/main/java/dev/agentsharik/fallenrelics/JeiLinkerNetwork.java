@@ -13,6 +13,11 @@ public final class JeiLinkerNetwork {
     @SubscribeEvent
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
+        registrar.playToServer(
+                LinkRegisterPayload.TYPE,
+                LinkRegisterPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(
+                        () -> JeiLinkerServer.registerToken(payload.token(), payload.stack())));
         if (net.neoforged.fml.loading.FMLLoader.getDist().isClient()) {
             registrar.playToClient(
                     JeiRecipePayload.TYPE,

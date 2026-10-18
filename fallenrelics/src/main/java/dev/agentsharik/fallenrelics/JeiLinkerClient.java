@@ -54,15 +54,36 @@ public final class JeiLinkerClient {
         if (!JeiLinkerJeiCalls.available()) {
             return;
         }
-        ItemStack stack = JeiLinkerJeiCalls.itemStackUnderMouse();
-        if (stack == null || stack.isEmpty()) {
+        ItemStack jeiStack = JeiLinkerJeiCalls.itemStackUnderMouse();
+        if (jeiStack != null && !jeiStack.isEmpty()) {
+            if (hasCraftingRecipe(minecraft, jeiStack)) {
+                minecraft.setScreen(new ChatScreen(buildMarker(jeiStack, false)));
+            } else {
+                JeiLinkerJeiCalls.searchFor(jeiStack);
+            }
             return;
         }
-        if (hasCraftingRecipe(minecraft, stack)) {
-            minecraft.setScreen(new ChatScreen(buildMarker(stack)));
-        } else {
-            JeiLinkerJeiCalls.searchFor(stack);
+        // WoW-style: hover a slot in any open container (inventory included) and
+        // link the exact stack, enchantments and all, without dropping it.
+        ItemStack slotStack = stackUnderMouseInContainer(minecraft);
+        if (slotStack != null) {
+            minecraft.setScreen(new ChatScreen(buildMarker(slotStack, true)));
         }
+    }
+
+    @org.jetbrains.annotations.Nullable
+    private static ItemStack stackUnderMouseInContainer(Minecraft minecraft) {
+        if (!(minecraft.screen instanceof net.minecraft.client.gui.screens.inventory.AbstractContainerScreen<?> screen)) {
+            return null;
+        }
+        double mouseX = minecraft.mouseHandler.xpos();
+        double mouseY = minecraft.mouseHandler.ypos();
+        for (net.minecraft.world.inventory.Slot slot : screen.getMenu().slots) {
+            if (slot.hasItem() && slot.isMouseOver(mouseX, mouseY)) {
+                return slot.getItem();
+            }
+        }
+        return null;
     }
 
     private static boolean hasCraftingRecipe(Minecraft minecraft, ItemStack stack) {
@@ -78,9 +99,17 @@ public final class JeiLinkerClient {
         return false;
     }
 
-    static String buildMarker(ItemStack stack) {
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        return JeiLinkerServer.MARKER_PREFIX + id + ">[" + stack.getHoverName().getString() + "]" + JeiLinkerServer.MARKER_SUFFIX;
+    static String buildMarker(ItemStack stack, boolean exactStack) {
+        String target;
+        if (exactStack) {
+            String token = java.util.UUID.randomUUID().toString();
+            net.neoforged.neoforge.network.PacketDistributor.sendToServer(
+                    new LinkRegisterPayload(token, stack.copy()));
+            target = "item:" + token;
+        } else {
+            target = "recipe:" + BuiltInRegistries.ITEM.getKey(stack.getItem());
+        }
+        return "<link:" + target + ">[" + stack.getHoverName().getString() + "]" + JeiLinkerServer.MARKER_SUFFIX;
     }
 
     /** Called from the network handler when somebody clicks a chat link. */

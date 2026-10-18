@@ -19,6 +19,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.ServerChatEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,11 +31,33 @@ import java.util.regex.Pattern;
 @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class JeiLinkerServer {
     /** Chat marker shared with the client side; a compile-time constant on both. */
-    public static final String MARKER_PREFIX = "<link:recipe:";
+    public static final String MARKER_PREFIX = "<link:";
     public static final String MARKER_SUFFIX = "</link>";
 
     private static final Pattern LINK = Pattern.compile(
-            "<link:recipe:([a-z0-9_.-]+:[a-z0-9_/.-]+)>\\[([^\\]]*)\\]</link>");
+            "<link:(recipe|item):([^>]+)>\\[([^\\]]*)\\]</link>");
+
+    /** Exact stacks registered behind item-link tokens, with an expiry stamp. */
+    private static final Map<String, TokenEntry> TOKEN_STACKS = new java.util.concurrent.ConcurrentHashMap<>();
+
+    private record TokenEntry(ItemStack stack, long expiresAt) {}
+
+    static void registerToken(String token, ItemStack stack) {
+        if (TOKEN_STACKS.size() > 512) {
+            long now = System.currentTimeMillis();
+            TOKEN_STACKS.entrySet().removeIf(entry -> entry.getValue().expiresAt() < now);
+        }
+        TOKEN_STACKS.put(token, new TokenEntry(stack.copy(), System.currentTimeMillis() + 600_000L));
+    }
+
+    @org.jetbrains.annotations.Nullable
+    private static ItemStack tokenStack(String token) {
+        TokenEntry entry = TOKEN_STACKS.get(token);
+        if (entry == null || entry.expiresAt() < System.currentTimeMillis()) {
+            return null;
+        }
+        return entry.stack();
+    }
 
     private JeiLinkerServer() {}
 
@@ -52,9 +75,18 @@ public final class JeiLinkerServer {
                 result.append(Component.literal(raw.substring(last, matcher.start())));
             }
             last = matcher.end();
-            ResourceLocation id = ResourceLocation.tryParse(matcher.group(1));
-            String label = matcher.group(2);
-            ItemStack stack = id == null ? ItemStack.EMPTY : new ItemStack(BuiltInRegistries.ITEM.get(id));
+            String kind = matcher.group(1);
+            String target = matcher.group(2);
+            String label = matcher.group(3);
+            ItemStack stack;
+            ResourceLocation id;
+            if (kind.equals("item")) {
+                stack = tokenStack(target);
+                id = stack == null ? null : BuiltInRegistries.ITEM.getKey(stack.getItem());
+            } else {
+                id = ResourceLocation.tryParse(target);
+                stack = id == null ? ItemStack.EMPTY : new ItemStack(BuiltInRegistries.ITEM.get(id));
+            }
             if (stack.isEmpty()) {
                 result.append(Component.literal("[" + label + "]"));
                 continue;
@@ -63,7 +95,7 @@ public final class JeiLinkerServer {
                     .withColor(stack.getRarity().color())
                     .withClickEvent(new ClickEvent(
                             ClickEvent.Action.RUN_COMMAND,
-                            "/fallenrelics jei_recipe " + id))
+                            "/fallenrelics jei_recipe " + (id == null ? "minecraft:air" : id)))
                     .withHoverEvent(new HoverEvent(
                             HoverEvent.Action.SHOW_ITEM,
                             new HoverEvent.ItemStackInfo(stack)))));
