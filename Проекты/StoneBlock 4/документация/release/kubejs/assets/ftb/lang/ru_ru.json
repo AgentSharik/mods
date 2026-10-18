@@ -392,7 +392,7 @@
   "ftb.echo.msg.available_prefix": "[Эхо] Доступно: ",
   "ftb.echo.msg.only_player": "[Эхо] Эта команда может использоваться только игроком.",
   "ftb.echo.msg.out_of_range": "Вы вне зоны досягаемости Эхо. Пожалуйста, сначала вернитесь в лобби.",
-  "ftb.echo.msg.fractured_suffix": " greet thee.",
+  "ftb.echo.msg.fractured_suffix": " приветствует тебя.",
   "ftb.echo.msg.routed_prefix": "[Эхо] Перенаправлено к ",
   "ftb.echo.msg.routed_suffix": ".",
   "ftb.echo.msg.unmet": "Вы ещё не встретили это Эхо.",
