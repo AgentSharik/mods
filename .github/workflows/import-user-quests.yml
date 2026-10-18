@@ -1,0 +1,27 @@
+name: Import user quest translation
+# Одноразовый импорт ОРИГИНАЛЬНОГО перевода квестов пользователя с Google Drive
+# (ru_ru.snbt, 722247 байт, id 1qfbpa7akN5uyQYQbtBLZwVahN9NhbHw-).
+# Кладёт файл в документацию как _user_original_ru_ru.snbt; в релиз напрямую не идёт —
+# дальше он используется как основа, пробелы дополняются в том же стиле.
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: arena/88cc25d2-mods
+      - name: Download and commit user ru_ru.snbt
+        run: |
+          set -euo pipefail
+          OUT="Проекты/StoneBlock 4/документация/_user_original_ru_ru.snbt"
+          curl -sSL --fail --retry 3 -o "$OUT" "https://drive.google.com/uc?export=download&id=1qfbpa7akN5uyQYQbtBLZwVahN9NhbHw-&confirm=t"
+          test "$(stat -c%s "$OUT")" = "722247"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$OUT"
+          git commit -m "Импорт оригинального перевода квестов пользователя (Google Drive, 722247 байт) — основа для восстановления"
+          git push origin HEAD:arena/88cc25d2-mods

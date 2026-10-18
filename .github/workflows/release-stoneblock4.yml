@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.10: книга квестов FTB Quests переведена полностью (2535 ключей lang ru_ru, включая 1651 недостающий и 12 заголовков filter-квестов вроде «Дополнения реле»); исправлена ротация папок гайдов по ярусам (t1..t5 — гайд «Улучшение источника» снова на русском); точечные переводы в Psi, Apothic Enchanting, Immersive Engineering.
+# v1.1.11: русская голосовая озвучка Эхо — 38 файлов .ogg скачиваются при сборке с Google Drive (папка echo старой сборки, манифест документация/echo_ru_voice.tsv, проверка сигнатуры OggS и размера каждого файла), события ru_ru/ftb.echo.* добавлены в kubejs/assets/ftb/sounds.json, файлы ложатся в kubejs/assets/ftb/sounds/echo/ru_ru/. Поверх v1.1.10 (полный перевод книги квестов, ротация гайдов, правки Psi/Apothic Enchanting/IE).
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.10'
+        default: 'StoneBlock4-ru-v1.1.11'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -19,6 +19,7 @@ on:
       - 'Проекты/StoneBlock 4/документация/release/УСТАНОВКА.txt'
       - 'Проекты/StoneBlock 4/документация/release/kubejs/**'
       - 'Проекты/StoneBlock 4/документация/release/config/**'
+      - 'Проекты/StoneBlock 4/документация/echo_ru_voice.tsv'
 
 permissions:
   contents: write
@@ -27,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.10' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.11' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -52,10 +53,27 @@ jobs:
           echo "JAR в архиве: $(ls pkg/mods/*.jar | wc -l)"
           echo "Файлов kubejs в архиве: $(find pkg/kubejs -type f | wc -l)"
           test -f pkg/kubejs/assets/ftb/lang/ru_ru.json
+          echo "--- Русская озвучка Эхо (Google Drive) ---"
+          mkdir -p pkg/kubejs/assets/ftb/sounds/echo/ru_ru
+          test -f pkg/kubejs/assets/ftb/sounds.json
+          n=0
+          while IFS=$'\t' read -r fname fid fsize; do
+            case "$fname" in ''|'#'*) continue ;; esac
+            out="pkg/kubejs/assets/ftb/sounds/echo/ru_ru/$fname"
+            curl -sSL --fail --retry 3 -o "$out" "https://drive.google.com/uc?export=download&id=${fid}&confirm=t"
+            test "$(head -c4 "$out")" = "OggS"
+            test "$(stat -c%s "$out")" = "$fsize"
+            n=$((n+1))
+          done < "$SB4/документация/echo_ru_voice.tsv"
+          echo "Файлов озвучки скачано: $n"
+          test "$n" -eq 38
           cd pkg
           zip -0 -q -r ../StoneBlock.4.zip .
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/lang/ru_ru.json"
           echo "Проверка: kubejs/assets/ftb/lang/ru_ru.json присутствует в архиве"
+          unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/sounds.json"
+          test "$(unzip -l ../StoneBlock.4.zip | grep -c 'sounds/echo/ru_ru/.*\.ogg')" -eq 38
+          echo "Проверка: sounds.json и 38 файлов русской озвучки Эхо в архиве"
           cd ..
           ls -la StoneBlock.4.zip
 
