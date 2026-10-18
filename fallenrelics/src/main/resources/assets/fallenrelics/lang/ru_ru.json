@@ -42,5 +42,8 @@
   "gui.fallenrelics.packager.clear": "Сбросить рецепт: автоупаковщик сам подбирает рецепты",
   "gui.fallenrelics.packager.mode": "Переключить режим автоподбора рецептов",
   "fallenrelics.packager.recipe_set": "Рецепт установлен: автоупаковщик будет выполнять этот крафт",
-  "fallenrelics.packager.recipe_not_found": "Рецепт не найден: такой раскладкой ничего не крафтится"
+  "fallenrelics.packager.recipe_not_found": "Рецепт не найден: такой раскладкой ничего не крафтится",
+  "key.fallenrelics.jei_recipe_link": "Отправить предмет в чат / поиск в JEI",
+  "key.categories.fallenrelics": "Fallen Relics",
+  "fallenrelics.jei_linker.missing": "Для открытия рецептов нужен установленный JEI"
 }

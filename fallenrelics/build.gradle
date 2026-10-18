@@ -12,6 +12,20 @@ base {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
+repositories {
+    mavenCentral()
+    maven {
+        name = 'BlameJared'
+        url = 'https://maven.blamejared.com'
+    }
+}
+
+// JEI API is compile-only: the Chat & Recipe Linker module is a soft integration
+// and simply stays dormant when the player has no JEI installed.
+dependencies {
+    compileOnly 'mezz.jei:jei-1.21.1-neoforge-api:19.+'
+}
+
 sourceSets.main.resources {
     srcDir('src/generated/resources')
 }
