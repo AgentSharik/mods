@@ -44,3 +44,11 @@
   FancyMenu (Виртуальная машина Java).
 - Остальное — форматы (%s mB), кредиты авторов музыки/картин, римские цифры уровней,
   имена модов (вкладки/категории клавиш — совпадают со списком модов), служебные __-комментарии.
+
+## Волна 5 — книги внутри модов (Patchouli и др.)
+- Книги Psi, Actually Additions, AppliedCooking/Delight, ProductiveMetalworks, StarbuncleMania,
+  Ars Elemental — на lang-ключах, покрыты волной 4. У Ars Nouveau книги-patchouli нет (текст в lang).
+- Отличия по прочим книгам (Apotheosis, IF, RFTools, XNet и т.д.) — только имена директорий,
+  файлы 1-в-1. EnderIO guide — тестовый (test_category/test_entry), не переводится.
+- Реальная дыра: DimDungeons — записи patch_notes_179/190/210 с буквальным текстом.
+  Добавлены ru_ru-записи «Версия 179/190/210» (3 файла в JAR).
