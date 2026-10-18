@@ -7,8 +7,8 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-384-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-79112-2b6cb0?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-385-4a7c3f?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-79365-2b6cb0?style=flat-square)
 ![В работе](https://img.shields.io/badge/%D0%92%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B5-0-b8862b?style=flat-square)
 
 </div>
@@ -58,7 +58,7 @@ mods/
 ## Проекты
 
 <details>
-<summary><b>StoneBlock 4</b> — сборка целиком: 383 готовых JAR, 77 878 ключей; переведены гайды и книги всех видов, квесты, GUI и имена Эхо</summary>
+<summary><b>StoneBlock 4</b> — сборка целиком: 384 готовых JAR, 78 131 ключей; переведены гайды и книги всех видов, квесты, GUI и имена Эхо</summary>
 
 ### StoneBlock 4
 
@@ -114,7 +114,8 @@ mods/
 | Дополнения v1.1.4 (присланные моды) | 14 | 870 | LaserIO (с книгой), RGP Client, Trophy Manager, Item Collectors, Relics, reliquified×3 и библиотеки/сервисные моды как есть; сверх того обновлены уже учтённые Psi и Chance Cubes |
 | Дополнения v1.1.5 (новые моды) | 21 | 2 657 |
 | Волна 21 (полная сборка) | 153 | 5 939 | JAR из папки сборки, отсутствовавшие в проекте: 73 как есть, 80 переведены (+2 795 новых ключей, включая Advanced Loot Info 609 и Amendments) | Actually Additions (полностью, с буклетом), Draconic Evolution с зависимостями Brandon's Core и CodeChickenLib, Akashic Tome, AppleSkin, Dummmmmmy, Cosmetic Armor Reworked и библиотеки без текста (Glodium, Aaron, Accelerated Decay); Roost Ultimate — доперевод патча 4.1.0 поверх авторского русского |
-| **Итого** | **383** | **77 878** | все волны, дополнения и полная сборка закрыты |
+| Волна 22 (вторая партия Диска + вычитка) | 1 | 382 | новый мод Moonlight Lib (255 ключей) и обновления Oritech 1.2.13, Collective 8.42, Collapsible Groups 2.0.0-beta2 (+126), Modonomicon 1.120.7; полная построчная вычитка со сверкой всех 2 794 ключей волны 21 — 46 исправлений в 18 модах | — |
+| **Итого** | **384** | **78 131** | все волны, дополнения и полная сборка закрыты |
 
 Ключи в таблице — по текущему содержимому готовых JAR (уникальные ключи `ru_ru` внутри каждого JAR); после волн часть JAR дополучала ключи в пачках исправлений, поэтому цифры волн отличаются от промежуточных отчётов в журналах.
 
