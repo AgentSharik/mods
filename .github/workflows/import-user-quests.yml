@@ -5,6 +5,11 @@ name: Import user quest translation
 # дальше он используется как основа, пробелы дополняются в том же стиле.
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - 'arena/88cc25d2-mods'
+    paths:
+      - '.github/workflows/import-user-quests.yml'
 permissions:
   contents: write
 jobs:
