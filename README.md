@@ -7,8 +7,8 @@
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-4a7c3f?style=flat-square)
 ![Загрузчик](https://img.shields.io/badge/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D1%87%D0%B8%D0%BA-NeoForge-2b6cb0?style=flat-square)
-![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-385-4a7c3f?style=flat-square)
-![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-79365-2b6cb0?style=flat-square)
+![Модов готово](https://img.shields.io/badge/%D0%9C%D0%BE%D0%B4%D0%BE%D0%B2%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-386-4a7c3f?style=flat-square)
+![Ключей переведено](https://img.shields.io/badge/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-79263-2b6cb0?style=flat-square)
 ![В работе](https://img.shields.io/badge/%D0%92%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B5-0-b8862b?style=flat-square)
 
 </div>
@@ -58,7 +58,7 @@ mods/
 ## Проекты
 
 <details>
-<summary><b>StoneBlock 4</b> — сборка целиком: 384 готовых JAR, 78 131 ключей; переведены гайды и книги всех видов, квесты, GUI и имена Эхо</summary>
+<summary><b>StoneBlock 4</b> — сборка целиком: 385 готовых JAR, 78 029 ключей; переведены гайды и книги всех видов, квесты, GUI и имена Эхо</summary>
 
 ### StoneBlock 4
 
@@ -115,7 +115,8 @@ mods/
 | Дополнения v1.1.5 (новые моды) | 21 | 2 657 |
 | Волна 21 (полная сборка) | 153 | 5 939 | JAR из папки сборки, отсутствовавшие в проекте: 73 как есть, 80 переведены (+2 795 новых ключей, включая Advanced Loot Info 609 и Amendments) | Actually Additions (полностью, с буклетом), Draconic Evolution с зависимостями Brandon's Core и CodeChickenLib, Akashic Tome, AppleSkin, Dummmmmmy, Cosmetic Armor Reworked и библиотеки без текста (Glodium, Aaron, Accelerated Decay); Roost Ultimate — доперевод патча 4.1.0 поверх авторского русского |
 | Волна 22 (вторая партия Диска + вычитка) | 1 | 382 | новый мод Moonlight Lib (255 ключей) и обновления Oritech 1.2.13, Collective 8.42, Collapsible Groups 2.0.0-beta2 (+126), Modonomicon 1.120.7; полная построчная вычитка со сверкой всех 2 794 ключей волны 21 — 46 исправлений в 18 модах | — |
-| **Итого** | **384** | **78 131** | все волны, дополнения и полная сборка закрыты |
+| Волна 23 (сверка полного состава сборки) | 1 | 163 | сверка трёх источников (проект ↔ папка mods на Диске ↔ packwiz-манифест .pw.toml из 410 модов): добавлены FTB Mighty Ender Chicken Rehatched (17) и Mob Grinding Utils (146), убран дубль Moonlight 3.6.8 (в проекте лежали 3.6.8 и 3.7.1), в конфиг Collapsible Groups добавлены 289 названий групп под beta2 | — |
+| **Итого** | **385** | **78 029** | все волны, дополнения и полная сборка закрыты |
 
 Ключи в таблице — по текущему содержимому готовых JAR (уникальные ключи `ru_ru` внутри каждого JAR); после волн часть JAR дополучала ключи в пачках исправлений, поэтому цифры волн отличаются от промежуточных отчётов в журналах.
 
