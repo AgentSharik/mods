@@ -1,4 +1,4 @@
-# StoneBlock 4 — состав перевода (релиз v1.1.5)
+# StoneBlock 4 — состав перевода (релиз v1.1.7)
 
 Полный список переведённых модов сборки StoneBlock 4 для Minecraft 1.21.1: что именно переведено в каждом моде, какие книги и гайды у него внутри, полнота перевода и как проверялось качество.
 
@@ -6,8 +6,8 @@
 
 | | |
 |---|---|
-| Готовых JAR | **230** (146 по снимку релиза 1.0.0 и 84 дополнения после него; считаются только готовые JAR) |
-| Ключей lang | **71 937** в русских файлах готовых JAR (каждый ключ внутри одного JAR считается один раз) |
+| Готовых JAR | **383** (146 по снимку релиза 1.0.0 и 237 дополнения после него; считаются только готовые JAR) |
+| Ключей lang | **77 878** в русских файлах готовых JAR (каждый ключ внутри одного JAR считается один раз) |
 | Внутренние справочники | гайды GuideME кластера AE2 — 224 стр.; книги Patchouli и Modonomicon; мануал Immersive Engineering — 114 стр.; сцены Ponder; вики Oracle Index |
 | Полнота | у каждого мода переведены все ключи `en_us` без исключения (подсчёт — по уникальным ключам: файлы-дубли внутри JAR не раздувают цифру). Если в русском ключей больше, чем в английском, это добавленные сверх оригинала (подсказки значений, ключи от свежих версий модов) — колонка «Полнота» это показывает |
 | качество | ручной перевод и вычитка: русский текст читался отдельно от английского (без кальки и машинных оборотов), шутки и отсылки переданы по смыслу. Содержимое готовых JAR проверено скриптами: покрытие ключей, плейсхолдеры, совпадение всех файлов с оригиналом, кроме добавленного `ru_ru`. Подтверждение запуском в игре не выполнялось |
@@ -255,7 +255,7 @@ Modonomicon (нужна для английского интерфейса кн�
 | `xycraft_machines-0.7.53.jar` | 225 | ru_ru создан с нуля; 225/225 |
 | `xycraft_world-0.7.53.jar` | 324 | ru_ru создан с нуля; 324/324 |
 
-Итого после дополнений: 230 готовых JAR в проекте StoneBlock 4 (146 исходных по снимку релиза + 84 добавленных после него), 71 937 ключей в русских файлах готовых JAR.
+Итого после дополнений: 383 готовых JAR в проекте StoneBlock 4 (146 исходных по снимку релиза + 237 добавленных после него), 77 878 ключей в русских файлах готовых JAR.
 
 ## Дополнение v1.1.4 (волна из присланных модов)
 
@@ -297,3 +297,163 @@ Modonomicon (нужна для английского интерфейса кн�
 | `roostultimate_1.21.1-curse-4.1.0.jar` | Авторский русский в JAR был почти полон; допереведены 28 ключей последнего патча (Сборщик/Кормушка насеста, теги уровней душ), падавших на английский. RU 583/583 |
 | `MoreRed-CCT-Compat-1.21.1-1.3.0.jar` | Без lang-текста, как есть |
 | `morejs-neoforge-1.21.1-0.16.0.jar` | Без lang-текста, как есть |
+
+## Волна 21 — моды полной сборки с Google Диска (v1.1.7)
+
+Полная сверка папки сборки (324 JAR) с проектом: отсутствовали 153 JAR. Из них 73 добавлены как есть (нет текста или полный авторский русский), 80 переведены/допереведены нами (+2 795 ключей). Axiom по правилам проекта в релиз не включается.
+
+| Файл | Мод | Русских ключей |
+|---|---|---|
+| AdvancedCoreInfo-neoforge-1.21.1-1.4.0.jar | AdvancedCoreInfo | 67 |
+| AdvancedLootInfo-neoforge-1.21.1-2.4.0.jar | AdvancedLootInfo | 609 |
+| AdvancementPlaques-1.21.1-neoforge-1.6.8.jar | Advancement Plaques | 0 |
+| alltheleaks-1.1.13+1.21.1-neoforge.jar | All The Leaks | 0 |
+| almostunified-neoforge-1.21.1-1.4.2.jar | AlmostUnified | 6 |
+| amendments-1.21-2.1.10-neoforge.jar | Amendments | 290 |
+| antiblocksrechiseled-neo-0.10.8.jar | AntiBlocksReChiseled | 147 |
+| arseng-2.1.1-beta.jar | Ars Énergistique | 17 |
+| athena-neoforge-1.21.1-4.0.6.jar | Athena | 0 |
+| atlas_api-1.21.1-1.2.0.jar | Atlas API | 0 |
+| attributefix-neoforge-1.21.1-21.1.3.jar | AttributeFix | 0 |
+| authme-neoforge-9.0.1+1.21.1.jar | Auth Me | 53 |
+| AvaritiaNeo-1.21-1.3.1.jar | Avaritia | 137 |
+| balm-neoforge-1.21.1-21.0.66.jar | Balm | 36 |
+| bambooeverything-neoforge-21.1.2+mc1.21.1.jar | Bamboo Everything | 22 |
+| beer-1.21.1-1.4.4.jar | BEER | 28 |
+| better-advanced-tooltips-2101.1.0-build.5.jar | Better Advanced Tooltips | 5 |
+| better-compatability-checker-neoforge-21.1.8.jar | Better Compatibility Checker | 2 |
+| BetterAdvancements-NeoForge-1.21.1-0.4.3.21.jar | Better Advancements | 1 |
+| BHMenu-NeoForge-1.21-2.4.4.jar | BHMenu | 57 |
+| bowinfinityfix-1.21-neo-3.1.1.jar | Bow Infinity Fix | 0 |
+| busy_villagers-neoforge-2101.1.1.jar | Busy Villagers | 3 |
+| cable_facades-1.21.1-NeoForge-2.1.4.jar | Cable Facades | 22 |
+| caelus-neoforge-7.0.1+1.21.1.jar | Caelus API | 2 |
+| cc-tweaked-1.21.1-forge-1.120.2.jar | CC: Tweaked | 235 |
+| classicperipherals-neoforge-1.21.1-0.6.5.jar | Classic Peripherals | 17 |
+| classicpipes-neoforge-1.21.1-1.1.7.jar | Classic Pipes | 174 |
+| Clavis-NEOFORGE-0.2.13+1.21.1.jar | Clavis | 31 |
+| cleanswing-1.10-1.21.jar | Clean Swing | 0 |
+| cloth-config-15.0.140-neoforge.jar | Cloth Config v15 API | 49 |
+| cmpreviewfixer-21.1-1.1.0.jar | Compact Machines Preview Fixer | 0 |
+| Cognition-v2.4.13-1.21.1.jar | Cognition | 192 |
+| colorfulallays-1.21.1-1.0.0.jar | Colorful Allays | 0 |
+| colorfulhearts-neoforge-1.21.1-10.5.9.jar | Colorful Hearts | 14 |
+| connectedglass-1.1.14-neoforge-mc1.21.jar | Connected Glass | 122 |
+| ConstructionSticks-1.21.1-1.5.0.jar | Construction Sticks | 142 |
+| Controlling-neoforge-1.21.1-19.0.5.jar | Controlling | 12 |
+| coroutil-neoforge-1.21.0-1.3.9.jar | CoroUtil | 0 |
+| craftingstationjei-1.21.1-NeoForge-2.2.0.jar | Crafting Station | 5 |
+| craftingtweaks-neoforge-1.21.1-21.1.11.jar | Crafting Tweaks | 41 |
+| Cucumber-1.21.1-8.0.16.jar | Cucumber Library | 16 |
+| cupboard-1.21.1-4.2.jar | Cupboard mod | 0 |
+| custom_machinery_ars-1.2.6.jar | Custom Machinery ArsNouveau | 22 |
+| CustomMachineryCreate-1.21.1-1.2.7.jar | Custom Machinery Create | 11 |
+| CustomMachineryMekanism-1.21.1-1.4.17.jar | Custom Machinery Mekanism | 36 |
+| deepdarkdimdungeons-1.21.1-1.0.1.jar | DeepDarkDimDungeons | 10 |
+| default-server-properties-neoforge-21.0.1.jar | Default Server Properties | 0 |
+| derenderpatcher-2.0.0.jar | Draconic Evolution Render Patcher | 0 |
+| deus_ex_machina-1.21.1-1.2.0.jar | Deus Ex Machina | 19 |
+| disconnect-packet-fix-neoforge-2.0.1.jar | Disconnect Packet Fix | 0 |
+| drippyloadingscreen_neoforge_3.1.5_MC_1.21.1.jar | Drippy Loading Screen | 46 |
+| durabilitytooltip-1.2.0-neoforge-mc1.21.jar | Durability Tooltip | 13 |
+| EdivadLib-1.21-3.0.0.jar | EdivadLib | 0 |
+| elevatorid-neoforge-1.21.1-1.11.4.jar | ElevatorMod | 29 |
+| Emojiful-Neoforge-1.21-5.2.4-all.jar | Emojiful | 21 |
+| entangled-1.3.21-neoforge-mc1.21.jar | Entangled | 24 |
+| experiencelib-1.21.1-1.2.1.jar | ExperienceLib | 0 |
+| explorerscompass-edited-1.21.1-3.0.4-neoforge.jar | Explorer's Compass Edited | 68 |
+| ExtremeSoundMuffler-3.57_NeoForge-1.21.jar | Extreme Sound Muffler | 78 |
+| fadingnightvision-1.3.0.jar | Fading Night Vision | 1 |
+| farmingforblockheads-neoforge-1.21.1-21.1.14.jar | Farming for Blockheads | 55 |
+| FastItemFrames-v21.1.6-1.21.1-NeoForge.jar | Fast Item Frames | 0 |
+| fdlib-1.0.9-1.21.1.jar | FDLib | 2 |
+| ferritecore-7.0.3-neoforge.jar | Ferrite Core | 0 |
+| ftb-filter-system-neoforge-21.1.4.jar | FTB Filter System | 65 |
+| ftb-obsidian-21.1.0.jar | FTB Obsidian | 0 |
+| ftb-pause-menu-api-21.1.3.jar | FTB Pause Menu API | 3 |
+| ftb-promoter-21.1.63.jar | FTB Promoter | 3 |
+| ftb-ranks-neoforge-2101.1.5.jar | FTB Ranks | 0 |
+| functionalstorage-1.21.1-1.5.8.jar | Functional Storage | 162 |
+| fusion-1.3.16-neoforge-mc1.21.1.jar | Fusion | 8 |
+| Glassential-renewed-1.21.1-3.4.7.jar | Glassential-renewed | 155 |
+| HostileNeuralNetworks-1.21.1-6.5.1.jar | Hostile Neural Networks | 298 |
+| ibicf-neo-7.0.1+mc1.21.1.jar | I Believe I Can Fly | 0 |
+| Iceberg-1.21.1-neoforge-1.3.2.jar | Iceberg | 0 |
+| inventoryessentials-neoforge-1.21.1-21.1.20.jar | Inventory Essentials | 46 |
+| inventorysorter-1.21.1-24.0.24.jar | Simple Inventory Sorter | 25 |
+| ironchest-1.21-neoforge-16.0.7.jar | Iron Chests | 40 |
+| ironfurnaces-neoforge-1.21.1-4.3.2.jar | Iron Furnaces | 142 |
+| jags-neo-21.1.7+mc1.21.1.jar | Just Another Grass Seed | 19 |
+| jearchaeology-1.21.1-1.2.0.jar | Just Enough Archaeology | 156 |
+| jumbofurnace-5.0.0.9.jar | Jumbo Furnace | 18 |
+| jumpoverfences-neoforge-1.21.1-1.6.1.jar | Jump Over Fences | 3 |
+| konkrete_neoforge_1.9.9_MC_1.21.jar | Konkrete | 0 |
+| kube-utils-21.1.3.jar | KubeUtils | 0 |
+| kubejs-mekanism-neoforge-2101.1.7-build.18.jar | KubeJS Mekanism | 0 |
+| kubejs_actuallyadditions-neoforge-1.21.1-0.3.0.jar | KubeJS Actually Additions | 0 |
+| kubejs_enderio-neoforge-1.21.1-0.13.0.jar | KubeJS EnderIO | 0 |
+| kubejspowah-1.3.4.jar | KubeJS Powah | 0 |
+| kubejstweaks-1.0.6.jar | KubeJS Tweaks | 4 |
+| leaderboards-1.21.1-NeoForge-2.0.4.jar | Leaderboards | 87 |
+| lionfishapi-3.1.jar | lionfishapi | 4 |
+| lmft-1.1.1+1.21.9-neoforge.jar | Load My F***ing Tags | 0 |
+| lodestone-1.21.1-1.8.2.jar | Lodestone | 31 |
+| lootjs-neoforge-1.21.1-3.7.0.jar | LootJS | 0 |
+| Lychee-1.21.1-NeoForge-6.5.3.jar | Lychee Tweaker | 122 |
+| magic_coins-1.1.3.jar | Magic Coins | 12 |
+| magiccoinstweak-1.0-SNAPSHOT.jar | Magic Coins Tweak | 3 |
+| mcjtylib-1.21-9.0.21.jar | McJtyLib | 3 |
+| Measurements-neoforge-1.21.1-3.0.3.jar | Measurements | 15 |
+| mekagenjei-1.2.jar | MekaGenJei | 10 |
+| melody_neoforge_1.0.10_MC_1.21.jar | Melody | 0 |
+| merequester-neoforge-1.21.1-1.5.0.jar | ME Requester | 27 |
+| metalbarrels-neoforge-1.21.1-7.jar | MetalBarrels | 46 |
+| mezz_config-1.21.1-neoforge-0.6.8-standalone.jar | mezz_config-1.21.1-neoforge-0.6.8-standalone.jar | 0 |
+| mininggadgets-1.18.8.jar | Mining Gadgets | 92 |
+| mob_tag_fixes-1.0.0.jar | Mob Tag Fixes | 1 |
+| modernfix-neoforge-5.27.24+mc1.21.1.jar | ModernFix | 156 |
+| modernworldcreation_neoforge_2.0.1_MC_1.21.1.jar | Modern World Creation | 5 |
+| MouseTweaks-neoforge-mc1.21-2.26.1.jar | Mouse Tweaks | 0 |
+| mru-1.0.41+1.21.1-neoforge.jar | MRU | 0 |
+| NaNny-1.21.1-1.0.1.jar | NaNny | 0 |
+| NBTac-NEOFORGE-1.21.1-2.1.jar | NBT Autocomplete | 80 |
+| OverflowingBars-v21.1.1-1.21.1-NeoForge.jar | Overflowing Bars | 0 |
+| PickUpNotifier-v21.1.1-1.21.1-NeoForge.jar | Pick Up Notifier | 0 |
+| pipe_connector-neoforge-0.5.28.jar | Pipe Connector | 63 |
+| pipegoggles-2.0.4.jar | Pipe Goggles | 50 |
+| pipez-neoforge-1.21.1-1.2.31.jar | Pipez | 83 |
+| pipezretriever-0.0.1.jar | Pipez Retriever | 6 |
+| player-animation-lib-forge-2.0.4+1.21.1.jar | Player Animator | 0 |
+| pop-21.1.3.jar | Pop | 0 |
+| rarcompat-1.21-0.9.7.jar | RAR-Compat | 273 |
+| rechiseled_chipped-2.0-1.21.1.jar | Rechiseled: Chipped | 0 |
+| resourcefulconfig-neoforge-1.21-3.0.11.jar | Resourcefulconfig | 28 |
+| Searchables-neoforge-1.21.1-1.0.2.jar | Searchables | 1 |
+| sg_economy-1.0.5.jar | SG Economy API | 14 |
+| shield_api-neoforge-2.2.0.jar | ShieldAPI | 0 |
+| solcarrot-1.21.1-1.16.6.jar | Spice of Life: Carrot Edition | 60 |
+| sophisticateditemactions-1.21.1-0.5.16.423.jar | Sophisticated Item Actions | 49 |
+| sophisticatedstoragecreateintegration-1.21.1-0.1.22.238.jar | Sophisticated Storage Create Integration | 0 |
+| soulplied_energistics-1.0.3.jar | Soulplied Energistics | 4 |
+| statuseffectbars-1.21.1-NeoForge-1.0.2.jar | Status Effect Bars | 58 |
+| stepcrafter-neoforge-1.21.1-0.1.9.jar | Step Crafter | 79 |
+| structure-expansion-neoforge-88.0.1.jar | Structure Expansion | 0 |
+| structureessentials-1.21.1-5.0.jar | Structure Essentials mod | 0 |
+| structures_tweaker-1.21.1-NeoForge-2.1.7.jar | Structures Tweaker | 6 |
+| structurify-neoforge-2.0.42+mc1.21.1.jar | Structurify | 154 |
+| supermartijn642configlib-1.1.8-neoforge-mc1.21.jar | SuperMartijn642's Config Library | 0 |
+| synesthesia-1.21.1-NeoForge-1.1.0.jar | Synesthesia: Sound Visualizer | 8 |
+| toofast-1.21.0-0.4.3.6.jar | Too Fast | 0 |
+| ToolBelt-1.21.1-2.2.10.jar | Tool Belt | 13 |
+| torchmaster-neoforge-1.21.1-21.1.13.jar | Torchmaster | 42 |
+| trade-cycling-neoforge-1.21.1-1.0.22.jar | Trade Cycling | 2 |
+| trashcans-1.1.1-neoforge-mc1.21.jar | Trash Cans | 34 |
+| trashslot-neoforge-1.21.1-21.1.11.jar | TrashSlot | 28 |
+| trenzalore-neo-6.1.1+mc1.21.1.jar | Trenzalore | 0 |
+| underlay-1.0.5-neoforge-mc1.21.1.jar | Underlay | 4 |
+| universalgrid-neoforge-1.21.1-0.3.2.jar | Universal Grid | 16 |
+| villagerconfig-neoforge-4.5.4+1.21.1.jar | VillagerConfig | 27 |
+| watut-neoforge-1.21.0-1.2.7.jar | What Are They Up To | 0 |
+| wits-neoforge-1.3.1.jar | Wits | 0 |
+| woodenshears-neoforge-1.21-3.2.3.0.jar | Wooden Shears | 7 |
+| yeetusexperimentus-neoforge-87.0.0.jar | Yeetus Experimentus | 0 |
