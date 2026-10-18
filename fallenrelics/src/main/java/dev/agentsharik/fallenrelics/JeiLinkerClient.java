@@ -78,8 +78,8 @@ public final class JeiLinkerClient {
         }
         double mouseX = minecraft.mouseHandler.xpos();
         double mouseY = minecraft.mouseHandler.ypos();
-        int left = screen.getLeft();
-        int top = screen.getTop();
+        int left = screenField(screen, "leftPos");
+        int top = screenField(screen, "topPos");
         for (net.minecraft.world.inventory.Slot slot : screen.getMenu().slots) {
             if (!slot.hasItem()) {
                 continue;
@@ -91,6 +91,23 @@ public final class JeiLinkerClient {
             }
         }
         return null;
+    }
+
+    /** 1.21.1 keeps leftPos/topPos protected with no getters; read them once via reflection. */
+    private static int screenField(net.minecraft.client.gui.screens.inventory.AbstractContainerScreen<?> screen, String name) {
+        try {
+            java.lang.reflect.Field field = screen.getClass().getField(name);
+            return field.getInt(screen);
+        } catch (ReflectiveOperationException | LinkageError first) {
+            try {
+                java.lang.reflect.Field field = net.minecraft.client.gui.screens.inventory.AbstractContainerScreen.class
+                        .getDeclaredField(name);
+                field.setAccessible(true);
+                return field.getInt(screen);
+            } catch (ReflectiveOperationException second) {
+                return 0;
+            }
+        }
     }
 
     private static boolean hasCraftingRecipe(Minecraft minecraft, ItemStack stack) {
