@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.12: восстановлен ОРИГИНАЛЬНЫЙ перевод книги квестов пользователя (_user_original_ru_ru.snbt с Google Drive — все 2523 ключа, с цветовыми кодами описаний) как основа lang-файла; моим переводом дополнены только 4 пустых ключа и 12 заголовков filter-квестов. Плюс v1.1.11: русская голосовая озвучка Эхо (38 ogg с Google Drive, события ru_ru в sounds.json).
+# v1.1.13: системный аудит остаточного английского по волнам (AUDIT_WAVES.md): книга квестов (заголовок B.E.E.R., &r), гайды (дополнен deepshelf), kubejs ftb lang (25 строк + фикс %1$s/%2$s), lang модов (7 JAR), книги в модах (patch notes DimDungeons), вложенные библиотеки (resourcefulconfig, TRender). Поверх v1.1.12 (оригинальный перевод квестов пользователя) и v1.1.11 (голос Эхо).
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.12'
+        default: 'StoneBlock4-ru-v1.1.13'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.12' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.13' }}
     steps:
       - uses: actions/checkout@v4
 
