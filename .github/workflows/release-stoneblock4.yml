@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.11: русская голосовая озвучка Эхо — 38 файлов .ogg скачиваются при сборке с Google Drive (папка echo старой сборки, манифест документация/echo_ru_voice.tsv, проверка сигнатуры OggS и размера каждого файла), события ru_ru/ftb.echo.* добавлены в kubejs/assets/ftb/sounds.json, файлы ложатся в kubejs/assets/ftb/sounds/echo/ru_ru/. Поверх v1.1.10 (полный перевод книги квестов, ротация гайдов, правки Psi/Apothic Enchanting/IE).
+# v1.1.12: восстановлен ОРИГИНАЛЬНЫЙ перевод книги квестов пользователя (_user_original_ru_ru.snbt с Google Drive — все 2523 ключа, с цветовыми кодами описаний) как основа lang-файла; моим переводом дополнены только 4 пустых ключа и 12 заголовков filter-квестов. Плюс v1.1.11: русская голосовая озвучка Эхо (38 ogg с Google Drive, события ru_ru в sounds.json).
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.11'
+        default: 'StoneBlock4-ru-v1.1.12'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.11' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.12' }}
     steps:
       - uses: actions/checkout@v4
 
