@@ -1536,5 +1536,12 @@
   "ftb.event_system.stick.name_6": "Палка лжи",
   "ftb.event_system.stick.name_7": "Базз Лайтер - В бесконечность и дальше!",
   "ftb.event_system.stick.name_8": "Я НЕ Грут",
-  "ftb.event_system.stick.name_9": "Палка - это на всю жизнь, а не только для факелов"
+  "ftb.event_system.stick.name_9": "Палка - это на всю жизнь, а не только для факелов",
+  "ftb.echo.unmet.lore": "§dВы ещё не встречали это Эхо.\\n\\n§fНайдите его там, где оно стоит, — в §dАрхиве Эхо§f на спавне. Как только вы встретитесь лично, его архив откроется здесь.",
+  "ftb.industrialforegoing.infinity_backpack_autofeed": "§aⓘ§f Этот §6рюкзак§f будет расходовать свой §dвнутренний бак биотоплива§f и §3автоматически кормить§f вас.",
+  "ftb.industrialforegoing.infinity_backpack_autofeed_1": "§c⚠ И отключить это пока никак нельзя...§f",
+  "ftb.powah.energy_cell_wrench": "§c⚠ Энергоячейки Powah будут сброшены, если вы соберёте их этим ключом.§f",
+  "ftb.protection.endest_pearl_denied": "⚠ Здесь это бросить нельзя!",
+  "ftb.tooltip.mekanism.creative_energy_cube_refill": "§aⓘ§f Уронили разряженным? §bСкрафтите его с самим собой§f, чтобы вновь наполнить энергией.",
+  "gateways.scylla": "Босс Сцилла - Катаклизм"
 }
