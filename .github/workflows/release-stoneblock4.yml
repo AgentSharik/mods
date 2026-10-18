@@ -38,9 +38,11 @@ jobs:
           mkdir -p pkg/mods pkg/config/ftbquests/quests/lang
           cp "$SB4"/*.jar pkg/mods/
           cp "$SB4/документация/_ftbquests_wip/ru_ru.snbt" pkg/config/ftbquests/quests/lang/ru_ru.snbt
-          mkdir -p pkg/config/fancymenu
+          mkdir -p pkg/config/fancymenu/assets/buttons
           cp "$SB4/документация/release/config/fancymenu/"*.txt pkg/config/fancymenu/
+          cp "$SB4/документация/release/config/fancymenu/assets/buttons/"*.png pkg/config/fancymenu/assets/buttons/
           test -f pkg/config/fancymenu/title_screen_button.txt
+          test -f pkg/config/fancymenu/assets/buttons/singleplayer.png
           mkdir -p pkg/config/collapsiblegroups/lang
           cp "$SB4/документация/release/config/collapsiblegroups/lang/ru_ru.json" pkg/config/collapsiblegroups/lang/ru_ru.json
           test -f pkg/config/collapsiblegroups/lang/ru_ru.json

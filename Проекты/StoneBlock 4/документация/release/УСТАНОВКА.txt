@@ -5,7 +5,7 @@ StoneBlock 4 — русская локализация v1.1.9
   mods\     — 414 JAR-файлов модов сборки с русским переводом
   config\   — перевод квестов FTB Quests (ru_ru.snbt), русские названия
              групп Collapsible Groups (collapsiblegroups\lang\ru_ru.json)
-             и раскладки меню FancyMenu (fancymenu\*.txt)
+             и раскладки меню FancyMenu с русскими кнопками (fancymenu\*.txt, fancymenu\assets\buttons\*.png)
   kubejs\   — имена Эхо и русское руководство FTB
 
 Установка
