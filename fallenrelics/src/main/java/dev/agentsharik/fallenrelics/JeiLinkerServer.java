@@ -103,12 +103,10 @@ public final class JeiLinkerServer {
             // COMMON would render white = "no colour at all", so links of common
             // items borrow the yellow link colour; other rarities keep their own.
             net.minecraft.network.chat.TextColor nameColor = stack.getHoverName().getStyle().getColor();
-            net.minecraft.network.chat.TextColor linkColor;
-            if (stack.getRarity() == net.minecraft.world.item.Rarity.COMMON) {
-                linkColor = net.minecraft.network.chat.TextColor.fromLegacyFormat(net.minecraft.ChatFormatting.YELLOW);
-            } else {
-                linkColor = stack.getRarity().color();
-            }
+            net.minecraft.network.chat.TextColor linkColor = net.minecraft.network.chat.TextColor.fromLegacyFormat(
+                    stack.getRarity() == net.minecraft.world.item.Rarity.COMMON
+                            ? net.minecraft.ChatFormatting.YELLOW
+                            : stack.getRarity().color());
             if (!hintLineDone) {
                 // discoverability: the pack swallows plain chat clicks, so the combo
                 // gets its own grey line right above the link
