@@ -140,7 +140,14 @@ public final class JeiLinkerClient {
             return; // player is typing into a search box, not linking
         }
         try {
-            ItemStack jeiStack = JeiLinkerJeiCalls.available() ? JeiLinkerJeiCalls.itemStackUnderMouse() : null;
+            double mouseX = minecraft.mouseHandler.xpos();
+            double mouseY = minecraft.mouseHandler.ypos();
+            ItemStack jeiStack = JeiLinkerJeiCalls.available()
+                    ? JeiLinkerJeiCalls.ingredientUnderMouseAnywhere(minecraft.screen, mouseX, mouseY)
+                    : null;
+            if (jeiStack == null && JeiLinkerJeiCalls.available()) {
+                jeiStack = JeiLinkerJeiCalls.itemStackUnderMouse();
+            }
             if (jeiStack != null && !jeiStack.isEmpty()) {
                 // The chat link is the point: give it even when JEI has no recipe for it.
                 openChatWithMarker(minecraft, jeiStack, false);
@@ -181,22 +188,67 @@ public final class JeiLinkerClient {
         }
         double mouseX = minecraft.mouseHandler.xpos();
         double mouseY = minecraft.mouseHandler.ypos();
+        // 1) vanilla tracks the hovered slot itself every frame - true for any container gui,
+        //    including modpack screens with non-vanilla layouts
+        net.minecraft.world.inventory.Slot slot = hoveredSlotField(screen);
+        if (slot != null && slot.hasItem()) {
+            return slot.getItem();
+        }
+        // 2) vanilla's own coordinate lookup
+        slot = findSlotMethod(screen, mouseX, mouseY);
+        if (slot != null && slot.hasItem()) {
+            return slot.getItem();
+        }
+        // 3) last resort: manual math with a centred-window guess
         int left = screenField(screen, "leftPos");
         int top = screenField(screen, "topPos");
         if (left <= 0 && top <= 0) {
-            // reflection found nothing: vanilla containers are centred 176x166 windows
             left = (screen.width - 176) / 2;
             top = (screen.height - 166) / 2;
         }
-        for (net.minecraft.world.inventory.Slot slot : screen.getMenu().slots) {
-            if (!slot.hasItem()) {
+        for (net.minecraft.world.inventory.Slot each : screen.getMenu().slots) {
+            if (!each.hasItem()) {
                 continue;
             }
-            int slotX = left + slot.x;
-            int slotY = top + slot.y;
+            int slotX = left + each.x;
+            int slotY = top + each.y;
             if (mouseX >= slotX - 1 && mouseX < slotX + 17 && mouseY >= slotY - 1 && mouseY < slotY + 17) {
-                return slot.getItem();
+                return each.getItem();
             }
+        }
+        return null;
+    }
+
+    @org.jetbrains.annotations.Nullable
+    private static net.minecraft.world.inventory.Slot hoveredSlotField(
+            net.minecraft.client.gui.screens.inventory.AbstractContainerScreen<?> screen) {
+        for (String name : new String[]{"hoveredSlot", "hoverSlot"}) {
+            try {
+                java.lang.reflect.Field field = net.minecraft.client.gui.screens.inventory.AbstractContainerScreen.class
+                        .getDeclaredField(name);
+                field.setAccessible(true);
+                if (field.get(screen) instanceof net.minecraft.world.inventory.Slot slot) {
+                    return slot;
+                }
+            } catch (ReflectiveOperationException ignored) {
+                // try the next candidate name
+            }
+        }
+        return null;
+    }
+
+    @org.jetbrains.annotations.Nullable
+    private static net.minecraft.world.inventory.Slot findSlotMethod(
+            net.minecraft.client.gui.screens.inventory.AbstractContainerScreen<?> screen, double mouseX, double mouseY) {
+        try {
+            java.lang.reflect.Method method = net.minecraft.client.gui.screens.inventory.AbstractContainerScreen.class
+                    .getDeclaredMethod("findSlot", double.class, double.class);
+            method.setAccessible(true);
+            if (method.invoke(screen, mouseX, mouseY) instanceof net.minecraft.world.inventory.Slot slot) {
+                return slot;
+            }
+        } catch (ReflectiveOperationException ignored) {
+            // fall through to manual math
         }
         return null;
     }

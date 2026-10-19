@@ -20,6 +20,27 @@ final class JeiLinkerJeiCalls {
         }
     }
 
+    /** Any JEI-rendered ingredient under the mouse: ingredient list, recipes gui, bookmarks. */
+    @org.jetbrains.annotations.Nullable
+    static ItemStack ingredientUnderMouseAnywhere(net.minecraft.client.gui.screens.Screen screen, double mouseX, double mouseY) {
+        IJeiRuntime runtime = JeiLinkerPlugin.runtime();
+        if (runtime == null || screen == null) {
+            return null;
+        }
+        try {
+            return runtime.getScreenHelper()
+                    .getClickableIngredientUnderMouse(screen, mouseX, mouseY)
+                    .map(meazz -> meazz.getIngredient())
+                    .filter(ItemStack.class::isInstance)
+                    .map(ItemStack.class::cast)
+                    .filter(stack -> !stack.isEmpty())
+                    .findFirst()
+                    .orElse(null);
+        } catch (LinkageError | RuntimeException missing) {
+            return null;
+        }
+    }
+
     /** The item stack under the mouse in JEI's ingredient list, if it is shown. */
     @Nullable
     static ItemStack itemStackUnderMouse() {
