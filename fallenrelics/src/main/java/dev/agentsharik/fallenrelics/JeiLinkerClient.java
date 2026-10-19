@@ -96,11 +96,11 @@ public final class JeiLinkerClient {
         String raw = message.getString();
         if (raw != null && raw.contains(JeiLinkerServer.MARKER_PREFIX)) {
             event.setMessage(JeiLinkerServer.decorate(raw, JeiLinkerClient::clientTokenStack));
-            actionBar(Minecraft.getInstance(), "fallenrelics.jei_linker.ctrl_hint");
+            actionBar(Minecraft.getInstance(), "fallenrelics.jei_linker.ctrl_notify");
             return;
         }
         if (hasLinkClickEvent(message)) {
-            actionBar(Minecraft.getInstance(), "fallenrelics.jei_linker.ctrl_hint");
+            actionBar(Minecraft.getInstance(), "fallenrelics.jei_linker.ctrl_notify");
         }
     }
 
