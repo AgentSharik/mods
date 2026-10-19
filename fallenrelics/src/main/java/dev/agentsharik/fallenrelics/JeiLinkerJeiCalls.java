@@ -30,15 +30,60 @@ final class JeiLinkerJeiCalls {
         try {
             return runtime.getScreenHelper()
                     .getClickableIngredientUnderMouse(screen, mouseX, mouseY)
-                    .map(meazz -> meazz.getIngredient())
-                    .filter(ItemStack.class::isInstance)
-                    .map(ItemStack.class::cast)
-                    .filter(stack -> !stack.isEmpty())
+                    .map(clickable -> clickable.getIngredient())
+                    .map(JeiLinkerJeiCalls::flattenIngredient)
+                    .filter(java.util.Objects::nonNull)
                     .findFirst()
                     .orElse(null);
         } catch (LinkageError | RuntimeException missing) {
             return null;
         }
+    }
+
+    /** Groups (Collapsible Groups etc.) are not stacks: take the first stack inside them. */
+    @org.jetbrains.annotations.Nullable
+    private static ItemStack flattenIngredient(Object ingredient) {
+        if (ingredient == null) {
+            return null;
+        }
+        if (ingredient instanceof ItemStack stack) {
+            return stack.isEmpty() ? null : stack;
+        }
+        try {
+            Class<?> clazz = ingredient.getClass();
+            while (clazz != null && clazz != Object.class) {
+                for (java.lang.reflect.Field field : clazz.getDeclaredFields()) {
+                    Class<?> type = field.getType();
+                    if (type != ItemStack.class && type != ItemStack[].class
+                            && !java.util.Collection.class.isAssignableFrom(type)) {
+                        continue;
+                    }
+                    field.setAccessible(true);
+                    Object value = field.get(ingredient);
+                    if (value instanceof ItemStack stack && !stack.isEmpty()) {
+                        return stack;
+                    }
+                    if (value instanceof ItemStack[] array) {
+                        for (ItemStack element : array) {
+                            if (element != null && !element.isEmpty()) {
+                                return element;
+                            }
+                        }
+                    }
+                    if (value instanceof java.util.Collection<?> collection) {
+                        for (Object element : collection) {
+                            if (element instanceof ItemStack stack && !stack.isEmpty()) {
+                                return stack;
+                            }
+                        }
+                    }
+                }
+                clazz = clazz.getSuperclass();
+            }
+        } catch (LinkageError | RuntimeException | ReflectiveOperationException ignored) {
+            // unknown ingredient shape: no link
+        }
+        return null;
     }
 
     /** The item stack under the mouse in JEI's ingredient list, if it is shown. */

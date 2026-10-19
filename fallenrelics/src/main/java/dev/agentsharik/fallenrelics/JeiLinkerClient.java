@@ -140,6 +140,13 @@ public final class JeiLinkerClient {
             return; // player is typing into a search box, not linking
         }
         try {
+            // 1) a container slot under the cursor wins: it carries the exact stack
+            ItemStack slotStack = stackUnderMouseInContainer(minecraft);
+            if (slotStack != null) {
+                openChatWithMarker(minecraft, slotStack, true);
+                return;
+            }
+            // 2) anything JEI renders under the cursor: list, recipes gui, bookmarks, groups
             double mouseX = minecraft.mouseHandler.xpos();
             double mouseY = minecraft.mouseHandler.ypos();
             ItemStack jeiStack = JeiLinkerJeiCalls.available()
@@ -149,17 +156,10 @@ public final class JeiLinkerClient {
                 jeiStack = JeiLinkerJeiCalls.itemStackUnderMouse();
             }
             if (jeiStack != null && !jeiStack.isEmpty()) {
-                // The chat link is the point: give it even when JEI has no recipe for it.
                 openChatWithMarker(minecraft, jeiStack, false);
                 return;
             }
-            // WoW-style: hover a slot in any open container (inventory included) and
-            // link the exact stack, enchantments and all, without dropping it.
-            // Works with or without JEI installed.
-            ItemStack slotStack = stackUnderMouseInContainer(minecraft);
-            if (slotStack != null) {
-                openChatWithMarker(minecraft, slotStack, true);
-            } else if (minecraft.screen instanceof net.minecraft.client.gui.screens.inventory.AbstractContainerScreen<?>) {
+            if (minecraft.screen != null) {
                 actionBar(minecraft, "fallenrelics.jei_linker.no_item");
             }
         } catch (Throwable boom) {

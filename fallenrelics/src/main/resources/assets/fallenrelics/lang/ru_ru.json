@@ -45,6 +45,7 @@
   "fallenrelics.packager.recipe_not_found": "Рецепт не найден: такой раскладкой ничего не крафтится",
   "key.fallenrelics.jei_recipe_link": "Отправить предмет в чат / поиск в JEI",
   "key.categories.fallenrelics": "Fallen Relics",
+  "fallenrelics.jei_linker.ctrl_suffix": " (Ctrl+ЛКМ — рецепты)",
   "fallenrelics.jei_linker.ctrl_hint": "Удерживай Ctrl и кликни по ссылке, чтобы открыть рецепты",
   "fallenrelics.jei_linker.no_item": "Наведи курсор на предмет, чтобы дать ссылку",
   "fallenrelics.jei_linker.opening": "Открываю рецепты: %s",
