@@ -90,7 +90,19 @@ public final class JeiLinkerClient {
                                 }))));
     }
 
+    /** Ctrl now, or pressed a moment ago: on modded servers the click reply arrives over the network. */
+    private static boolean ctrlHeldForClick() {
+        return net.minecraft.client.gui.screens.Screen.hasControlDown()
+                || System.currentTimeMillis() - lastCtrlPress < 700L;
+    }
+
+    private static volatile long lastCtrlPress;
+
     private static void onKeyInput(InputEvent.Key event) {
+        if (event.getAction() == GLFW.GLFW_PRESS
+                && (event.getKey() == GLFW.GLFW_KEY_LEFT_CONTROL || event.getKey() == GLFW.GLFW_KEY_RIGHT_CONTROL)) {
+            lastCtrlPress = System.currentTimeMillis();
+        }
         if (event.getAction() != GLFW.GLFW_PRESS) {
             return;
         }
@@ -223,6 +235,11 @@ public final class JeiLinkerClient {
     /** Called from the network handler when somebody clicks a chat link. */
     public static void openRecipesById(ResourceLocation id) {
         Minecraft minecraft = Minecraft.getInstance();
+        if (!ctrlHeldForClick()) {
+            // agreed behaviour: recipes open on Ctrl+LMB over the link only
+            actionBar(minecraft, "fallenrelics.jei_linker.ctrl_hint");
+            return;
+        }
         if (!JeiLinkerJeiCalls.available()) {
             if (minecraft.player != null) {
                 minecraft.player.displayClientMessage(
