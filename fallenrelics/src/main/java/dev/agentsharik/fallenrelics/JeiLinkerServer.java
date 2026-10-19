@@ -99,8 +99,13 @@ public final class JeiLinkerServer {
                 result.append(Component.literal("[" + label + "]"));
                 continue;
             }
+            // COMMON would render white = "no colour at all", so links of common
+            // items borrow the yellow link colour; other rarities keep their own.
+            net.minecraft.ChatFormatting linkColor = stack.getRarity() == net.minecraft.world.item.Rarity.COMMON
+                    ? net.minecraft.ChatFormatting.YELLOW
+                    : null;
             result.append(Component.literal("[" + label + "]").withStyle(style -> style
-                    .withColor(stack.getRarity().color())
+                    .withColor(linkColor != null ? linkColor : stack.getRarity().color())
                     .withClickEvent(new ClickEvent(
                             ClickEvent.Action.RUN_COMMAND,
                             "/fallenrelics jei_recipe " + (id == null ? "minecraft:air" : id)))
