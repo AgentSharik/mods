@@ -45,5 +45,6 @@
   "fallenrelics.packager.recipe_not_found": "No recipe found: nothing crafts with this layout",
   "key.fallenrelics.jei_recipe_link": "Send item to chat / search in JEI",
   "key.categories.fallenrelics": "Fallen Relics",
+  "fallenrelics.jei_linker.inserted": "Link inserted into chat - add your text and press Enter",
   "fallenrelics.jei_linker.missing": "Opening recipes requires JEI to be installed"
 }

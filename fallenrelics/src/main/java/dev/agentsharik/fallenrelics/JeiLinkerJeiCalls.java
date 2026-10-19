@@ -13,7 +13,11 @@ final class JeiLinkerJeiCalls {
     private JeiLinkerJeiCalls() {}
 
     static boolean available() {
-        return JeiLinkerPlugin.runtime() != null;
+        try {
+            return JeiLinkerPlugin.runtime() != null;
+        } catch (LinkageError | RuntimeException missing) {
+            return false; // JEI not installed: item linking still works
+        }
     }
 
     /** The item stack under the mouse in JEI's ingredient list, if it is shown. */

@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.lwjgl.glfw.GLFW;
@@ -37,12 +37,36 @@ public final class JeiLinkerClient {
     @SubscribeEvent
     public static void registerKeys(RegisterKeyMappingsEvent event) {
         event.register(RECIPE_LINK_KEY);
-        NeoForge.EVENT_BUS.addListener(JeiLinkerClient::onClientTick);
+        // Raw key events fire even while a container/JEI screen is open - unlike
+        // KeyMapping#consumeClick, which vanilla only clicks when no screen is up.
+        NeoForge.EVENT_BUS.addListener(JeiLinkerClient::onKeyInput);
     }
 
-    private static void onClientTick(ClientTickEvent.Post event) {
-        if (RECIPE_LINK_KEY.consumeClick()) {
-            handlePress();
+    private static void onKeyInput(InputEvent.Key event) {
+        if (event.getAction() != GLFW.GLFW_PRESS) {
+            return;
+        }
+        InputConstants.Key key = InputConstants.getKey(event.getKey(), event.getScanCode());
+        if (!RECIPE_LINK_KEY.isActiveAndMatches(key) || !bindingModifiersDown()) {
+            return;
+        }
+        handlePress();
+    }
+
+    /** Honours combos assigned in the controls screen (Ctrl/Shift/Alt + key). */
+    private static boolean bindingModifiersDown() {
+        long window = Minecraft.getInstance().getWindow().getWindow();
+        boolean ctrl = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_CONTROL)
+                || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_CONTROL);
+        boolean shift = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT)
+                || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
+        boolean alt = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_ALT)
+                || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_ALT);
+        switch (RECIPE_LINK_KEY.getKeyModifier().name()) {
+            case "CONTROL": return ctrl && !shift && !alt;
+            case "SHIFT":   return shift && !ctrl && !alt;
+            case "ALT":     return alt && !ctrl && !shift;
+            default:        return !ctrl && !shift && !alt;
         }
     }
 
@@ -51,13 +75,14 @@ public final class JeiLinkerClient {
         if (minecraft.player == null || minecraft.screen instanceof ChatScreen) {
             return;
         }
-        if (!JeiLinkerJeiCalls.available()) {
-            return;
+        if (minecraft.screen != null
+                && minecraft.screen.getFocused() instanceof net.minecraft.client.gui.components.EditBox) {
+            return; // player is typing into a search box, not linking
         }
-        ItemStack jeiStack = JeiLinkerJeiCalls.itemStackUnderMouse();
+        ItemStack jeiStack = JeiLinkerJeiCalls.available() ? JeiLinkerJeiCalls.itemStackUnderMouse() : null;
         if (jeiStack != null && !jeiStack.isEmpty()) {
             if (hasCraftingRecipe(minecraft, jeiStack)) {
-                minecraft.setScreen(new ChatScreen(buildMarker(jeiStack, false)));
+                openChatWithMarker(minecraft, jeiStack, false);
             } else {
                 JeiLinkerJeiCalls.searchFor(jeiStack);
             }
@@ -65,10 +90,18 @@ public final class JeiLinkerClient {
         }
         // WoW-style: hover a slot in any open container (inventory included) and
         // link the exact stack, enchantments and all, without dropping it.
+        // Works with or without JEI installed.
         ItemStack slotStack = stackUnderMouseInContainer(minecraft);
         if (slotStack != null) {
-            minecraft.setScreen(new ChatScreen(buildMarker(slotStack, true)));
+            openChatWithMarker(minecraft, slotStack, true);
         }
+    }
+
+    /** Opens the chat with the link already typed in, plus an actionbar hint. */
+    private static void openChatWithMarker(Minecraft minecraft, ItemStack stack, boolean exactStack) {
+        minecraft.setScreen(new ChatScreen(buildMarker(stack, exactStack)));
+        minecraft.player.displayClientMessage(
+                net.minecraft.network.chat.Component.translatable("fallenrelics.jei_linker.inserted"), true);
     }
 
     @org.jetbrains.annotations.Nullable
