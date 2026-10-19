@@ -103,9 +103,12 @@ public final class JeiLinkerServer {
             // COMMON would render white = "no colour at all", so links of common
             // items borrow the yellow link colour; other rarities keep their own.
             net.minecraft.network.chat.TextColor nameColor = stack.getHoverName().getStyle().getColor();
-            net.minecraft.ChatFormatting rarityFallback = stack.getRarity() == net.minecraft.world.item.Rarity.COMMON
-                    ? net.minecraft.ChatFormatting.YELLOW
-                    : null;
+            net.minecraft.network.chat.TextColor linkColor;
+            if (stack.getRarity() == net.minecraft.world.item.Rarity.COMMON) {
+                linkColor = net.minecraft.network.chat.TextColor.fromLegacyFormat(net.minecraft.ChatFormatting.YELLOW);
+            } else {
+                linkColor = stack.getRarity().color();
+            }
             if (!hintLineDone) {
                 // discoverability: the pack swallows plain chat clicks, so the combo
                 // gets its own grey line right above the link
@@ -115,8 +118,7 @@ public final class JeiLinkerServer {
                 hintLineDone = true;
             }
             result.append(Component.literal("[" + label + "]").withStyle(style -> style
-                    .withColor(nameColor != null ? nameColor
-                            : (rarityFallback != null ? rarityFallback : stack.getRarity().color()))
+                    .withColor(nameColor != null ? nameColor : linkColor)
                     .withClickEvent(new ClickEvent(
                             ClickEvent.Action.RUN_COMMAND,
                             "/fallenrelics jei_recipe " + (id == null ? "minecraft:air" : id)))
