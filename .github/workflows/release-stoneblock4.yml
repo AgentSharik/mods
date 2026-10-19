@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.18: фикс ошибки v1.1.17: материал в названиях Apotheosis — конструкцией «из + род. падеж» («Ботинки из железа», а не калька «Ботинки железа»). Правило уточнено в AUDIT_WAVES.md. Поверх v1.1.17.
+# v1.1.19: names.cfg переведён заново — литературно по оригинальным спискам Apotheosis (без «ботинок из железа» и прочих выдумок v1.1.17–v1.1.18). Оформление релизов зафиксировано образцом RELEASE_NOTES_TEMPLATE.md. Поверх v1.1.18.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.18'
+        default: 'StoneBlock4-ru-v1.1.19'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.18' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.19' }}
     steps:
       - uses: actions/checkout@v4
 
