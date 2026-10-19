@@ -80,19 +80,6 @@ final class JeiLinkerJeiCalls {
                             }
                         }
                     }
-                    if (value instanceof net.minecraft.world.item.crafting.Ingredient ingredient) {
-                        try {
-                            ItemStack first = ingredient.getItems()
-                                    .filter(stack -> !stack.isEmpty())
-                                    .findFirst()
-                                    .orElse(null);
-                            if (first != null) {
-                                return first;
-                            }
-                        } catch (RuntimeException ignored) {
-                            // empty ingredient
-                        }
-                    }
                 }
                 clazz = clazz.getSuperclass();
             }
