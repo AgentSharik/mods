@@ -75,6 +75,22 @@ final class JeiLinkerJeiCalls {
                             if (element instanceof ItemStack stack && !stack.isEmpty()) {
                                 return stack;
                             }
+                            if (element instanceof net.minecraft.world.item.Item item) {
+                                return new ItemStack(item);
+                            }
+                        }
+                    }
+                    if (value instanceof net.minecraft.world.item.crafting.Ingredient ingredient) {
+                        try {
+                            ItemStack first = ingredient.getItems()
+                                    .filter(stack -> !stack.isEmpty())
+                                    .findFirst()
+                                    .orElse(null);
+                            if (first != null) {
+                                return first;
+                            }
+                        } catch (RuntimeException ignored) {
+                            // empty ingredient
                         }
                     }
                 }

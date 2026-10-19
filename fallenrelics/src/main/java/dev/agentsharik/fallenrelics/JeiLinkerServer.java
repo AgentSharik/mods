@@ -77,6 +77,7 @@ public final class JeiLinkerServer {
     static Component decorate(String raw, java.util.function.Function<String, ItemStack> tokenLookup) {
         Matcher matcher = LINK.matcher(raw);
         MutableComponent result = Component.empty();
+        boolean hintLineDone = false;
         int last = 0;
         while (matcher.find()) {
             if (matcher.start() > last) {
@@ -101,21 +102,27 @@ public final class JeiLinkerServer {
             }
             // COMMON would render white = "no colour at all", so links of common
             // items borrow the yellow link colour; other rarities keep their own.
-            net.minecraft.ChatFormatting linkColor = stack.getRarity() == net.minecraft.world.item.Rarity.COMMON
+            net.minecraft.network.chat.TextColor nameColor = stack.getHoverName().getStyle().getColor();
+            net.minecraft.ChatFormatting rarityFallback = stack.getRarity() == net.minecraft.world.item.Rarity.COMMON
                     ? net.minecraft.ChatFormatting.YELLOW
                     : null;
+            if (!hintLineDone) {
+                // discoverability: the pack swallows plain chat clicks, so the combo
+                // gets its own grey line right above the link
+                result.append(Component.translatable("fallenrelics.jei_linker.ctrl_suffix")
+                        .withStyle(style -> style.withColor(net.minecraft.ChatFormatting.DARK_GRAY)));
+                result.append(Component.literal("\n"));
+                hintLineDone = true;
+            }
             result.append(Component.literal("[" + label + "]").withStyle(style -> style
-                    .withColor(linkColor != null ? linkColor : stack.getRarity().color())
+                    .withColor(nameColor != null ? nameColor
+                            : (rarityFallback != null ? rarityFallback : stack.getRarity().color()))
                     .withClickEvent(new ClickEvent(
                             ClickEvent.Action.RUN_COMMAND,
                             "/fallenrelics jei_recipe " + (id == null ? "minecraft:air" : id)))
                     .withHoverEvent(new HoverEvent(
                             HoverEvent.Action.SHOW_ITEM,
                             new HoverEvent.ItemStackInfo(stack)))));
-            // discoverability: the pack swallows plain chat clicks, so the combo
-            // is advertised right next to every link
-            result.append(Component.translatable("fallenrelics.jei_linker.ctrl_suffix")
-                    .withStyle(style -> style.withColor(net.minecraft.ChatFormatting.DARK_GRAY)));
         }
         if (last < raw.length()) {
             result.append(Component.literal(raw.substring(last)));

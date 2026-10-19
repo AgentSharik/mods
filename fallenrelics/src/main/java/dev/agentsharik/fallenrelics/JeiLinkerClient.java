@@ -45,7 +45,27 @@ public final class JeiLinkerClient {
         // Client-only fallback: decorate own links and answer link clicks locally
         // when the server does not have the mod installed.
         NeoForge.EVENT_BUS.addListener(JeiLinkerClient::onChatReceived);
+        // Universal hover source: whatever item tooltip is on screen right now
+        // (any container, AE2/Ars terminals, JEI list and recipes gui included).
+        NeoForge.EVENT_BUS.addListener(JeiLinkerClient::onTooltipRender);
         NeoForge.EVENT_BUS.addListener(JeiLinkerClient::registerClientCommands);
+    }
+
+    private static volatile ItemStack lastTooltipStack = ItemStack.EMPTY;
+    private static volatile long lastTooltipAt;
+
+    private static void onTooltipRender(net.neoforged.neoforge.client.event.RenderTooltipEvent.Pre event) {
+        lastTooltipStack = event.getItemStack();
+        lastTooltipAt = System.currentTimeMillis();
+    }
+
+    @org.jetbrains.annotations.Nullable
+    private static ItemStack freshTooltipStack() {
+        ItemStack stack = lastTooltipStack;
+        if (stack != null && !stack.isEmpty() && System.currentTimeMillis() - lastTooltipAt < 250L) {
+            return stack;
+        }
+        return null;
     }
 
     /** Client-side twin of the server token registry, for servers without the mod. */
@@ -140,13 +160,19 @@ public final class JeiLinkerClient {
             return; // player is typing into a search box, not linking
         }
         try {
-            // 1) a container slot under the cursor wins: it carries the exact stack
+            // 1) the item tooltip currently on screen: exact stack in ANY gui
+            ItemStack tooltipStack = freshTooltipStack();
+            if (tooltipStack != null) {
+                openChatWithMarker(minecraft, tooltipStack, true);
+                return;
+            }
+            // 2) a container slot under the cursor: carries the exact stack too
             ItemStack slotStack = stackUnderMouseInContainer(minecraft);
             if (slotStack != null) {
                 openChatWithMarker(minecraft, slotStack, true);
                 return;
             }
-            // 2) anything JEI renders under the cursor: list, recipes gui, bookmarks, groups
+            // 3) anything JEI renders under the cursor: list, recipes gui, bookmarks, groups
             double mouseX = minecraft.mouseHandler.xpos();
             double mouseY = minecraft.mouseHandler.ypos();
             ItemStack jeiStack = JeiLinkerJeiCalls.available()
