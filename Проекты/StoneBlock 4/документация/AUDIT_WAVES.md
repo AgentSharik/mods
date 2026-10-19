@@ -73,3 +73,15 @@
 - Книги/гайды внутри JAR по системам: Patchouli (волна 5), Oracle/GuideMe —
   Powah (28 md RU, не хватало только общих PNG), Replication, SimpleTeleporters, EnergyMeter,
   JustDynaThings — полные; Modonomicon (Occultism, OccultEngineering) — текст в lang-ключах, покрыт.
+
+## Волна 8 — литеральные имена и генеративные имена (по скриншотам пользователя)
+- FTB Filter System: lang переведён 65/65, английским оставался только displayName
+  в neoforge.mods.toml («FTB Filter System») — заменён на «FTB Система Фильтрации» (JAR пропатчен).
+- Заголовки filter-квестов: FTB Quests берёт заголовок из имени предмета-задания;
+  45 литеральных custom_name в 9 главах переведены на месте (главы шипятся в релиз).
+- Apotheosis: генеративные имена предметов/боссов берутся НЕ из lang, а из
+  config/apotheosis/names.cfg (класс NameHelper; дефолты вытащены из байткода <clinit>).
+  В релиз включён полностью переведённый names.cfg: 737 записей —
+  Names (341), Name Parts (117), Prefixes (30), Suffixes (91), корни предметов (80),
+  материалы инструментов (50) и брони (28); Suffix Format «%s %s», Ownership Format «%s».
+- Fallen Relics (мод автора): обновлён 1.5.17 → 1.6.0, русский встроен автором (54/54).

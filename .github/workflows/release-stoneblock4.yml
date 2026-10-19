@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.15: заголовки filter-квестов переведены в самих главах (45 литеральных custom_name в 9 главах: «Relay Extras»→«Дополнения реле» и др. — FTB Quests берёт заголовок из имени предмета-задания, lang-ключ работает не всегда); displayName мода FTB Filter System → «FTB Система Фильтрации» (lang мода был переведён, английским оставался только mods.toml). Поверх v1.1.14.
+# v1.1.16: мод автора Fallen Relics обновлён до 1.6.0 (новый JAR автора, ru встроен 54/54); Apotheosis: переведён config/apotheosis/names.cfg — 737 генеративных имён (имена/фрагменты/титулы/прозвища боссов, корни предметов, материалы) — NameHelper берёт их из конфига, а не из lang (пример: «Bajorno's Iron Boots» → «Баджорно Железный Ботинки»). Поверх v1.1.15.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.15'
+        default: 'StoneBlock4-ru-v1.1.16'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.15' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.16' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -47,6 +47,9 @@ jobs:
           cp "$SB4/документация/release/config/fancymenu/assets/buttons/"*.png pkg/config/fancymenu/assets/buttons/
           test -f pkg/config/fancymenu/title_screen_button.txt
           test -f pkg/config/fancymenu/assets/buttons/singleplayer.png
+          mkdir -p pkg/config/apotheosis
+          cp "$SB4/документация/release/config/apotheosis/names.cfg" pkg/config/apotheosis/names.cfg
+          test -f pkg/config/apotheosis/names.cfg
           mkdir -p pkg/config/collapsiblegroups/lang
           cp "$SB4/документация/release/config/collapsiblegroups/lang/ru_ru.json" pkg/config/collapsiblegroups/lang/ru_ru.json
           test -f pkg/config/collapsiblegroups/lang/ru_ru.json
@@ -72,6 +75,7 @@ jobs:
           test "$n" -eq 38
           cd pkg
           zip -0 -q -r ../StoneBlock.4.zip .
+          unzip -l ../StoneBlock.4.zip | grep -q "config/apotheosis/names.cfg"
           unzip -l ../StoneBlock.4.zip | grep -q "config/ftbquests/quests/chapters/general_magic.snbt"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/lang/ru_ru.json"
           echo "Проверка: kubejs/assets/ftb/lang/ru_ru.json присутствует в архиве"
