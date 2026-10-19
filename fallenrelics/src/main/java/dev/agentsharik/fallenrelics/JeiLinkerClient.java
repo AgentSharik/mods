@@ -79,21 +79,31 @@ public final class JeiLinkerClient {
                 && minecraft.screen.getFocused() instanceof net.minecraft.client.gui.components.EditBox) {
             return; // player is typing into a search box, not linking
         }
-        ItemStack jeiStack = JeiLinkerJeiCalls.available() ? JeiLinkerJeiCalls.itemStackUnderMouse() : null;
-        if (jeiStack != null && !jeiStack.isEmpty()) {
-            if (hasCraftingRecipe(minecraft, jeiStack)) {
+        try {
+            ItemStack jeiStack = JeiLinkerJeiCalls.available() ? JeiLinkerJeiCalls.itemStackUnderMouse() : null;
+            if (jeiStack != null && !jeiStack.isEmpty()) {
+                // The chat link is the point: give it even when JEI has no recipe for it.
                 openChatWithMarker(minecraft, jeiStack, false);
-            } else {
-                JeiLinkerJeiCalls.searchFor(jeiStack);
+                return;
             }
-            return;
+            // WoW-style: hover a slot in any open container (inventory included) and
+            // link the exact stack, enchantments and all, without dropping it.
+            // Works with or without JEI installed.
+            ItemStack slotStack = stackUnderMouseInContainer(minecraft);
+            if (slotStack != null) {
+                openChatWithMarker(minecraft, slotStack, true);
+            } else if (minecraft.screen instanceof net.minecraft.client.gui.screens.inventory.AbstractContainerScreen<?>) {
+                actionBar(minecraft, "fallenrelics.jei_linker.no_item");
+            }
+        } catch (Throwable boom) {
+            actionBar(minecraft, "fallenrelics.jei_linker.error", boom.getClass().getSimpleName());
         }
-        // WoW-style: hover a slot in any open container (inventory included) and
-        // link the exact stack, enchantments and all, without dropping it.
-        // Works with or without JEI installed.
-        ItemStack slotStack = stackUnderMouseInContainer(minecraft);
-        if (slotStack != null) {
-            openChatWithMarker(minecraft, slotStack, true);
+    }
+
+    private static void actionBar(Minecraft minecraft, String key, Object... args) {
+        if (minecraft.player != null) {
+            minecraft.player.displayClientMessage(
+                    net.minecraft.network.chat.Component.translatable(key, args), true);
         }
     }
 
@@ -113,13 +123,18 @@ public final class JeiLinkerClient {
         double mouseY = minecraft.mouseHandler.ypos();
         int left = screenField(screen, "leftPos");
         int top = screenField(screen, "topPos");
+        if (left <= 0 && top <= 0) {
+            // reflection found nothing: vanilla containers are centred 176x166 windows
+            left = (screen.width - 176) / 2;
+            top = (screen.height - 166) / 2;
+        }
         for (net.minecraft.world.inventory.Slot slot : screen.getMenu().slots) {
             if (!slot.hasItem()) {
                 continue;
             }
             int slotX = left + slot.x;
             int slotY = top + slot.y;
-            if (mouseX >= slotX && mouseX < slotX + 16 && mouseY >= slotY && mouseY < slotY + 16) {
+            if (mouseX >= slotX - 1 && mouseX < slotX + 17 && mouseY >= slotY - 1 && mouseY < slotY + 17) {
                 return slot.getItem();
             }
         }
@@ -141,19 +156,6 @@ public final class JeiLinkerClient {
                 return 0;
             }
         }
-    }
-
-    private static boolean hasCraftingRecipe(Minecraft minecraft, ItemStack stack) {
-        List<RecipeHolder<CraftingRecipe>> recipes = minecraft.player.level()
-                .getRecipeManager()
-                .getAllRecipesFor(RecipeType.CRAFTING);
-        for (RecipeHolder<CraftingRecipe> holder : recipes) {
-            ItemStack result = holder.value().getResultItem(minecraft.player.level().registryAccess());
-            if (result.is(stack.getItem())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     static String buildMarker(ItemStack stack, boolean exactStack) {
@@ -179,6 +181,10 @@ public final class JeiLinkerClient {
             }
             return;
         }
-        BuiltInRegistries.ITEM.getOptional(id).ifPresent(item -> JeiLinkerJeiCalls.showRecipes(new ItemStack(item)));
+        BuiltInRegistries.ITEM.getOptional(id).ifPresent(item -> {
+            ItemStack stack = new ItemStack(item);
+            JeiLinkerJeiCalls.showRecipes(stack);
+            actionBar(minecraft, "fallenrelics.jei_linker.opening", stack.getHoverName());
+        });
     }
 }

@@ -34,14 +34,6 @@ final class JeiLinkerJeiCalls {
         return overlay.getIngredientUnderMouse(VanillaTypes.ITEM_STACK);
     }
 
-    /** Variant B: put the item name into JEI's search box. */
-    static void searchFor(ItemStack stack) {
-        IJeiRuntime runtime = JeiLinkerPlugin.runtime();
-        if (runtime != null) {
-            runtime.getIngredientFilter().setFilterText(stack.getHoverName().getString());
-        }
-    }
-
     /** On-click behaviour of the chat link: the same view the R key opens. */
     static void showRecipes(ItemStack stack) {
         IJeiRuntime runtime = JeiLinkerPlugin.runtime();
