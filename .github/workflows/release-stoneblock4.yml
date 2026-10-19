@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.16: мод автора Fallen Relics обновлён до 1.6.0 (новый JAR автора, ru встроен 54/54); Apotheosis: переведён config/apotheosis/names.cfg — 737 генеративных имён (имена/фрагменты/титулы/прозвища боссов, корни предметов, материалы) — NameHelper берёт их из конфига, а не из lang (пример: «Bajorno's Iron Boots» → «Баджорно Железный Ботинки»). Поверх v1.1.15.
+# v1.1.17: names.cfg Apotheosis переделан по правилам пользователя: материалы — родительным падежом («Ботинки железа» вместо несогласованного «Железный Ботинки»), имена — аккуратной транслитерацией («Байорно» вместо «Баджорно»). Правила перевода записаны в AUDIT_WAVES.md. Поверх v1.1.16.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.16'
+        default: 'StoneBlock4-ru-v1.1.17'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.16' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.17' }}
     steps:
       - uses: actions/checkout@v4
 
