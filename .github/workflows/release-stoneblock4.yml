@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.14: глубокий аудит каждого мода (волна 7): смешанные строки в 6 модах, английские вставки {...} в книге Industrial Foregoing (30 записей), сверка всех наборов ключей и книжных систем (Patchouli/Oracle/GuideMe/Modonomicon). Книга квестов не трогалась. Поверх v1.1.13.
+# v1.1.15: заголовки filter-квестов переведены в самих главах (45 литеральных custom_name в 9 главах: «Relay Extras»→«Дополнения реле» и др. — FTB Quests берёт заголовок из имени предмета-задания, lang-ключ работает не всегда); displayName мода FTB Filter System → «FTB Система Фильтрации» (lang мода был переведён, английским оставался только mods.toml). Поверх v1.1.14.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.14'
+        default: 'StoneBlock4-ru-v1.1.15'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.14' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.15' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -39,6 +39,9 @@ jobs:
           mkdir -p pkg/mods pkg/config/ftbquests/quests/lang
           cp "$SB4"/*.jar pkg/mods/
           cp "$SB4/документация/_ftbquests_wip/ru_ru.snbt" pkg/config/ftbquests/quests/lang/ru_ru.snbt
+          mkdir -p pkg/config/ftbquests/quests/chapters
+          cp "$SB4/документация/release/config/ftbquests/quests/chapters/"*.snbt pkg/config/ftbquests/quests/chapters/
+          test -f pkg/config/ftbquests/quests/chapters/general_magic.snbt
           mkdir -p pkg/config/fancymenu/assets/buttons
           cp "$SB4/документация/release/config/fancymenu/"*.txt pkg/config/fancymenu/
           cp "$SB4/документация/release/config/fancymenu/assets/buttons/"*.png pkg/config/fancymenu/assets/buttons/
@@ -69,6 +72,7 @@ jobs:
           test "$n" -eq 38
           cd pkg
           zip -0 -q -r ../StoneBlock.4.zip .
+          unzip -l ../StoneBlock.4.zip | grep -q "config/ftbquests/quests/chapters/general_magic.snbt"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/lang/ru_ru.json"
           echo "Проверка: kubejs/assets/ftb/lang/ru_ru.json присутствует в архиве"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/sounds.json"
