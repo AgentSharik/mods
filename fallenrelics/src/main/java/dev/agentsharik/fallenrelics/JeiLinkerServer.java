@@ -111,7 +111,7 @@ public final class JeiLinkerServer {
                             "/fallenrelics jei_recipe " + (id == null ? "minecraft:air" : id)))
                     .withHoverEvent(new HoverEvent(
                             HoverEvent.Action.SHOW_ITEM,
-                            new HoverEvent.ItemStackInfo(stack))));
+                            new HoverEvent.ItemStackInfo(stack)))));
             // discoverability: the pack swallows plain chat clicks, so the combo
             // is advertised right next to every link
             result.append(Component.translatable("fallenrelics.jei_linker.ctrl_suffix")
