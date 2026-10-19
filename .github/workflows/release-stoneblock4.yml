@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.19: names.cfg переведён заново — литературно по оригинальным спискам Apotheosis (без «ботинок из железа» и прочих выдумок v1.1.17–v1.1.18). Оформление релизов зафиксировано образцом RELEASE_NOTES_TEMPLATE.md. Поверх v1.1.18.
+# v1.1.20: фикс русской озвучки Эхо: мод FTB Echoes ищет событие ftb:ru_ru/<диалог> в реестре и при отсутствии играет английское; наши ru_ru события никто не регистрировал (пак регистрирует только свои). Добавлен kubejs/startup_scripts/ru_echo_sounds.js — регистрирует все 38 событий ftb:ru_ru/*. Поверх v1.1.19.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.19'
+        default: 'StoneBlock4-ru-v1.1.20'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.19' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.20' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -79,6 +79,8 @@ jobs:
           unzip -l ../StoneBlock.4.zip | grep -q "config/ftbquests/quests/chapters/general_magic.snbt"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/lang/ru_ru.json"
           echo "Проверка: kubejs/assets/ftb/lang/ru_ru.json присутствует в архиве"
+          unzip -l ../StoneBlock.4.zip | grep -q "kubejs/startup_scripts/ru_echo_sounds.js"
+          test "$(grep -c "event.create('ftb:ru_ru/" ../pkg/kubejs/startup_scripts/ru_echo_sounds.js)" -eq 38
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/sounds.json"
           test "$(unzip -l ../StoneBlock.4.zip | grep -c 'sounds/echo/ru_ru/.*\.ogg')" -eq 38
           echo "Проверка: sounds.json и 38 файлов русской озвучки Эхо в архиве"
