@@ -83,7 +83,7 @@ public final class JeiLinkerClient {
     private static void registerClientCommands(RegisterClientCommandsEvent event) {
         event.getDispatcher().register(net.minecraft.commands.Commands.literal("fallenrelics")
                 .then(net.minecraft.commands.Commands.literal("jei_recipe")
-                        .then(net.minecraft.commands.argument("item", net.minecraft.commands.arguments.ResourceLocationArgument.id())
+                        .then(net.minecraft.commands.Commands.argument("item", net.minecraft.commands.arguments.ResourceLocationArgument.id())
                                 .executes(context -> {
                                     openRecipesById(net.minecraft.commands.arguments.ResourceLocationArgument.getId(context, "item"));
                                     return 1;
