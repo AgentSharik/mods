@@ -65,22 +65,11 @@ def apply_rules(text, st, fname):
     if fname == 'README.md':
         rules = [
             (r'(%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BE-)\d+', r'\g<1>' + str(st['total_jars'])),
-            (r'(%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-)[\d%20]+',
-             lambda m: m.group(1) + str(st['total_keys'])),
-            (r'<summary><b>StoneBlock 4</b> — сборка целиком: [^<]*</summary>',
-             f"<summary><b>StoneBlock 4</b> — сборка целиком: {st['sb_jars']} готовых JAR, "
-             f"{fmt(st['sb_keys'])} ключей; переведены гайды и книги всех видов, "
-             f"квесты, GUI и имена Эхо</summary>"),
-            (r'\*\*Моды из сборки\*\* — [^\n]*',
-             f"**Моды из сборки** — каждый мод доводится до конца отдельно: переведены "
-             f"все lang-ключи, гайды и книги всех видов (Patchouli, Modonomicon, GuideME, "
-             f"Oracle Index), квесты сборки, отображаемые строки интерфейсов (GUI) "
-             f"в коде модов и имена Эхо."),
+            (r'(%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%BE-)\d+',
+             r'\g<1>' + str(st['total_keys'])),
             (r'\| Готовых JAR \| \*\*\d+\*\* \|', f"| Готовых JAR | **{st['sb_jars']}** |"),
             (r'\| Ключей переведено \| \*\*[\d ]+\*\* \|',
              f"| Ключей переведено | **{fmt(st['sb_keys'])}** |"),
-            (r'Состав перевода целиком \(все \d+ готовых JAR, гайды, полнота, качество\)',
-             f"Состав перевода целиком (все {st['sb_jars']} готовых JAR, гайды, полнота, качество)"),
             (r'\| `Axiom-6\.1\.3-for-MC1\.21\.1\.jar` \| [\d ]+ \|',
              f"| `Axiom-6.1.3-for-MC1.21.1.jar` | {fmt(st['sep_keys'])} |"),
         ]
@@ -117,17 +106,10 @@ def validate(text, st, fname):
         if bad in text:
             problems.append(f'остался итог по старой методике: «{bad}»')
     if fname == 'README.md':
-        m = re.search(
-            r'\| Волна \| Готовых JAR \| Ключей \| Состав \|(?P<body>.*?)\| \*\*Итого\*\* \| \*\*(\d+)\*\* \|',
-            text, re.S)
-        if not m:
-            problems.append('не найдена сводная таблица волн по готовым JAR')
-        else:
-            rows = [int(n) for n in re.findall(r'\|[^|\n]+ \| (\d+) \| [\d ]+ \|', m.group('body'))]
-            if sum(rows) != st['sb_jars'] or int(m.group(2)) != st['sb_jars']:
-                problems.append(
-                    f"сводная таблица волн: сумма {sum(rows)} и итог {m.group(2)} "
-                    f"не равны числу готовых JAR ({st['sb_jars']})")
+        if f"| Готовых JAR | **{st['sb_jars']}** |" not in text:
+            problems.append('в разделе StoneBlock 4 не указано фактическое число готовых JAR')
+        if f"| Ключей переведено | **{fmt(st['sb_keys'])}** |" not in text:
+            problems.append('в разделе StoneBlock 4 не указано фактическое число ключей')
     if fname == 'RELEASE_CONTENTS.md':
         missing = [os.path.basename(p) for p in jars(SB4)
                    if os.path.basename(p) not in text]
