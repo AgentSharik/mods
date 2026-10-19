@@ -34,7 +34,7 @@ public final class JeiLinkerServer {
     public static final String MARKER_PREFIX = "<link:";
     public static final String MARKER_SUFFIX = "</link>";
 
-    private static final Pattern LINK = Pattern.compile(
+    static final Pattern LINK = Pattern.compile(
             "<link:(recipe|item):([^>]+)>\\[([^\\]]*)\\]</link>");
 
     /** Exact stacks registered behind item-link tokens, with an expiry stamp. */
@@ -67,6 +67,14 @@ public final class JeiLinkerServer {
         if (raw == null || !raw.contains(MARKER_PREFIX)) {
             return;
         }
+        event.setMessage(decorate(raw, JeiLinkerServer::tokenStack));
+    }
+
+    /**
+     * Turns raw markers into coloured, clickable [Name] components. Shared with the
+     * client-side fallback so links look the same even on servers without the mod.
+     */
+    static Component decorate(String raw, java.util.function.Function<String, ItemStack> tokenLookup) {
         Matcher matcher = LINK.matcher(raw);
         MutableComponent result = Component.empty();
         int last = 0;
@@ -81,13 +89,13 @@ public final class JeiLinkerServer {
             ItemStack stack;
             ResourceLocation id;
             if (kind.equals("item")) {
-                stack = tokenStack(target);
+                stack = tokenLookup.apply(target);
                 id = stack == null ? null : BuiltInRegistries.ITEM.getKey(stack.getItem());
             } else {
                 id = ResourceLocation.tryParse(target);
                 stack = id == null ? ItemStack.EMPTY : new ItemStack(BuiltInRegistries.ITEM.get(id));
             }
-            if (stack.isEmpty()) {
+            if (stack == null || stack.isEmpty()) {
                 result.append(Component.literal("[" + label + "]"));
                 continue;
             }
@@ -103,7 +111,7 @@ public final class JeiLinkerServer {
         if (last < raw.length()) {
             result.append(Component.literal(raw.substring(last)));
         }
-        event.setMessage(result);
+        return result;
     }
 
     @SubscribeEvent

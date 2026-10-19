@@ -12,7 +12,9 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientChatReceivedEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.lwjgl.glfw.GLFW;
@@ -40,6 +42,52 @@ public final class JeiLinkerClient {
         // Raw key events fire even while a container/JEI screen is open - unlike
         // KeyMapping#consumeClick, which vanilla only clicks when no screen is up.
         NeoForge.EVENT_BUS.addListener(JeiLinkerClient::onKeyInput);
+        // Client-only fallback: decorate own links and answer link clicks locally
+        // when the server does not have the mod installed.
+        NeoForge.EVENT_BUS.addListener(JeiLinkerClient::onChatReceived);
+        NeoForge.EVENT_BUS.addListener(JeiLinkerClient::registerClientCommands);
+    }
+
+    /** Client-side twin of the server token registry, for servers without the mod. */
+    private static final java.util.Map<String, ClientToken> CLIENT_TOKENS = new java.util.concurrent.ConcurrentHashMap<>();
+
+    private record ClientToken(ItemStack stack, long expiresAt) {}
+
+    private static void rememberToken(String token, ItemStack stack) {
+        if (CLIENT_TOKENS.size() > 512) {
+            long now = System.currentTimeMillis();
+            CLIENT_TOKENS.entrySet().removeIf(entry -> entry.getValue().expiresAt() < now);
+        }
+        CLIENT_TOKENS.put(token, new ClientToken(stack.copy(), System.currentTimeMillis() + 600_000L));
+    }
+
+    @org.jetbrains.annotations.Nullable
+    private static ItemStack clientTokenStack(String token) {
+        ClientToken entry = CLIENT_TOKENS.get(token);
+        if (entry == null || entry.expiresAt() < System.currentTimeMillis()) {
+            return null;
+        }
+        return entry.stack();
+    }
+
+    /** The server never decorated the message (no mod there): do it locally. */
+    private static void onChatReceived(ClientChatReceivedEvent event) {
+        String raw = event.getMessage().getString();
+        if (raw == null || !raw.contains(JeiLinkerServer.MARKER_PREFIX)) {
+            return;
+        }
+        event.setMessage(JeiLinkerServer.decorate(raw, JeiLinkerClient::clientTokenStack));
+    }
+
+    /** NeoForge routes RUN_COMMAND clicks through client commands, so this answers link clicks locally. */
+    private static void registerClientCommands(RegisterClientCommandsEvent event) {
+        event.getDispatcher().register(net.minecraft.commands.Commands.literal("fallenrelics")
+                .then(net.minecraft.commands.Commands.literal("jei_recipe")
+                        .then(net.minecraft.commands.argument("item", net.minecraft.commands.arguments.ResourceLocationArgument.id())
+                                .executes(context -> {
+                                    openRecipesById(net.minecraft.commands.arguments.ResourceLocationArgument.getId(context, "item"));
+                                    return 1;
+                                }))));
     }
 
     private static void onKeyInput(InputEvent.Key event) {
@@ -162,6 +210,7 @@ public final class JeiLinkerClient {
         String target;
         if (exactStack) {
             String token = java.util.UUID.randomUUID().toString();
+            rememberToken(token, stack);
             net.neoforged.neoforge.network.PacketDistributor.sendToServer(
                     new LinkRegisterPayload(token, stack.copy()));
             target = "item:" + token;
