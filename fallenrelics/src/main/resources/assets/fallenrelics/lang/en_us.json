@@ -46,7 +46,7 @@
   "key.fallenrelics.jei_recipe_link": "Send item to chat / search in JEI",
   "key.categories.fallenrelics": "Fallen Relics",
   "fallenrelics.jei_linker.ctrl_suffix": "Ctrl+LMB on the link below - recipes",
-  "fallenrelics.jei_linker.ctrl_hint": "Hold Ctrl and click the link to open recipes",
+  "fallenrelics.jei_linker.ctrl_hint": "Link sent - Ctrl+LMB on it in chat opens recipes",
   "fallenrelics.jei_linker.no_item": "Hover the cursor over an item to link it",
   "fallenrelics.jei_linker.opening": "Opening recipes: %s",
   "fallenrelics.jei_linker.error": "Linker error: %s",

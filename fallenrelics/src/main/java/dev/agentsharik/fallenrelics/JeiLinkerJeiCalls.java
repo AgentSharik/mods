@@ -43,42 +43,53 @@ final class JeiLinkerJeiCalls {
     /** Groups (Collapsible Groups etc.) are not stacks: take the first stack inside them. */
     @org.jetbrains.annotations.Nullable
     private static ItemStack flattenIngredient(Object ingredient) {
-        if (ingredient == null) {
+        return firstStack(ingredient, 0);
+    }
+
+    /** Groups hide their stacks in fields of fields: walk two levels deep. */
+    @org.jetbrains.annotations.Nullable
+    private static ItemStack firstStack(Object node, int depth) {
+        if (node == null || depth > 2) {
             return null;
         }
-        if (ingredient instanceof ItemStack stack) {
+        if (node instanceof ItemStack stack) {
             return stack.isEmpty() ? null : stack;
         }
+        if (node instanceof net.minecraft.world.item.Item item) {
+            return new ItemStack(item);
+        }
+        if (node instanceof Iterable<?> iterable) {
+            for (Object element : iterable) {
+                ItemStack found = firstStack(element, depth + 1);
+                if (found != null) {
+                    return found;
+                }
+            }
+            return null;
+        }
+        if (node instanceof Object[] array) {
+            for (Object element : array) {
+                ItemStack found = firstStack(element, depth + 1);
+                if (found != null) {
+                    return found;
+                }
+            }
+            return null;
+        }
+        if (node instanceof String || node instanceof Number || node instanceof Boolean) {
+            return null;
+        }
         try {
-            Class<?> clazz = ingredient.getClass();
+            Class<?> clazz = node.getClass();
             while (clazz != null && clazz != Object.class) {
                 for (java.lang.reflect.Field field : clazz.getDeclaredFields()) {
-                    Class<?> type = field.getType();
-                    if (type != ItemStack.class && type != ItemStack[].class
-                            && !java.util.Collection.class.isAssignableFrom(type)) {
+                    if (field.getType().isPrimitive() || field.isSynthetic()) {
                         continue;
                     }
                     field.setAccessible(true);
-                    Object value = field.get(ingredient);
-                    if (value instanceof ItemStack stack && !stack.isEmpty()) {
-                        return stack;
-                    }
-                    if (value instanceof ItemStack[] array) {
-                        for (ItemStack element : array) {
-                            if (element != null && !element.isEmpty()) {
-                                return element;
-                            }
-                        }
-                    }
-                    if (value instanceof java.util.Collection<?> collection) {
-                        for (Object element : collection) {
-                            if (element instanceof ItemStack stack && !stack.isEmpty()) {
-                                return stack;
-                            }
-                            if (element instanceof net.minecraft.world.item.Item item) {
-                                return new ItemStack(item);
-                            }
-                        }
+                    ItemStack found = firstStack(field.get(node), depth + 1);
+                    if (found != null) {
+                        return found;
                     }
                 }
                 clazz = clazz.getSuperclass();

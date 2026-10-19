@@ -77,7 +77,6 @@ public final class JeiLinkerServer {
     static Component decorate(String raw, java.util.function.Function<String, ItemStack> tokenLookup) {
         Matcher matcher = LINK.matcher(raw);
         MutableComponent result = Component.empty();
-        boolean hintLineDone = false;
         int last = 0;
         while (matcher.find()) {
             if (matcher.start() > last) {
@@ -107,14 +106,6 @@ public final class JeiLinkerServer {
                     stack.getRarity() == net.minecraft.world.item.Rarity.COMMON
                             ? net.minecraft.ChatFormatting.YELLOW
                             : stack.getRarity().color());
-            if (!hintLineDone) {
-                // discoverability: the pack swallows plain chat clicks, so the combo
-                // gets its own grey line right above the link
-                result.append(Component.translatable("fallenrelics.jei_linker.ctrl_suffix")
-                        .withStyle(style -> style.withColor(net.minecraft.ChatFormatting.DARK_GRAY)));
-                result.append(Component.literal("\n"));
-                hintLineDone = true;
-            }
             result.append(Component.literal("[" + label + "]").withStyle(style -> style
                     .withColor(nameColor != null ? nameColor : linkColor)
                     .withClickEvent(new ClickEvent(

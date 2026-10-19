@@ -92,11 +92,30 @@ public final class JeiLinkerClient {
 
     /** The server never decorated the message (no mod there): do it locally. */
     private static void onChatReceived(ClientChatReceivedEvent event) {
-        String raw = event.getMessage().getString();
-        if (raw == null || !raw.contains(JeiLinkerServer.MARKER_PREFIX)) {
+        net.minecraft.network.chat.Component message = event.getMessage();
+        String raw = message.getString();
+        if (raw != null && raw.contains(JeiLinkerServer.MARKER_PREFIX)) {
+            event.setMessage(JeiLinkerServer.decorate(raw, JeiLinkerClient::clientTokenStack));
+            actionBar(Minecraft.getInstance(), "fallenrelics.jei_linker.ctrl_hint");
             return;
         }
-        event.setMessage(JeiLinkerServer.decorate(raw, JeiLinkerClient::clientTokenStack));
+        if (hasLinkClickEvent(message)) {
+            actionBar(Minecraft.getInstance(), "fallenrelics.jei_linker.ctrl_hint");
+        }
+    }
+
+    /** True when any part of the message carries our recipe-opening click event. */
+    private static boolean hasLinkClickEvent(net.minecraft.network.chat.Component message) {
+        net.minecraft.network.chat.ClickEvent click = message.getStyle().getClickEvent();
+        if (click != null && click.getValue() != null && click.getValue().startsWith("/fallenrelics jei_recipe")) {
+            return true;
+        }
+        for (net.minecraft.network.chat.Component sibling : message.getSiblings()) {
+            if (hasLinkClickEvent(sibling)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** NeoForge routes RUN_COMMAND clicks through client commands, so this answers link clicks locally. */
@@ -133,6 +152,12 @@ public final class JeiLinkerClient {
         handlePress();
     }
 
+    /** Letters/digits/numpad type into a focused search box; F-keys and the like do not. */
+    private static boolean isTypeableKey(int keyCode) {
+        return keyCode >= org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE && keyCode <= org.lwjgl.glfw.GLFW.GLFW_KEY_MENU
+                && keyCode < org.lwjgl.glfw.GLFW.GLFW_KEY_F1;
+    }
+
     /** Honours combos assigned in the controls screen (Ctrl/Shift/Alt + key). */
     private static boolean bindingModifiersDown() {
         long window = Minecraft.getInstance().getWindow().getWindow();
@@ -156,8 +181,9 @@ public final class JeiLinkerClient {
             return;
         }
         if (minecraft.screen != null
-                && minecraft.screen.getFocused() instanceof net.minecraft.client.gui.components.EditBox) {
-            return; // player is typing into a search box, not linking
+                && minecraft.screen.getFocused() instanceof net.minecraft.client.gui.components.EditBox
+                && isTypeableKey(RECIPE_LINK_KEY.getKey().getValue())) {
+            return; // player is typing into a search box and the bound key would type a char
         }
         try {
             // 1) the item tooltip currently on screen: exact stack in ANY gui
