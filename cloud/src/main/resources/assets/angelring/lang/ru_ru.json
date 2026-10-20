@@ -1,0 +1,21 @@
+{
+  "item.angelring.angel_ring": "Кольцо ангела",
+  "item.angelring.angel_ring.tooltip": "Даёт полёт, как в творческом режиме, пока надето в слоте для колец",
+  "item.angelring.angel_ring.desc": "Даёт полёт, как в творческом режиме. Чем дольше вы летите, тем выше уровень кольца.",
+  "tooltip.angelring.level": "Уровень %s/%s",
+  "tooltip.angelring.open_hint": "Нажмите J, чтобы открыть окно кольца",
+  "key.angelring.open_relic": "Открыть окно Кольца ангела",
+  "key.categories.angelring": "Кольцо ангела",
+  "message.angelring.level_up": "Кольцо ангела: уровень %s!",
+  "message.angelring.not_worn": "Сначала наденьте Кольцо ангела в слот для колец (Curios)",
+  "gui.angelring.points": "Очки улучшений",
+  "gui.angelring.xp": "Опыт на текущем уровне",
+  "gui.angelring.flight_bonus": "Бонус к скорости полёта",
+  "gui.angelring.upgrade": "Улучшить",
+  "gui.angelring.max": "МАКС",
+  "gui.angelring.rank": "Ранг %s/%s",
+  "gui.angelring.speed_effect": "+%s%% скорость",
+  "gui.angelring.mastery_effect": "+%s%% опыта",
+  "gui.angelring.upgrade.speed": "Скорость",
+  "gui.angelring.upgrade.mastery": "Мастерство"
+}

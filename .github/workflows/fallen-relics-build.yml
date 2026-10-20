@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'fallenrelics/**'
+      - 'cloud/**'
       - '.github/workflows/fallen-relics-build.yml'
   workflow_dispatch:
 
@@ -42,6 +43,21 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
           exit "$result"
 
+      - name: Build Cloud addon
+        working-directory: cloud
+        shell: bash
+        run: |
+          set +e
+          ../fallenrelics/gradlew --no-daemon --stacktrace --console=plain build 2>&1 | tee gradle-build.log
+          result=${PIPESTATUS[0]}
+          {
+            echo '### Cloud addon Gradle build output (last 120 lines)'
+            echo '```text'
+            tail -n 120 gradle-build.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit "$result"
+
       - name: Upload built JAR artifact
         uses: actions/upload-artifact@v5
         with:
@@ -50,7 +66,7 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Publish JAR to the session branch
+      - name: Publish JARs to the session branch
         if: github.ref == 'refs/heads/arena/423851f4-mods'
         shell: bash
         run: |
@@ -60,14 +76,20 @@ jobs:
           test -f "$source_jar"
           cp "$source_jar" "$published_jar"
           find . -maxdepth 1 -type f -name 'fallen-relics-neoforge-1.21.1-*.jar' ! -name "$(basename "$published_jar")" -delete
+          cloud_ver="$(grep -E '^mod_version=' cloud/gradle.properties | cut -d= -f2 | tr -d '[:space:]')"
+          cloud_src="cloud/build/libs/angelring-1.21.1-${cloud_ver}.jar"
+          cloud_pub="angelring-1.21.1-${cloud_ver}.jar"
+          test -f "$cloud_src"
+          cp "$cloud_src" "$cloud_pub"
+          find . -maxdepth 1 -type f -name 'angelring-1.21.1-*.jar' ! -name "$(basename "$cloud_pub")" -delete
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$published_jar"
-          git add -u -- 'fallen-relics-neoforge-1.21.1-*.jar'
+          git add "$published_jar" "$cloud_pub"
+          git add -u -- 'fallen-relics-neoforge-1.21.1-*.jar' 'angelring-1.21.1-*.jar'
           if git diff --cached --quiet; then
-            echo 'The committed JAR is already up to date.'
+            echo 'The committed JARs are already up to date.'
           else
-            git commit -m 'Add built Fallen Relics NeoForge 1.21.1 JAR'
+            git commit -m 'Add built Fallen Relics and Cloud addon JARs'
             git fetch origin "${GITHUB_REF_NAME}"
             git merge --no-edit "origin/${GITHUB_REF_NAME}" || true
             git push origin "HEAD:${GITHUB_REF_NAME}"

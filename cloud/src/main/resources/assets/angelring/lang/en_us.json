@@ -1,0 +1,21 @@
+{
+  "item.angelring.angel_ring": "Angel Ring",
+  "item.angelring.angel_ring.tooltip": "Grants creative-style flight while worn in a ring slot",
+  "item.angelring.angel_ring.desc": "Grants creative-style flight. The longer you fly, the higher the ring's level climbs.",
+  "tooltip.angelring.level": "Level %s/%s",
+  "tooltip.angelring.open_hint": "Press J to open the ring window",
+  "key.angelring.open_relic": "Open Angel Ring window",
+  "key.categories.angelring": "Angel Ring",
+  "message.angelring.level_up": "Angel Ring: level %s!",
+  "message.angelring.not_worn": "Put the Angel Ring into a ring slot (Curios) first",
+  "gui.angelring.points": "Upgrade points",
+  "gui.angelring.xp": "Experience in this level",
+  "gui.angelring.flight_bonus": "Flight speed bonus",
+  "gui.angelring.upgrade": "Upgrade",
+  "gui.angelring.max": "MAX",
+  "gui.angelring.rank": "Rank %s/%s",
+  "gui.angelring.speed_effect": "+%s%% speed",
+  "gui.angelring.mastery_effect": "+%s%% XP",
+  "gui.angelring.upgrade.speed": "Speed",
+  "gui.angelring.upgrade.mastery": "Mastery"
+}
