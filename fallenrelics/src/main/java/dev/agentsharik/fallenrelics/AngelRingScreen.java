@@ -37,7 +37,7 @@ public final class AngelRingScreen extends Screen {
     };
 
     /** Panel art occupies the top 224 rows of the 256x256 sheet. */
-    private static final int WIDTH = 256;
+    private static final int WIDTH = 280;
     private static final int HEIGHT = 224;
 
     private static final int TITLE_COLOR = 0xFFE8E8EC;
@@ -141,14 +141,14 @@ public final class AngelRingScreen extends Screen {
             outline(graphics, 96, 126, 36, 44);
         }
         centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.header").getString(),
-                left + 223, top + 20, HEADER_COLOR, true);
+                left + 243, top + 20, HEADER_COLOR, true);
         plaque(graphics, 0, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.points").getString(),
                 stale ? "--" : String.valueOf(relic.points()));
         plaque(graphics, 1, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.xp").getString(),
                 stale ? "--" : String.valueOf(relic.xp()));
         plaque(graphics, 2, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.speed").getString(),
                 stale ? "--" : "+" + Math.round((relic.speedMultiplier() - 1.0F) * 100F) + "%");
-        centered(graphics, stale ? "--" : timeText(), left + 223, top + 104, HEADER_COLOR, true);
+        centered(graphics, stale ? "--" : timeText(), left + 243, top + 104, HEADER_COLOR, true);
         centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.hint").getString(),
                 left + 108, top + 204, 0xFF9A8CA0, true);
         tooltips(graphics, mouseX, mouseY, relic, stale);
@@ -244,8 +244,8 @@ public final class AngelRingScreen extends Screen {
 
     private void plaque(GuiGraphics graphics, int row, String label, String text) {
         int y = top + 36 + row * 22;
-        graphics.drawString(font, label, left + 198, y + 3, LABEL_DIM, false);
-        graphics.drawString(font, text, left + 198, y + 11, PLAQUE_COLOR, false);
+        graphics.drawString(font, label, left + 200, y + 5, LABEL_DIM, false);
+        graphics.drawString(font, text, left + 266 - font.width(text), y + 5, PLAQUE_COLOR, false);
     }
 
     private void centered(GuiGraphics graphics, String text, int centerX, int y, int color, boolean shadow) {
@@ -267,16 +267,16 @@ public final class AngelRingScreen extends Screen {
                     Component.translatable("gui.fallenrelics.angel_ring.ability.insurance.desc"),
                     Component.translatable("gui.fallenrelics.angel_ring.rank", relic.cushion(), RelicData.MAX_RANK),
                     Component.translatable("gui.fallenrelics.angel_ring.click"));
-        } else if (inside(mouseX, mouseY, 196, 36, 54, 18)) {
+        } else if (inside(mouseX, mouseY, 196, 36, 74, 18)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.points");
             body = List.of(Component.translatable("gui.fallenrelics.angel_ring.plaque.points.desc"));
-        } else if (inside(mouseX, mouseY, 196, 58, 54, 18)) {
+        } else if (inside(mouseX, mouseY, 196, 58, 74, 18)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.xp");
             body = List.of(Component.translatable("gui.fallenrelics.angel_ring.plaque.xp.desc"));
-        } else if (inside(mouseX, mouseY, 196, 80, 54, 18)) {
+        } else if (inside(mouseX, mouseY, 196, 80, 74, 18)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.speed");
             body = List.of(Component.translatable("gui.fallenrelics.angel_ring.plaque.speed.desc"));
-        } else if (inside(mouseX, mouseY, 196, 98, 54, 14)) {
+        } else if (inside(mouseX, mouseY, 196, 98, 74, 14)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.time");
             body = List.of(Component.literal(timeText()));
         } else if (inside(mouseX, mouseY, 44, 77, 46, 7)) {
