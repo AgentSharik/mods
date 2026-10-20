@@ -87,5 +87,6 @@
   "gui.fallenrelics.angel_ring.plaque.xp.desc": "Grows while flying, 5 per second",
   "gui.fallenrelics.angel_ring.plaque.speed": "Flight speed",
   "gui.fallenrelics.angel_ring.plaque.speed.desc": "+15% per Flight rank",
-  "message.fallenrelics.level_up": "Angel Ring: level %s!"
+  "message.fallenrelics.level_up": "Angel Ring: level %s!",
+  "item.fallenrelics.angel_ring.shift_hint": "Hold [Shift] over the ring in an inventory to inspect the relic"
 }

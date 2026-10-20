@@ -87,5 +87,6 @@
   "gui.fallenrelics.angel_ring.plaque.xp.desc": "Растёт за полёт, 5 очков в секунду",
   "gui.fallenrelics.angel_ring.plaque.speed": "Скорость полёта",
   "gui.fallenrelics.angel_ring.plaque.speed.desc": "+15% за ранг «Полёта»",
-  "message.fallenrelics.level_up": "Кольцо ангела: уровень %s!"
+  "message.fallenrelics.level_up": "Кольцо ангела: уровень %s!",
+  "item.fallenrelics.angel_ring.shift_hint": "Удерживай [Shift] над кольцом в инвентаре, чтобы исследовать реликвию"
 }

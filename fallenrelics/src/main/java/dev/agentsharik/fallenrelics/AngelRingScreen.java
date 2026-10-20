@@ -3,6 +3,8 @@ package dev.agentsharik.fallenrelics;
 import java.util.List;
 import java.util.Locale;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -12,47 +14,57 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
- * The relic scroll of the angel ring: a Relics-style relic sheet. Starfield
- * splat, two parchment rolls, the ring card with a level badge and level pips,
- * the candle-held experience bar, two ability cards with rank pips (click a
- * card to spend an upgrade point) and the right column of Relics counters.
- * Statuses and relic data arrive from the server once a second while open.
+ * The relic scroll of the angel ring, variant 2 grown up: the same composite
+ * structure (two rolls, ring card with badge and pips, candle-held bar, ability
+ * cards, counter column) but reskinned into deep black / dark grey / muted
+ * crimson, floating on a living organic smoke aura instead of hard frames.
+ * The smoke pulses and drifts in four baked frames, Relics-style but in our
+ * dark-red palette. Opens by right-click or by Shift-hovering the ring in any
+ * inventory (Relics manner); Esc returns to the previous screen.
  */
 public final class AngelRingScreen extends Screen {
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/angel_ring_screen.png");
     private static final ResourceLocation PORTRAIT =
             ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/ring_portrait.png");
+    private static final ResourceLocation[] SMOKE = {
+            ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/relic_smoke_0.png"),
+            ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/relic_smoke_1.png"),
+            ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/relic_smoke_2.png"),
+            ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/relic_smoke_3.png"),
+    };
 
     /** Panel art occupies the top 224 rows of the 256x256 sheet. */
     private static final int WIDTH = 256;
     private static final int HEIGHT = 224;
 
-    private static final int TITLE_COLOR = 0xFF3B2A18;
-    private static final int TEXT_COLOR = 0xFF6B5B45;
-    private static final int PLAQUE_COLOR = 0xFF2E2010;
-    private static final int HEADER_COLOR = 0xFFE8A33D;
-    private static final int BADGE_COLOR = 0xFFE8C060;
-    private static final int STATUS_FLYING = 0xFF55C955;
-    private static final int STATUS_WORN = 0xFFB07A20;
-    private static final int STATUS_IDLE = 0xFF8A7A63;
-    private static final int STATUS_CUSHION = 0xFF2E8C90;
-    private static final int BAR_FILL = 0xFF7EE0FF;
-    private static final int BAR_GLOSS = 0xFFD2F4FF;
-    private static final int BAR_EMPTY = 0xFF3A2A52;
-    private static final int PIP_FILL = 0xFFF0C050;
-    private static final int HOVER_GOLD = 0xFFE8A33D;
+    private static final int TITLE_COLOR = 0xFFE8E8EC;
+    private static final int TEXT_COLOR = 0xFFA8A8B0;
+    private static final int PLAQUE_COLOR = 0xFFDCDCE2;
+    private static final int HEADER_COLOR = 0xFFC85A5A;
+    private static final int BADGE_COLOR = 0xFFF0B4B4;
+    private static final int STATUS_FLYING = 0xFF78DC78;
+    private static final int STATUS_WORN = 0xFFDCB45A;
+    private static final int STATUS_IDLE = 0xFF8A8A92;
+    private static final int STATUS_CUSHION = 0xFF78C8C8;
+    private static final int BAR_FILL = 0xFFBE3C3C;
+    private static final int BAR_GLOSS = 0xFFE67878;
+    private static final int BAR_EMPTY = 0xFF141418;
+    private static final int PIP_FILL = 0xFFC85050;
+    private static final int HOVER_CRIMSON = 0xFFE67878;
     /** Level milestones behind the five pips under the ring card. */
     private static final int[] LEVEL_PIPS = {2, 4, 6, 8, 10};
 
     private final ItemStack ring;
+    private final Screen returnTo;
     private int left;
     private int top;
     private int ticks;
 
-    public AngelRingScreen(ItemStack ring) {
+    public AngelRingScreen(ItemStack ring, Screen returnTo) {
         super(Component.translatable("gui.fallenrelics.angel_ring.title"));
         this.ring = ring;
+        this.returnTo = returnTo;
     }
 
     @Override
@@ -76,14 +88,11 @@ public final class AngelRingScreen extends Screen {
         super.render(graphics, mouseX, mouseY, partialTick);
         RelicData relic = AngelRingStatusClient.relic();
         boolean stale = AngelRingStatusClient.stale();
+        drawSmoke(graphics, partialTick);
         graphics.blit(TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
         graphics.blit(PORTRAIT, left + 42, top + 30, 0, 0, 32, 32);
-        // level badge over the card, Relics-style
         if (!stale) {
             centered(graphics, String.valueOf(relic.level()), left + 62, top + 11, BADGE_COLOR, true);
-        }
-        // level milestone pips under the card
-        if (!stale) {
             for (int i = 0; i < LEVEL_PIPS.length; i++) {
                 if (relic.level() >= LEVEL_PIPS[i]) {
                     int cx = 44 + i * 9;
@@ -91,9 +100,8 @@ public final class AngelRingScreen extends Screen {
                 }
             }
         }
-        // title, live status line and prose on the top roll
         graphics.drawString(font, title, left + 88, top + 24, TITLE_COLOR, false);
-        graphics.fill(left + 88, top + 36, left + 184, top + 37, 0xFFB49A72);
+        graphics.fill(left + 88, top + 36, left + 184, top + 37, 0xFF5A4646);
         Component status = statusLine();
         graphics.drawString(font, status, left + 184 - font.width(status), top + 24, statusColor(), false);
         List<FormattedCharSequence> lines =
@@ -101,7 +109,6 @@ public final class AngelRingScreen extends Screen {
         for (int i = 0; i < lines.size() && i < 4; i++) {
             graphics.drawString(font, lines.get(i), left + 88, top + 42 + i * 10, TEXT_COLOR, false);
         }
-        // candle-held experience bar
         float ratio = relic.maxed() ? 1.0F : Math.min(1.0F, relic.xp() / (float) relic.xpToNext());
         int fill = Math.round(130 * ratio);
         graphics.fill(left + 45, top + 99, left + 175, top + 109, BAR_EMPTY);
@@ -113,16 +120,18 @@ public final class AngelRingScreen extends Screen {
                 : (relic.maxed() ? Component.translatable("gui.fallenrelics.angel_ring.max").getString()
                         : Math.round(ratio * 100F) + "%");
         centered(graphics, barLabel, left + 110, top + 100, 0xFFFFFFFF, true);
-        // ability cards: rank pips and hover highlight when an upgrade is affordable
         rankPips(graphics, relic.speed(), 47);
         rankPips(graphics, relic.cushion(), 99);
+        if (!stale) {
+            centered(graphics, relic.speed() + "/" + RelicData.MAX_RANK, left + 62, top + 174, TEXT_COLOR, false);
+            centered(graphics, relic.cushion() + "/" + RelicData.MAX_RANK, left + 114, top + 174, TEXT_COLOR, false);
+        }
         if (upgradable(RelicData.STAT_SPEED) && inside(mouseX, mouseY, 44, 126, 36, 44)) {
             outline(graphics, 44, 126, 36, 44);
         }
         if (upgradable(RelicData.STAT_CUSHION) && inside(mouseX, mouseY, 96, 126, 36, 44)) {
             outline(graphics, 96, 126, 36, 44);
         }
-        // right column: Relics counters and the flight clock
         centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.header").getString(),
                 left + 223, top + 20, HEADER_COLOR, true);
         plaque(graphics, 0, stale ? "--" : String.valueOf(relic.points()));
@@ -130,8 +139,21 @@ public final class AngelRingScreen extends Screen {
         plaque(graphics, 2, stale ? "--" : "+" + Math.round((relic.speedMultiplier() - 1.0F) * 100F) + "%");
         centered(graphics, stale ? "--" : timeText(), left + 223, top + 104, HEADER_COLOR, true);
         centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.hint").getString(),
-                left + 108, top + 204, 0xFFBFB3D9, true);
+                left + 108, top + 204, 0xFF9A8CA0, true);
         tooltips(graphics, mouseX, mouseY, relic, stale);
+    }
+
+    /** The living aura: four baked smoke frames, drifting wobble and alpha pulse. */
+    private void drawSmoke(GuiGraphics graphics, float partialTick) {
+        float t = (this.ticks + partialTick) * 1.0F;
+        int frame = ((int) (t / 6.0F) % SMOKE.length + SMOKE.length) % SMOKE.length;
+        int ox = Math.round((float) Math.sin(t / 9.0F) * 3.0F);
+        int oy = Math.round((float) Math.cos(t / 7.0F) * 2.0F);
+        float alpha = 0.72F + 0.18F * (float) Math.sin(t / 5.0F);
+        RenderSystem.enableBlend();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
+        graphics.blit(SMOKE[frame], left - 16 + ox, top - 16 + oy, 0, 0, 256, 256);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     private Component statusLine() {
@@ -178,10 +200,10 @@ public final class AngelRingScreen extends Screen {
     }
 
     private void outline(GuiGraphics graphics, int x, int y, int w, int h) {
-        graphics.fill(left + x - 1, top + y - 1, left + x + w + 1, top + y, HOVER_GOLD);
-        graphics.fill(left + x - 1, top + y + h, left + x + w + 1, top + y + h + 1, HOVER_GOLD);
-        graphics.fill(left + x - 1, top + y, left + x, top + y + h, HOVER_GOLD);
-        graphics.fill(left + x + w, top + y, left + x + w + 1, top + y + h, HOVER_GOLD);
+        graphics.fill(left + x - 1, top + y - 1, left + x + w + 1, top + y, HOVER_CRIMSON);
+        graphics.fill(left + x - 1, top + y + h, left + x + w + 1, top + y + h + 1, HOVER_CRIMSON);
+        graphics.fill(left + x - 1, top + y, left + x, top + y + h, HOVER_CRIMSON);
+        graphics.fill(left + x + w, top + y, left + x + w + 1, top + y + h, HOVER_CRIMSON);
     }
 
     private boolean upgradable(int stat) {
@@ -266,6 +288,16 @@ public final class AngelRingScreen extends Screen {
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    /** Esc brings back the inventory the scroll was opened from, if any. */
+    @Override
+    public void onClose() {
+        if (this.returnTo != null) {
+            this.minecraft.setScreen(this.returnTo);
+        } else {
+            super.onClose();
+        }
     }
 
     @Override

@@ -22,6 +22,7 @@ public class AngelRingItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("item.fallenrelics.angel_ring.tooltip").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.fallenrelics.angel_ring.scroll_hint").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.fallenrelics.angel_ring.shift_hint").withStyle(ChatFormatting.DARK_GRAY));
     }
 
     /** Right-click in hand opens the relic scroll screen (client side). */
@@ -29,7 +30,7 @@ public class AngelRingItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (level.isClientSide) {
-            net.minecraft.client.Minecraft.getInstance().setScreen(new AngelRingScreen(stack));
+            net.minecraft.client.Minecraft.getInstance().setScreen(new AngelRingScreen(stack, null));
             return InteractionResultHolder.success(stack);
         }
         return InteractionResultHolder.consume(stack);
