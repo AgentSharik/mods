@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.20: фикс русской озвучки Эхо: мод FTB Echoes ищет событие ftb:ru_ru/<диалог> в реестре и при отсутствии играет английское; наши ru_ru события никто не регистрировал (пак регистрирует только свои). Добавлен kubejs/startup_scripts/ru_echo_sounds.js — регистрирует все 38 событий ftb:ru_ru/*. Поверх v1.1.19.
+# v1.1.21: правки названий в описаниях квестов под имена предметов в игре (по скриншоту владельца): «Призрачные катушки» → «Спектральные катушки» (Irregular Implements), «Топливный нагреватель» → «Твердотопливный нагреватель» (Mekanism), 2 квеста. Только релизный ru_ru.snbt, эталон владельца не тронут. Поверх v1.1.20.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.20'
+        default: 'StoneBlock4-ru-v1.1.21'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.20' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.21' }}
     steps:
       - uses: actions/checkout@v4
 
