@@ -19,6 +19,18 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 public final class RelicHoverClient {
     private RelicHoverClient() {}
 
+    /** findSlot is private in 1.21.1, so hit-test the menu slots by their screen rects. */
+    private static Slot slotUnder(AbstractContainerScreen<?> container, double mx, double my) {
+        for (Slot slot : container.getMenu().slots) {
+            if (slot.isActive()
+                    && mx >= slot.x && mx < slot.x + 16
+                    && my >= slot.y && my < slot.y + 16) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
     private static boolean prevShift;
 
     @SubscribeEvent
@@ -33,7 +45,7 @@ public final class RelicHoverClient {
         double scale = mc.getWindow().getGuiScale();
         double mx = mc.mouseHandler.xpos() / scale;
         double my = mc.mouseHandler.ypos() / scale;
-        Slot slot = container.findSlot(mx, my);
+        Slot slot = slotUnder(container, mx, my);
         if (slot == null || !slot.hasItem()) {
             return;
         }
