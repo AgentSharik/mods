@@ -66,6 +66,14 @@
   "gui.fallenrelics.angel_ring.status.ready": "Готова",
   "gui.fallenrelics.angel_ring.status.buffering": "%s с",
   "gui.fallenrelics.angel_ring.stat.time_caption": "всего в полёте",
-  "gui.fallenrelics.angel_ring.hint": "Двойной пробел — взлёт, Esc — закрыть свиток",
-  "item.fallenrelics.angel_ring.scroll_hint": "Правый клик: свиток реликвии"
+  "gui.fallenrelics.angel_ring.hint": "Esc — закрыть свиток",
+  "item.fallenrelics.angel_ring.scroll_hint": "Правый клик: свиток реликвии",
+  "gui.fallenrelics.angel_ring.header": "РЕЛИКВИИ",
+  "gui.fallenrelics.angel_ring.seconds": "с",
+  "gui.fallenrelics.angel_ring.ability.flight.desc": "Двойной пробел в воздухе — взлёт; полёт даёт кольцо в слоте Curios",
+  "gui.fallenrelics.angel_ring.ability.insurance.desc": "Сняли кольцо в воздухе — падение гасят 10 секунд мягкого падения",
+  "gui.fallenrelics.angel_ring.plaque.status": "Текущий статус",
+  "gui.fallenrelics.angel_ring.plaque.insurance": "Страховка мягкого падения",
+  "gui.fallenrelics.angel_ring.plaque.time": "Суммарное время в полёте",
+  "gui.fallenrelics.angel_ring.pips": "Вехи полёта: 1, 5, 15, 30 и 60 минут"
 }
