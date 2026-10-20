@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,12 +26,12 @@ public class AngelRingItem extends Item {
 
     /** Right-click in hand opens the relic scroll screen (client side). */
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
         if (level.isClientSide) {
-            net.minecraft.client.Minecraft.getInstance()
-                    .setScreen(new AngelRingScreen(player.getItemInHand(hand)));
-            return InteractionResult.SUCCESS;
+            net.minecraft.client.Minecraft.getInstance().setScreen(new AngelRingScreen(stack));
+            return InteractionResultHolder.success(stack);
         }
-        return InteractionResult.CONSUME;
+        return InteractionResultHolder.consume(stack);
     }
 }
