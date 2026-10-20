@@ -18,12 +18,19 @@ repositories {
         name = 'BlameJared'
         url = 'https://maven.blamejared.com'
     }
+    maven {
+        name = 'Illusivec4'
+        url = 'https://maven.theillusivec4.top/'
+    }
 }
 
 // JEI API is compile-only: the Chat & Recipe Linker module is a soft integration
 // and simply stays dormant when the player has no JEI installed.
 dependencies {
     compileOnly 'mezz.jei:jei-1.21.1-neoforge-api:19.+'
+    // Curios API is compile-only: the angel ring flight is a soft integration
+    // and stays dormant when the player has no Curios installed.
+    compileOnly 'top.theillusivec4.curios:curios-neoforge:9.5.0+1.21.1:api'
 }
 
 sourceSets.main.resources {

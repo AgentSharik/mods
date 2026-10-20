@@ -52,5 +52,7 @@
   "fallenrelics.jei_linker.opening": "Opening recipes: %s",
   "fallenrelics.jei_linker.error": "Linker error: %s",
   "fallenrelics.jei_linker.inserted": "Link inserted into chat - add your text and press Enter",
-  "fallenrelics.jei_linker.missing": "Opening recipes requires JEI to be installed"
+  "fallenrelics.jei_linker.missing": "Opening recipes requires JEI to be installed",
+  "item.fallenrelics.angel_ring": "Angel Ring",
+  "item.fallenrelics.angel_ring.tooltip": "Grants creative-style flight while worn in a ring slot"
 }
