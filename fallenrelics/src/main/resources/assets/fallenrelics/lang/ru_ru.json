@@ -56,5 +56,16 @@
   "item.fallenrelics.angel_ring": "Кольцо ангела",
   "item.fallenrelics.angel_ring.tooltip": "Даёт полёт, как в творческом режиме, пока надето в слоте для колец",
   "item.fallenrelics.ring_base": "Золотая основа кольца",
-  "item.fallenrelics.star_ring_base": "Звёздная основа кольца"
+  "item.fallenrelics.star_ring_base": "Звёздная основа кольца",
+  "gui.fallenrelics.angel_ring.title": "Кольцо ангела",
+  "gui.fallenrelics.angel_ring.ability.flight": "Полёт",
+  "gui.fallenrelics.angel_ring.ability.insurance": "Мягкое падение",
+  "gui.fallenrelics.angel_ring.status.flying": "Летит",
+  "gui.fallenrelics.angel_ring.status.worn": "Надето",
+  "gui.fallenrelics.angel_ring.status.idle": "Снято",
+  "gui.fallenrelics.angel_ring.status.ready": "Готова",
+  "gui.fallenrelics.angel_ring.status.buffering": "%s с",
+  "gui.fallenrelics.angel_ring.stat.time_caption": "всего в полёте",
+  "gui.fallenrelics.angel_ring.hint": "Двойной пробел — взлёт, Esc — закрыть свиток",
+  "item.fallenrelics.angel_ring.scroll_hint": "Правый клик: свиток реликвии"
 }

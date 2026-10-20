@@ -56,5 +56,16 @@
   "item.fallenrelics.angel_ring": "Angel Ring",
   "item.fallenrelics.angel_ring.tooltip": "Grants creative-style flight while worn in a ring slot",
   "item.fallenrelics.ring_base": "Golden Ring Base",
-  "item.fallenrelics.star_ring_base": "Star-Forged Ring Base"
+  "item.fallenrelics.star_ring_base": "Star-Forged Ring Base",
+  "gui.fallenrelics.angel_ring.title": "Angel Ring",
+  "gui.fallenrelics.angel_ring.ability.flight": "Flight",
+  "gui.fallenrelics.angel_ring.ability.insurance": "Soft Falling",
+  "gui.fallenrelics.angel_ring.status.flying": "Airborne",
+  "gui.fallenrelics.angel_ring.status.worn": "Worn",
+  "gui.fallenrelics.angel_ring.status.idle": "Off",
+  "gui.fallenrelics.angel_ring.status.ready": "Ready",
+  "gui.fallenrelics.angel_ring.status.buffering": "%s s",
+  "gui.fallenrelics.angel_ring.stat.time_caption": "total in flight",
+  "gui.fallenrelics.angel_ring.hint": "Double space to take off - Esc closes the scroll",
+  "item.fallenrelics.angel_ring.scroll_hint": "Right-click: open the relic scroll"
 }

@@ -4,9 +4,13 @@ import java.util.List;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 /** Angel ring item as designed in the angel-ring addon: foiled, epic, with a grey hint line. */
 public class AngelRingItem extends Item {
@@ -17,5 +21,17 @@ public class AngelRingItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("item.fallenrelics.angel_ring.tooltip").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.fallenrelics.angel_ring.scroll_hint").withStyle(ChatFormatting.GRAY));
+    }
+
+    /** Right-click in hand opens the relic scroll screen (client side). */
+    @Override
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (level.isClientSide) {
+            net.minecraft.client.Minecraft.getInstance()
+                    .setScreen(new AngelRingScreen(player.getItemInHand(hand)));
+            return InteractionResult.SUCCESS;
+        }
+        return InteractionResult.CONSUME;
     }
 }
