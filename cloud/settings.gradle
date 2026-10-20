@@ -5,7 +5,3 @@ pluginManagement {
 }
 
 rootProject.name = 'angel-ring-cloud'
-org.gradle.jvmargs=-Xmx2G
-org.gradle.daemon=false
-org.gradle.parallel=true
-org.gradle.caching=true
