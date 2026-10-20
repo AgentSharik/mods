@@ -57,7 +57,7 @@ public final class ModContent {
     /** Angel ring from the angel-ring addon: epic, stacks to one, Curios ring slot. */
     public static final DeferredItem<Item> ANGEL_RING = ITEMS.registerItem(
             "angel_ring",
-            props -> new AngelRingItem(props.stacksTo(1).rarity(net.minecraft.world.item.Rarity.EPIC)));
+            props -> new AngelRingItem(props.stacksTo(1).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
 
     public static final DeferredItem<Item> UPGRADE_TEMPLATE =
             ITEMS.registerSimpleItem("upgrade_template", new Item.Properties());
