@@ -1,6 +1,6 @@
 package dev.agentsharik.angelring;
 
-import dev.agentsharik.angelring.network.UpgradePayload;
+import dev.agentsharik.angelring.network.RelicActionPayload;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -22,6 +22,6 @@ public class AngelRingMod {
 
     private static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
-        registrar.playToServer(UpgradePayload.TYPE, UpgradePayload.STREAM_CODEC, UpgradePayload::handle);
+        registrar.playToServer(RelicActionPayload.TYPE, RelicActionPayload.STREAM_CODEC, RelicActionPayload::handle);
     }
 }

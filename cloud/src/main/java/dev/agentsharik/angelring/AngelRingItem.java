@@ -19,7 +19,10 @@ public class AngelRingItem extends Item {
         tooltip.add(Component.translatable("item.angelring.angel_ring.tooltip").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("tooltip.angelring.level", data.level(), RelicData.MAX_LEVEL)
                 .withStyle(ChatFormatting.GOLD));
-        tooltip.add(Component.translatable("tooltip.angelring.open_hint").withStyle(ChatFormatting.DARK_GRAY));
+        if (data.rank() > 0) {
+            tooltip.add(Component.translatable("tooltip.angelring.rank", data.rank(), RelicData.MAX_RANK)
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
     }
 
     /** Блеск зачарования — чтобы кольцо выглядело особенным. */
