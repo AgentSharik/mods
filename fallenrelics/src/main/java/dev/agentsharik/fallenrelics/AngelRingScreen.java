@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Axis;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -18,7 +19,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * structure (two rolls, ring card with badge and pips, candle-held bar, ability
  * cards, counter column) but reskinned into deep black / dark grey / muted
  * crimson, floating on a living organic smoke aura instead of hard frames.
- * The smoke pulses and drifts in four baked frames, Relics-style but in our
+ * The smoke morphs continuously by cross-fading four baked frames, Relics-style
+ * but in our
  * dark-red palette. Opens by right-click or by Shift-hovering the ring in any
  * inventory (Relics manner); Esc returns to the previous screen.
  */
@@ -50,6 +52,8 @@ public final class AngelRingScreen extends Screen {
     private static final int BAR_FILL = 0xFFBE3C3C;
     private static final int BAR_GLOSS = 0xFFE67878;
     private static final int BAR_EMPTY = 0xFF141418;
+    private static final int PANEL_DARK = 0xFF1E1E22;
+    private static final int LABEL_DIM = 0xFF8A8A92;
     private static final int PIP_FILL = 0xFFC85050;
     private static final int HOVER_CRIMSON = 0xFFE67878;
     /** Level milestones behind the five pips under the ring card. */
@@ -100,14 +104,17 @@ public final class AngelRingScreen extends Screen {
                 }
             }
         }
-        graphics.drawString(font, title, left + 88, top + 24, TITLE_COLOR, false);
-        graphics.fill(left + 88, top + 36, left + 184, top + 37, 0xFF5A4646);
+        graphics.drawString(font, title, left + 88, top + 20, TITLE_COLOR, false);
+        graphics.fill(left + 88, top + 31, left + 184, top + 32, 0xFF5A4646);
         Component status = statusLine();
-        graphics.drawString(font, status, left + 184 - font.width(status), top + 24, statusColor(), false);
+        List<FormattedCharSequence> statusLines = font.split(status, 96);
+        if (!statusLines.isEmpty()) {
+            graphics.drawString(font, statusLines.get(0), left + 88, top + 35, statusColor(), false);
+        }
         List<FormattedCharSequence> lines =
                 font.split(Component.translatable("item.fallenrelics.angel_ring.tooltip"), 94);
         for (int i = 0; i < lines.size() && i < 4; i++) {
-            graphics.drawString(font, lines.get(i), left + 88, top + 42 + i * 10, TEXT_COLOR, false);
+            graphics.drawString(font, lines.get(i), left + 88, top + 46 + i * 10, TEXT_COLOR, false);
         }
         float ratio = relic.maxed() ? 1.0F : Math.min(1.0F, relic.xp() / (float) relic.xpToNext());
         int fill = Math.round(130 * ratio);
@@ -120,6 +127,7 @@ public final class AngelRingScreen extends Screen {
                 : (relic.maxed() ? Component.translatable("gui.fallenrelics.angel_ring.max").getString()
                         : Math.round(ratio * 100F) + "%");
         centered(graphics, barLabel, left + 110, top + 100, 0xFFFFFFFF, true);
+        graphics.fill(left + 44, top + 110, left + 176, top + 120, PANEL_DARK);
         rankPips(graphics, relic.speed(), 47);
         rankPips(graphics, relic.cushion(), 99);
         if (!stale) {
@@ -134,26 +142,45 @@ public final class AngelRingScreen extends Screen {
         }
         centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.header").getString(),
                 left + 223, top + 20, HEADER_COLOR, true);
-        plaque(graphics, 0, stale ? "--" : String.valueOf(relic.points()));
-        plaque(graphics, 1, stale ? "--" : String.valueOf(relic.xp()));
-        plaque(graphics, 2, stale ? "--" : "+" + Math.round((relic.speedMultiplier() - 1.0F) * 100F) + "%");
+        plaque(graphics, 0, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.points").getString(),
+                stale ? "--" : String.valueOf(relic.points()));
+        plaque(graphics, 1, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.xp").getString(),
+                stale ? "--" : String.valueOf(relic.xp()));
+        plaque(graphics, 2, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.speed").getString(),
+                stale ? "--" : "+" + Math.round((relic.speedMultiplier() - 1.0F) * 100F) + "%");
         centered(graphics, stale ? "--" : timeText(), left + 223, top + 104, HEADER_COLOR, true);
         centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.hint").getString(),
                 left + 108, top + 204, 0xFF9A8CA0, true);
         tooltips(graphics, mouseX, mouseY, relic, stale);
     }
 
-    /** The living aura: four baked smoke frames, drifting wobble and alpha pulse. */
+    /** The living aura: the four baked smoke frames are cross-faded every render
+     *  frame, so the smoke morphs at display rate instead of stepping through
+     *  frames; float drift, a breathing scale and a slow sway keep it organic,
+     *  Relics-style but in our dark-red palette. */
     private void drawSmoke(GuiGraphics graphics, float partialTick) {
-        float t = (this.ticks + partialTick) * 1.0F;
-        int frame = ((int) (t / 6.0F) % SMOKE.length + SMOKE.length) % SMOKE.length;
-        int ox = Math.round((float) Math.sin(t / 9.0F) * 3.0F);
-        int oy = Math.round((float) Math.cos(t / 7.0F) * 2.0F);
-        float alpha = 0.72F + 0.18F * (float) Math.sin(t / 5.0F);
+        float t = this.ticks + partialTick;
+        float pos = t / 6.0F;
+        int floor = (int) Math.floor(pos);
+        int frame = ((floor % SMOKE.length) + SMOKE.length) % SMOKE.length;
+        int next = (frame + 1) % SMOKE.length;
+        float f = pos - floor;
+        float ox = (float) Math.sin(t / 9.0F) * 4.0F;
+        float oy = (float) Math.cos(t / 7.0F) * 3.0F;
+        float alpha = 0.80F + 0.12F * (float) Math.sin(t / 5.0F);
+        float grow = 1.22F + 0.06F * (float) Math.sin(t / 11.0F);
+        com.mojang.blaze3d.vertex.PoseStack pose = graphics.pose();
+        pose.pushPose();
+        pose.translate(left + WIDTH / 2.0F + ox, top + HEIGHT / 2.0F + oy, 0.0F);
+        pose.scale(grow, grow, 1.0F);
+        pose.mulPose(Axis.ZP.rotationDegrees((float) Math.sin(t / 13.0F) * 3.0F));
         RenderSystem.enableBlend();
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
-        graphics.blit(SMOKE[frame], left - 16 + ox, top - 16 + oy, 0, 0, 256, 256);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha * (1.0F - f));
+        graphics.blit(SMOKE[frame], -128, -128, 0, 0, 256, 256);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha * f);
+        graphics.blit(SMOKE[next], -128, -128, 0, 0, 256, 256);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        pose.popPose();
     }
 
     private Component statusLine() {
@@ -215,9 +242,10 @@ public final class AngelRingScreen extends Screen {
                 : relic.cushion() < RelicData.MAX_RANK;
     }
 
-    private void plaque(GuiGraphics graphics, int row, String text) {
+    private void plaque(GuiGraphics graphics, int row, String label, String text) {
         int y = top + 36 + row * 22;
-        graphics.drawString(font, text, left + 211, y + 5, PLAQUE_COLOR, false);
+        graphics.drawString(font, label, left + 198, y + 3, LABEL_DIM, false);
+        graphics.drawString(font, text, left + 198, y + 11, PLAQUE_COLOR, false);
     }
 
     private void centered(GuiGraphics graphics, String text, int centerX, int y, int color, boolean shadow) {

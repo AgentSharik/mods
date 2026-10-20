@@ -88,5 +88,8 @@
   "gui.fallenrelics.angel_ring.plaque.speed": "Flight speed",
   "gui.fallenrelics.angel_ring.plaque.speed.desc": "+15% per Flight rank",
   "message.fallenrelics.level_up": "Angel Ring: level %s!",
-  "item.fallenrelics.angel_ring.shift_hint": "Hold [Shift] over the ring in an inventory to inspect the relic"
+  "item.fallenrelics.angel_ring.shift_hint": "Hold [Shift] over the ring in an inventory to inspect the relic",
+  "gui.fallenrelics.angel_ring.plaque.label.points": "POINTS",
+  "gui.fallenrelics.angel_ring.plaque.label.xp": "XP",
+  "gui.fallenrelics.angel_ring.plaque.label.speed": "SPEED"
 }
