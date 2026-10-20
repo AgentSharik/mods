@@ -1,6 +1,6 @@
 package dev.agentsharik.fallenrelics;
 
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -15,7 +15,7 @@ public record AngelRingUpgradePayload(int stat) implements CustomPacketPayload {
             new CustomPacketPayload.Type<>(
                     ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "angel_ring_upgrade"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, AngelRingUpgradePayload> STREAM_CODEC =
+    public static final StreamCodec<ByteBuf, AngelRingUpgradePayload> STREAM_CODEC =
             ByteBufCodecs.VAR_INT.map(AngelRingUpgradePayload::new, AngelRingUpgradePayload::stat);
 
     @Override
