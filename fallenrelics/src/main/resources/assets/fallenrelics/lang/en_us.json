@@ -55,5 +55,6 @@
   "fallenrelics.jei_linker.missing": "Opening recipes requires JEI to be installed",
   "item.fallenrelics.angel_ring": "Angel Ring",
   "item.fallenrelics.angel_ring.tooltip": "Grants creative-style flight while worn in a ring slot",
-  "item.fallenrelics.ring_base": "Golden Ring Base"
+  "item.fallenrelics.ring_base": "Golden Ring Base",
+  "item.fallenrelics.star_ring_base": "Star-Forged Ring Base"
 }

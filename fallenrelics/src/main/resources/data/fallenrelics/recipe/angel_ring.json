@@ -1,16 +1,16 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "equipment",
-  "ingredients": [
-    { "item": "fallenrelics:ring_base" },
-    { "item": "minecraft:nether_star" },
-    { "item": "minecraft:echo_shard" },
-    { "item": "minecraft:echo_shard" },
-    { "item": "minecraft:feather" },
-    { "item": "minecraft:feather" },
-    { "item": "minecraft:feather" },
-    { "item": "minecraft:feather" }
+  "pattern": [
+    "FNF",
+    "NSN",
+    "FNF"
   ],
+  "key": {
+    "F": { "item": "minecraft:feather" },
+    "N": { "item": "minecraft:gold_nugget" },
+    "S": { "item": "fallenrelics:star_ring_base" }
+  },
   "result": {
     "id": "fallenrelics:angel_ring",
     "count": 1

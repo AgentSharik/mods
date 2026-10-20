@@ -58,6 +58,10 @@ public final class ModContent {
     public static final DeferredItem<Item> RING_BASE =
             ITEMS.registerSimpleItem("ring_base", new Item.Properties());
 
+    /** Stage-two intermediate: golden base infused with echo shards and a nether star. */
+    public static final DeferredItem<Item> STAR_RING_BASE =
+            ITEMS.registerSimpleItem("star_ring_base", new Item.Properties().rarity(net.minecraft.world.item.Rarity.RARE));
+
     /** Angel ring from the angel-ring addon: epic, stacks to one, Curios ring slot. */
     public static final DeferredItem<Item> ANGEL_RING = ITEMS.registerItem(
             "angel_ring",
