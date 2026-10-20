@@ -86,7 +86,7 @@ public final class AngelRingFlight {
             data.remove(GRANTED_TAG);
             abilities.mayfly = false;
             abilities.flying = false;
-            abilities.flyingSpeed = BASE_FLY_SPEED;
+            abilities.setFlyingSpeed(BASE_FLY_SPEED);
             player.onUpdateAbilities();
             if (!player.onGround()) {
                 // страховка: сняли кольцо в воздухе — не разбиваемся сразу
