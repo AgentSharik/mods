@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.21: правки названий в описаниях квестов под имена предметов в игре (по скриншоту владельца): «Призрачные катушки» → «Спектральные катушки» (Irregular Implements), «Топливный нагреватель» → «Твердотопливный нагреватель» (Mekanism), 2 квеста. Только релизный ru_ru.snbt, эталон владельца не тронут. Поверх v1.1.20.
+# v1.1.22: единый термин Spectre = спектральный: в книгах Irregular Implements (Oracle Index + Patchouli внутри JAR) «призрачн-» заменён на «спектральн-» (89 вхождений, 27 файлов) — как называется сам предмет; материал ftb.irons.material.spectre → «Спектральный слиток». Поверх v1.1.21.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.21'
+        default: 'StoneBlock4-ru-v1.1.22'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.21' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.22' }}
     steps:
       - uses: actions/checkout@v4
 
