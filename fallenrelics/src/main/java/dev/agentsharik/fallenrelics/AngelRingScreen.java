@@ -97,7 +97,7 @@ public final class AngelRingScreen extends Screen {
         graphics.drawString(font, statusLine(), left + 88, top + 42, statusColor(), false);
         List<FormattedCharSequence> lines =
                 font.split(Component.translatable("item.fallenrelics.angel_ring.tooltip"), 94);
-        for (int i = 0; i < lines.size(); i++) {
+        for (int i = 0; i < lines.size() && i < 4; i++) {
             graphics.drawString(font, lines.get(i), left + 88, top + 52 + i * 10, TEXT_COLOR, false);
         }
         // candle-held experience bar
@@ -111,10 +111,10 @@ public final class AngelRingScreen extends Screen {
         String barLabel = stale ? "--"
                 : (relic.maxed() ? Component.translatable("gui.fallenrelics.angel_ring.max").getString()
                         : Math.round(ratio * 100F) + "%");
-        centered(graphics, barLabel, left + 110, top + 100, 0xFF203040, true);
+        centered(graphics, barLabel, left + 110, top + 100, 0xFFFFFFFF, true);
         // ability cards: rank pips and hover highlight when an upgrade is affordable
-        rankPips(graphics, relic.speed(), 48);
-        rankPips(graphics, relic.cushion(), 100);
+        rankPips(graphics, relic.speed(), 47);
+        rankPips(graphics, relic.cushion(), 99);
         if (upgradable(RelicData.STAT_SPEED) && inside(mouseX, mouseY, 44, 126, 36, 44)) {
             outline(graphics, 44, 126, 36, 44);
         }
@@ -170,8 +170,8 @@ public final class AngelRingScreen extends Screen {
     private void rankPips(GuiGraphics graphics, int rank, int x0) {
         for (int i = 0; i < RelicData.MAX_RANK; i++) {
             if (i < rank) {
-                int cx = x0 + i * 7;
-                graphics.fill(left + cx + 1, top + 155, left + cx + 6, top + 160, PIP_FILL);
+                int cx = x0 + i * 6;
+                graphics.fill(left + cx + 1, top + 155, left + cx + 5, top + 160, PIP_FILL);
             }
         }
     }
