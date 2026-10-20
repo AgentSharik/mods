@@ -57,6 +57,7 @@ public final class FallenRelicsMod {
 
     private void addCreativeContent(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(ModContent.RING_BASE);
             event.accept(ModContent.ANGEL_RING);
         }
         if (event.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS) {

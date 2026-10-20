@@ -54,6 +54,10 @@ public final class ModContent {
     public static final DeferredHolder<MenuType<?>, MenuType<PackagerMenu>> PACKAGER_MENU =
             MENUS.register("packager", () -> IMenuTypeExtension.create(PackagerMenu::new));
 
+    /** Intermediate for the two-stage angel ring craft. */
+    public static final DeferredItem<Item> RING_BASE =
+            ITEMS.registerSimpleItem("ring_base", new Item.Properties());
+
     /** Angel ring from the angel-ring addon: epic, stacks to one, Curios ring slot. */
     public static final DeferredItem<Item> ANGEL_RING = ITEMS.registerItem(
             "angel_ring",
