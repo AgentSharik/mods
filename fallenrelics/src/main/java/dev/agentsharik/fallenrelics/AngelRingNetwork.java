@@ -14,6 +14,11 @@ public final class AngelRingNetwork {
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
         registrar.playToServer(
+                AngelRingUpgradePayload.TYPE,
+                AngelRingUpgradePayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(
+                        () -> AngelRingFlight.spendUpgrade(context.player(), payload.stat())));
+        registrar.playToServer(
                 AngelRingStatusRequestPayload.TYPE,
                 AngelRingStatusRequestPayload.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> AngelRingFlight.sendStatus(context.player())));

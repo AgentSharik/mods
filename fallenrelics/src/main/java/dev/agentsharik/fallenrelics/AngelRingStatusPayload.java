@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
  * plus the lifetime flight time in ticks.
  */
 public record AngelRingStatusPayload(boolean granted, boolean flying, boolean buffering, int bufferTicks,
-        long flightTicks) implements CustomPacketPayload {
+        long flightTicks, RelicData relic) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<AngelRingStatusPayload> TYPE =
             new CustomPacketPayload.Type<>(
                     ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "angel_ring_status"));
@@ -22,7 +22,7 @@ public record AngelRingStatusPayload(boolean granted, boolean flying, boolean bu
                 @Override
                 public AngelRingStatusPayload decode(RegistryFriendlyByteBuf buf) {
                     return new AngelRingStatusPayload(buf.readBoolean(), buf.readBoolean(), buf.readBoolean(),
-                            buf.readVarInt(), buf.readVarLong());
+                            buf.readVarInt(), buf.readVarLong(), RelicData.STREAM_CODEC.decode(buf));
                 }
 
                 @Override
@@ -32,6 +32,7 @@ public record AngelRingStatusPayload(boolean granted, boolean flying, boolean bu
                     buf.writeBoolean(payload.buffering());
                     buf.writeVarInt(payload.bufferTicks());
                     buf.writeVarLong(payload.flightTicks());
+                    RelicData.STREAM_CODEC.encode(buf, payload.relic());
                 }
             };
 

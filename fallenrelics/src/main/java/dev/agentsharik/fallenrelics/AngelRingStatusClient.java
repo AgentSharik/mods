@@ -13,6 +13,7 @@ public final class AngelRingStatusClient {
     private static boolean buffering;
     private static int bufferTicks;
     private static long flightTicks;
+    private static RelicData relic = RelicData.EMPTY;
     private static long receivedAt;
 
     private AngelRingStatusClient() {}
@@ -23,6 +24,7 @@ public final class AngelRingStatusClient {
         buffering = payload.buffering();
         bufferTicks = payload.bufferTicks();
         flightTicks = payload.flightTicks();
+        relic = payload.relic();
         receivedAt = System.currentTimeMillis();
     }
 
@@ -49,6 +51,10 @@ public final class AngelRingStatusClient {
 
     public static long flightTicks() {
         return flightTicks;
+    }
+
+    public static RelicData relic() {
+        return relic;
     }
 
     /** True when no snapshot arrived for five seconds (server side unreachable). */

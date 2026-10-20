@@ -12,9 +12,22 @@ import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class ModContent {
+    public static final DeferredRegister<DataComponentType<?>> COMPONENTS =
+            DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, FallenRelicsMod.MOD_ID);
+
+    /** Relic progression stored on the ring itself, Relics-style. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<RelicData>> RELIC_DATA =
+            COMPONENTS.register("relic_data", () -> DataComponentType.<RelicData>builder()
+                    .persistent(RelicData.CODEC)
+                    .networkSynchronized(RelicData.STREAM_CODEC)
+                    .build());
+
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(FallenRelicsMod.MOD_ID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FallenRelicsMod.MOD_ID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =

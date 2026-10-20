@@ -25,6 +25,7 @@ public final class FallenRelicsMod {
     public FallenRelicsMod(IEventBus modEventBus) {
         ModContent.BLOCKS.register(modEventBus);
         ModContent.ITEMS.register(modEventBus);
+        ModContent.COMPONENTS.register(modEventBus);
         ModContent.BLOCK_ENTITIES.register(modEventBus);
         ModContent.MENUS.register(modEventBus);
 
