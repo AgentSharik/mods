@@ -94,11 +94,12 @@ public final class AngelRingScreen extends Screen {
         // title, live status line and prose on the top roll
         graphics.drawString(font, title, left + 88, top + 24, TITLE_COLOR, false);
         graphics.fill(left + 88, top + 36, left + 184, top + 37, 0xFFB49A72);
-        graphics.drawString(font, statusLine(), left + 88, top + 42, statusColor(), false);
+        Component status = statusLine();
+        graphics.drawString(font, status, left + 184 - font.width(status), top + 24, statusColor(), false);
         List<FormattedCharSequence> lines =
                 font.split(Component.translatable("item.fallenrelics.angel_ring.tooltip"), 94);
         for (int i = 0; i < lines.size() && i < 4; i++) {
-            graphics.drawString(font, lines.get(i), left + 88, top + 52 + i * 10, TEXT_COLOR, false);
+            graphics.drawString(font, lines.get(i), left + 88, top + 42 + i * 10, TEXT_COLOR, false);
         }
         // candle-held experience bar
         float ratio = relic.maxed() ? 1.0F : Math.min(1.0F, relic.xp() / (float) relic.xpToNext());
