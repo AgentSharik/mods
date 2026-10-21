@@ -1,5 +1,7 @@
 package dev.agentsharik.fallenrelics;
 
+import java.util.UUID;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -19,9 +21,11 @@ import net.minecraft.network.codec.StreamCodec;
  * @param rarity рарность артефакта, 0..6 звёзд: базовые параметры кольца
  * @param a0..a2 рарность способностей (звёзды 0..6): сила эффектов
  * @param r0..r2 ранги способностей (0..3): 0 = не изучено, улучшение за уровни
+ * @param id     UUID конкретного кольца-стека: свиток и действия привязаны к тому
+ *               кольцу, которое открыто, а не к надетому (фикс 1.8.1)
  */
 public record RelicData(int level, int xp, boolean rolled, int rarity,
-        int a0, int a1, int a2, int r0, int r1, int r2) {
+        int a0, int a1, int a2, int r0, int r1, int r2, UUID id) {
     public static final int MAX_LEVEL = 10;
     /** Опыт реликвии за секунду полёта (добавка к зеркальному опыту игрока). */
     public static final int XP_PER_SECOND = 5;
@@ -29,7 +33,8 @@ public record RelicData(int level, int xp, boolean rolled, int rarity,
     public static final int MAX_RANK = 3;
     public static final int ABILITIES = 3;
 
-    public static final RelicData EMPTY = new RelicData(0, 0, false, 0, 0, 0, 0, 0, 0, 0);
+    public static final UUID NO_ID = new UUID(0L, 0L);
+    public static final RelicData EMPTY = new RelicData(0, 0, false, 0, 0, 0, 0, 0, 0, 0, NO_ID);
 
     public static final Codec<RelicData> CODEC = RecordCodecBuilder.create(i -> i.group(
             Codec.INT.optionalFieldOf("level", 0).forGetter(RelicData::level),
@@ -41,7 +46,8 @@ public record RelicData(int level, int xp, boolean rolled, int rarity,
             Codec.INT.optionalFieldOf("a2", 0).forGetter(RelicData::a2),
             Codec.INT.optionalFieldOf("r0", 0).forGetter(RelicData::r0),
             Codec.INT.optionalFieldOf("r1", 0).forGetter(RelicData::r1),
-            Codec.INT.optionalFieldOf("r2", 0).forGetter(RelicData::r2)
+            Codec.INT.optionalFieldOf("r2", 0).forGetter(RelicData::r2),
+            Codec.UUID.optionalFieldOf("id", NO_ID).forGetter(RelicData::id)
     ).apply(i, RelicData::new));
 
     public static final StreamCodec<ByteBuf, RelicData> STREAM_CODEC = new StreamCodec<>() {
@@ -51,7 +57,8 @@ public record RelicData(int level, int xp, boolean rolled, int rarity,
                     ByteBufCodecs.BOOL.decode(buf), ByteBufCodecs.VAR_INT.decode(buf),
                     ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf),
                     ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf),
-                    ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf));
+                    ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf),
+                    ByteBufCodecs.UUID.decode(buf));
         }
 
         @Override
@@ -66,6 +73,7 @@ public record RelicData(int level, int xp, boolean rolled, int rarity,
             ByteBufCodecs.VAR_INT.encode(buf, d.r0());
             ByteBufCodecs.VAR_INT.encode(buf, d.r1());
             ByteBufCodecs.VAR_INT.encode(buf, d.r2());
+            ByteBufCodecs.UUID.encode(buf, d.id());
         }
     };
 
@@ -114,19 +122,20 @@ public record RelicData(int level, int xp, boolean rolled, int rarity,
         if (lvl >= MAX_LEVEL) {
             x = 0;
         }
-        return new RelicData(lvl, x, rolled, rarity, a0, a1, a2, r0, r1, r2);
+        return new RelicData(lvl, x, rolled, rarity, a0, a1, a2, r0, r1, r2, id);
     }
 
     public RelicData withRank(int index, int value) {
         int v = Math.max(0, Math.min(MAX_RANK, value));
         return new RelicData(level, xp, rolled, rarity,
                 a0, a1, a2,
-                index == 0 ? v : r0, index == 1 ? v : r1, index == 2 ? v : r2);
+                index == 0 ? v : r0, index == 1 ? v : r1, index == 2 ? v : r2, id);
     }
 
     public RelicData withRoll(int artifact, int s0, int s1, int s2) {
+        UUID fresh = NO_ID.equals(id) ? UUID.randomUUID() : id;
         return new RelicData(level, xp, true, clampStar(artifact),
-                clampStar(s0), clampStar(s1), clampStar(s2), r0, r1, r2);
+                clampStar(s0), clampStar(s1), clampStar(s2), r0, r1, r2, fresh);
     }
 
     /* Базовые параметры кольца от рарности артефакта (0..6 звёзд). */

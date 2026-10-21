@@ -1,5 +1,7 @@
 package dev.agentsharik.fallenrelics;
 
+import java.util.UUID;
+
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
@@ -36,7 +38,12 @@ public final class AngelRingStatusClient {
 
     /** Asks the server for a fresh snapshot; safe to call any time on the client. */
     public static void request() {
-        PacketDistributor.sendToServer(AngelRingStatusRequestPayload.INSTANCE);
+        request(AngelRingStatusRequestPayload.NO_TARGET);
+    }
+
+    /** Snapshot of one concrete ring stack, by its relic UUID. */
+    public static void request(UUID target) {
+        PacketDistributor.sendToServer(new AngelRingStatusRequestPayload(target));
     }
 
     public static boolean granted() {

@@ -196,11 +196,11 @@ public final class RelicAbilities {
     }
 
     /** Улучшение ранга способности за уровни игрока; потолок ранга от уровня реликвии. */
-    public static void upgrade(ServerPlayer player, int index) {
+    public static void upgrade(ServerPlayer player, int index, java.util.UUID target) {
         if (index < 0 || index >= RelicData.ABILITIES) {
             return;
         }
-        var ring = AngelRingFlight.findRing(player);
+        var ring = resolveTarget(player, target);
         if (ring.isEmpty()) {
             return;
         }
@@ -219,11 +219,20 @@ public final class RelicAbilities {
         player.giveExperienceLevels(-cost);
         stack.set(ModContent.RELIC_DATA.get(), relic.withRank(index, next));
         player.playSound(SoundEvents.PLAYER_LEVELUP, 0.7F, 1.4F);
-        AngelRingFlight.sendStatus(player);
+        AngelRingFlight.sendStatus(player, relic.id());
+    }
+
+    /**
+     * 1.8.1: действия бьют по тому кольцу, которое открыто в свитке (по UUID
+     * стека), а не по надетому. Хоткеи и старое поведение — null → надетое.
+     */
+    private static java.util.Optional<ItemStack> resolveTarget(ServerPlayer player, java.util.UUID target) {
+        return target == null ? AngelRingFlight.findRing(player)
+                : AngelRingFlight.findStackByRelicId(player, target).or(() -> AngelRingFlight.findRing(player));
     }
 
     /** Применение активной способности (0 = приговор, 1 = убежище). */
-    public static void cast(ServerPlayer player, int index) {
+    public static void cast(ServerPlayer player, int index, java.util.UUID target) {
         if (index != 0 && index != 1) {
             return;
         }
@@ -232,7 +241,7 @@ public final class RelicAbilities {
             player.displayClientMessage(Component.translatable("message.fallenrelics.cast.cooldown"), true);
             return;
         }
-        var ring = AngelRingFlight.findRing(player);
+        var ring = resolveTarget(player, target);
         if (ring.isEmpty()) {
             return;
         }
@@ -254,7 +263,7 @@ public final class RelicAbilities {
             player.playSound(SoundEvents.EVOKER_CAST_SPELL, 0.8F, 0.9F);
         }
         data.putInt(CD_TAG + index, (int) ((index == 0 ? 600 : 900) * (1.0F - 0.15F * (rank - 1))));
-        AngelRingFlight.sendStatus(player);
+        AngelRingFlight.sendStatus(player, relic.id());
     }
 
     /** Контроль по площади: левитация, замедление и метка уязвимости. */
@@ -277,8 +286,8 @@ public final class RelicAbilities {
     }
 
     /** Реролл рарности артефакта и способностей за REROLL_COST уровня. */
-    public static void reroll(ServerPlayer player) {
-        var ring = AngelRingFlight.findRing(player);
+    public static void reroll(ServerPlayer player, java.util.UUID target) {
+        var ring = resolveTarget(player, target);
         if (ring.isEmpty()) {
             return;
         }
@@ -295,6 +304,6 @@ public final class RelicAbilities {
         player.playSound(SoundEvents.END_PORTAL_SPAWN, 0.5F, 1.4F);
         player.displayClientMessage(Component.translatable("message.fallenrelics.reroll.done",
                 rolled.rarity(), rolled.a0(), rolled.a1(), rolled.a2()), true);
-        AngelRingFlight.sendStatus(player);
+        AngelRingFlight.sendStatus(player, rolled.id());
     }
 }

@@ -1,6 +1,9 @@
 package dev.agentsharik.fallenrelics;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -27,13 +30,13 @@ public final class AngelRingFlight {
     private AngelRingFlight() {}
 
     /** Метка в данных игрока: «полёт выдан именно кольцом». Нужна, чтобы не отбирать полёт у других источников. */
-    private static final String GRANTED_TAG = "angelring_flight_granted";
+    private static final String GRANTED_TAG = "fallenrelics_flight_granted";
 
     /** Метка в данных игрока: суммарное время полёта с кольцом в тиках (для свитка реликвии). */
-    private static final String FLIGHT_TICKS_TAG = "angelring_flight_ticks";
+    private static final String FLIGHT_TICKS_TAG = "fallenrelics_flight_ticks";
 
     /** Метка в данных игрока: запас страховки последнего надетого кольца (тики мягкого падения). */
-    private static final String CUSHION_TAG = "angelring_cushion_ticks";
+    private static final String CUSHION_TAG = "fallenrelics_cushion_ticks";
 
     /** Проверяем раз в 5 тиков (четыре раза в секунду) — этого хватает и не нагружает сервер. */
     private static final int CHECK_INTERVAL_TICKS = 5;
@@ -122,13 +125,24 @@ public final class AngelRingFlight {
 
     /** Builds and sends the ring status snapshot for the relic scroll screen. */
     public static void sendStatus(Player player) {
+        sendStatus(player, null);
+    }
+
+    /**
+     * 1.8.1: snapshot of the ring stack the scroll is actually viewing.
+     * target = UUID кольца-стека; nil UUID — ещё не брошенное кольцо (ищем
+     * первое неролленное, оно и будет тем самым просмотренным); null — прежнее
+     * поведение «надетое кольцо» (для хоткеев и фонового тика).
+     */
+    public static void sendStatus(Player player, UUID target) {
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return;
         }
         CompoundTag data = serverPlayer.getPersistentData();
         boolean buffering = serverPlayer.hasEffect(MobEffects.SLOW_FALLING);
         int bufferTicks = buffering ? serverPlayer.getEffect(MobEffects.SLOW_FALLING).getDuration() : 0;
-        RelicData relic = findRing(serverPlayer)
+        Optional<ItemStack> viewed = target == null ? Optional.empty() : findStackByRelicId(serverPlayer, target);
+        RelicData relic = viewed.or(() -> findRing(serverPlayer))
                 .map(stack -> RelicAbilities.ensureRolled(serverPlayer, stack,
                         stack.getOrDefault(ModContent.RELIC_DATA.get(), RelicData.EMPTY)))
                 .orElse(RelicData.EMPTY);
@@ -142,5 +156,43 @@ public final class AngelRingFlight {
                         data.getInt(RelicAbilities.CD_TAG + "0"),
                         data.getInt(RelicAbilities.CD_TAG + "1"),
                         0));
+    }
+
+    /**
+     * Ищет конкретный стек кольца по UUID реликвии во всех хранилищах игрока:
+     * Curios-слоты, обычный инвентарь, вторая рука, броня. Nil UUID — первое
+     * кольцо без броска рарности (ровно то, которое только что открыли).
+     */
+    public static Optional<ItemStack> findStackByRelicId(Player player, UUID target) {
+        if (target == null) {
+            return Optional.empty();
+        }
+        boolean unrolled = RelicData.NO_ID.equals(target);
+        Optional<ItemStack> inCurios = CuriosApi.getCuriosInventory(player)
+                .flatMap(handler -> handler.findFirstCurio(stack -> matchesTarget(stack, target, unrolled)))
+                .map(SlotResult::stack);
+        if (inCurios.isPresent()) {
+            return inCurios;
+        }
+        List<ItemStack> bags = new ArrayList<>(player.getInventory().items);
+        bags.addAll(player.getInventory().offhand);
+        bags.addAll(player.getInventory().armor);
+        for (ItemStack stack : bags) {
+            if (matchesTarget(stack, target, unrolled)) {
+                return Optional.of(stack);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private static boolean matchesTarget(ItemStack stack, UUID target, boolean unrolled) {
+        if (!stack.is(ModContent.ANGEL_RING.get()) && !stack.has(ModContent.RELIC_DATA.get())) {
+            return false;
+        }
+        RelicData relic = stack.get(ModContent.RELIC_DATA.get());
+        if (unrolled) {
+            return relic == null || !relic.rolled();
+        }
+        return relic != null && target.equals(relic.id());
     }
 }

@@ -1,5 +1,7 @@
 package dev.agentsharik.fallenrelics;
 
+import java.util.UUID;
+
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -7,10 +9,14 @@ import net.minecraft.resources.ResourceLocation;
 
 /**
  * Client-to-server ping sent while the relic scroll screen is open: the server
- * answers with an {@link AngelRingStatusPayload} snapshot.
+ * answers with an {@link AngelRingStatusPayload} snapshot. 1.8.1: the request
+ * carries the UUID of the ring stack being viewed, so the snapshot (and every
+ * action) belongs to that exact ring — equipped, in inventory, anywhere.
+ * A nil UUID means "not rolled yet": the server resolves it to the first
+ * unrolled ring stack and assigns the UUID during the roll.
  */
-public record AngelRingStatusRequestPayload() implements CustomPacketPayload {
-    public static final AngelRingStatusRequestPayload INSTANCE = new AngelRingStatusRequestPayload();
+public record AngelRingStatusRequestPayload(UUID target) implements CustomPacketPayload {
+    public static final UUID NO_TARGET = new UUID(0L, 0L);
 
     public static final CustomPacketPayload.Type<AngelRingStatusRequestPayload> TYPE =
             new CustomPacketPayload.Type<>(
@@ -20,12 +26,12 @@ public record AngelRingStatusRequestPayload() implements CustomPacketPayload {
             new StreamCodec<>() {
                 @Override
                 public AngelRingStatusRequestPayload decode(RegistryFriendlyByteBuf buf) {
-                    return INSTANCE;
+                    return new AngelRingStatusRequestPayload(buf.readUUID());
                 }
 
                 @Override
                 public void encode(RegistryFriendlyByteBuf buf, AngelRingStatusRequestPayload payload) {
-                    // empty payload: nothing to write
+                    buf.writeUUID(payload.target());
                 }
             };
 

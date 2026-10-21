@@ -18,22 +18,24 @@ public final class AngelRingNetwork {
                 RelicActionPayloads.Upgrade.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(
                         () -> RelicAbilities.upgrade((net.minecraft.server.level.ServerPlayer) context.player(),
-                                payload.index())));
+                                payload.index(), payload.target())));
         registrar.playToServer(
                 RelicActionPayloads.Cast.TYPE,
                 RelicActionPayloads.Cast.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(
                         () -> RelicAbilities.cast((net.minecraft.server.level.ServerPlayer) context.player(),
-                                payload.index())));
+                                payload.index(), payload.target())));
         registrar.playToServer(
                 RelicActionPayloads.Reroll.TYPE,
                 RelicActionPayloads.Reroll.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(
-                        () -> RelicAbilities.reroll((net.minecraft.server.level.ServerPlayer) context.player())));
+                        () -> RelicAbilities.reroll((net.minecraft.server.level.ServerPlayer) context.player(),
+                                payload.target())));
         registrar.playToServer(
                 AngelRingStatusRequestPayload.TYPE,
                 AngelRingStatusRequestPayload.STREAM_CODEC,
-                (payload, context) -> context.enqueueWork(() -> AngelRingFlight.sendStatus(context.player())));
+                (payload, context) -> context.enqueueWork(
+                        () -> AngelRingFlight.sendStatus(context.player(), payload.target())));
         if (net.neoforged.fml.loading.FMLLoader.getDist().isClient()) {
             registrar.playToClient(
                     AngelRingStatusPayload.TYPE,

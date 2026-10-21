@@ -2,6 +2,7 @@ package dev.agentsharik.fallenrelics;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -17,12 +18,15 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
- * Свиток реликвии ревизии 1.8.0: чёрно-серо-багровый композит на живой дымке
+ * Свиток реликвии ревизии 1.8.1: чёрно-серо-багровый композит на живой дымке
  * (кросс-фейд кадров каждый render-кадр), ряд звёзд рарности под портретом,
  * три карточки способностей со звёздами, рангами и кулдаунами, кнопка РЕРОЛЛ
  * за два уровня игрока. Вспышка прокачки — сгущение дымки на карточке, реролл —
  * вихрь вокруг портрета с пересборкой звёзд. Всё числовое приходит снапшотом
- * с сервера; клики шлют.payload'ы, сервер проверяет и считает.
+ * с сервера; клики шлют payload'ы, сервер проверяет и считает. 1.8.1: панель
+ * расширена до 320px, свиток и все действия привязаны к UUID открытого кольца,
+ * вспышка улучшения стартует по клику, повышение уровня — настоящий бёрст,
+ * каст активных способностей продублирован хоткеями Z/X.
  */
 public final class AngelRingScreen extends Screen {
     private static final ResourceLocation TEXTURE =
@@ -36,7 +40,7 @@ public final class AngelRingScreen extends Screen {
             ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/relic_smoke_3.png"),
     };
 
-    private static final int WIDTH = 280;
+    private static final int WIDTH = 320;
     private static final int HEIGHT = 224;
 
     private static final int TITLE_COLOR = 0xFFE8E8EC;
@@ -70,17 +74,21 @@ public final class AngelRingScreen extends Screen {
 
     private final ItemStack ring;
     private final Screen returnTo;
+    /** UUID кольца-стека, из которого открыт свиток; nil — рарность ещё не брошена. */
+    private UUID viewId;
     private int left;
     private int top;
     private int ticks;
     private RelicData prevRelic;
     private final int[] flash = {0, 0, 0};
     private int rerollAnim;
+    private int levelAnim;
 
     public AngelRingScreen(ItemStack ring, Screen returnTo) {
         super(Component.translatable("gui.fallenrelics.angel_ring.title"));
         this.ring = ring;
         this.returnTo = returnTo;
+        this.viewId = ring.getOrDefault(ModContent.RELIC_DATA.get(), RelicData.EMPTY).id();
     }
 
     @Override
@@ -88,14 +96,14 @@ public final class AngelRingScreen extends Screen {
         this.left = (this.width - WIDTH) / 2;
         this.top = (this.height - HEIGHT) / 2;
         this.ticks = 0;
-        AngelRingStatusClient.request();
+        AngelRingStatusClient.request(viewId);
     }
 
     @Override
     public void tick() {
         super.tick();
         if (++this.ticks % 20 == 0) {
-            AngelRingStatusClient.request();
+            AngelRingStatusClient.request(viewId);
         }
         for (int i = 0; i < flash.length; i++) {
             if (flash[i] > 0) {
@@ -105,6 +113,9 @@ public final class AngelRingScreen extends Screen {
         if (rerollAnim > 0) {
             rerollAnim--;
         }
+        if (levelAnim > 0) {
+            levelAnim--;
+        }
     }
 
     @Override
@@ -112,11 +123,17 @@ public final class AngelRingScreen extends Screen {
         super.render(graphics, mouseX, mouseY, partialTick);
         RelicData relic = AngelRingStatusClient.relic();
         boolean stale = AngelRingStatusClient.stale();
+        if (RelicData.NO_ID.equals(viewId) && !RelicData.NO_ID.equals(relic.id())) {
+            viewId = relic.id();
+        }
         diffAnimations(relic);
         drawSmoke(graphics, partialTick);
         graphics.blit(TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
         if (rerollAnim > 0) {
             drawRerollVortex(graphics);
+        }
+        if (levelAnim > 0) {
+            drawLevelBurst(graphics, relic);
         }
         graphics.blit(PORTRAIT, left + 42, top + 30, 0, 0, 32, 32);
         if (!stale) {
@@ -127,20 +144,20 @@ public final class AngelRingScreen extends Screen {
             }
         }
         graphics.drawString(font, title, left + 88, top + 20, TITLE_COLOR, false);
-        graphics.fill(left + 88, top + 31, left + 184, top + 32, 0xFF5A4646);
+        graphics.fill(left + 88, top + 31, left + 224, top + 32, 0xFF5A4646);
         Component status = statusLine();
-        List<FormattedCharSequence> statusLines = font.split(status, 96);
+        List<FormattedCharSequence> statusLines = font.split(status, 134);
         if (!statusLines.isEmpty()) {
             graphics.drawString(font, statusLines.get(0), left + 88, top + 35, statusColor(), false);
         }
         List<FormattedCharSequence> lines =
-                font.split(Component.translatable("item.fallenrelics.angel_ring.tooltip"), 94);
+                font.split(Component.translatable("item.fallenrelics.angel_ring.tooltip"), 134);
         for (int i = 0; i < lines.size() && i < 4; i++) {
             graphics.drawString(font, lines.get(i), left + 88, top + 46 + i * 10, TEXT_COLOR, false);
         }
         float ratio = relic.maxed() ? 1.0F : Math.min(1.0F, relic.xp() / (float) relic.xpToNext());
-        int fill = Math.round(130 * ratio);
-        graphics.fill(left + 45, top + 99, left + 175, top + 109, BAR_EMPTY);
+        int fill = Math.round(170 * ratio);
+        graphics.fill(left + 45, top + 99, left + 215, top + 109, BAR_EMPTY);
         if (fill > 0) {
             graphics.fill(left + 45, top + 99, left + 45 + fill, top + 109, BAR_FILL);
             graphics.fill(left + 45, top + 99, left + 45 + fill, top + 101, BAR_GLOSS);
@@ -148,40 +165,77 @@ public final class AngelRingScreen extends Screen {
         String barLabel = stale ? "--"
                 : (relic.maxed() ? Component.translatable("gui.fallenrelics.angel_ring.max").getString()
                         : Math.round(ratio * 100F) + "%");
-        centered(graphics, barLabel, left + 110, top + 100, 0xFFFFFFFF, true);
-        graphics.fill(left + 44, top + 110, left + 176, top + 120, PANEL_DARK);
+        centered(graphics, barLabel, left + 130, top + 100, 0xFFFFFFFF, true);
+        graphics.fill(left + 44, top + 110, left + 216, top + 120, PANEL_DARK);
         for (int i = 0; i < RelicData.ABILITIES; i++) {
             drawAbilityCard(graphics, i, relic, stale, mouseX, mouseY);
         }
         drawRerollButton(graphics, relic, stale, mouseX, mouseY);
         centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.header").getString(),
-                left + 243, top + 20, HEADER_COLOR, true);
+                left + 283, top + 20, HEADER_COLOR, true);
         plaque(graphics, 0, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.level").getString(),
                 stale ? "--" : String.valueOf(relic.level()));
         plaque(graphics, 1, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.xp").getString(),
                 stale ? "--" : String.valueOf(relic.xp()));
         plaque(graphics, 2, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.speed").getString(),
                 stale ? "--" : "+" + Math.round((relic.speedMultiplier() - 1.0F) * 100F) + "%");
-        centered(graphics, stale ? "--" : timeText(), left + 243, top + 104, HEADER_COLOR, true);
+        centered(graphics, stale ? "--" : timeText(), left + 283, top + 104, HEADER_COLOR, true);
         centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.hint").getString(),
-                left + 108, top + 204, 0xFF9A8CA0, true);
+                left + 120, top + 204, 0xFF9A8CA0, true);
         tooltips(graphics, mouseX, mouseY, relic, stale);
     }
 
-    /** Сравнивает снапшоты: рост ранга даёт вспышку карточки, смена звёзд — вихрь. */
+    /**
+     * Сравнивает снапшоты: рост ранга даёт вспышку карточки, смена звёзд — вихрь,
+     * рост уровня реликвии — бёрст badges. Диффер — только страховка для чужих
+     * изменений; свои клики запускают анимации мгновенно (фикс 1.8.1: анимация
+     * больше не «живёт своей жизнью» с задержкой до секунды).
+     */
     private void diffAnimations(RelicData relic) {
         if (prevRelic != null && prevRelic.rolled()) {
             for (int i = 0; i < RelicData.ABILITIES; i++) {
-                if (relic.rank(i) > prevRelic.rank(i)) {
+                if (relic.rank(i) > prevRelic.rank(i) && flash[i] == 0) {
                     flash[i] = 24;
                 }
             }
-            if (relic.rarity() != prevRelic.rarity() || relic.a0() != prevRelic.a0()
-                    || relic.a1() != prevRelic.a1() || relic.a2() != prevRelic.a2()) {
+            if ((relic.rarity() != prevRelic.rarity() || relic.a0() != prevRelic.a0()
+                    || relic.a1() != prevRelic.a1() || relic.a2() != prevRelic.a2()) && rerollAnim == 0) {
                 rerollAnim = 40;
+            }
+            if (relic.level() > prevRelic.level() && levelAnim == 0) {
+                levelAnim = 36;
             }
         }
         prevRelic = relic;
+    }
+
+    /** Повышение уровня реликвии: расходящееся кольцо, дымок и всплывающая цифра. */
+    private void drawLevelBurst(GuiGraphics graphics, RelicData relic) {
+        int t = 36 - levelAnim;
+        int cx = left + 62;
+        int cy = top + 15;
+        int radius = 5 + t;
+        int alpha = Math.max(0, 235 - t * 7);
+        int ringColor = (alpha << 24) | 0xF0B4B4;
+        for (int a = 0; a < 24; a++) {
+            double ang = a * Math.PI / 12.0;
+            int px = cx + (int) Math.round(radius * Math.cos(ang));
+            int py = cy + (int) Math.round(radius * Math.sin(ang) * 0.8);
+            graphics.fill(px, py, px + 1, py + 1, ringColor);
+        }
+        PoseStack pose = graphics.pose();
+        pose.pushPose();
+        pose.translate(cx, cy, 0);
+        float s = 0.55F + t * 0.045F;
+        pose.scale(s, s, 1.0F);
+        RenderSystem.enableBlend();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.6F * (1.0F - t / 36.0F));
+        graphics.blit(SMOKE[(t / 9) % SMOKE.length], -24, -24, 96, 96, 48, 48);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        pose.popPose();
+        String msg = Component.translatable("gui.fallenrelics.angel_ring.levelup", relic.level()).getString();
+        int textAlpha = Math.max(30, 255 - t * 9);
+        centered(graphics, msg, cx, top + 2 - t / 3, (textAlpha << 24) | 0xFFE8E8, true);
     }
 
     /** Живая дымка: кросс-фейд кадров каждый render-кадр, дрейф, дыхание, покачивание. */
@@ -240,7 +294,7 @@ public final class AngelRingScreen extends Screen {
 
     private void drawAbilityCard(GuiGraphics graphics, int index, RelicData relic, boolean stale,
             int mouseX, int mouseY) {
-        int x0 = 44 + index * 48;
+        int x0 = 44 + index * 56;
         int y0 = 126;
         int rank = stale ? 0 : relic.rank(index);
         int stars = stale ? 0 : relic.abilityRarity(index);
@@ -301,19 +355,19 @@ public final class AngelRingScreen extends Screen {
         boolean affordable = Minecraft.getInstance().player != null
                 && Minecraft.getInstance().player.experienceLevel >= RelicAbilities.REROLL_COST;
         int bg = affordable ? 0xFF2C2C32 : 0xFF232327;
-        graphics.fill(left + 196, top + 120, left + 270, top + 138, bg);
+        graphics.fill(left + 236, top + 120, left + 310, top + 138, bg);
         int edge = affordable ? 0xFF963030 : 0xFF4A4A50;
-        graphics.fill(left + 196, top + 120, left + 270, top + 121, edge);
-        graphics.fill(left + 196, top + 137, left + 270, top + 138, edge);
-        graphics.fill(left + 196, top + 120, left + 197, top + 138, edge);
-        graphics.fill(left + 269, top + 120, left + 270, top + 138, edge);
+        graphics.fill(left + 236, top + 120, left + 310, top + 121, edge);
+        graphics.fill(left + 236, top + 137, left + 310, top + 138, edge);
+        graphics.fill(left + 236, top + 120, left + 237, top + 138, edge);
+        graphics.fill(left + 309, top + 120, left + 310, top + 138, edge);
         int labelColor = affordable ? 0xFFE8B4B4 : 0xFF6A6A72;
         centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.reroll").getString(),
-                left + 233, top + 122, labelColor, true);
+                left + 273, top + 122, labelColor, true);
         centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.reroll.cost").getString(),
-                left + 233, top + 130, LABEL_DIM, false);
-        if (inside(mouseX, mouseY, 196, 120, 74, 18)) {
-            outline(graphics, 196, 120, 74, 18);
+                left + 273, top + 130, LABEL_DIM, false);
+        if (inside(mouseX, mouseY, 236, 120, 74, 18)) {
+            outline(graphics, 236, 120, 74, 18);
         }
     }
 
@@ -360,8 +414,8 @@ public final class AngelRingScreen extends Screen {
 
     private void plaque(GuiGraphics graphics, int row, String label, String text) {
         int y = top + 36 + row * 22;
-        graphics.drawString(font, label, left + 200, y + 5, LABEL_DIM, false);
-        graphics.drawString(font, text, left + 266 - font.width(text), y + 5, PLAQUE_COLOR, false);
+        graphics.drawString(font, label, left + 240, y + 5, LABEL_DIM, false);
+        graphics.drawString(font, text, left + 306 - font.width(text), y + 5, PLAQUE_COLOR, false);
     }
 
     private void centered(GuiGraphics graphics, String text, int centerX, int y, int color, boolean shadow) {
@@ -372,7 +426,7 @@ public final class AngelRingScreen extends Screen {
         Component tip = null;
         List<Component> body = null;
         for (int i = 0; i < RelicData.ABILITIES && tip == null; i++) {
-            if (!inside(mouseX, mouseY, 42 + i * 48, 124, 40, 48)) {
+            if (!inside(mouseX, mouseY, 42 + i * 56, 124, 40, 48)) {
                 continue;
             }
             String key = i == 0 ? "verdict" : i == 1 ? "sanctuary" : "aegis";
@@ -395,6 +449,8 @@ public final class AngelRingScreen extends Screen {
                     int cd = AngelRingStatusClient.cooldown(i);
                     if (relic.rank(i) > 0 && cd <= 0) {
                         list.add(Component.translatable("gui.fallenrelics.angel_ring.cast_click"));
+                        list.add(Component.translatable("gui.fallenrelics.angel_ring.cast_hotkey",
+                                RelicKeys.keyName(i)));
                     } else if (cd > 0) {
                         list.add(Component.translatable("gui.fallenrelics.angel_ring.cooldown", (cd + 19) / 20));
                     }
@@ -408,25 +464,25 @@ public final class AngelRingScreen extends Screen {
             tip = Component.translatable("gui.fallenrelics.angel_ring.stars", stale ? 0 : relic.rarity());
             body = List.of(Component.translatable("gui.fallenrelics.angel_ring.pips"));
         }
-        if (tip == null && inside(mouseX, mouseY, 196, 120, 74, 18)) {
+        if (tip == null && inside(mouseX, mouseY, 236, 120, 74, 18)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.reroll");
             body = List.of(
                     Component.translatable("gui.fallenrelics.angel_ring.reroll.desc"),
                     Component.translatable("gui.fallenrelics.angel_ring.reroll.cost"));
         }
-        if (tip == null && inside(mouseX, mouseY, 196, 36, 74, 18)) {
+        if (tip == null && inside(mouseX, mouseY, 236, 36, 74, 18)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.level");
             body = List.of(Component.translatable("gui.fallenrelics.angel_ring.plaque.level.desc"));
         }
-        if (tip == null && inside(mouseX, mouseY, 196, 58, 74, 18)) {
+        if (tip == null && inside(mouseX, mouseY, 236, 58, 74, 18)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.xp");
             body = List.of(Component.translatable("gui.fallenrelics.angel_ring.plaque.xp.desc"));
         }
-        if (tip == null && inside(mouseX, mouseY, 196, 80, 74, 18)) {
+        if (tip == null && inside(mouseX, mouseY, 236, 80, 74, 18)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.speed");
             body = List.of(Component.translatable("gui.fallenrelics.angel_ring.plaque.speed.desc"));
         }
-        if (tip == null && inside(mouseX, mouseY, 196, 98, 74, 14)) {
+        if (tip == null && inside(mouseX, mouseY, 236, 98, 74, 14)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.time");
             body = List.of(Component.literal(timeText()));
         }
@@ -444,29 +500,50 @@ public final class AngelRingScreen extends Screen {
         return mouseX >= left + x && mouseX < left + x + w && mouseY >= top + y && mouseY < top + y + h;
     }
 
-    /** ЛКМ по карточке — улучшение за уровни, ПКМ — применение, клик по кнопке — реролл. */
+    /**
+     * ЛКМ по карточке — улучшение за уровни, ПКМ — применение, клик по кнопке —
+     * реролл. Анимация стартует в тот же кадр, что и клик (1.8.1).
+     */
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (int i = 0; i < RelicData.ABILITIES; i++) {
-            if (inside((int) mouseX, (int) mouseY, 42 + i * 48, 124, 40, 48)) {
+            if (inside((int) mouseX, (int) mouseY, 42 + i * 56, 124, 40, 48)) {
                 if (button == 0) {
-                    PacketDistributor.sendToServer(new RelicActionPayloads.Upgrade(i));
-                    AngelRingStatusClient.request();
+                    PacketDistributor.sendToServer(new RelicActionPayloads.Upgrade(i, viewId));
+                    if (upgradeLooksValid(i)) {
+                        flash[i] = 24;
+                    }
+                    AngelRingStatusClient.request(viewId);
                     return true;
                 }
                 if (button == 1 && i < 2) {
-                    PacketDistributor.sendToServer(new RelicActionPayloads.Cast(i));
-                    AngelRingStatusClient.request();
+                    PacketDistributor.sendToServer(new RelicActionPayloads.Cast(i, viewId));
+                    AngelRingStatusClient.request(viewId);
                     return true;
                 }
             }
         }
-        if (button == 0 && inside((int) mouseX, (int) mouseY, 196, 120, 74, 18)) {
-            PacketDistributor.sendToServer(new RelicActionPayloads.Reroll());
-            AngelRingStatusClient.request();
+        if (button == 0 && inside((int) mouseX, (int) mouseY, 236, 120, 74, 18)) {
+            PacketDistributor.sendToServer(new RelicActionPayloads.Reroll(viewId));
+            if (Minecraft.getInstance().player != null && Minecraft.getInstance().player
+                    .experienceLevel >= RelicAbilities.REROLL_COST) {
+                rerollAnim = 40;
+            }
+            AngelRingStatusClient.request(viewId);
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    /** Локальная прикидка: вспышку улучшения зажигаем только когда сервер его примет. */
+    private boolean upgradeLooksValid(int index) {
+        if (Minecraft.getInstance().player == null) {
+            return false;
+        }
+        RelicData relic = AngelRingStatusClient.relic();
+        int next = relic.rank(index) + 1;
+        return next <= RelicData.MAX_RANK && next <= relic.rankCap()
+                && Minecraft.getInstance().player.experienceLevel >= RelicData.rankCost(next);
     }
 
     /** Esc возвращает в тот же инвентарь, из которого открыт свиток. */
