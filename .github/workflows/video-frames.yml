@@ -1,0 +1,86 @@
+name: Extract video frames
+
+# Ремесленный конвейер: раннер GitHub Actions не ограничен списком хостов песочницы,
+# поэтому он сам тянет большое видео (например, из общего Drive по ссылке),
+# режет его ffmpeg на кадры и коммитит кадры в ветку — песочница потом читает их поштучно.
+on:
+  workflow_dispatch:
+    inputs:
+      file_id:
+        description: 'Drive file id of the video'
+        required: true
+      out_dir:
+        description: 'Directory under frames/ to commit into'
+        required: false
+        default: 'aiarena'
+      fps:
+        description: 'Frames per second as 1/N (2 = every 2 seconds)'
+        required: false
+        default: '2'
+      max_frames:
+        description: 'Cap on extracted frames'
+        required: false
+        default: '400'
+
+permissions:
+  contents: write
+
+jobs:
+  frames:
+    name: Download and slice video
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+
+      - name: Download video from Drive
+        shell: bash
+        run: |
+          id="${{ inputs.file_id }}"
+          curl -L --retry 3 -o /tmp/video.mp4 \
+            "https://drive.google.com/uc?export=download&confirm=t&id=${id}"
+          size=$(stat -c%s /tmp/video.mp4)
+          echo "downloaded bytes: $size"
+          if [ "$size" -lt 1000000 ]; then
+            echo 'Drive answer is too small, trying gdown'
+            pip install --quiet gdown
+            rm -f /tmp/video.mp4
+            gdown "${id}" -O /tmp/video.mp4
+            size=$(stat -c%s /tmp/video.mp4)
+            echo "gdown bytes: $size"
+          fi
+          file /tmp/video.mp4
+          ffprobe -v error -show_entries format=duration -of default=nw=1 /tmp/video.mp4 | tee /tmp/duration.txt
+          {
+            echo '### Video probe'
+            echo '```text'
+            cat /tmp/duration.txt
+            ffprobe -v error -select_streams v:0 -show_entries stream=width,height,r_frame_rate -of default=nw=1 /tmp/video.mp4
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Extract frames
+        shell: bash
+        run: |
+          mkdir -p "frames/${{ inputs.out_dir }}"
+          ffmpeg -hide_banner -loglevel error -i /tmp/video.mp4 \
+            -vf "fps=1/${{ inputs.fps }},scale=960:-2" -q:v 4 \
+            -frames:v "${{ inputs.max_frames }}" \
+            "frames/${{ inputs.out_dir }}/%04d.jpg"
+          ls "frames/${{ inputs.out_dir }}" | wc -l
+          du -sh "frames/${{ inputs.out_dir }}"
+
+      - name: Publish frames to the session branch
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "frames/${{ inputs.out_dir }}"
+          if git diff --cached --quiet; then
+            echo 'No new frames.'
+          else
+            git commit -m "frames: ${{ inputs.out_dir }} (video round 3, every ${{ inputs.fps }}s)"
+            git fetch origin "${GITHUB_REF_NAME}"
+            git merge --no-edit "origin/${GITHUB_REF_NAME}" || true
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
