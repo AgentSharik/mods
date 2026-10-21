@@ -37,18 +37,31 @@ jobs:
         shell: bash
         run: |
           id="${{ steps.req.outputs.file_id }}"
-          curl -L --retry 3 -o /tmp/video.mp4 \
-            "https://drive.usercontent.google.com/download?id=${id}&export=download&confirm=t"
-          size=$(stat -c%s /tmp/video.mp4)
+          base="https://drive.usercontent.google.com/download?id=${id}&export=download"
+          curl -L -c /tmp/cookies.txt -o /tmp/warn.html "${base}" || true
+          uuid=$(grep -oE 'uuid=[0-9a-f-]+' /tmp/warn.html | head -1 | cut -d= -f2 || true)
+          if [ -n "$uuid" ]; then
+            echo "warning page uuid: $uuid"
+            curl -L -b /tmp/cookies.txt --retry 3 -o /tmp/video.mp4 "${base}&confirm=t&uuid=${uuid}"
+          else
+            curl -L -b /tmp/cookies.txt --retry 3 -o /tmp/video.mp4 "${base}&confirm=t"
+          fi
+          size=$(stat -c%s /tmp/video.mp4 || echo 0)
           echo "downloaded bytes: $size"
           if [ "$size" -lt 1000000 ]; then
             echo 'Drive answer is too small, trying gdown'
-            pip install --quiet gdown
+            pip install --quiet --break-system-packages gdown || python3 -m pip install --quiet --user gdown
             rm -f /tmp/video.mp4
             gdown "${id}" -O /tmp/video.mp4
-            size=$(stat -c%s /tmp/video.mp4)
+            size=$(stat -c%s /tmp/video.mp4 || echo 0)
             echo "gdown bytes: $size"
           fi
+          {
+            echo "size=$size"
+            file /tmp/video.mp4
+            head -c 200 /tmp/video.mp4 | base64 | head -5
+            grep -oE 'uuid=[0-9a-f-]+' /tmp/warn.html | head -3
+          } > /tmp/diag.txt || true
           file /tmp/video.mp4
           {
             echo '### Video probe'
@@ -57,6 +70,23 @@ jobs:
             ffprobe -v error -select_streams v:0 -show_entries stream=width,height,r_frame_rate -of default=nw=1 /tmp/video.mp4
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Save diagnostics on failure
+        if: failure()
+        shell: bash
+        run: |
+          mkdir -p ci-logs
+          cp /tmp/diag.txt ci-logs/video-diag.txt 2>/dev/null || true
+          cp /tmp/warn.html ci-logs/video-warn.html 2>/dev/null || true
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ci-logs
+          if ! git diff --cached --quiet; then
+            git commit -m 'ci: video download diagnostics'
+            git fetch origin "${GITHUB_REF_NAME}"
+            git merge --no-edit "origin/${GITHUB_REF_NAME}" || true
+            git push origin "HEAD:${GITHUB_REF_NAME}" || true
+          fi
 
       - name: Extract frames
         shell: bash
