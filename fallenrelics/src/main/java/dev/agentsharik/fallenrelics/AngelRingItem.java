@@ -23,6 +23,10 @@ public class AngelRingItem extends Item {
         tooltip.add(Component.translatable("item.fallenrelics.angel_ring.tooltip").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.fallenrelics.angel_ring.scroll_hint").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.fallenrelics.angel_ring.shift_hint").withStyle(ChatFormatting.DARK_GRAY));
+        RelicData relic = stack.getOrDefault(ModContent.RELIC_DATA.get(), RelicData.EMPTY);
+        tooltip.add(relic.rolled()
+                ? Component.translatable("item.fallenrelics.angel_ring.rarity", relic.rarity()).withStyle(ChatFormatting.DARK_RED)
+                : Component.translatable("item.fallenrelics.angel_ring.rarity.unknown").withStyle(ChatFormatting.DARK_GRAY));
     }
 
     /** Right-click in hand opens the relic scroll screen (client side). */

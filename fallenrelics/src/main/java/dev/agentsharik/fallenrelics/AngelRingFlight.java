@@ -52,6 +52,12 @@ public final class AngelRingFlight {
         if (player.tickCount % CHECK_INTERVAL_TICKS != 0) {
             return;
         }
+        for (int i = 0; i < 2; i++) {
+            int cd = data.getInt(RelicAbilities.CD_TAG + i);
+            if (cd > 0) {
+                data.putInt(RelicAbilities.CD_TAG + i, Math.max(0, cd - CHECK_INTERVAL_TICKS));
+            }
+        }
         if (player.isCreative() || player.isSpectator()) {
             return; // в этих режимах полётом управляет сама игра
         }
@@ -114,20 +120,6 @@ public final class AngelRingFlight {
                 .map(SlotResult::stack);
     }
 
-    /** Серверная трата очка улучшения по клику в свитке. Всё проверяет сервер. */
-    public static void spendUpgrade(Player player, int stat) {
-        if (!(player instanceof ServerPlayer)) {
-            return;
-        }
-        findRing(player).ifPresent(stack -> {
-            RelicData old = stack.getOrDefault(ModContent.RELIC_DATA.get(), RelicData.EMPTY);
-            RelicData updated = old.spend(stat);
-            if (updated != old) {
-                stack.set(ModContent.RELIC_DATA.get(), updated);
-            }
-        });
-    }
-
     /** Builds and sends the ring status snapshot for the relic scroll screen. */
     public static void sendStatus(Player player) {
         if (!(player instanceof ServerPlayer serverPlayer)) {
@@ -137,7 +129,8 @@ public final class AngelRingFlight {
         boolean buffering = serverPlayer.hasEffect(MobEffects.SLOW_FALLING);
         int bufferTicks = buffering ? serverPlayer.getEffect(MobEffects.SLOW_FALLING).getDuration() : 0;
         RelicData relic = findRing(serverPlayer)
-                .map(stack -> stack.getOrDefault(ModContent.RELIC_DATA.get(), RelicData.EMPTY))
+                .map(stack -> RelicAbilities.ensureRolled(serverPlayer, stack,
+                        stack.getOrDefault(ModContent.RELIC_DATA.get(), RelicData.EMPTY)))
                 .orElse(RelicData.EMPTY);
         PacketDistributor.sendToPlayer(serverPlayer,
                 new AngelRingStatusPayload(data.getBoolean(GRANTED_TAG),
@@ -145,6 +138,9 @@ public final class AngelRingFlight {
                         buffering,
                         bufferTicks,
                         data.getLong(FLIGHT_TICKS_TAG),
-                        relic));
+                        relic,
+                        data.getInt(RelicAbilities.CD_TAG + "0"),
+                        data.getInt(RelicAbilities.CD_TAG + "1"),
+                        0));
     }
 }

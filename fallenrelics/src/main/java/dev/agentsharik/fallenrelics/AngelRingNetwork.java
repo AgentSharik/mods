@@ -14,10 +14,22 @@ public final class AngelRingNetwork {
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
         registrar.playToServer(
-                AngelRingUpgradePayload.TYPE,
-                AngelRingUpgradePayload.STREAM_CODEC,
+                RelicActionPayloads.Upgrade.TYPE,
+                RelicActionPayloads.Upgrade.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(
-                        () -> AngelRingFlight.spendUpgrade(context.player(), payload.stat())));
+                        () -> RelicAbilities.upgrade((net.minecraft.server.level.ServerPlayer) context.player(),
+                                payload.index())));
+        registrar.playToServer(
+                RelicActionPayloads.Cast.TYPE,
+                RelicActionPayloads.Cast.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(
+                        () -> RelicAbilities.cast((net.minecraft.server.level.ServerPlayer) context.player(),
+                                payload.index())));
+        registrar.playToServer(
+                RelicActionPayloads.Reroll.TYPE,
+                RelicActionPayloads.Reroll.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(
+                        () -> RelicAbilities.reroll((net.minecraft.server.level.ServerPlayer) context.player())));
         registrar.playToServer(
                 AngelRingStatusRequestPayload.TYPE,
                 AngelRingStatusRequestPayload.STREAM_CODEC,

@@ -14,6 +14,9 @@ public final class AngelRingStatusClient {
     private static int bufferTicks;
     private static long flightTicks;
     private static RelicData relic = RelicData.EMPTY;
+    private static int cd0;
+    private static int cd1;
+    private static int cd2;
     private static long receivedAt;
 
     private AngelRingStatusClient() {}
@@ -25,6 +28,9 @@ public final class AngelRingStatusClient {
         bufferTicks = payload.bufferTicks();
         flightTicks = payload.flightTicks();
         relic = payload.relic();
+        cd0 = payload.cd0();
+        cd1 = payload.cd1();
+        cd2 = payload.cd2();
         receivedAt = System.currentTimeMillis();
     }
 
@@ -55,6 +61,11 @@ public final class AngelRingStatusClient {
 
     public static RelicData relic() {
         return relic;
+    }
+
+    /** Остаток кулдауна активной способности в тиках (0 и 1). */
+    public static int cooldown(int index) {
+        return index == 0 ? cd0 : index == 1 ? cd1 : cd2;
     }
 
     /** True when no snapshot arrived for five seconds (server side unreachable). */

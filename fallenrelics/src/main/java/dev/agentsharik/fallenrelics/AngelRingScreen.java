@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Locale;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -15,14 +17,12 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
- * The relic scroll of the angel ring, variant 2 grown up: the same composite
- * structure (two rolls, ring card with badge and pips, candle-held bar, ability
- * cards, counter column) but reskinned into deep black / dark grey / muted
- * crimson, floating on a living organic smoke aura instead of hard frames.
- * The smoke morphs continuously by cross-fading four baked frames, Relics-style
- * but in our
- * dark-red palette. Opens by right-click or by Shift-hovering the ring in any
- * inventory (Relics manner); Esc returns to the previous screen.
+ * Свиток реликвии ревизии 1.8.0: чёрно-серо-багровый композит на живой дымке
+ * (кросс-фейд кадров каждый render-кадр), ряд звёзд рарности под портретом,
+ * три карточки способностей со звёздами, рангами и кулдаунами, кнопка РЕРОЛЛ
+ * за два уровня игрока. Вспышка прокачки — сгущение дымки на карточке, реролл —
+ * вихрь вокруг портрета с пересборкой звёзд. Всё числовое приходит снапшотом
+ * с сервера; клики шлют.payload'ы, сервер проверяет и считает.
  */
 public final class AngelRingScreen extends Screen {
     private static final ResourceLocation TEXTURE =
@@ -36,7 +36,6 @@ public final class AngelRingScreen extends Screen {
             ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "textures/gui/relic_smoke_3.png"),
     };
 
-    /** Panel art occupies the top 224 rows of the 256x256 sheet. */
     private static final int WIDTH = 280;
     private static final int HEIGHT = 224;
 
@@ -54,16 +53,29 @@ public final class AngelRingScreen extends Screen {
     private static final int BAR_EMPTY = 0xFF141418;
     private static final int PANEL_DARK = 0xFF1E1E22;
     private static final int LABEL_DIM = 0xFF8A8A92;
-    private static final int PIP_FILL = 0xFFC85050;
+    private static final int STAR_FILL = 0xFFD86464;
+    private static final int STAR_EMPTY = 0xFF3A3A40;
+    private static final int ICON_ON = 0xFFE67878;
+    private static final int ICON_OFF = 0xFF6A6A72;
     private static final int HOVER_CRIMSON = 0xFFE67878;
-    /** Level milestones behind the five pips under the ring card. */
-    private static final int[] LEVEL_PIPS = {2, 4, 6, 8, 10};
+
+    /** Пиксель-арт иконок способностей 8x8, масштаб x2. */
+    private static final String[][] ABILITY_ICONS = {
+            {"...##...", "..#..#..", ".#....#.", "...##...", "..#..#..", ".#....#.", "...##...", "........"},
+            {"...##...", "..####..", "...##...", ".######.", "..#..#..", "..#..#..", ".######.", "........"},
+            {".######.", "#..##..#", "#..##..#", "#......#", ".#....#.", "..#..#..", "...##...", "........"},
+    };
+    private static final String[] STAR_PIXELS = {"..#..", ".###.", "#####", ".###.", "#...#"};
+    private static final String[] MINI_STAR_PIXELS = {".#.", "###", "#.#"};
 
     private final ItemStack ring;
     private final Screen returnTo;
     private int left;
     private int top;
     private int ticks;
+    private RelicData prevRelic;
+    private final int[] flash = {0, 0, 0};
+    private int rerollAnim;
 
     public AngelRingScreen(ItemStack ring, Screen returnTo) {
         super(Component.translatable("gui.fallenrelics.angel_ring.title"));
@@ -85,6 +97,14 @@ public final class AngelRingScreen extends Screen {
         if (++this.ticks % 20 == 0) {
             AngelRingStatusClient.request();
         }
+        for (int i = 0; i < flash.length; i++) {
+            if (flash[i] > 0) {
+                flash[i]--;
+            }
+        }
+        if (rerollAnim > 0) {
+            rerollAnim--;
+        }
     }
 
     @Override
@@ -92,16 +112,18 @@ public final class AngelRingScreen extends Screen {
         super.render(graphics, mouseX, mouseY, partialTick);
         RelicData relic = AngelRingStatusClient.relic();
         boolean stale = AngelRingStatusClient.stale();
+        diffAnimations(relic);
         drawSmoke(graphics, partialTick);
         graphics.blit(TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
+        if (rerollAnim > 0) {
+            drawRerollVortex(graphics);
+        }
         graphics.blit(PORTRAIT, left + 42, top + 30, 0, 0, 32, 32);
         if (!stale) {
             centered(graphics, String.valueOf(relic.level()), left + 62, top + 11, BADGE_COLOR, true);
-            for (int i = 0; i < LEVEL_PIPS.length; i++) {
-                if (relic.level() >= LEVEL_PIPS[i]) {
-                    int cx = 44 + i * 9;
-                    graphics.fill(left + cx + 1, top + 78, left + cx + 6, top + 83, PIP_FILL);
-                }
+            int stars = rerollAnim > 12 ? (int) ((ticks * 7L) % 8) : relic.rarity();
+            for (int i = 0; i <= RelicData.MAX_STAR; i++) {
+                drawStar(graphics, 44 + i * 5, 76, i < stars, false);
             }
         }
         graphics.drawString(font, title, left + 88, top + 20, TITLE_COLOR, false);
@@ -128,22 +150,14 @@ public final class AngelRingScreen extends Screen {
                         : Math.round(ratio * 100F) + "%");
         centered(graphics, barLabel, left + 110, top + 100, 0xFFFFFFFF, true);
         graphics.fill(left + 44, top + 110, left + 176, top + 120, PANEL_DARK);
-        rankPips(graphics, relic.speed(), 47);
-        rankPips(graphics, relic.cushion(), 99);
-        if (!stale) {
-            centered(graphics, relic.speed() + "/" + RelicData.MAX_RANK, left + 62, top + 174, TEXT_COLOR, false);
-            centered(graphics, relic.cushion() + "/" + RelicData.MAX_RANK, left + 114, top + 174, TEXT_COLOR, false);
+        for (int i = 0; i < RelicData.ABILITIES; i++) {
+            drawAbilityCard(graphics, i, relic, stale, mouseX, mouseY);
         }
-        if (upgradable(RelicData.STAT_SPEED) && inside(mouseX, mouseY, 44, 126, 36, 44)) {
-            outline(graphics, 44, 126, 36, 44);
-        }
-        if (upgradable(RelicData.STAT_CUSHION) && inside(mouseX, mouseY, 96, 126, 36, 44)) {
-            outline(graphics, 96, 126, 36, 44);
-        }
+        drawRerollButton(graphics, relic, stale, mouseX, mouseY);
         centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.header").getString(),
                 left + 243, top + 20, HEADER_COLOR, true);
-        plaque(graphics, 0, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.points").getString(),
-                stale ? "--" : String.valueOf(relic.points()));
+        plaque(graphics, 0, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.level").getString(),
+                stale ? "--" : String.valueOf(relic.level()));
         plaque(graphics, 1, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.xp").getString(),
                 stale ? "--" : String.valueOf(relic.xp()));
         plaque(graphics, 2, Component.translatable("gui.fallenrelics.angel_ring.plaque.label.speed").getString(),
@@ -154,10 +168,23 @@ public final class AngelRingScreen extends Screen {
         tooltips(graphics, mouseX, mouseY, relic, stale);
     }
 
-    /** The living aura: the four baked smoke frames are cross-faded every render
-     *  frame, so the smoke morphs at display rate instead of stepping through
-     *  frames; float drift, a breathing scale and a slow sway keep it organic,
-     *  Relics-style but in our dark-red palette. */
+    /** Сравнивает снапшоты: рост ранга даёт вспышку карточки, смена звёзд — вихрь. */
+    private void diffAnimations(RelicData relic) {
+        if (prevRelic != null && prevRelic.rolled()) {
+            for (int i = 0; i < RelicData.ABILITIES; i++) {
+                if (relic.rank(i) > prevRelic.rank(i)) {
+                    flash[i] = 24;
+                }
+            }
+            if (relic.rarity() != prevRelic.rarity() || relic.a0() != prevRelic.a0()
+                    || relic.a1() != prevRelic.a1() || relic.a2() != prevRelic.a2()) {
+                rerollAnim = 40;
+            }
+        }
+        prevRelic = relic;
+    }
+
+    /** Живая дымка: кросс-фейд кадров каждый render-кадр, дрейф, дыхание, покачивание. */
     private void drawSmoke(GuiGraphics graphics, float partialTick) {
         float t = this.ticks + partialTick;
         float pos = t / 6.0F;
@@ -169,18 +196,125 @@ public final class AngelRingScreen extends Screen {
         float oy = (float) Math.cos(t / 7.0F) * 3.0F;
         float alpha = 0.80F + 0.12F * (float) Math.sin(t / 5.0F);
         float grow = 1.22F + 0.06F * (float) Math.sin(t / 11.0F);
-        com.mojang.blaze3d.vertex.PoseStack pose = graphics.pose();
+        PoseStack pose = graphics.pose();
         pose.pushPose();
         pose.translate(left + WIDTH / 2.0F + ox, top + HEIGHT / 2.0F + oy, 0.0F);
         pose.scale(grow, grow, 1.0F);
         pose.mulPose(Axis.ZP.rotationDegrees((float) Math.sin(t / 13.0F) * 3.0F));
         RenderSystem.enableBlend();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha * (1.0F - f));
-        graphics.blit(SMOKE[frame], -128, -128, 0, 0, 256, 256);
+        graphics.blit(SMOKE[frame], -128, -112, 0, 0, 256, 256);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha * f);
-        graphics.blit(SMOKE[next], -128, -128, 0, 0, 256, 256);
+        graphics.blit(SMOKE[next], -128, -112, 0, 0, 256, 256);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         pose.popPose();
+    }
+
+    /** Вихрь багрового дыма вокруг портрета во время реролла. */
+    private void drawRerollVortex(GuiGraphics graphics) {
+        int t = 40 - rerollAnim;
+        PoseStack pose = graphics.pose();
+        pose.pushPose();
+        pose.translate(left + 58, top + 46, 0);
+        pose.mulPose(Axis.ZP.rotationDegrees(t * 14.0F));
+        float scale = 1.0F + 0.25F * (float) Math.sin(t / 3.0F);
+        pose.scale(scale, scale, 1.0F);
+        RenderSystem.enableBlend();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.75F);
+        graphics.blit(SMOKE[(t / 3) % SMOKE.length], -40, -40, 64, 64, 80, 80);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        pose.popPose();
+    }
+
+    private void drawStar(GuiGraphics graphics, int x, int y, boolean filled, boolean mini) {
+        String[] pattern = mini ? MINI_STAR_PIXELS : STAR_PIXELS;
+        int color = filled ? (mini ? STAR_FILL : STAR_FILL) : STAR_EMPTY;
+        for (int row = 0; row < pattern.length; row++) {
+            for (int col = 0; col < pattern[row].length(); col++) {
+                if (pattern[row].charAt(col) == '#') {
+                    graphics.fill(left + x + col, top + y + row, left + x + col + 1, top + y + row + 1, color);
+                }
+            }
+        }
+    }
+
+    private void drawAbilityCard(GuiGraphics graphics, int index, RelicData relic, boolean stale,
+            int mouseX, int mouseY) {
+        int x0 = 44 + index * 48;
+        int y0 = 126;
+        int rank = stale ? 0 : relic.rank(index);
+        int stars = stale ? 0 : relic.abilityRarity(index);
+        int iconColor = rank > 0 ? ICON_ON : ICON_OFF;
+        String[] icon = ABILITY_ICONS[index];
+        for (int row = 0; row < icon.length; row++) {
+            for (int col = 0; col < icon[row].length(); col++) {
+                if (icon[row].charAt(col) == '#') {
+                    graphics.fill(left + x0 + 10 + col * 2, top + y0 + 2 + row * 2,
+                            left + x0 + 12 + col * 2, top + y0 + 4 + row * 2, iconColor);
+                }
+            }
+        }
+        for (int i = 0; i <= RelicData.MAX_STAR; i++) {
+            int shown = rerollAnim > 12 ? (int) ((ticks * 5L + i) % 8) : stars;
+            drawStar(graphics, x0 + 4 + i * 4, y0 + 22, i < shown, true);
+        }
+        for (int i = 0; i < RelicData.MAX_RANK; i++) {
+            int color = i < rank ? STAR_FILL : STAR_EMPTY;
+            graphics.fill(left + x0 + 8 + i * 8, top + 174, left + x0 + 13 + i * 8, top + 179, color);
+        }
+        int cd = index < 2 ? AngelRingStatusClient.cooldown(index) : 0;
+        if (cd > 0) {
+            double cdMax = (index == 0 ? 600 : 900) * (1.0 - 0.15 * (rank - 1));
+            int shade = (int) Math.round(44 * Math.min(1.0, cd / cdMax));
+            graphics.fill(left + x0, top + y0, left + x0 + 36, top + y0 + shade, 0xCC08080A);
+            centered(graphics, String.valueOf((cd + 19) / 20), left + x0 + 18, top + y0 + 18, 0xFFE8E8EC, true);
+        }
+        if (flash[index] > 0) {
+            int t = flash[index];
+            int e = (24 - t) / 2;
+            int c = 0xFFE67878;
+            graphics.fill(left + x0 - 2 - e, top + y0 - 2 - e, left + x0 + 38 + e, top + y0 - 1 - e, c);
+            graphics.fill(left + x0 - 2 - e, top + y0 + 45 + e, left + x0 + 38 + e, top + y0 + 46 + e, c);
+            graphics.fill(left + x0 - 2 - e, top + y0 - 2 - e, left + x0 - 1 - e, top + y0 + 46 + e, c);
+            graphics.fill(left + x0 + 37 + e, top + y0 - 2 - e, left + x0 + 38 + e, top + y0 + 46 + e, c);
+            PoseStack pose = graphics.pose();
+            pose.pushPose();
+            pose.translate(left + x0 + 18, top + y0 + 22, 0);
+            float s = 1.0F + t / 24.0F * 1.2F;
+            pose.scale(s, s, 1.0F);
+            RenderSystem.enableBlend();
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.55F * t / 24.0F);
+            graphics.blit(SMOKE[(24 - t) / 6 % SMOKE.length], -18, -22, 96, 96, 36, 44);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            pose.popPose();
+            if (t > 16) {
+                graphics.fill(left + x0, top + y0, left + x0 + 36, top + y0 + 44,
+                        ((t - 16) * 8 << 24) | 0xFFFFFF);
+            }
+        }
+        if (inside(mouseX, mouseY, x0 - 2, 124, 40, 48)) {
+            outline(graphics, x0 - 2, 124, 40, 48);
+        }
+    }
+
+    private void drawRerollButton(GuiGraphics graphics, RelicData relic, boolean stale, int mouseX, int mouseY) {
+        boolean affordable = Minecraft.getInstance().player != null
+                && Minecraft.getInstance().player.experienceLevel >= RelicAbilities.REROLL_COST;
+        int bg = affordable ? 0xFF2C2C32 : 0xFF232327;
+        graphics.fill(left + 196, top + 120, left + 270, top + 138, bg);
+        int edge = affordable ? 0xFF963030 : 0xFF4A4A50;
+        graphics.fill(left + 196, top + 120, left + 270, top + 121, edge);
+        graphics.fill(left + 196, top + 137, left + 270, top + 138, edge);
+        graphics.fill(left + 196, top + 120, left + 197, top + 138, edge);
+        graphics.fill(left + 269, top + 120, left + 270, top + 138, edge);
+        int labelColor = affordable ? 0xFFE8B4B4 : 0xFF6A6A72;
+        centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.reroll").getString(),
+                left + 233, top + 122, labelColor, true);
+        centered(graphics, Component.translatable("gui.fallenrelics.angel_ring.reroll.cost").getString(),
+                left + 233, top + 130, LABEL_DIM, false);
+        if (inside(mouseX, mouseY, 196, 120, 74, 18)) {
+            outline(graphics, 196, 120, 74, 18);
+        }
     }
 
     private Component statusLine() {
@@ -217,29 +351,11 @@ public final class AngelRingScreen extends Screen {
         return String.format(Locale.ROOT, "%d:%02d", seconds / 60L, seconds % 60L);
     }
 
-    private void rankPips(GuiGraphics graphics, int rank, int x0) {
-        for (int i = 0; i < RelicData.MAX_RANK; i++) {
-            if (i < rank) {
-                int cx = x0 + i * 6;
-                graphics.fill(left + cx + 1, top + 155, left + cx + 5, top + 160, PIP_FILL);
-            }
-        }
-    }
-
     private void outline(GuiGraphics graphics, int x, int y, int w, int h) {
         graphics.fill(left + x - 1, top + y - 1, left + x + w + 1, top + y, HOVER_CRIMSON);
         graphics.fill(left + x - 1, top + y + h, left + x + w + 1, top + y + h + 1, HOVER_CRIMSON);
         graphics.fill(left + x - 1, top + y, left + x, top + y + h, HOVER_CRIMSON);
         graphics.fill(left + x + w, top + y, left + x + w + 1, top + y + h, HOVER_CRIMSON);
-    }
-
-    private boolean upgradable(int stat) {
-        RelicData relic = AngelRingStatusClient.relic();
-        if (AngelRingStatusClient.stale() || relic.points() <= 0) {
-            return false;
-        }
-        return stat == RelicData.STAT_SPEED ? relic.speed() < RelicData.MAX_RANK
-                : relic.cushion() < RelicData.MAX_RANK;
     }
 
     private void plaque(GuiGraphics graphics, int row, String label, String text) {
@@ -255,36 +371,64 @@ public final class AngelRingScreen extends Screen {
     private void tooltips(GuiGraphics graphics, int mouseX, int mouseY, RelicData relic, boolean stale) {
         Component tip = null;
         List<Component> body = null;
-        if (inside(mouseX, mouseY, 44, 126, 36, 44)) {
-            tip = Component.translatable("gui.fallenrelics.angel_ring.ability.flight");
+        for (int i = 0; i < RelicData.ABILITIES && tip == null; i++) {
+            if (!inside(mouseX, mouseY, 42 + i * 48, 124, 40, 48)) {
+                continue;
+            }
+            String key = i == 0 ? "verdict" : i == 1 ? "sanctuary" : "aegis";
+            tip = Component.translatable("gui.fallenrelics.angel_ring.ability." + key);
+            var list = new java.util.ArrayList<Component>();
+            list.add(Component.translatable("gui.fallenrelics.angel_ring.ability." + key + ".desc"));
+            if (!stale) {
+                list.add(Component.translatable("gui.fallenrelics.angel_ring.stars.ability", relic.abilityRarity(i)));
+                list.add(Component.translatable("gui.fallenrelics.angel_ring.rank.line", relic.rank(i)));
+                int next = relic.rank(i) + 1;
+                if (next <= RelicData.MAX_RANK) {
+                    if (next <= relic.rankCap()) {
+                        list.add(Component.translatable("gui.fallenrelics.angel_ring.upgrade_click",
+                                RelicData.rankCost(next)));
+                    } else {
+                        list.add(Component.translatable("message.fallenrelics.rank.cap"));
+                    }
+                }
+                if (i < 2) {
+                    int cd = AngelRingStatusClient.cooldown(i);
+                    if (relic.rank(i) > 0 && cd <= 0) {
+                        list.add(Component.translatable("gui.fallenrelics.angel_ring.cast_click"));
+                    } else if (cd > 0) {
+                        list.add(Component.translatable("gui.fallenrelics.angel_ring.cooldown", (cd + 19) / 20));
+                    }
+                } else {
+                    list.add(Component.translatable("gui.fallenrelics.angel_ring.passive"));
+                }
+            }
+            body = list;
+        }
+        if (tip == null && inside(mouseX, mouseY, 44, 74, 36, 10)) {
+            tip = Component.translatable("gui.fallenrelics.angel_ring.stars", stale ? 0 : relic.rarity());
+            body = List.of(Component.translatable("gui.fallenrelics.angel_ring.pips"));
+        }
+        if (tip == null && inside(mouseX, mouseY, 196, 120, 74, 18)) {
+            tip = Component.translatable("gui.fallenrelics.angel_ring.reroll");
             body = List.of(
-                    Component.translatable("gui.fallenrelics.angel_ring.ability.flight.desc"),
-                    Component.translatable("gui.fallenrelics.angel_ring.rank", relic.speed(), RelicData.MAX_RANK),
-                    Component.translatable("gui.fallenrelics.angel_ring.click"));
-        } else if (inside(mouseX, mouseY, 96, 126, 36, 44)) {
-            tip = Component.translatable("gui.fallenrelics.angel_ring.ability.insurance");
-            body = List.of(
-                    Component.translatable("gui.fallenrelics.angel_ring.ability.insurance.desc"),
-                    Component.translatable("gui.fallenrelics.angel_ring.rank", relic.cushion(), RelicData.MAX_RANK),
-                    Component.translatable("gui.fallenrelics.angel_ring.click"));
-        } else if (inside(mouseX, mouseY, 196, 36, 74, 18)) {
-            tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.points");
-            body = List.of(Component.translatable("gui.fallenrelics.angel_ring.plaque.points.desc"));
-        } else if (inside(mouseX, mouseY, 196, 58, 74, 18)) {
+                    Component.translatable("gui.fallenrelics.angel_ring.reroll.desc"),
+                    Component.translatable("gui.fallenrelics.angel_ring.reroll.cost"));
+        }
+        if (tip == null && inside(mouseX, mouseY, 196, 36, 74, 18)) {
+            tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.level");
+            body = List.of(Component.translatable("gui.fallenrelics.angel_ring.plaque.level.desc"));
+        }
+        if (tip == null && inside(mouseX, mouseY, 196, 58, 74, 18)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.xp");
             body = List.of(Component.translatable("gui.fallenrelics.angel_ring.plaque.xp.desc"));
-        } else if (inside(mouseX, mouseY, 196, 80, 74, 18)) {
+        }
+        if (tip == null && inside(mouseX, mouseY, 196, 80, 74, 18)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.speed");
             body = List.of(Component.translatable("gui.fallenrelics.angel_ring.plaque.speed.desc"));
-        } else if (inside(mouseX, mouseY, 196, 98, 74, 14)) {
+        }
+        if (tip == null && inside(mouseX, mouseY, 196, 98, 74, 14)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.time");
             body = List.of(Component.literal(timeText()));
-        } else if (inside(mouseX, mouseY, 44, 77, 46, 7)) {
-            tip = Component.translatable("gui.fallenrelics.angel_ring.pips");
-            body = List.of(Component.translatable("gui.fallenrelics.angel_ring.level", relic.level(), RelicData.MAX_LEVEL));
-        } else if (inside(mouseX, mouseY, 52, 10, 20, 10)) {
-            tip = Component.translatable("gui.fallenrelics.angel_ring.badge");
-            body = List.of(Component.translatable("gui.fallenrelics.angel_ring.level", relic.level(), RelicData.MAX_LEVEL));
         }
         if (tip != null && !stale) {
             List<FormattedCharSequence> lines = new java.util.ArrayList<>();
@@ -300,25 +444,32 @@ public final class AngelRingScreen extends Screen {
         return mouseX >= left + x && mouseX < left + x + w && mouseY >= top + y && mouseY < top + y + h;
     }
 
-    /** Click an ability card to spend one upgrade point; the server validates. */
+    /** ЛКМ по карточке — улучшение за уровни, ПКМ — применение, клик по кнопке — реролл. */
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) {
-            if (upgradable(RelicData.STAT_SPEED) && inside((int) mouseX, (int) mouseY, 44, 126, 36, 44)) {
-                PacketDistributor.sendToServer(new AngelRingUpgradePayload(RelicData.STAT_SPEED));
-                AngelRingStatusClient.request();
-                return true;
+        for (int i = 0; i < RelicData.ABILITIES; i++) {
+            if (inside((int) mouseX, (int) mouseY, 42 + i * 48, 124, 40, 48)) {
+                if (button == 0) {
+                    PacketDistributor.sendToServer(new RelicActionPayloads.Upgrade(i));
+                    AngelRingStatusClient.request();
+                    return true;
+                }
+                if (button == 1 && i < 2) {
+                    PacketDistributor.sendToServer(new RelicActionPayloads.Cast(i));
+                    AngelRingStatusClient.request();
+                    return true;
+                }
             }
-            if (upgradable(RelicData.STAT_CUSHION) && inside((int) mouseX, (int) mouseY, 96, 126, 36, 44)) {
-                PacketDistributor.sendToServer(new AngelRingUpgradePayload(RelicData.STAT_CUSHION));
-                AngelRingStatusClient.request();
-                return true;
-            }
+        }
+        if (button == 0 && inside((int) mouseX, (int) mouseY, 196, 120, 74, 18)) {
+            PacketDistributor.sendToServer(new RelicActionPayloads.Reroll());
+            AngelRingStatusClient.request();
+            return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    /** Esc brings back the inventory the scroll was opened from, if any. */
+    /** Esc возвращает в тот же инвентарь, из которого открыт свиток. */
     @Override
     public void onClose() {
         if (this.returnTo != null) {

@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
  * plus the lifetime flight time in ticks.
  */
 public record AngelRingStatusPayload(boolean granted, boolean flying, boolean buffering, int bufferTicks,
-        long flightTicks, RelicData relic) implements CustomPacketPayload {
+        long flightTicks, RelicData relic, int cd0, int cd1, int cd2) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<AngelRingStatusPayload> TYPE =
             new CustomPacketPayload.Type<>(
                     ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "angel_ring_status"));
@@ -22,7 +22,8 @@ public record AngelRingStatusPayload(boolean granted, boolean flying, boolean bu
                 @Override
                 public AngelRingStatusPayload decode(RegistryFriendlyByteBuf buf) {
                     return new AngelRingStatusPayload(buf.readBoolean(), buf.readBoolean(), buf.readBoolean(),
-                            buf.readVarInt(), buf.readVarLong(), RelicData.STREAM_CODEC.decode(buf));
+                            buf.readVarInt(), buf.readVarLong(), RelicData.STREAM_CODEC.decode(buf),
+                            buf.readVarInt(), buf.readVarInt(), buf.readVarInt());
                 }
 
                 @Override
@@ -33,6 +34,9 @@ public record AngelRingStatusPayload(boolean granted, boolean flying, boolean bu
                     buf.writeVarInt(payload.bufferTicks());
                     buf.writeVarLong(payload.flightTicks());
                     RelicData.STREAM_CODEC.encode(buf, payload.relic());
+                    buf.writeVarInt(payload.cd0());
+                    buf.writeVarInt(payload.cd1());
+                    buf.writeVarInt(payload.cd2());
                 }
             };
 
