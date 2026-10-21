@@ -19,7 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.IncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.minecraft.world.entity.monster.Monster;
 import net.neoforged.neoforge.event.entity.player.PlayerXpEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
@@ -82,7 +83,7 @@ public final class RelicAbilities {
 
     /** Опыт игрока зеркально копится в реликвии (только приобретения). */
     @SubscribeEvent
-    public static void onXpChange(PlayerXpEvent.ChangeXp event) {
+    public static void onXpChange(PlayerXpEvent.XpChange event) {
         Player player = event.getEntity();
         if (player.level().isClientSide || event.getAmount() <= 0 || !(player instanceof ServerPlayer serverPlayer)) {
             return;
@@ -102,7 +103,7 @@ public final class RelicAbilities {
 
     /** Метка «Приговора» усиливает входящий урон; пассивка блокирует удар. */
     @SubscribeEvent
-    public static void onIncomingDamage(IncomingDamageEvent event) {
+    public static void onIncomingDamage(LivingIncomingDamageEvent event) {
         var marked = event.getEntity().getPersistentData();
         // метка уязвимости: помеченные «Приговором» получают больше урона от всего
         if (marked.getInt(MARK_END_TAG) > event.getEntity().tickCount) {
@@ -179,7 +180,7 @@ public final class RelicAbilities {
                     target.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 40, 1, false, true));
                     target.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 0, false, true));
                 }
-                for (Mob mob : level.getEntitiesOfClass(Mob.class, box, m -> !(m instanceof Player))) {
+                for (Monster mob : level.getEntitiesOfClass(Monster.class, box)) {
                     mob.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 40, 1, false, true));
                     mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 1, false, true));
                 }
@@ -262,8 +263,7 @@ public final class RelicAbilities {
         int duration = (int) ((2 + stars * 2 / 3) * 20 * rankMult);
         int markPct = rank >= 3 ? 40 : 25;
         ServerLevel level = player.serverLevel();
-        for (Mob mob : level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(radius),
-                m -> m.isAlive() && !(m instanceof Player))) {
+        for (Monster mob : level.getEntitiesOfClass(Monster.class, player.getBoundingBox().inflate(radius))) {
             mob.addEffect(new MobEffectInstance(MobEffects.LEVITATION, duration, 0, false, true));
             mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, duration, 1, false, true));
             mob.getPersistentData().putInt(MARK_END_TAG, mob.tickCount + 100);

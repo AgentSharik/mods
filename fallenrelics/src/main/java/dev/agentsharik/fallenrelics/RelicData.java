@@ -23,6 +23,8 @@ import net.minecraft.network.codec.StreamCodec;
 public record RelicData(int level, int xp, boolean rolled, int rarity,
         int a0, int a1, int a2, int r0, int r1, int r2) {
     public static final int MAX_LEVEL = 10;
+    /** Опыт реликвии за секунду полёта (добавка к зеркальному опыту игрока). */
+    public static final int XP_PER_SECOND = 5;
     public static final int MAX_STAR = 6;
     public static final int MAX_RANK = 3;
     public static final int ABILITIES = 3;
@@ -42,18 +44,30 @@ public record RelicData(int level, int xp, boolean rolled, int rarity,
             Codec.INT.optionalFieldOf("r2", 0).forGetter(RelicData::r2)
     ).apply(i, RelicData::new));
 
-    public static final StreamCodec<ByteBuf, RelicData> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.VAR_INT, RelicData::level,
-            ByteBufCodecs.VAR_INT, RelicData::xp,
-            ByteBufCodecs.BOOL, RelicData::rolled,
-            ByteBufCodecs.VAR_INT, RelicData::rarity,
-            ByteBufCodecs.VAR_INT, RelicData::a0,
-            ByteBufCodecs.VAR_INT, RelicData::a1,
-            ByteBufCodecs.VAR_INT, RelicData::a2,
-            ByteBufCodecs.VAR_INT, RelicData::r0,
-            ByteBufCodecs.VAR_INT, RelicData::r1,
-            ByteBufCodecs.VAR_INT, RelicData::r2,
-            RelicData::new);
+    public static final StreamCodec<ByteBuf, RelicData> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public RelicData decode(ByteBuf buf) {
+            return new RelicData(ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf),
+                    ByteBufCodecs.BOOL.decode(buf), ByteBufCodecs.VAR_INT.decode(buf),
+                    ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf),
+                    ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf),
+                    ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf));
+        }
+
+        @Override
+        public void encode(ByteBuf buf, RelicData d) {
+            ByteBufCodecs.VAR_INT.encode(buf, d.level());
+            ByteBufCodecs.VAR_INT.encode(buf, d.xp());
+            ByteBufCodecs.BOOL.encode(buf, d.rolled());
+            ByteBufCodecs.VAR_INT.encode(buf, d.rarity());
+            ByteBufCodecs.VAR_INT.encode(buf, d.a0());
+            ByteBufCodecs.VAR_INT.encode(buf, d.a1());
+            ByteBufCodecs.VAR_INT.encode(buf, d.a2());
+            ByteBufCodecs.VAR_INT.encode(buf, d.r0());
+            ByteBufCodecs.VAR_INT.encode(buf, d.r1());
+            ByteBufCodecs.VAR_INT.encode(buf, d.r2());
+        }
+    };
 
     public boolean maxed() {
         return level >= MAX_LEVEL;
