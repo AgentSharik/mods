@@ -3,24 +3,11 @@ name: Extract video frames
 # Ремесленный конвейер: раннер GitHub Actions не ограничен списком хостов песочницы,
 # поэтому он сам тянет большое видео (например, из общего Drive по ссылке),
 # режет его ffmpeg на кадры и коммитит кадры в ветку — песочница потом читает их поштучно.
+# Запуск: закоммитить маркер frames/REQUEST-<имя> с содержимым "<drive_id> <every_N_seconds> <max_frames>".
 on:
-  workflow_dispatch:
-    inputs:
-      file_id:
-        description: 'Drive file id of the video'
-        required: true
-      out_dir:
-        description: 'Directory under frames/ to commit into'
-        required: false
-        default: 'aiarena'
-      fps:
-        description: 'Frames per second as 1/N (2 = every 2 seconds)'
-        required: false
-        default: '2'
-      max_frames:
-        description: 'Cap on extracted frames'
-        required: false
-        default: '400'
+  push:
+    paths:
+      - 'frames/REQUEST-*'
 
 permissions:
   contents: write
@@ -33,10 +20,23 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v5
 
+      - name: Parse request marker
+        id: req
+        shell: bash
+        run: |
+          marker=$(ls frames/REQUEST-* | head -1)
+          name="${marker#frames/REQUEST-}"
+          read -r file_id every_n max_frames < "$marker"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "file_id=$file_id" >> "$GITHUB_OUTPUT"
+          echo "every_n=${every_n:-2}" >> "$GITHUB_OUTPUT"
+          echo "max_frames=${max_frames:-400}" >> "$GITHUB_OUTPUT"
+          echo "request: $name id=$file_id every ${every_n:-2}s max ${max_frames:-400}"
+
       - name: Download video from Drive
         shell: bash
         run: |
-          id="${{ inputs.file_id }}"
+          id="${{ steps.req.outputs.file_id }}"
           curl -L --retry 3 -o /tmp/video.mp4 \
             "https://drive.google.com/uc?export=download&confirm=t&id=${id}"
           size=$(stat -c%s /tmp/video.mp4)
@@ -50,11 +50,10 @@ jobs:
             echo "gdown bytes: $size"
           fi
           file /tmp/video.mp4
-          ffprobe -v error -show_entries format=duration -of default=nw=1 /tmp/video.mp4 | tee /tmp/duration.txt
           {
             echo '### Video probe'
             echo '```text'
-            cat /tmp/duration.txt
+            ffprobe -v error -show_entries format=duration -of default=nw=1 /tmp/video.mp4
             ffprobe -v error -select_streams v:0 -show_entries stream=width,height,r_frame_rate -of default=nw=1 /tmp/video.mp4
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
@@ -62,24 +61,25 @@ jobs:
       - name: Extract frames
         shell: bash
         run: |
-          mkdir -p "frames/${{ inputs.out_dir }}"
+          mkdir -p "frames/${{ steps.req.outputs.name }}"
           ffmpeg -hide_banner -loglevel error -i /tmp/video.mp4 \
-            -vf "fps=1/${{ inputs.fps }},scale=960:-2" -q:v 4 \
-            -frames:v "${{ inputs.max_frames }}" \
-            "frames/${{ inputs.out_dir }}/%04d.jpg"
-          ls "frames/${{ inputs.out_dir }}" | wc -l
-          du -sh "frames/${{ inputs.out_dir }}"
+            -vf "fps=1/${{ steps.req.outputs.every_n }},scale=960:-2" -q:v 4 \
+            -frames:v "${{ steps.req.outputs.max_frames }}" \
+            "frames/${{ steps.req.outputs.name }}/%04d.jpg"
+          ls "frames/${{ steps.req.outputs.name }}" | wc -l
+          du -sh "frames/${{ steps.req.outputs.name }}"
 
       - name: Publish frames to the session branch
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "frames/${{ inputs.out_dir }}"
+          git rm -q --ignore-unmatch 'frames/REQUEST-*' || true
+          git add "frames/${{ steps.req.outputs.name }}"
           if git diff --cached --quiet; then
             echo 'No new frames.'
           else
-            git commit -m "frames: ${{ inputs.out_dir }} (video round 3, every ${{ inputs.fps }}s)"
+            git commit -m "frames: ${{ steps.req.outputs.name }} (video round 3, every ${{ steps.req.outputs.every_n }}s)"
             git fetch origin "${GITHUB_REF_NAME}"
             git merge --no-edit "origin/${GITHUB_REF_NAME}" || true
             git push origin "HEAD:${GITHUB_REF_NAME}"
