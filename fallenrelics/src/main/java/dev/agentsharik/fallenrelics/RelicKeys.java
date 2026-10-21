@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
@@ -24,22 +24,24 @@ public final class RelicKeys {
 
     private RelicKeys() {}
 
+    /** consumeClick() в клиентском тике: без зависимости от классов InputEvent. */
     @SubscribeEvent
-    public static void onKeyPressed(InputEvent.KeyPressed event) {
+    public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.screen != null || mc.player == null) {
             return;
         }
-        int index = -1;
-        if (event.getKey() == VERDICT.getKey().getValue() && event.getAction() == 1) {
-            index = 0;
-        } else if (event.getKey() == SANCTUARY.getKey().getValue() && event.getAction() == 1) {
-            index = 1;
+        while (VERDICT.consumeClick()) {
+            send(0);
         }
-        if (index >= 0) {
-            PacketDistributor.sendToServer(new RelicActionPayloads.Cast(index,
-                    AngelRingStatusRequestPayload.NO_TARGET));
+        while (SANCTUARY.consumeClick()) {
+            send(1);
         }
+    }
+
+    private static void send(int index) {
+        PacketDistributor.sendToServer(new RelicActionPayloads.Cast(index,
+                AngelRingStatusRequestPayload.NO_TARGET));
     }
 
     /** Подсказка клавиши для тултипа карточки. */

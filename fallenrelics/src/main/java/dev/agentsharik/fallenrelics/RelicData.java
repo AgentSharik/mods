@@ -3,6 +3,7 @@ package dev.agentsharik.fallenrelics;
 import java.util.UUID;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import io.netty.buffer.ByteBuf;
@@ -34,6 +35,15 @@ public record RelicData(int level, int xp, boolean rolled, int rarity,
     public static final int ABILITIES = 3;
 
     public static final UUID NO_ID = new UUID(0L, 0L);
+
+    /** В 1.21.1 нет Codec.UUID — строковый кодек с защитой от битых данных. */
+    public static final Codec<UUID> UUID_CODEC = Codec.STRING.comapFlatMap(s -> {
+        try {
+            return DataResult.success(UUID.fromString(s));
+        } catch (IllegalArgumentException e) {
+            return DataResult.error(() -> "invalid uuid: " + s);
+        }
+    }, UUID::toString);
     public static final RelicData EMPTY = new RelicData(0, 0, false, 0, 0, 0, 0, 0, 0, 0, NO_ID);
 
     public static final Codec<RelicData> CODEC = RecordCodecBuilder.create(i -> i.group(
@@ -47,7 +57,7 @@ public record RelicData(int level, int xp, boolean rolled, int rarity,
             Codec.INT.optionalFieldOf("r0", 0).forGetter(RelicData::r0),
             Codec.INT.optionalFieldOf("r1", 0).forGetter(RelicData::r1),
             Codec.INT.optionalFieldOf("r2", 0).forGetter(RelicData::r2),
-            Codec.UUID.optionalFieldOf("id", NO_ID).forGetter(RelicData::id)
+            UUID_CODEC.optionalFieldOf("id", NO_ID).forGetter(RelicData::id)
     ).apply(i, RelicData::new));
 
     public static final StreamCodec<ByteBuf, RelicData> STREAM_CODEC = new StreamCodec<>() {
@@ -58,7 +68,7 @@ public record RelicData(int level, int xp, boolean rolled, int rarity,
                     ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf),
                     ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf),
                     ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.VAR_INT.decode(buf),
-                    ByteBufCodecs.UUID.decode(buf));
+                    new UUID(buf.readLong(), buf.readLong()));
         }
 
         @Override
@@ -73,7 +83,8 @@ public record RelicData(int level, int xp, boolean rolled, int rarity,
             ByteBufCodecs.VAR_INT.encode(buf, d.r0());
             ByteBufCodecs.VAR_INT.encode(buf, d.r1());
             ByteBufCodecs.VAR_INT.encode(buf, d.r2());
-            ByteBufCodecs.UUID.encode(buf, d.id());
+            buf.writeLong(d.id().getMostSignificantBits());
+            buf.writeLong(d.id().getLeastSignificantBits());
         }
     };
 
