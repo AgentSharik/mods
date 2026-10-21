@@ -92,12 +92,35 @@ jobs:
         shell: bash
         run: |
           mkdir -p "frames/${{ steps.req.outputs.name }}"
-          ffmpeg -hide_banner -loglevel error -i /tmp/video.mp4 \
+          ffmpeg -hide_banner -loglevel warning -i /tmp/video.mp4 \
             -vf "fps=1/${{ steps.req.outputs.every_n }},scale=960:-2" -q:v 4 \
             -frames:v "${{ steps.req.outputs.max_frames }}" \
-            "frames/${{ steps.req.outputs.name }}/%04d.jpg"
+            "frames/${{ steps.req.outputs.name }}/%04d.jpg" 2>/tmp/ffmpeg.log || true
+          tail -30 /tmp/ffmpeg.log
           ls "frames/${{ steps.req.outputs.name }}" | wc -l
           du -sh "frames/${{ steps.req.outputs.name }}"
+
+      - name: Save extract diagnostics
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p ci-logs
+          {
+            echo "ffmpeg log tail:"
+            tail -40 /tmp/ffmpeg.log 2>/dev/null
+            echo "frames dir:"
+            ls -la "frames/${{ steps.req.outputs.name }}" 2>/dev/null | head -8
+            du -sh "frames/${{ steps.req.outputs.name }}" 2>/dev/null
+          } > ci-logs/video-extract.log
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ci-logs
+          if ! git diff --cached --quiet; then
+            git commit -m 'ci: video extract diagnostics'
+            git fetch origin "${GITHUB_REF_NAME}"
+            git merge --no-edit "origin/${GITHUB_REF_NAME}" || true
+            git push origin "HEAD:${GITHUB_REF_NAME}" || true
+          fi
 
       - name: Publish frames to the session branch
         shell: bash
