@@ -166,7 +166,7 @@ public final class AscensionRitual {
                     level.sendParticles(ParticleTypes.FLASH, cx, peakY, cz, 1, 0, 0, 0, 0.0);
                     level.sendParticles(ParticleTypes.CRIMSON_SPORE, cx, peakY, cz, 240, 1.6, 1.6, 1.6, 0.1);
                     level.sendParticles(ParticleTypes.SMOKE, cx, peakY - 0.2, cz, 120, 1.4, 1.2, 1.4, 0.04);
-                    level.playSound(null, st.table, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.8F, 0.7F);
+                    level.playSound(null, st.table, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 0.8F, 0.7F);
                     ItemEntity d = new ItemEntity(level, cx, peakY, cz, new ItemStack(ModContent.ANGEL_RING.get()));
                     d.setNoGravity(true);
                     d.setPickUpDelay(32767);

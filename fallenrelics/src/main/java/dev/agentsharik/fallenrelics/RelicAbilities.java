@@ -380,7 +380,7 @@ public final class RelicAbilities {
         level.sendParticles(ParticleTypes.FLAME, cx, cy + 0.2, cz, 40, radius / 2, 0.2, radius / 2, 0.06);
         player.playSound(SoundEvents.END_PORTAL_SPAWN, 1.0F, 0.7F);
         player.playSound(SoundEvents.BEACON_ACTIVATE, 1.0F, 0.6F);
-        player.playSound(SoundEvents.GENERIC_EXPLODE, 0.7F, 0.8F);
+        player.playSound(SoundEvents.GENERIC_EXPLODE.value(), 0.7F, 0.8F);
     }
 
     /** Реролл рарности артефакта и способностей за REROLL_COST уровня. */
