@@ -38,7 +38,7 @@ jobs:
         run: |
           id="${{ steps.req.outputs.file_id }}"
           curl -L --retry 3 -o /tmp/video.mp4 \
-            "https://drive.google.com/uc?export=download&confirm=t&id=${id}"
+            "https://drive.usercontent.google.com/download?id=${id}&export=download&confirm=t"
           size=$(stat -c%s /tmp/video.mp4)
           echo "downloaded bytes: $size"
           if [ "$size" -lt 1000000 ]; then
