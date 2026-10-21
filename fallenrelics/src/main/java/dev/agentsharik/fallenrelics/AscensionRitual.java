@@ -69,7 +69,7 @@ public final class AscensionRitual {
         if (!hand.is(ModContent.AWAKENED_RING.get())) {
             return;
         }
-        event.setCancellationMarker(InteractionResult.SUCCESS);
+        event.setCancellationResult(InteractionResult.SUCCESS);
         if (ACTIVE.stream().anyMatch(s -> s.player.equals(player.getUUID()))) {
             player.displayClientMessage(Component.translatable("message.fallenrelics.ritual.busy"), true);
             return;

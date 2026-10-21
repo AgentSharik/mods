@@ -287,7 +287,7 @@ public final class RelicAbilities {
         stack.set(ModContent.RELIC_DATA.get(), relic.addXp(8 + 4 * stars));
         killer.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST,
                 40 + 20 * stars, stars >= 5 ? 1 : 0, false, true));
-        killer.level().sendParticles(ParticleTypes.CRIMSON_SPORE, killer.getX(), killer.getY() + 1.0,
+        ((ServerLevel) killer.level()).sendParticles(ParticleTypes.CRIMSON_SPORE, killer.getX(), killer.getY() + 1.0,
                 killer.getZ(), 14, 0.5, 0.7, 0.5, 0.05);
         killer.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5F, 1.4F);
     }
