@@ -33,6 +33,15 @@ jobs:
           echo "max_frames=${max_frames:-400}" >> "$GITHUB_OUTPUT"
           echo "request: $name id=$file_id every ${every_n:-2}s max ${max_frames:-400}"
 
+      - name: Ensure ffmpeg
+        shell: bash
+        run: |
+          if ! command -v ffmpeg || ! command -v ffprobe; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1 || true
+
       - name: Download video from Drive
         shell: bash
         run: |
@@ -66,10 +75,11 @@ jobs:
           {
             echo '### Video probe'
             echo '```text'
-            ffprobe -v error -show_entries format=duration -of default=nw=1 /tmp/video.mp4
-            ffprobe -v error -select_streams v:0 -show_entries stream=width,height,r_frame_rate -of default=nw=1 /tmp/video.mp4
+            ffprobe -v error -show_entries format=duration -of default=nw=1 /tmp/video.mp4 || true
+            ffprobe -v error -select_streams v:0 -show_entries stream=width,height,r_frame_rate -of default=nw=1 /tmp/video.mp4 || true
             echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
+          } >> "$GITHUB_STEP_SUMMARY" || true
+          command -v ffmpeg && command -v ffprobe || true
 
       - name: Save diagnostics on failure
         if: failure()

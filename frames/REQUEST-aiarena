@@ -3,3 +3,4 @@
 # retry 3: uuid flow
 # retry 4: ffmpeg self-log
 # retry 5: apt ffmpeg
+# retry 6: ffprobe guard + apt ffmpeg
