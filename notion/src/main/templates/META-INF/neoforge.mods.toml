@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="Apache-2.0"
+
+[[mods]]
+modId="angelring"
+version="1.1.0"
+displayName="Angel Ring"
+authors="AgentSharik"
+description='''Кольцо ангела: пока оно надето в слоте колец (Curios), даёт полёт как в творческом режиме.'''
+
+[[dependencies.angelring]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.angelring]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1,1.21.2)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.angelring]]
+modId="curios"
+type="required"
+versionRange="[9.0.0,)"
+ordering="AFTER"
+side="BOTH"

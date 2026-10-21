@@ -1,0 +1,33 @@
+{
+  "ui.open_hum": {
+    "sounds": [{ "name": "minecraft:block.beacon.ambient", "type": "event" }]
+  },
+  "ui.open_whisper": {
+    "sounds": [{ "name": "minecraft:block.respawn_anchor.ambient", "type": "event" }]
+  },
+  "ui.reroll_thud": {
+    "sounds": [{ "name": "minecraft:block.respawn_anchor.deplete", "type": "event" }]
+  },
+  "ui.reroll_rustle": {
+    "sounds": [{ "name": "minecraft:item.armor.equip_leather", "type": "event" }]
+  },
+  "ui.chime": {
+    "sounds": [{ "name": "minecraft:block.note_block.chime", "type": "event" }]
+  },
+  "ui.shimmer": {
+    "sounds": [{ "name": "minecraft:block.amethyst_block.chime", "type": "event" }]
+  },
+  "ui.error": {
+    "sounds": [{ "name": "minecraft:block.note_block.bass", "type": "event" }]
+  },
+  "ui.error_click": {
+    "sounds": [{ "name": "minecraft:block.dispenser.fail", "type": "event" }]
+  },
+  "ui.press": {
+    "sounds": [{ "name": "minecraft:ui.button.click", "type": "event" }]
+  },
+  "ring.level_up": {
+    "subtitle": "subtitles.angelring.ring.level_up",
+    "sounds": [{ "name": "minecraft:entity.player.levelup", "type": "event" }]
+  }
+}
