@@ -21,90 +21,53 @@ Loaded 131 artifacts from /home/runner/work/mods/mods/fallenrelics/build/tmp/cre
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/1757c8b1fbfc6b638504e1f6cceb05893f7389d5/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.38s
-[1m*** Started working on [4mdownloadServer[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.45s
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
 [1m*** Started working on [4mdownloadClient[23;0m[23;0m
-  ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
+[1m*** Started working on [4mdownloadServer[23;0m[23;0m
   ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
+  ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
   ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.43s
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.49s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.81s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 1.03s
 [1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.09s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.43s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.83s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.77s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.85s
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.53s
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.55s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.11s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.69s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 4.24s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.35s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.51s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 5.69s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 6.73s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.57s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.39s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.66s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.69s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.12s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.16s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.41s
-Total runtime: 29.66s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 7.38s
+Total runtime: 33.02s
 
 
 > Task :compileJava
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicKeys.java:28: error: cannot find symbol
-    public static void onKeyPressed(InputEvent.KeyPressed event) {
-                                              ^
-  symbol:   class KeyPressed
-  location: class InputEvent
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AngelRingNetwork.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
                                                     ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AngelRingNetwork.java:9: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-                                                                            ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicData.java:50: error: cannot find symbol
-            Codec.UUID.optionalFieldOf("id", NO_ID).forGetter(RelicData::id)
-                 ^
-  symbol:   variable UUID
-  location: interface Codec
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicData.java:61: error: cannot find symbol
-                    ByteBufCodecs.UUID.decode(buf));
-                                 ^
-  symbol:   variable UUID
-  location: interface ByteBufCodecs
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicData.java:76: error: cannot find symbol
-            ByteBufCodecs.UUID.encode(buf, d.id());
-                         ^
-  symbol:   variable UUID
-  location: interface ByteBufCodecs
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerJeiCalls.java:33: warning: [removal] getIngredient() in IClickableIngredient has been deprecated and marked for removal
-                    .map(clickable -> clickable.getIngredient())
-                                               ^
-  where T is a type-variable:
-    T extends Object declared in interface IClickableIngredient
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
-                                                    ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
-                                                                            ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerNetwork.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-                                                    ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerNetwork.java:9: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
                                                                             ^
 /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientModEvents.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -112,11 +75,52 @@ Total runtime: 29.66s
 /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientModEvents.java:9: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
                                                                             ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicAbilities.java:290: error: cannot find symbol
+        killer.level().sendParticles(ParticleTypes.CRIMSON_SPORE, killer.getX(), killer.getY() + 1.0,
+                      ^
+  symbol:   method sendParticles(SimpleParticleType,double,double,double,int,double,double,double,double)
+  location: class Level
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicAbilities.java:383: error: incompatible types: Reference<SoundEvent> cannot be converted to SoundEvent
+        player.playSound(SoundEvents.GENERIC_EXPLODE, 0.7F, 0.8F);
+                                    ^
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
                                                     ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+                                                                            ^
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AngelRingNetwork.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+                                                    ^
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AngelRingNetwork.java:9: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+                                                                            ^
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AscensionRitual.java:72: error: cannot find symbol
+        event.setCancellationMarker(InteractionResult.SUCCESS);
+             ^
+  symbol:   method setCancellationMarker(InteractionResult)
+  location: variable event of type RightClickBlock
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AscensionRitual.java:169: error: no suitable method found for playSound(<null>,BlockPos,Reference<SoundEvent>,SoundSource,float,float)
+                    level.playSound(null, st.table, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.8F, 0.7F);
+                         ^
+    method Level.playSound(Entity,BlockPos,SoundEvent,SoundSource,float,float) is not applicable
+      (argument mismatch; Reference<SoundEvent> cannot be converted to SoundEvent)
+    method Level.playSound(Player,BlockPos,SoundEvent,SoundSource,float,float) is not applicable
+      (argument mismatch; Reference<SoundEvent> cannot be converted to SoundEvent)
+    method Level.playSound(Player,double,double,double,SoundEvent,SoundSource) is not applicable
+      (argument mismatch; BlockPos cannot be converted to double)
+    method Level.playSound(Player,Entity,SoundEvent,SoundSource,float,float) is not applicable
+      (argument mismatch; BlockPos cannot be converted to Entity)
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerJeiCalls.java:33: warning: [removal] getIngredient() in IClickableIngredient has been deprecated and marked for removal
+                    .map(clickable -> clickable.getIngredient())
+                                               ^
+  where T is a type-variable:
+    T extends Object declared in interface IClickableIngredient
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerNetwork.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+                                                    ^
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerNetwork.java:9: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
                                                                             ^
 /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerClient.java:29: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = net.neoforged.api.distmarker.Dist.CLIENT)
@@ -126,11 +130,12 @@ Total runtime: 29.66s
                                                                             ^
 Note: Some input files use or override a deprecated API.
 Note: Recompile with -Xlint:deprecation for details.
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
 4 errors
 13 warnings
 
 > Task :compileJava FAILED
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1792583896399.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1792616960518.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/mods/mods/fallenrelics/build/reports/problems/problems-report.html
 
@@ -139,28 +144,40 @@ FAILURE: Build failed with an exception.
 * What went wrong:
 Execution failed for task ':compileJava'.
 > Compilation failed; see the compiler output below.
-  Note: Recompile with -Xlint:deprecation for details.
-  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicKeys.java:28: error: cannot find symbol
-      public static void onKeyPressed(InputEvent.KeyPressed event) {
-                                                ^
-    symbol:   class KeyPressed
-    location: class InputEvent
-  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicData.java:50: error: cannot find symbol
-              Codec.UUID.optionalFieldOf("id", NO_ID).forGetter(RelicData::id)
-                   ^
-    symbol:   variable UUID
-    location: interface Codec
-  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicData.java:61: error: cannot find symbol
-                      ByteBufCodecs.UUID.decode(buf));
-                                   ^
-    symbol:   variable UUID
-    location: interface ByteBufCodecs
-  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicData.java:76: error: cannot find symbol
-              ByteBufCodecs.UUID.encode(buf, d.id());
+  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AscensionRitual.java:169: error: no suitable method found for playSound(<null>,BlockPos,Reference<SoundEvent>,SoundSource,float,float)
+                      level.playSound(null, st.table, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.8F, 0.7F);
                            ^
-    symbol:   variable UUID
-    location: interface ByteBufCodecs
+      method Level.playSound(Entity,BlockPos,SoundEvent,SoundSource,float,float) is not applicable
+        (argument mismatch; Reference<SoundEvent> cannot be converted to SoundEvent)
+      method Level.playSound(Player,BlockPos,SoundEvent,SoundSource,float,float) is not applicable
+        (argument mismatch; Reference<SoundEvent> cannot be converted to SoundEvent)
+      method Level.playSound(Player,double,double,double,SoundEvent,SoundSource) is not applicable
+        (argument mismatch; BlockPos cannot be converted to double)
+      method Level.playSound(Player,Entity,SoundEvent,SoundSource,float,float) is not applicable
+        (argument mismatch; BlockPos cannot be converted to Entity)
+  Note: Recompile with -Xlint:deprecation for details.
+  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicAbilities.java:383: error: incompatible types: Reference<SoundEvent> cannot be converted to SoundEvent
+          player.playSound(SoundEvents.GENERIC_EXPLODE, 0.7F, 0.8F);
+                                      ^
   Note: Some input files use or override a deprecated API.
+  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+                                                      ^
+  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+                                                                              ^
+  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientModEvents.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                      ^
+  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientModEvents.java:9: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                              ^
+  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+                                                      ^
+  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+                                                                              ^
   /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AngelRingNetwork.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
   @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
                                                       ^
@@ -172,29 +189,11 @@ Execution failed for task ':compileJava'.
                                                  ^
     where T is a type-variable:
       T extends Object declared in interface IClickableIngredient
-  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
-                                                      ^
-  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
-                                                                              ^
   /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerNetwork.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
   @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
                                                       ^
   /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerNetwork.java:9: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
   @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-                                                                              ^
-  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientModEvents.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                      ^
-  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientModEvents.java:9: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                                              ^
-  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
-                                                      ^
-  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-  @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
                                                                               ^
   /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerClient.java:29: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
   @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = net.neoforged.api.distmarker.Dist.CLIENT)
@@ -202,6 +201,17 @@ Execution failed for task ':compileJava'.
   /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerClient.java:29: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
   @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = net.neoforged.api.distmarker.Dist.CLIENT)
                                                                               ^
+  Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicAbilities.java:290: error: cannot find symbol
+          killer.level().sendParticles(ParticleTypes.CRIMSON_SPORE, killer.getX(), killer.getY() + 1.0,
+                        ^
+    symbol:   method sendParticles(SimpleParticleType,double,double,double,int,double,double,double,double)
+    location: class Level
+  /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AscensionRitual.java:72: error: cannot find symbol
+          event.setCancellationMarker(InteractionResult.SUCCESS);
+               ^
+    symbol:   method setCancellationMarker(InteractionResult)
+    location: variable event of type RightClickBlock
   4 errors
   13 warnings
 
@@ -245,28 +255,40 @@ org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':compile
 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
 Caused by: org.gradle.api.internal.tasks.compile.CompilationFailedException: Compilation failed; see the compiler output below.
-Note: Recompile with -Xlint:deprecation for details.
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicKeys.java:28: error: cannot find symbol
-    public static void onKeyPressed(InputEvent.KeyPressed event) {
-                                              ^
-  symbol:   class KeyPressed
-  location: class InputEvent
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicData.java:50: error: cannot find symbol
-            Codec.UUID.optionalFieldOf("id", NO_ID).forGetter(RelicData::id)
-                 ^
-  symbol:   variable UUID
-  location: interface Codec
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicData.java:61: error: cannot find symbol
-                    ByteBufCodecs.UUID.decode(buf));
-                                 ^
-  symbol:   variable UUID
-  location: interface ByteBufCodecs
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicData.java:76: error: cannot find symbol
-            ByteBufCodecs.UUID.encode(buf, d.id());
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AscensionRitual.java:169: error: no suitable method found for playSound(<null>,BlockPos,Reference<SoundEvent>,SoundSource,float,float)
+                    level.playSound(null, st.table, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.8F, 0.7F);
                          ^
-  symbol:   variable UUID
-  location: interface ByteBufCodecs
+    method Level.playSound(Entity,BlockPos,SoundEvent,SoundSource,float,float) is not applicable
+      (argument mismatch; Reference<SoundEvent> cannot be converted to SoundEvent)
+    method Level.playSound(Player,BlockPos,SoundEvent,SoundSource,float,float) is not applicable
+      (argument mismatch; Reference<SoundEvent> cannot be converted to SoundEvent)
+    method Level.playSound(Player,double,double,double,SoundEvent,SoundSource) is not applicable
+      (argument mismatch; BlockPos cannot be converted to double)
+    method Level.playSound(Player,Entity,SoundEvent,SoundSource,float,float) is not applicable
+      (argument mismatch; BlockPos cannot be converted to Entity)
+Note: Recompile with -Xlint:deprecation for details.
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicAbilities.java:383: error: incompatible types: Reference<SoundEvent> cannot be converted to SoundEvent
+        player.playSound(SoundEvents.GENERIC_EXPLODE, 0.7F, 0.8F);
+                                    ^
 Note: Some input files use or override a deprecated API.
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+                                                    ^
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+                                                                            ^
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientModEvents.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                    ^
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientModEvents.java:9: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                            ^
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+                                                    ^
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+                                                                            ^
 /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AngelRingNetwork.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
                                                     ^
@@ -278,29 +300,11 @@ Note: Some input files use or override a deprecated API.
                                                ^
   where T is a type-variable:
     T extends Object declared in interface IClickableIngredient
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
-                                                    ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerServer.java:31: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
-                                                                            ^
 /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerNetwork.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
                                                     ^
 /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerNetwork.java:9: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-                                                                            ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientModEvents.java:9: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                    ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientModEvents.java:9: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                                            ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
-                                                    ^
-/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/ClientScreenCleaner.java:17: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
                                                                             ^
 /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerClient.java:29: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = net.neoforged.api.distmarker.Dist.CLIENT)
@@ -308,6 +312,17 @@ Note: Some input files use or override a deprecated API.
 /home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/JeiLinkerClient.java:29: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = net.neoforged.api.distmarker.Dist.CLIENT)
                                                                             ^
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/RelicAbilities.java:290: error: cannot find symbol
+        killer.level().sendParticles(ParticleTypes.CRIMSON_SPORE, killer.getX(), killer.getY() + 1.0,
+                      ^
+  symbol:   method sendParticles(SimpleParticleType,double,double,double,int,double,double,double,double)
+  location: class Level
+/home/runner/work/mods/mods/fallenrelics/src/main/java/dev/agentsharik/fallenrelics/AscensionRitual.java:72: error: cannot find symbol
+        event.setCancellationMarker(InteractionResult.SUCCESS);
+             ^
+  symbol:   method setCancellationMarker(InteractionResult)
+  location: variable event of type RightClickBlock
 4 errors
 13 warnings
 	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:89)
@@ -438,5 +453,5 @@ Note: Some input files use or override a deprecated API.
 	... 30 more
 
 
-BUILD FAILED in 1m 10s
+BUILD FAILED in 1m 20s
 2 actionable tasks: 2 executed
