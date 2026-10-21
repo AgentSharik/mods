@@ -19,20 +19,23 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.minecraft.world.entity.monster.Monster;
 import net.neoforged.neoforge.event.entity.player.PlayerXpEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 /**
- * Серверная половина ревизии 1.8.0: зеркальный опыт реликвии, бросок и реролл
- * рарности, три способности кольца со скейлингом от звёзд.
+ * Серверная половина ревизии 1.9.0: зеркальный опыт реликвии с ручной прокачкой
+ * уровня кнопкой, бросок и реролл рарности, способности со скейлингом от звёзд
+ * и рубежами открытия по уровню артефакта.
  *
- * <p>Способности: 0 = «Небесный приговор» (активная, контроль: левитация,
- * замедление и метка уязвимости по площади), 1 = «Багровое убежище» (активная,
- * зона в мире: лечение и защита своим, слабость и замедление врагам),
- * 2 = «Божественная защита» (пассивная: шанс полностью блокировать удар,
- * исцелиться и ослабить атакующего). Всё проверяет сервер.</p>
+ * <p>Способности: 0 = «Кровавая защита» (пассивная, открыта с 1 уровня: шанс
+ * полностью блокировать удар, исцелиться и ослабить атакующего), 1 = «Багровая
+ * жажда» (пассивная, рубеж 5 уровня: убийства в полёте лечат, питают реликвию
+ * опытом и дают силу), 2 = «Небесная кара» (единственная активная, рубеж 10
+ * уровня: ультимативный контроль по площади с многослойным спектаклем).
+ * Всё проверяет сервер.</p>
  */
 @EventBusSubscriber(modid = FallenRelicsMod.MOD_ID)
 public final class RelicAbilities {
@@ -93,9 +96,9 @@ public final class RelicAbilities {
             RelicData updated = ensureRolled(serverPlayer, stack, old).addXp(event.getAmount());
             if (updated != old) {
                 stack.set(ModContent.RELIC_DATA.get(), updated);
-                if (updated.level() > old.level()) {
+                if (!old.canLevelUp() && updated.canLevelUp()) {
                     serverPlayer.displayClientMessage(
-                            Component.translatable("message.fallenrelics.level_up", updated.level()), true);
+                            Component.translatable("message.fallenrelics.levelup.ready"), true);
                 }
             }
         });
@@ -206,6 +209,11 @@ public final class RelicAbilities {
         }
         ItemStack stack = ring.get();
         RelicData relic = ensureRolled(player, stack, stack.getOrDefault(ModContent.RELIC_DATA.get(), RelicData.EMPTY));
+        if (!relic.unlocked(index)) {
+            player.displayClientMessage(Component.translatable("message.fallenrelics.ability.locked",
+                    relic.unlockLevel(index)), true);
+            return;
+        }
         int next = relic.rank(index) + 1;
         if (next > RelicData.MAX_RANK || next > relic.rankCap()) {
             player.displayClientMessage(Component.translatable("message.fallenrelics.rank.cap"), true);
@@ -231,9 +239,62 @@ public final class RelicAbilities {
                 : AngelRingFlight.findStackByRelicId(player, target).or(() -> AngelRingFlight.findRing(player));
     }
 
-    /** Применение активной способности (0 = приговор, 1 = убежище). */
+    /** Повышение уровня реликвии кнопкой: порог списывается, излишек опыта живёт дальше. */
+    public static void levelUp(ServerPlayer player, java.util.UUID target) {
+        var ring = resolveTarget(player, target);
+        if (ring.isEmpty()) {
+            return;
+        }
+        ItemStack stack = ring.get();
+        RelicData relic = ensureRolled(player, stack, stack.getOrDefault(ModContent.RELIC_DATA.get(), RelicData.EMPTY));
+        if (!relic.canLevelUp()) {
+            return;
+        }
+        RelicData next = relic.withLevelUp();
+        stack.set(ModContent.RELIC_DATA.get(), next);
+        player.playSound(SoundEvents.PLAYER_LEVELUP, 0.9F, 1.6F);
+        player.displayClientMessage(Component.translatable("message.fallenrelics.level_up", next.level()), true);
+        if (next.unlocked(1) && !relic.unlocked(1)) {
+            player.displayClientMessage(Component.translatable("message.fallenrelics.ability.unlocked",
+                    Component.translatable("gui.fallenrelics.angel_ring.ability.thirst")), true);
+        }
+        if (next.unlocked(2) && !relic.unlocked(2)) {
+            player.displayClientMessage(Component.translatable("message.fallenrelics.ability.unlocked",
+                    Component.translatable("gui.fallenrelics.angel_ring.ability.ascension")), true);
+        }
+        AngelRingFlight.sendStatus(player, next.id());
+    }
+
+    /** Пассивка «Багровая жажда»: убийства в полёте лечат, питают реликвию и дают силу. */
+    @SubscribeEvent
+    public static void onKill(LivingDeathEvent event) {
+        if (event.getEntity().level().isClientSide
+                || !(event.getSource().getEntity() instanceof ServerPlayer killer)
+                || !killer.getAbilities().flying) {
+            return;
+        }
+        var ring = AngelRingFlight.findRing(killer);
+        if (ring.isEmpty()) {
+            return;
+        }
+        ItemStack stack = ring.get();
+        RelicData relic = stack.getOrDefault(ModContent.RELIC_DATA.get(), RelicData.EMPTY);
+        if (!relic.rolled() || !relic.unlocked(1)) {
+            return;
+        }
+        int stars = relic.abilityRarity(1);
+        killer.heal(1.0F + stars / 2.0F);
+        stack.set(ModContent.RELIC_DATA.get(), relic.addXp(8 + 4 * stars));
+        killer.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST,
+                40 + 20 * stars, stars >= 5 ? 1 : 0, false, true));
+        killer.level().sendParticles(ParticleTypes.CRIMSON_SPORE, killer.getX(), killer.getY() + 1.0,
+                killer.getZ(), 14, 0.5, 0.7, 0.5, 0.05);
+        killer.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5F, 1.4F);
+    }
+
+    /** Применение единственной активной способности — «Небесная кара» (индекс 2). */
     public static void cast(ServerPlayer player, int index, java.util.UUID target) {
-        if (index != 0 && index != 1) {
+        if (index != 2) {
             return;
         }
         var data = player.getPersistentData();
@@ -247,42 +308,79 @@ public final class RelicAbilities {
         }
         ItemStack stack = ring.get();
         RelicData relic = ensureRolled(player, stack, stack.getOrDefault(ModContent.RELIC_DATA.get(), RelicData.EMPTY));
-        int rank = relic.rank(index);
+        if (!relic.unlocked(2)) {
+            player.displayClientMessage(Component.translatable("message.fallenrelics.ability.locked",
+                    relic.unlockLevel(2)), true);
+            return;
+        }
+        int rank = relic.rank(2);
         if (rank <= 0) {
             player.displayClientMessage(Component.translatable("message.fallenrelics.cast.not_learned"), true);
             return;
         }
-        int stars = relic.abilityRarity(index);
+        int stars = relic.abilityRarity(2);
         float rankMult = 1.0F + 0.2F * (rank - 1);
-        if (index == 0) {
-            castVerdict(player, stars, rankMult, rank);
-        } else {
-            int duration = (int) ((4 + stars) * 20 * rankMult);
-            ZONES.add(new Zone(player.level().dimension(), player.blockPosition(),
-                    (int) (player.level().getGameTime() + duration), stars, rank));
-            player.playSound(SoundEvents.EVOKER_CAST_SPELL, 0.8F, 0.9F);
-        }
-        data.putInt(CD_TAG + index, (int) ((index == 0 ? 600 : 900) * (1.0F - 0.15F * (rank - 1))));
+        castAscension(player, stars, rankMult, rank);
+        data.putInt(CD_TAG + 2, (int) (900 * (1.0F - 0.15F * (rank - 1))));
         AngelRingFlight.sendStatus(player, relic.id());
     }
 
-    /** Контроль по площади: левитация, замедление и метка уязвимости. */
-    private static void castVerdict(ServerPlayer player, int stars, float rankMult, int rank) {
-        double radius = 5.0 + stars / 2.0;
-        int duration = (int) ((2 + stars * 2 / 3) * 20 * rankMult);
+    /**
+     * Ультимативный контроль по площади, ревизия 1.9.0: многослойный спектакль —
+     * два вращающихся рунических кольца из багровых спор, восемь столпов-лучей
+     * от земли, расходящаяся ударная волна, дым и искры, финальная вспышка;
+     * механически — левитация, замедление и метка уязвимости по врагам,
+     * исцеление своим, сопротивление себе и освящённая земля под ногами.
+     */
+    private static void castAscension(ServerPlayer player, int stars, float rankMult, int rank) {
+        double radius = 8.0 + stars;
+        int duration = (int) ((3 + stars * 2 / 3) * 20 * rankMult);
         int markPct = rank >= 3 ? 40 : 25;
         ServerLevel level = player.serverLevel();
+        double cx = player.getX();
+        double cy = player.getY();
+        double cz = player.getZ();
         for (Monster mob : level.getEntitiesOfClass(Monster.class, player.getBoundingBox().inflate(radius))) {
             mob.addEffect(new MobEffectInstance(MobEffects.LEVITATION, duration, 0, false, true));
             mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, duration, 1, false, true));
             mob.getPersistentData().putInt(MARK_END_TAG, mob.tickCount + 100);
             mob.getPersistentData().putInt(MARK_PCT_TAG, markPct);
+            mob.hurt(player.damageSources().playerAttack(player), 6.0F + 2.0F * stars);
         }
-        level.sendParticles(ParticleTypes.CRIMSON_SPORE, player.getX(), player.getY() + 1.0, player.getZ(),
-                48, radius / 2, 1.0, radius / 2, 0.05);
-        level.sendParticles(ParticleTypes.SMOKE, player.getX(), player.getY() + 0.5, player.getZ(),
-                24, radius / 2, 0.5, radius / 2, 0.02);
-        player.playSound(SoundEvents.EVOKER_CAST_SPELL, 0.9F, 1.1F);
+        for (Player ally : level.getEntitiesOfClass(Player.class, player.getBoundingBox().inflate(radius))) {
+            ally.heal(4.0F + stars);
+            ally.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 0, false, true));
+        }
+        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 200, 1, false, true));
+        player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 1, false, true));
+        ZONES.add(new Zone(player.level().dimension(), player.blockPosition(),
+                (int) (player.level().getGameTime() + (4 + stars) * 20 * rankMult), stars, rank));
+        // слой 1: два рунических кольца, вращающихся в противоположные стороны
+        for (int i = 0; i < 48; i++) {
+            double a = i * Math.PI / 24.0;
+            level.sendParticles(ParticleTypes.CRIMSON_SPORE,
+                    cx + Math.cos(a) * radius, cy + 0.2, cz + Math.sin(a) * radius, 1, 0, 0.05, 0, 0.01);
+            level.sendParticles(ParticleTypes.CRIMSON_SPORE,
+                    cx + Math.cos(-a) * radius * 0.6, cy + 0.9, cz + Math.sin(-a) * radius * 0.6, 1, 0, 0.05, 0, 0.01);
+        }
+        // слой 2: восемь столпов-лучей от земли до роста игрока
+        for (int b = 0; b < 8; b++) {
+            double a = b * Math.PI / 4.0;
+            double bx = cx + Math.cos(a) * radius * 0.85;
+            double bz = cz + Math.sin(a) * radius * 0.85;
+            for (double y = cy - 2.0; y <= cy + 4.0; y += 0.5) {
+                level.sendParticles(ParticleTypes.CRIMSON_SPORE, bx, y, bz, 1, 0, 0, 0, 0.02);
+                level.sendParticles(ParticleTypes.SMOKE, bx, y, bz, 1, 0, 0, 0, 0.01);
+            }
+        }
+        // слой 3: ударная волна, дымовая шапка и финальная вспышка
+        level.sendParticles(ParticleTypes.FLASH, cx, cy + 1.0, cz, 1, 0, 0, 0, 0.0);
+        level.sendParticles(ParticleTypes.CRIMSON_SPORE, cx, cy + 1.0, cz, 160, radius / 2, 1.2, radius / 2, 0.08);
+        level.sendParticles(ParticleTypes.SMOKE, cx, cy + 0.5, cz, 60, radius / 2, 0.8, radius / 2, 0.03);
+        level.sendParticles(ParticleTypes.FLAME, cx, cy + 0.2, cz, 40, radius / 2, 0.2, radius / 2, 0.06);
+        player.playSound(SoundEvents.END_PORTAL_SPAWN, 1.0F, 0.7F);
+        player.playSound(SoundEvents.BEACON_ACTIVATE, 1.0F, 0.6F);
+        player.playSound(SoundEvents.GENERIC_EXPLODE, 0.7F, 0.8F);
     }
 
     /** Реролл рарности артефакта и способностей за REROLL_COST уровня. */

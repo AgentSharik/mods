@@ -80,6 +80,19 @@ public final class ModContent {
             "angel_ring",
             props -> new AngelRingItem(props.stacksTo(1).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
 
+    /** Этап 1: оболочка кольца — базовая заготовка без эффектов. */
+    public static final DeferredItem<Item> RING_SHELL =
+            ITEMS.registerSimpleItem("ring_shell", new Item.Properties());
+
+    /** Этап 2: кольцо планирования — только плавное падение, как у курицы. */
+    public static final DeferredItem<Item> GLIDE_RING =
+            ITEMS.registerSimpleItem("glide_ring", new Item.Properties().stacksTo(1));
+
+    /** Этап 3: пробуждённое кольцо полёта — полёт с бюджетом 60 секунд. */
+    public static final DeferredItem<Item> AWAKENED_RING =
+            ITEMS.registerSimpleItem("awakened_ring", new Item.Properties().stacksTo(1)
+                    .rarity(net.minecraft.world.item.Rarity.RARE));
+
     public static final DeferredItem<Item> UPGRADE_TEMPLATE =
             ITEMS.registerSimpleItem("upgrade_template", new Item.Properties());
     public static final DeferredItem<Item> IRON_UPGRADE =

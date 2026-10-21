@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "G T G",
+    "N W N",
+    "G T G"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "T": {
+      "item": "minecraft:ghast_tear"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "W": {
+      "item": "fallenrelics:glide_ring"
+    }
+  },
+  "result": {
+    "id": "fallenrelics:awakened_ring",
+    "count": 1
+  }
+}

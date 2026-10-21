@@ -38,6 +38,10 @@ public final class AngelRingFlight {
     /** Метка в данных игрока: запас страховки последнего надетого кольца (тики мягкого падения). */
     private static final String CUSHION_TAG = "fallenrelics_cushion_ticks";
 
+    /** Бюджет полёта пробуждённого кольца: 60 секунд (1200 тиков). */
+    private static final String AWAKE_BUDGET_TAG = "fallenrelics_awake_budget";
+    private static final int AWAKE_BUDGET_MAX = 1200;
+
     /** Проверяем раз в 5 тиков (четыре раза в секунду) — этого хватает и не нагружает сервер. */
     private static final int CHECK_INTERVAL_TICKS = 5;
 
@@ -96,9 +100,9 @@ public final class AngelRingFlight {
                 RelicData updated = relic.addXp(RelicData.XP_PER_SECOND);
                 if (updated != relic) {
                     stack.set(ModContent.RELIC_DATA.get(), updated);
-                    if (updated.level() > relic.level()) {
+                    if (!relic.canLevelUp() && updated.canLevelUp()) {
                         player.displayClientMessage(
-                                Component.translatable("message.fallenrelics.level_up", updated.level()), true);
+                                Component.translatable("message.fallenrelics.levelup.ready"), true);
                     }
                 }
             }
@@ -114,6 +118,49 @@ public final class AngelRingFlight {
                 player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, cushion, 0, false, false));
             }
         }
+
+        // Этап 2: кольцо планирования — только плавное падение, пока надето
+        if (findCurio(player, ModContent.GLIDE_RING.get()).isPresent()) {
+            player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 220, 0, false, false));
+        }
+
+        // Этап 3: пробуждённое кольцо — полёт с бюджетом 60 секунд и перезарядкой на земле
+        if (ring.isEmpty() && findCurio(player, ModContent.AWAKENED_RING.get()).isPresent()
+                && !player.isCreative() && !player.isSpectator()) {
+            if (!data.contains(AWAKE_BUDGET_TAG)) {
+                data.putInt(AWAKE_BUDGET_TAG, AWAKE_BUDGET_MAX);
+            }
+            int budget = data.getInt(AWAKE_BUDGET_TAG);
+            if (abilities.flying) {
+                budget -= CHECK_INTERVAL_TICKS;
+                if (budget <= 0) {
+                    budget = 0;
+                    abilities.mayfly = false;
+                    abilities.flying = false;
+                    abilities.setFlyingSpeed(BASE_FLY_SPEED);
+                    player.onUpdateAbilities();
+                    player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 200, 0, false, false));
+                    player.displayClientMessage(
+                            Component.translatable("message.fallenrelics.awakened.exhausted"), true);
+                }
+                data.putInt(AWAKE_BUDGET_TAG, budget);
+            } else if (player.onGround()) {
+                if (budget < AWAKE_BUDGET_MAX) {
+                    data.putInt(AWAKE_BUDGET_TAG, Math.min(AWAKE_BUDGET_MAX, budget + CHECK_INTERVAL_TICKS * 4));
+                }
+                if (!abilities.mayfly && data.getInt(AWAKE_BUDGET_TAG) > 0) {
+                    abilities.mayfly = true;
+                    player.onUpdateAbilities();
+                }
+            }
+        }
+    }
+
+    /** Ищет надетый предмет конкретной стадии кольца в слотах Curios. */
+    public static Optional<ItemStack> findCurio(Player player, net.minecraft.world.item.Item item) {
+        return CuriosApi.getCuriosInventory(player)
+                .flatMap(handler -> handler.findFirstCurio(item))
+                .map(SlotResult::stack);
     }
 
     /** Ищет надетое кольцо в слотах Curios. Работает и на клиенте, и на сервере. */

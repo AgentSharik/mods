@@ -19,7 +19,6 @@ public final class ClientModEvents {
 
     @SubscribeEvent
     public static void registerKeys(RegisterKeyMappingsEvent event) {
-        event.register(RelicKeys.VERDICT);
-        event.register(RelicKeys.SANCTUARY);
+        event.register(RelicKeys.CAST);
     }
 }

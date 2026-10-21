@@ -65,10 +65,12 @@ public final class AngelRingScreen extends Screen {
 
     /** Пиксель-арт иконок способностей 8x8, масштаб x2. */
     private static final String[][] ABILITY_ICONS = {
-            {"...##...", "..#..#..", ".#....#.", "...##...", "..#..#..", ".#....#.", "...##...", "........"},
-            {"...##...", "..####..", "...##...", ".######.", "..#..#..", "..#..#..", ".######.", "........"},
             {".######.", "#..##..#", "#..##..#", "#......#", ".#....#.", "..#..#..", "...##...", "........"},
+            {"...##...", "..####..", ".######.", ".######.", "..####..", "...##...","....#...", "........"},
+            {"#......#", "##....##", "#.#..#.#", "..####..", ".######.", "..####..", "...##...", "........"},
     };
+    /** Замок для заблокированных рубежами способностей. */
+    private static final String[] LOCK_PIXELS = {".###.", "#...#", "#.#.#", "#...#", "#...#", ".###."};
     private static final String[] STAR_PIXELS = {"..#..", ".###.", "#####", ".###.", "#...#"};
     private static final String[] MINI_STAR_PIXELS = {".#.", "###", "#.#"};
 
@@ -156,8 +158,8 @@ public final class AngelRingScreen extends Screen {
             graphics.drawString(font, lines.get(i), left + 88, top + 46 + i * 10, TEXT_COLOR, false);
         }
         float ratio = relic.maxed() ? 1.0F : Math.min(1.0F, relic.xp() / (float) relic.xpToNext());
-        int fill = Math.round(170 * ratio);
-        graphics.fill(left + 45, top + 99, left + 215, top + 109, BAR_EMPTY);
+        int fill = Math.round(126 * ratio);
+        graphics.fill(left + 45, top + 99, left + 171, top + 109, BAR_EMPTY);
         if (fill > 0) {
             graphics.fill(left + 45, top + 99, left + 45 + fill, top + 109, BAR_FILL);
             graphics.fill(left + 45, top + 99, left + 45 + fill, top + 101, BAR_GLOSS);
@@ -165,7 +167,8 @@ public final class AngelRingScreen extends Screen {
         String barLabel = stale ? "--"
                 : (relic.maxed() ? Component.translatable("gui.fallenrelics.angel_ring.max").getString()
                         : Math.round(ratio * 100F) + "%");
-        centered(graphics, barLabel, left + 130, top + 100, 0xFFFFFFFF, true);
+        centered(graphics, barLabel, left + 108, top + 100, 0xFFFFFFFF, true);
+        drawLevelButton(graphics, relic, stale, mouseX, mouseY);
         graphics.fill(left + 44, top + 110, left + 216, top + 120, PANEL_DARK);
         for (int i = 0; i < RelicData.ABILITIES; i++) {
             drawAbilityCard(graphics, i, relic, stale, mouseX, mouseY);
@@ -292,8 +295,26 @@ public final class AngelRingScreen extends Screen {
         }
     }
 
+    /** Кнопка повышения уровня реликвии: активна и пульсирует при полном пороге опыта. */
+    private void drawLevelButton(GuiGraphics graphics, RelicData relic, boolean stale, int mouseX, int mouseY) {
+        boolean ready = !stale && relic.canLevelUp();
+        graphics.fill(left + 175, top + 99, left + 215, top + 109, ready ? 0xFF3A2226 : 0xFF232327);
+        int edge = ready ? ((ticks / 4) % 2 == 0 ? 0xFFE67878 : 0xFF963030) : 0xFF4A4A50;
+        graphics.fill(left + 175, top + 99, left + 215, top + 100, edge);
+        graphics.fill(left + 175, top + 108, left + 215, top + 109, edge);
+        graphics.fill(left + 175, top + 99, left + 176, top + 109, edge);
+        graphics.fill(left + 214, top + 99, left + 215, top + 109, edge);
+        String label = relic.maxed() ? "—" : "+";
+        centered(graphics, label, left + 195, top + 100,
+                ready ? 0xFFE8B4B4 : 0xFF6A6A72, true);
+        if (inside(mouseX, mouseY, 175, 99, 40, 10)) {
+            outline(graphics, 175, 99, 40, 10);
+        }
+    }
+
     private void drawAbilityCard(GuiGraphics graphics, int index, RelicData relic, boolean stale,
             int mouseX, int mouseY) {
+        boolean locked = !stale && !relic.unlocked(index);
         int x0 = 44 + index * 56;
         int y0 = 126;
         int rank = stale ? 0 : relic.rank(index);
@@ -316,7 +337,7 @@ public final class AngelRingScreen extends Screen {
             int color = i < rank ? STAR_FILL : STAR_EMPTY;
             graphics.fill(left + x0 + 8 + i * 8, top + 174, left + x0 + 13 + i * 8, top + 179, color);
         }
-        int cd = index < 2 ? AngelRingStatusClient.cooldown(index) : 0;
+        int cd = index == 2 ? AngelRingStatusClient.cooldown(2) : 0;
         if (cd > 0) {
             double cdMax = (index == 0 ? 600 : 900) * (1.0 - 0.15 * (rank - 1));
             int shade = (int) Math.round(44 * Math.min(1.0, cd / cdMax));
@@ -346,7 +367,26 @@ public final class AngelRingScreen extends Screen {
                         ((t - 16) * 8 << 24) | 0xFFFFFF);
             }
         }
-        if (inside(mouseX, mouseY, x0 - 2, 124, 40, 48)) {
+        if (locked) {
+            graphics.fill(left + x0 - 2, top + 124, left + x0 + 38, top + 172, 0xB408080A);
+            for (int row = 0; row < LOCK_PIXELS.length; row++) {
+                for (int col = 0; col < LOCK_PIXELS[row].length(); col++) {
+                    if (LOCK_PIXELS[row].charAt(col) == '#') {
+                        graphics.fill(left + x0 + 15 + col, top + 132 + row,
+                                left + x0 + 16 + col, top + 133 + row, 0xFF8A8A92);
+                    }
+                }
+            }
+            PoseStack lockPose = graphics.pose();
+            lockPose.pushPose();
+            lockPose.translate(left + x0 + 18, top + 146, 0);
+            lockPose.scale(0.5F, 0.5F, 1.0F);
+            String req = Component.translatable("gui.fallenrelics.angel_ring.locked_until",
+                    relic.unlockLevel(index)).getString();
+            graphics.drawString(font, req, -font.width(req) / 2, 0, 0xFFB4B4BC, true);
+            lockPose.popPose();
+        }
+        if (!locked && inside(mouseX, mouseY, x0 - 2, 124, 40, 48)) {
             outline(graphics, x0 - 2, 124, 40, 48);
         }
     }
@@ -429,11 +469,15 @@ public final class AngelRingScreen extends Screen {
             if (!inside(mouseX, mouseY, 42 + i * 56, 124, 40, 48)) {
                 continue;
             }
-            String key = i == 0 ? "verdict" : i == 1 ? "sanctuary" : "aegis";
+            String key = i == 0 ? "aegis" : i == 1 ? "thirst" : "ascension";
             tip = Component.translatable("gui.fallenrelics.angel_ring.ability." + key);
             var list = new java.util.ArrayList<Component>();
             list.add(Component.translatable("gui.fallenrelics.angel_ring.ability." + key + ".desc"));
             if (!stale) {
+                if (!relic.unlocked(i)) {
+                    list.add(Component.translatable("gui.fallenrelics.angel_ring.locked_until",
+                            relic.unlockLevel(i)));
+                }
                 list.add(Component.translatable("gui.fallenrelics.angel_ring.stars.ability", relic.abilityRarity(i)));
                 list.add(Component.translatable("gui.fallenrelics.angel_ring.rank.line", relic.rank(i)));
                 int next = relic.rank(i) + 1;
@@ -445,12 +489,12 @@ public final class AngelRingScreen extends Screen {
                         list.add(Component.translatable("message.fallenrelics.rank.cap"));
                     }
                 }
-                if (i < 2) {
-                    int cd = AngelRingStatusClient.cooldown(i);
-                    if (relic.rank(i) > 0 && cd <= 0) {
+                if (i == 2) {
+                    int cd = AngelRingStatusClient.cooldown(2);
+                    if (relic.unlocked(2) && relic.rank(2) > 0 && cd <= 0) {
                         list.add(Component.translatable("gui.fallenrelics.angel_ring.cast_click"));
                         list.add(Component.translatable("gui.fallenrelics.angel_ring.cast_hotkey",
-                                RelicKeys.keyName(i)));
+                                RelicKeys.keyName()));
                     } else if (cd > 0) {
                         list.add(Component.translatable("gui.fallenrelics.angel_ring.cooldown", (cd + 19) / 20));
                     }
@@ -481,6 +525,12 @@ public final class AngelRingScreen extends Screen {
         if (tip == null && inside(mouseX, mouseY, 236, 80, 74, 18)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.speed");
             body = List.of(Component.translatable("gui.fallenrelics.angel_ring.plaque.speed.desc"));
+        }
+        if (tip == null && inside(mouseX, mouseY, 175, 99, 40, 10)) {
+            tip = Component.translatable("gui.fallenrelics.angel_ring.levelup.btn");
+            body = List.of(
+                    Component.translatable("gui.fallenrelics.angel_ring.levelup.desc"),
+                    Component.literal(stale ? "--" : relic.xp() + " / " + relic.xpToNext()));
         }
         if (tip == null && inside(mouseX, mouseY, 236, 98, 74, 14)) {
             tip = Component.translatable("gui.fallenrelics.angel_ring.plaque.time");
@@ -516,12 +566,20 @@ public final class AngelRingScreen extends Screen {
                     AngelRingStatusClient.request(viewId);
                     return true;
                 }
-                if (button == 1 && i < 2) {
-                    PacketDistributor.sendToServer(new RelicActionPayloads.Cast(i, viewId));
+                if (button == 1 && i == 2) {
+                    PacketDistributor.sendToServer(new RelicActionPayloads.Cast(2, viewId));
                     AngelRingStatusClient.request(viewId);
                     return true;
                 }
             }
+        }
+        if (button == 0 && inside((int) mouseX, (int) mouseY, 175, 99, 40, 10)) {
+            PacketDistributor.sendToServer(new RelicActionPayloads.LevelUp(viewId));
+            if (AngelRingStatusClient.relic().canLevelUp()) {
+                levelAnim = 36;
+            }
+            AngelRingStatusClient.request(viewId);
+            return true;
         }
         if (button == 0 && inside((int) mouseX, (int) mouseY, 236, 120, 74, 18)) {
             PacketDistributor.sendToServer(new RelicActionPayloads.Reroll(viewId));

@@ -26,6 +26,12 @@ public final class AngelRingNetwork {
                         () -> RelicAbilities.cast((net.minecraft.server.level.ServerPlayer) context.player(),
                                 payload.index(), payload.target())));
         registrar.playToServer(
+                RelicActionPayloads.LevelUp.TYPE,
+                RelicActionPayloads.LevelUp.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(
+                        () -> RelicAbilities.levelUp((net.minecraft.server.level.ServerPlayer) context.player(),
+                                payload.target())));
+        registrar.playToServer(
                 RelicActionPayloads.Reroll.TYPE,
                 RelicActionPayloads.Reroll.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(

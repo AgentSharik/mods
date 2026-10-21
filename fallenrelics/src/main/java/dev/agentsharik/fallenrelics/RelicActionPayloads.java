@@ -47,6 +47,19 @@ public final class RelicActionPayloads {
         }
     }
 
+    public record LevelUp(UUID target) implements CustomPacketPayload {
+        public static final CustomPacketPayload.Type<LevelUp> TYPE =
+                new CustomPacketPayload.Type<>(
+                        ResourceLocation.fromNamespaceAndPath(FallenRelicsMod.MOD_ID, "relic_level_up"));
+        public static final StreamCodec<FriendlyByteBuf, LevelUp> STREAM_CODEC =
+                StreamCodec.of((buf, p) -> buf.writeUUID(p.target), buf -> new LevelUp(buf.readUUID()));
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
     public record Reroll(UUID target) implements CustomPacketPayload {
         public static final CustomPacketPayload.Type<Reroll> TYPE =
                 new CustomPacketPayload.Type<>(

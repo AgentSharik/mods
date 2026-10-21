@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "fallenrelics:angel_ring"
+    },
+    "title": {
+      "translate": "advancement.fallenrelics.divine_wings.title"
+    },
+    "description": {
+      "translate": "advancement.fallenrelics.divine_wings.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "ritual": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "ritual"
+    ]
+  ]
+}

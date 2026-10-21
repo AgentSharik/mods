@@ -119,21 +119,36 @@ public record RelicData(int level, int xp, boolean rolled, int rarity,
         return nextRank * 2;
     }
 
-    /** Зеркальный опыт игрока копится в реликвии и растит её уровень. */
+    /**
+     * Зеркальный опыт игрока копится в реликвии. С 1.9.0 уровень сам НЕ растёт:
+     * опыт копится вплоть до кнопки «Повысить», сверх порога ничего не сгорает.
+     */
     public RelicData addXp(int amount) {
-        if (maxed()) {
+        int x = (int) Math.min(Integer.MAX_VALUE - 1L, xp + Math.max(0, amount));
+        return new RelicData(level, x, rolled, rarity, a0, a1, a2, r0, r1, r2, id);
+    }
+
+    /** Кнопка повышения активна, когда накоплен полный порог и уровень не максимальный. */
+    public boolean canLevelUp() {
+        return !maxed() && xp >= xpToNext();
+    }
+
+    /** +1 уровень, порог списывается, накопленный сверх нормы опыт переходит дальше. */
+    public RelicData withLevelUp() {
+        if (!canLevelUp()) {
             return this;
         }
-        int lvl = level;
-        int x = xp + amount;
-        while (lvl < MAX_LEVEL && x >= 300 + 150 * lvl) {
-            x -= 300 + 150 * lvl;
-            lvl++;
-        }
-        if (lvl >= MAX_LEVEL) {
-            x = 0;
-        }
-        return new RelicData(lvl, x, rolled, rarity, a0, a1, a2, r0, r1, r2, id);
+        return new RelicData(level + 1, xp - xpToNext(), rolled, rarity,
+                a0, a1, a2, r0, r1, r2, id);
+    }
+
+    /** Рубежи открытия способностей: 1-й уровень, 5-й и 10-й (1.9.0). */
+    public int unlockLevel(int index) {
+        return index == 0 ? 1 : index == 1 ? 5 : 10;
+    }
+
+    public boolean unlocked(int index) {
+        return level >= unlockLevel(index);
     }
 
     public RelicData withRank(int index, int value) {
