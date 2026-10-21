@@ -10,48 +10,38 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.VarInt;
 import net.minecraft.network.VarLong;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.RandomSource;
 
 /**
- * Вся прокачка кольца. Хранится прямо в предмете (компонент данных), поэтому уровень, ранг,
- * способности и перезарядки остаются у кольца, куда бы оно ни попало.
+ * Вся прокачка кольца. Хранится прямо в предмете (компонент данных).
  *
- * @param level     уровень кольца (0..MAX_LEVEL)
- * @param xp        опыт внутри текущего уровня
- * @param points    непотраченные очки (+1 за новый уровень и за повышение ранга)
- * @param rank      ранг кольца (0..MAX_RANK)
- * @param speed     ранг характеристики «Скорость полёта»
- * @param mastery   ранг характеристики «Мастерство» (ускоряет набор опыта)
- * @param abilities уровень каждой способности (0 = не изучена), по одному числу на способность
- * @param equipped  id способностей в двух слотах (-1 = слот пуст)
- * @param cooldowns игровое время (тики), когда способность снова будет готова
+ * @param level         уровень кольца (0..MAX_LEVEL); растёт от опыта, который игрок получает в мире
+ * @param xp            опыт кольца внутри текущего уровня
+ * @param rarity        редкость кольца 0..6 звёзд; -1 — ещё не определена (определится, когда кольцо попадёт к игроку)
+ * @param rerolls       сколько раз редкость перебрасывали (нужно клиенту, чтобы показать анимацию)
+ * @param abilityLevels уровень каждой способности (0 = не изучена)
+ * @param abilityRarity редкость каждой способности 0..6 звёзд (-1 — не определена)
+ * @param cooldowns     игровое время (тики), когда способность снова будет готова
  */
-public record RelicData(int level, int xp, int points, int rank, int speed, int mastery,
-                        List<Integer> abilities, List<Integer> equipped, List<Long> cooldowns) {
+public record RelicData(int level, int xp, int rarity, int rerolls,
+                        List<Integer> abilityLevels, List<Integer> abilityRarity, List<Long> cooldowns) {
     public static final int MAX_LEVEL = 10;
-    public static final int MAX_RANK = 5;
-    public static final int BASE_MAX_STAT = 5;
-    public static final int SLOTS = 2;
+    public static final int MAX_STARS = 6;
     public static final int ABILITY_COUNT = 3;
+    /** Стоимость переброса редкости в уровнях опыта игрока. */
+    public static final int REROLL_COST = 2;
 
     /** Действия, которые клиент может попросить у сервера. */
-    public static final int ACTION_STAT_SPEED = 0;
-    public static final int ACTION_STAT_MASTERY = 1;
-    public static final int ACTION_RANK_UP = 2;
-    public static final int ACTION_ABILITY_LEARN = 3;
-    public static final int ACTION_ABILITY_EQUIP = 4;
-    public static final int ACTION_USE = 5;
+    public static final int ACTION_UPGRADE = 0;
+    public static final int ACTION_REROLL = 1;
+    public static final int ACTION_USE = 2;
 
-    /** Опыт за секунду полёта (до множителя «Мастерства») и за применение способности. */
-    public static final int XP_PER_SECOND = 5;
-    public static final int XP_PER_ABILITY_USE = 12;
-
-    public static final RelicData EMPTY =
-            new RelicData(0, 0, 0, 0, 0, 0, List.of(), List.of(), List.of());
+    public static final RelicData EMPTY = new RelicData(0, 0, -1, 0, List.of(), List.of(), List.of());
 
     /** Приводит списки к нужной длине, чтобы старые и неполные данные не ломали код. */
     public RelicData {
-        abilities = normalize(abilities, ABILITY_COUNT, 0);
-        equipped = normalize(equipped, SLOTS, -1);
+        abilityLevels = normalize(abilityLevels, ABILITY_COUNT, 0);
+        abilityRarity = normalize(abilityRarity, ABILITY_COUNT, -1);
         cooldowns = normalize(cooldowns, ABILITY_COUNT, 0L);
     }
 
@@ -69,12 +59,10 @@ public record RelicData(int level, int xp, int points, int rank, int speed, int 
     public static final Codec<RelicData> CODEC = RecordCodecBuilder.create(i -> i.group(
             Codec.INT.optionalFieldOf("level", 0).forGetter(RelicData::level),
             Codec.INT.optionalFieldOf("xp", 0).forGetter(RelicData::xp),
-            Codec.INT.optionalFieldOf("points", 0).forGetter(RelicData::points),
-            Codec.INT.optionalFieldOf("rank", 0).forGetter(RelicData::rank),
-            Codec.INT.optionalFieldOf("speed", 0).forGetter(RelicData::speed),
-            Codec.INT.optionalFieldOf("mastery", 0).forGetter(RelicData::mastery),
-            Codec.INT.listOf().optionalFieldOf("abilities", List.of()).forGetter(RelicData::abilities),
-            Codec.INT.listOf().optionalFieldOf("equipped", List.of()).forGetter(RelicData::equipped),
+            Codec.INT.optionalFieldOf("rarity", -1).forGetter(RelicData::rarity),
+            Codec.INT.optionalFieldOf("rerolls", 0).forGetter(RelicData::rerolls),
+            Codec.INT.listOf().optionalFieldOf("ability_levels", List.of()).forGetter(RelicData::abilityLevels),
+            Codec.INT.listOf().optionalFieldOf("ability_rarity", List.of()).forGetter(RelicData::abilityRarity),
             Codec.LONG.listOf().optionalFieldOf("cooldowns", List.of()).forGetter(RelicData::cooldowns)
     ).apply(i, RelicData::new));
 
@@ -83,38 +71,34 @@ public record RelicData(int level, int xp, int points, int rank, int speed, int 
         public RelicData decode(ByteBuf buf) {
             int level = VarInt.read(buf);
             int xp = VarInt.read(buf);
-            int points = VarInt.read(buf);
-            int rank = VarInt.read(buf);
-            int speed = VarInt.read(buf);
-            int mastery = VarInt.read(buf);
-            List<Integer> abilities = new ArrayList<>();
-            for (int k = 0; k < ABILITY_COUNT; k++) {
-                abilities.add(VarInt.read(buf));
-            }
-            List<Integer> equipped = new ArrayList<>();
-            for (int k = 0; k < SLOTS; k++) {
-                equipped.add(VarInt.read(buf));
-            }
+            int rarity = VarInt.read(buf);
+            int rerolls = VarInt.read(buf);
+            List<Integer> levels = new ArrayList<>();
+            List<Integer> rarities = new ArrayList<>();
             List<Long> cooldowns = new ArrayList<>();
+            for (int k = 0; k < ABILITY_COUNT; k++) {
+                levels.add(VarInt.read(buf));
+            }
+            for (int k = 0; k < ABILITY_COUNT; k++) {
+                rarities.add(VarInt.read(buf));
+            }
             for (int k = 0; k < ABILITY_COUNT; k++) {
                 cooldowns.add(VarLong.read(buf));
             }
-            return new RelicData(level, xp, points, rank, speed, mastery, abilities, equipped, cooldowns);
+            return new RelicData(level, xp, rarity, rerolls, levels, rarities, cooldowns);
         }
 
         @Override
         public void encode(ByteBuf buf, RelicData d) {
             VarInt.write(buf, d.level());
             VarInt.write(buf, d.xp());
-            VarInt.write(buf, d.points());
-            VarInt.write(buf, d.rank());
-            VarInt.write(buf, d.speed());
-            VarInt.write(buf, d.mastery());
+            VarInt.write(buf, d.rarity());
+            VarInt.write(buf, d.rerolls());
             for (int k = 0; k < ABILITY_COUNT; k++) {
-                VarInt.write(buf, d.abilities().get(k));
+                VarInt.write(buf, d.abilityLevels().get(k));
             }
-            for (int k = 0; k < SLOTS; k++) {
-                VarInt.write(buf, d.equipped().get(k));
+            for (int k = 0; k < ABILITY_COUNT; k++) {
+                VarInt.write(buf, d.abilityRarity().get(k));
             }
             for (int k = 0; k < ABILITY_COUNT; k++) {
                 VarLong.write(buf, d.cooldowns().get(k));
@@ -122,92 +106,119 @@ public record RelicData(int level, int xp, int points, int rank, int speed, int 
         }
     };
 
-    // ---------- уровень, ранг, характеристики ----------
+    // ---------- редкость ----------
+
+    public boolean rolled() {
+        return rarity >= 0;
+    }
+
+    /** Звёзды кольца для показа и расчётов (нераспределённая редкость считается нулевой). */
+    public int ringStars() {
+        return Math.max(0, rarity);
+    }
+
+    public int abilityStars(int id) {
+        return id >= 0 && id < ABILITY_COUNT ? Math.max(0, abilityRarity.get(id)) : 0;
+    }
+
+    /** Случайная редкость: чем больше звёзд, тем реже. Веса для 0..6 звёзд: 24, 24, 20, 15, 10, 5, 2 (из 100). */
+    public static int randomStars(RandomSource random) {
+        int[] weights = {24, 24, 20, 15, 10, 5, 2};
+        int roll = random.nextInt(100);
+        int acc = 0;
+        for (int stars = 0; stars < weights.length; stars++) {
+            acc += weights[stars];
+            if (roll < acc) {
+                return stars;
+            }
+        }
+        return 0;
+    }
+
+    private RelicData withRarity(RandomSource random, int newRerolls) {
+        List<Integer> rarities = new ArrayList<>();
+        for (int k = 0; k < ABILITY_COUNT; k++) {
+            rarities.add(randomStars(random));
+        }
+        return new RelicData(level, xp, randomStars(random), newRerolls, abilityLevels, rarities, cooldowns);
+    }
+
+    /** Первое определение редкости, когда предмет достаётся игроку. Если уже определена — возвращает this. */
+    public RelicData ensureRolled(RandomSource random) {
+        return rolled() ? this : withRarity(random, rerolls);
+    }
+
+    /** Переброс редкости кольца и всех трёх способностей. */
+    public RelicData reroll(RandomSource random) {
+        return withRarity(random, rerolls + 1);
+    }
+
+    // ---------- уровень и опыт кольца ----------
 
     public boolean maxed() {
         return level >= MAX_LEVEL;
     }
 
-    public boolean canRankUp() {
-        return maxed() && rank < MAX_RANK;
-    }
-
-    /** Предел рангов характеристик растёт вместе с рангом кольца. */
-    public int maxStat() {
-        return BASE_MAX_STAT + rank;
-    }
-
-    private int needed(int lvl) {
-        return Math.round((300 + 150 * lvl) * (1f + 0.5f * rank));
-    }
-
-    /** Сколько опыта нужно до следующего уровня (с каждым рангом дороже на 50%). */
     public int xpToNext() {
-        return needed(level);
+        return 100 + 80 * level;
     }
 
-    /** Множитель скорости полёта: +15% за ранг характеристики и +10% за ранг кольца. */
-    public float speedMultiplier() {
-        return 1.0f + 0.15f * speed + 0.10f * rank;
+    /** Кольцо копит чуть больше опыта, чем получает игрок: +5% за звезду (до +30%). */
+    public float xpFactor() {
+        return 1.0f + 0.05f * ringStars();
     }
 
-    /** Множитель набора опыта (+20% за ранг «Мастерства»). */
-    public float xpMultiplier() {
-        return 1.0f + 0.20f * mastery;
+    /** Бонус к скорости полёта от редкости кольца: +5% за звезду (до +30%). */
+    public float flightMultiplier() {
+        return 1.0f + 0.05f * ringStars();
     }
 
-    private RelicData withProgress(int lvl, int x, int pts, int rk) {
-        return new RelicData(lvl, x, pts, rk, speed, mastery, abilities, equipped, cooldowns);
-    }
-
-    public RelicData addXp(int amount) {
-        if (maxed()) {
+    public RelicData addXp(int playerXp) {
+        if (maxed() || playerXp <= 0) {
             return this;
         }
         int lvl = level;
-        int x = xp + Math.round(amount * xpMultiplier());
-        int pts = points;
-        while (lvl < MAX_LEVEL && x >= needed(lvl)) {
-            x -= needed(lvl);
+        int x = xp + Math.round(playerXp * xpFactor());
+        while (lvl < MAX_LEVEL && x >= 100 + 80 * lvl) {
+            x -= 100 + 80 * lvl;
             lvl++;
-            pts++;
         }
         if (lvl >= MAX_LEVEL) {
             x = 0;
         }
-        return withProgress(lvl, x, pts, rank);
+        return new RelicData(lvl, x, rarity, rerolls, abilityLevels, abilityRarity, cooldowns);
     }
 
     // ---------- способности ----------
 
     public int abilityLevel(int id) {
-        return id >= 0 && id < ABILITY_COUNT ? abilities.get(id) : 0;
+        return id >= 0 && id < ABILITY_COUNT ? abilityLevels.get(id) : 0;
     }
 
-    /** Номер слота (0 или 1), в котором стоит способность, или -1. */
-    public int equippedSlot(int id) {
-        return equipped.indexOf(id);
+    /** До какого уровня можно улучшать способности при текущем уровне кольца: 1 + уровень/3, максимум 4. */
+    public int abilityCap() {
+        return Math.min(RelicAbility.MAX_LEVEL, 1 + level / 3);
     }
 
-    public int equippedCount() {
-        int n = 0;
-        for (int id : equipped) {
-            if (id >= 0) {
-                n++;
-            }
-        }
-        return n;
-    }
-
-    /** Уровень способности, если она стоит в слоте (иначе 0) — для пассивных эффектов. */
-    public int equippedLevel(RelicAbility ability) {
-        return equippedSlot(ability.id) >= 0 ? abilityLevel(ability.id) : 0;
-    }
-
-    /** Стоимость изучения/улучшения в очках, либо -1, если уже максимальный уровень. */
-    public int abilityCost(int id) {
+    /** Стоимость следующего уровня способности в уровнях опыта игрока: 2, 4, 6, 8. -1 — уже максимум. */
+    public int upgradeCost(int id) {
         int lvl = abilityLevel(id);
-        return lvl >= RelicAbility.MAX_LEVEL ? -1 : Math.max(1, lvl);
+        return lvl >= RelicAbility.MAX_LEVEL ? -1 : 2 + 2 * lvl;
+    }
+
+    /** Можно ли улучшить способность прямо сейчас (не считая уровней опыта игрока). */
+    public boolean canUpgrade(int id) {
+        int lvl = abilityLevel(id);
+        return id >= 0 && id < ABILITY_COUNT && lvl < RelicAbility.MAX_LEVEL && lvl < abilityCap();
+    }
+
+    public RelicData upgrade(int id) {
+        if (!canUpgrade(id)) {
+            return this;
+        }
+        List<Integer> list = new ArrayList<>(abilityLevels);
+        list.set(id, list.get(id) + 1);
+        return new RelicData(level, xp, rarity, rerolls, list, abilityRarity, cooldowns);
     }
 
     public long cooldownReadyAt(int id) {
@@ -217,56 +228,6 @@ public record RelicData(int level, int xp, int points, int rank, int speed, int 
     public RelicData withCooldown(int id, long readyAt) {
         List<Long> list = new ArrayList<>(cooldowns);
         list.set(id, readyAt);
-        return new RelicData(level, xp, points, rank, speed, mastery, abilities, equipped, list);
-    }
-
-    /** Чисто «данные»: действия, не требующие эффектов в мире. Если нельзя — возвращает this. */
-    public RelicData act(int action, int arg) {
-        switch (action) {
-            case ACTION_STAT_SPEED:
-                if (points > 0 && speed < maxStat()) {
-                    return new RelicData(level, xp, points - 1, rank, speed + 1, mastery, abilities, equipped, cooldowns);
-                }
-                return this;
-            case ACTION_STAT_MASTERY:
-                if (points > 0 && mastery < maxStat()) {
-                    return new RelicData(level, xp, points - 1, rank, speed, mastery + 1, abilities, equipped, cooldowns);
-                }
-                return this;
-            case ACTION_RANK_UP:
-                if (canRankUp()) {
-                    // уровень и опыт сбрасываются, ранг растёт, в награду — одно очко
-                    return withProgress(0, 0, points + 1, rank + 1);
-                }
-                return this;
-            case ACTION_ABILITY_LEARN: {
-                int cost = abilityCost(arg);
-                if (arg < 0 || arg >= ABILITY_COUNT || cost < 0 || points < cost) {
-                    return this;
-                }
-                List<Integer> list = new ArrayList<>(abilities);
-                list.set(arg, list.get(arg) + 1);
-                return new RelicData(level, xp, points - cost, rank, speed, mastery, list, equipped, cooldowns);
-            }
-            case ACTION_ABILITY_EQUIP: {
-                if (abilityLevel(arg) <= 0) {
-                    return this;
-                }
-                List<Integer> list = new ArrayList<>(equipped);
-                int slot = list.indexOf(arg);
-                if (slot >= 0) {
-                    list.set(slot, -1);       // снять
-                } else {
-                    int free = list.indexOf(-1);
-                    if (free < 0) {
-                        return this;           // оба слота заняты
-                    }
-                    list.set(free, arg);
-                }
-                return new RelicData(level, xp, points, rank, speed, mastery, abilities, list, cooldowns);
-            }
-            default:
-                return this;
-        }
+        return new RelicData(level, xp, rarity, rerolls, abilityLevels, abilityRarity, list);
     }
 }

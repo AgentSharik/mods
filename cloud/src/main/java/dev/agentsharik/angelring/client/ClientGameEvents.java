@@ -48,7 +48,7 @@ public final class ClientGameEvents {
         }
     }
 
-    private static void useAbility(Minecraft mc, int slot) {
+    private static void useAbility(Minecraft mc, int abilityId) {
         if (mc.screen != null || mc.player == null || mc.level == null) {
             return;
         }
@@ -58,17 +58,16 @@ public final class ClientGameEvents {
             return;
         }
         RelicData data = ring.get().getOrDefault(ModComponents.RELIC_DATA.get(), RelicData.EMPTY);
-        int id = data.equipped().get(slot);
-        if (id < 0) {
-            mc.player.displayClientMessage(Component.translatable("message.angelring.empty_slot", slot + 1), true);
+        if (data.abilityLevel(abilityId) <= 0) {
+            mc.player.displayClientMessage(Component.translatable("message.angelring.not_learned"), true);
             return;
         }
-        long left = data.cooldownReadyAt(id) - mc.level.getGameTime();
+        long left = data.cooldownReadyAt(abilityId) - mc.level.getGameTime();
         if (left > 0) {
             mc.player.displayClientMessage(
                     Component.translatable("message.angelring.cooldown", (left + 19) / 20), true);
             return;
         }
-        PacketDistributor.sendToServer(new RelicActionPayload(RelicData.ACTION_USE, slot, -1));
+        PacketDistributor.sendToServer(new RelicActionPayload(RelicData.ACTION_USE, abilityId, -1));
     }
 }

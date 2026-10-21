@@ -16,7 +16,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
  * Клиент просит сервер выполнить действие. Всё проверяет и меняет сервер.
  *
  * @param action   одно из RelicData.ACTION_*
- * @param arg      id способности, номер слота (для ACTION_USE) и т. п.
+ * @param arg      id способности (0 — «Багровые узы», 1 — «Святилище падшего», 2 — «Кровавая защита»)
  * @param menuSlot номер слота открытого меню, где лежит кольцо; -1 — надетое кольцо
  */
 public record RelicActionPayload(int action, int arg, int menuSlot) implements CustomPacketPayload {

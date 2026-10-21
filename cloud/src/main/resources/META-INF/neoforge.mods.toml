@@ -4,7 +4,7 @@ license="Apache-2.0"
 
 [[mods]]
 modId="angelring"
-version="1.1-cloud"
+version="1.2-cloud"
 displayName="Angel Ring"
 authors="AgentSharik"
 description='''Кольцо ангела: пока оно надето в слоте колец (Curios), даёт полёт как в творческом режиме.'''
