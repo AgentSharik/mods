@@ -1,0 +1,73 @@
+package dev.agentsharik.angelring.client;
+
+import java.util.Optional;
+
+import dev.agentsharik.angelring.AngelRingMod;
+import dev.agentsharik.angelring.ModComponents;
+import dev.agentsharik.angelring.RelicAbility;
+import dev.agentsharik.angelring.RelicData;
+import dev.agentsharik.angelring.RingLookup;
+import dev.agentsharik.angelring.network.RelicActionPayload;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+
+@EventBusSubscriber(modid = AngelRingMod.MOD_ID, value = Dist.CLIENT)
+public final class ClientGameEvents {
+    private ClientGameEvents() {}
+
+    @SubscribeEvent
+    public static void onClientTick(ClientTickEvent.Post event) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null) {
+            return;
+        }
+
+        // J — окно надетого кольца
+        while (ClientModEvents.OPEN_KEY.consumeClick()) {
+            if (mc.screen != null) {
+                continue;
+            }
+            if (RingLookup.find(mc.player).isPresent()) {
+                mc.setScreen(new RelicScreen(null, null, -1));
+            } else {
+                mc.player.displayClientMessage(Component.translatable("message.angelring.not_worn"), true);
+            }
+        }
+
+        // R — активная способность («Багровое вознесение»)
+        while (ClientModEvents.ABILITY_KEY.consumeClick()) {
+            useAbility(mc);
+        }
+    }
+
+    private static void useAbility(Minecraft mc) {
+        if (mc.screen != null || mc.player == null || mc.level == null) {
+            return;
+        }
+        Optional<ItemStack> ring = RingLookup.find(mc.player);
+        if (ring.isEmpty()) {
+            mc.player.displayClientMessage(Component.translatable("message.angelring.not_worn"), true);
+            return;
+        }
+        RelicData data = ring.get().getOrDefault(ModComponents.RELIC_DATA.get(), RelicData.EMPTY);
+        int id = RelicAbility.ASCENSION.id;
+        if (!data.unlocked(id)) {
+            mc.player.displayClientMessage(
+                    Component.translatable("message.angelring.ability_locked", RelicAbility.ASCENSION.unlockLevel), true);
+            return;
+        }
+        long left = data.cooldownReadyAt(id) - mc.level.getGameTime();
+        if (left > 0) {
+            mc.player.displayClientMessage(
+                    Component.translatable("message.angelring.cooldown", (left + 19) / 20), true);
+            return;
+        }
+        PacketDistributor.sendToServer(new RelicActionPayload(RelicData.ACTION_USE, id, -1));
+    }
+}

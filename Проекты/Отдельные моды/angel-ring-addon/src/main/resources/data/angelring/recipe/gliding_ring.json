@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "F F",
+    "EBE",
+    " M "
+  ],
+  "key": {
+    "F": {
+      "item": "minecraft:feather"
+    },
+    "E": {
+      "item": "minecraft:ender_pearl"
+    },
+    "B": {
+      "item": "angelring:ring_blank"
+    },
+    "M": {
+      "item": "minecraft:phantom_membrane"
+    }
+  },
+  "result": {
+    "id": "angelring:gliding_ring",
+    "count": 1
+  }
+}
