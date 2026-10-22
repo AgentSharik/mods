@@ -59,7 +59,7 @@ public final class AngelRingFlight {
         if (player.tickCount % CHECK_INTERVAL_TICKS != 0) {
             return;
         }
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             int cd = data.getInt(RelicAbilities.CD_TAG + i);
             if (cd > 0) {
                 data.putInt(RelicAbilities.CD_TAG + i, Math.max(0, cd - CHECK_INTERVAL_TICKS));
@@ -202,7 +202,7 @@ public final class AngelRingFlight {
                         relic,
                         data.getInt(RelicAbilities.CD_TAG + "0"),
                         data.getInt(RelicAbilities.CD_TAG + "1"),
-                        0));
+                        data.getInt(RelicAbilities.CD_TAG + "2")));
     }
 
     /**

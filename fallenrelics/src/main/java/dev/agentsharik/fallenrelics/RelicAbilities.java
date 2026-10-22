@@ -123,11 +123,11 @@ public final class RelicAbilities {
         RelicData relic = AngelRingFlight.findRing(player)
                 .map(stack -> stack.getOrDefault(ModContent.RELIC_DATA.get(), RelicData.EMPTY))
                 .orElse(RelicData.EMPTY);
-        int rank = relic.rank(2);
+        int rank = relic.rank(0);
         if (rank <= 0) {
             return;
         }
-        int stars = relic.abilityRarity(2);
+        int stars = relic.abilityRarity(0);
         float chance = (20.0F + 40.0F * stars / RelicData.MAX_STAR) / 100.0F;
         if (player.getRandom().nextFloat() >= chance) {
             return;

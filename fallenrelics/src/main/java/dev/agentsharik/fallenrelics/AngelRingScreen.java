@@ -600,7 +600,8 @@ public final class AngelRingScreen extends Screen {
         }
         RelicData relic = AngelRingStatusClient.relic();
         int next = relic.rank(index) + 1;
-        return next <= RelicData.MAX_RANK && next <= relic.rankCap()
+        return relic.unlocked(index)
+                && next <= RelicData.MAX_RANK && next <= relic.rankCap()
                 && Minecraft.getInstance().player.experienceLevel >= RelicData.rankCost(next);
     }
 
