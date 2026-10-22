@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -30,6 +30,27 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew build --no-daemon --stacktrace
+      - name: Verify jar
+        run: |
+          unzip -t build/libs/angelring-1.0.0.jar
+          unzip -l build/libs/angelring-1.0.0.jar | grep 'META-INF/neoforge.mods.toml'
+          unzip -l build/libs/angelring-1.0.0.jar | grep 'assets/angelring/lang/ru_ru.json'
+          unzip -l build/libs/angelring-1.0.0.jar | grep 'data/curios/tags/item/ring.json'
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG=angel-ring-v1.0.0
+          JAR=build/libs/angelring-1.0.0.jar
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$JAR" --clobber
+          else
+            gh release create "$TAG" "$JAR" \
+              --target "$GITHUB_SHA" \
+              --title "Angel Ring 1.0.0 — NeoForge 1.21.1" \
+              --notes "Готовая сборка мода Angel Ring для Minecraft 1.21.1 на NeoForge. Требуется Curios. Установка: поместите JAR в папку mods."
+          fi
       - name: Upload built jar
         uses: actions/upload-artifact@v4
         with:
