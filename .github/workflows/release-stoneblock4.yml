@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.22: единый термин Spectre = спектральный: в книгах Irregular Implements (Oracle Index + Patchouli внутри JAR) «призрачн-» заменён на «спектральн-» (89 вхождений, 27 файлов) — как называется сам предмет; материал ftb.irons.material.spectre → «Спектральный слиток». Поверх v1.1.21.
+# v1.1.23: добавлены 4 русские страницы отдельного гайда Oritech из kubejs (ранее перевели только вики внутри JAR); в sg_economy переведены 2 зашитые в EconomyCommand.class строки об отправке/получении монет — lang на них не влиял. Поверх v1.1.22.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.22'
+        default: 'StoneBlock4-ru-v1.1.23'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.22' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.23' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -59,6 +59,19 @@ jobs:
           echo "JAR в архиве: $(ls pkg/mods/*.jar | wc -l)"
           echo "Файлов kubejs в архиве: $(find pkg/kubejs -type f | wc -l)"
           test -f pkg/kubejs/assets/ftb/lang/ru_ru.json
+          test -f pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru/items/automating_recipes.md
+          test "$(find pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru -name '*.md' | wc -l)" -eq 4
+          echo "Проверка: 4 русские страницы гайда Oritech присутствуют"
+          python3 - <<'PY'
+          import zipfile
+          with zipfile.ZipFile('pkg/mods/sg_economy-1.0.5.jar') as z:
+              data = z.read('net/sirgrantd/sg_economy/command/EconomyCommand.class')
+          assert '§aВы отправили %s %s игроку %s.'.encode() in data
+          assert '§aВы получили %s %s от %s.'.encode() in data
+          assert b'You sent %s %s to %s.' not in data
+          assert b'You received %s %s from %s.' not in data
+          print('Проверка: зашитые сообщения SG Economy переведены')
+          PY
           echo "--- Русская озвучка Эхо (Google Drive) ---"
           mkdir -p pkg/kubejs/assets/ftb/sounds/echo/ru_ru
           test -f pkg/kubejs/assets/ftb/sounds.json
@@ -78,7 +91,8 @@ jobs:
           unzip -l ../StoneBlock.4.zip | grep -q "config/apotheosis/names.cfg"
           unzip -l ../StoneBlock.4.zip | grep -q "config/ftbquests/quests/chapters/general_magic.snbt"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/lang/ru_ru.json"
-          echo "Проверка: kubejs/assets/ftb/lang/ru_ru.json присутствует в архиве"
+          unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/oritech/guides/oritech/guide/_ru_ru/items/automating_recipes.md"
+          echo "Проверка: lang и гайд Oritech присутствуют в архиве"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/startup_scripts/ru_echo_sounds.js"
           test "$(grep -c "event.create('ftb:ru_ru/" ../pkg/kubejs/startup_scripts/ru_echo_sounds.js)" -eq 38
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/sounds.json"
