@@ -192,8 +192,37 @@ public final class AscensionRitual {
         }
     }
 
+    /** Владелец вышел посреди ритуала: завершаем мгновенно, кольцо остаётся у стола под защитой. */
+    @SubscribeEvent
+    public static void onLogout(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        UUID uuid = player.getUUID();
+        Iterator<State> it = ACTIVE.iterator();
+        while (it.hasNext()) {
+            State st = it.next();
+            if (uuid.equals(st.player)) {
+                finish(st, null);
+                it.remove();
+            }
+        }
+    }
+
+    /** Останов сервера: доводим все ритуалы, чтобы кольцо и уровни не исчезли вместе с процессом. */
+    @SubscribeEvent
+    public static void onServerStopping(net.neoforged.neoforge.event.server.ServerStoppingEvent event) {
+        for (State st : ACTIVE) {
+            finish(st, st.level.getServer().getPlayerList().getPlayer(st.player));
+        }
+        ACTIVE.clear();
+    }
+
     private static void finish(State st, ServerPlayer player) {
         var level = st.level;
+        if (st.floater != null) {
+            st.floater.discard();
+        }
         if (st.descender != null) {
             st.descender.discard();
         }
