@@ -7,7 +7,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 /**
- * Аддон «Кольцо ангела». Само кольцо носится в слоте аксессуаров Curios (слот "ring").
+ * Аддон «Кольцо ангела». Кольца носятся в слоте аксессуаров Curios (слот "ring").
  */
 @Mod(AngelRingMod.MOD_ID)
 public class AngelRingMod {
@@ -15,6 +15,7 @@ public class AngelRingMod {
 
     public AngelRingMod(IEventBus modEventBus) {
         ModComponents.COMPONENTS.register(modEventBus);
+        ModParticles.PARTICLES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         modEventBus.addListener(ModItems::addToCreativeTab);
         modEventBus.addListener(AngelRingMod::registerPayloads);

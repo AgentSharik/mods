@@ -14,16 +14,20 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerXpEvent;
 
 /**
- * Две вещи, которые работают, пока кольцо надето:
+ * Всё, что работает, пока надето «Кольцо ангела»:
  *  1) опыт кольца копится вместе с опытом игрока;
- *  2) пассивная способность «Кровавая защита».
+ *  2) «Кровавая защита» (пассивная, с 1 уровня кольца);
+ *  3) «Жатва падших» (пассивная, с 5 уровня кольца).
  */
 @EventBusSubscriber(modid = AngelRingMod.MOD_ID)
 public final class AbilityEvents {
@@ -52,15 +56,15 @@ public final class AbilityEvents {
         RelicData updated = data.addXp(amount);
         if (updated != data) {
             stack.set(ModComponents.RELIC_DATA.get(), updated);
-            if (updated.level() > data.level()) {
-                player.displayClientMessage(Component.translatable("message.angelring.level_up", updated.level()), true);
+            if (!data.canLevelUp() && updated.canLevelUp()) {
+                player.displayClientMessage(Component.translatable("message.angelring.level_ready"), true);
             }
         }
     }
 
     /**
-     * «Кровавая защита» (пассивная): при получении урона есть шанс (от 20% на 0 звёздах до 60% на 6 звёздах)
-     * полностью заблокировать удар, вернуть немного здоровья и ослабить нападавшего.
+     * «Кровавая защита»: при получении урона есть шанс (от 20% на 0 звёздах до 60% на 6 звёздах) полностью
+     * заблокировать удар, вернуть немного здоровья и ослабить нападавшего.
      */
     @SubscribeEvent
     public static void onIncomingDamage(LivingIncomingDamageEvent event) {
@@ -79,7 +83,7 @@ public final class AbilityEvents {
         int id = RelicAbility.BLOOD_WARD.id;
         int level = data.abilityLevel(id);
         if (level <= 0) {
-            return; // способность не изучена
+            return; // способность ещё закрыта
         }
         long now = player.level().getGameTime();
         CompoundTag tag = player.getPersistentData();
@@ -102,7 +106,57 @@ public final class AbilityEvents {
         ServerLevel world = player.serverLevel();
         world.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0f, 0.7f);
-        world.sendParticles(ParticleTypes.CRIMSON_SPORE, player.getX(), player.getY() + 1.0, player.getZ(),
-                18, 0.4, 0.6, 0.4, 0.03);
+        world.sendParticles(ModParticles.CRIMSON_SMOKE.get(), player.getX(), player.getY() + 1.0, player.getZ(),
+                10, 0.4, 0.6, 0.4, 0.02);
+        world.sendParticles(ModParticles.CRIMSON_SPARK.get(), player.getX(), player.getY() + 1.0, player.getZ(),
+                18, 0.4, 0.6, 0.4, 0.12);
+    }
+
+    /**
+     * «Жатва падших»: за каждого убитого врага вы возвращаете здоровье, получаете поглощение урона
+     * и с шансом (от 10% до 40% в зависимости от звёзд) — бонусный опыт.
+     */
+    @SubscribeEvent
+    public static void onKill(LivingDeathEvent event) {
+        if (!(event.getSource().getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        LivingEntity victim = event.getEntity();
+        if (!(victim instanceof Enemy)) {
+            return;
+        }
+        Optional<ItemStack> ring = RingLookup.find(player);
+        if (ring.isEmpty()) {
+            return;
+        }
+        RelicData data = ring.get().getOrDefault(ModComponents.RELIC_DATA.get(), RelicData.EMPTY);
+        int id = RelicAbility.HARVEST.id;
+        int level = data.abilityLevel(id);
+        if (level <= 0) {
+            return; // откроется на 5 уровне кольца
+        }
+        int stars = data.abilityStars(id);
+        player.heal(RelicAbility.harvestHeal(stars, level));
+        player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION,
+                20 * RelicAbility.harvestAbsorbSeconds(stars), level >= 3 ? 1 : 0, false, true));
+
+        ServerLevel world = player.serverLevel();
+        if (player.getRandom().nextFloat() < RelicAbility.harvestXpChance(stars, level)) {
+            ExperienceOrb.award(world, victim.position(), RelicAbility.harvestBonusXp(level));
+        }
+        world.playSound(null, victim.getX(), victim.getY(), victim.getZ(),
+                SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.35f, 0.6f);
+        world.sendParticles(ModParticles.CRIMSON_SMOKE.get(), victim.getX(), victim.getY() + 0.8, victim.getZ(),
+                8, 0.3, 0.4, 0.3, 0.03);
+        world.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, victim.getX(), victim.getY() + 0.8, victim.getZ(),
+                6, 0.2, 0.3, 0.2, 0.05);
+        // душа убитого стремится к игроку
+        for (int k = 0; k < 8; k++) {
+            double t = k / 8.0;
+            world.sendParticles(ModParticles.CRIMSON_SPARK.get(),
+                    victim.getX() + (player.getX() - victim.getX()) * t,
+                    victim.getY() + 1.0 + (player.getY() + 1.0 - victim.getY() - 1.0) * t,
+                    victim.getZ() + (player.getZ() - victim.getZ()) * t, 1, 0.0, 0.0, 0.0, 0.0);
+        }
     }
 }

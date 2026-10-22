@@ -1,27 +1,21 @@
 package dev.agentsharik.angelring;
 
-import java.util.List;
-
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 
-/** Серверная логика: прокачка за уровни игрока, реролл редкости и применение активных способностей. */
+/** Серверная логика: повышение уровня, улучшения за уровни игрока, реролл редкости и применение ульты. */
 public final class RelicActions {
     private RelicActions() {}
 
     public static void perform(ServerPlayer player, ItemStack stack, int action, int arg) {
         RelicData data = stack.getOrDefault(ModComponents.RELIC_DATA.get(), RelicData.EMPTY);
         switch (action) {
+            case RelicData.ACTION_LEVEL_UP -> levelUp(player, stack, data);
             case RelicData.ACTION_UPGRADE -> upgrade(player, stack, data, arg);
             case RelicData.ACTION_REROLL -> reroll(player, stack, data);
             case RelicData.ACTION_USE -> use(player, stack, data, arg);
@@ -29,11 +23,37 @@ public final class RelicActions {
         }
     }
 
+    /**
+     * Повышение уровня кольца: опыт вычитается на величину порога, весь остаток сохраняется, порог растёт.
+     * Если опыта не хватает или уровень максимальный, ничего не происходит.
+     */
+    private static void levelUp(ServerPlayer player, ItemStack stack, RelicData data) {
+        RelicData next = data.levelUp();
+        if (next == data) {
+            return;
+        }
+        stack.set(ModComponents.RELIC_DATA.get(), next);
+        ServerLevel world = player.serverLevel();
+        world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.9f, 0.8f);
+        world.sendParticles(ModParticles.CRIMSON_SPARK.get(), player.getX(), player.getY() + 1.0, player.getZ(),
+                40, 0.5, 0.8, 0.5, 0.15);
+        player.displayClientMessage(Component.translatable("message.angelring.level_up", next.level()), true);
+        for (RelicAbility ability : RelicAbility.values()) {
+            if (ability.unlockLevel == next.level()) {
+                player.sendSystemMessage(Component.translatable("message.angelring.ability_unlocked",
+                        Component.translatable("gui.angelring.ability." + ability.key + ".name")));
+                world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                        SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.2f, 0.7f);
+            }
+        }
+    }
+
     /** Улучшение способности стоит уровни опыта игрока; креативу уровни не нужны (удобно для проверки). */
     private static void upgrade(ServerPlayer player, ItemStack stack, RelicData data, int id) {
         int cost = data.upgradeCost(id);
         if (cost < 0 || !data.canUpgrade(id)) {
-            return; // максимум или не хватает уровня кольца
+            return; // максимум или способность ещё закрыта
         }
         boolean free = player.isCreative();
         if (!free && player.experienceLevel < cost) {
@@ -60,8 +80,11 @@ public final class RelicActions {
         ServerLevel world = player.serverLevel();
         world.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0f, 0.7f);
+        world.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, player.getX(), player.getY() + 1.0, player.getZ(),
+                20, 0.4, 0.6, 0.4, 0.05);
     }
 
+    /** Применение активной способности (она у кольца одна — «Багровое вознесение», открывается на 10 уровне). */
     private static void use(ServerPlayer player, ItemStack stack, RelicData data, int id) {
         RelicAbility ability = RelicAbility.byId(id);
         if (ability == null || !ability.active) {
@@ -70,57 +93,11 @@ public final class RelicActions {
         int level = data.abilityLevel(id);
         long now = player.level().getGameTime();
         if (level <= 0 || now < data.cooldownReadyAt(id)) {
-            return; // не изучена или ещё перезаряжается
+            return; // закрыта или ещё перезаряжается
         }
         int stars = data.abilityStars(id);
-        switch (ability) {
-            case BONDS -> crimsonBonds(player, stars, level);
-            case SANCTUARY -> fallenSanctuary(player, stars, level);
-            default -> {
-                return;
-            }
-        }
+        AscensionEffects.start(player, stars, level);
         long ready = now + 20L * ability.cooldownSeconds(stars, level);
         stack.set(ModComponents.RELIC_DATA.get(), data.withCooldown(id, ready));
-    }
-
-    /**
-     * «Багровые узы» — контроль: все враги в радиусе подтягиваются к вам, на время обездвиживаются,
-     * ослабляются и начинают светиться (их видно сквозь стены).
-     */
-    private static void crimsonBonds(ServerPlayer player, int stars, int level) {
-        ServerLevel world = player.serverLevel();
-        float radius = RelicAbility.bondsRadius(stars);
-        int ticks = Math.round(RelicAbility.bondsSeconds(stars, level) * 20f);
-
-        List<LivingEntity> targets = world.getEntitiesOfClass(LivingEntity.class,
-                player.getBoundingBox().inflate(radius),
-                e -> e != player && e instanceof Enemy && e.isAlive() && e.distanceToSqr(player) <= radius * radius);
-        for (LivingEntity target : targets) {
-            Vec3 pull = player.position().subtract(target.position()).multiply(1, 0, 1).normalize().scale(0.45);
-            target.setDeltaMovement(target.getDeltaMovement().add(pull.x, 0.1, pull.z));
-            target.hurtMarked = true;
-            target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, ticks, 6, false, true));
-            target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, ticks, 1, false, true));
-            target.addEffect(new MobEffectInstance(MobEffects.GLOWING, ticks, 0, false, false));
-            world.sendParticles(ParticleTypes.CRIMSON_SPORE, target.getX(), target.getY() + 1.0, target.getZ(),
-                    10, 0.3, 0.5, 0.3, 0.02);
-        }
-        world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1.0f, 0.6f);
-        world.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, player.getX(), player.getY() + 0.2, player.getZ(),
-                30, radius * 0.4, 0.1, radius * 0.4, 0.02);
-    }
-
-    /** «Святилище падшего» — зона под ногами: отталкивает врагов, лечит игроков, стирает чужие снаряды. */
-    private static void fallenSanctuary(ServerPlayer player, int stars, int level) {
-        ServerLevel world = player.serverLevel();
-        float radius = RelicAbility.sanctuaryRadius(stars);
-        int ticks = Math.round(RelicAbility.sanctuarySeconds(stars, level) * 20f);
-        SanctuaryZones.add(world, player.position(), radius, ticks);
-        world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 1.0f, 0.7f);
-        world.sendParticles(ParticleTypes.END_ROD, player.getX(), player.getY() + 0.5, player.getZ(),
-                20, radius * 0.3, 0.3, radius * 0.3, 0.02);
     }
 }

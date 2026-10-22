@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:story/root",
+  "display": {
+    "icon": {
+      "id": "angelring:angel_ring"
+    },
+    "title": {
+      "translate": "advancement.angelring.divine_wings.title"
+    },
+    "description": {
+      "translate": "advancement.angelring.divine_wings.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "ritual_complete": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "ritual_complete"
+    ]
+  ]
+}
