@@ -6,12 +6,13 @@
 
 | | |
 |---|---|
-| Готовых JAR | **414** (146 по снимку релиза 1.0.0 и 268 дополнения после него; считаются только готовые JAR) |
-| Ключей lang | **90 012** в русских файлах готовых JAR (каждый ключ внутри одного JAR считается один раз) |
+| Готовых JAR | **411** (146 по снимку релиза 1.0.0 и 265 дополнения после него; считаются только готовые JAR) |
+| Ключей lang | **89 859** в русских файлах готовых JAR (каждый ключ внутри одного JAR считается один раз) |
 | Внутренние справочники | гайды GuideME кластера AE2 — 224 стр.; гайды KubeJS — 30 стр. (26 FTB + 4 Oritech); книги Patchouli и Modonomicon; мануал Immersive Engineering — 114 стр.; сцены Ponder; вики Oracle Index |
 | Полнота | у каждого мода переведены все ключи `en_us` без исключения (подсчёт — по уникальным ключам: файлы-дубли внутри JAR не раздувают цифру). Если в русском ключей больше, чем в английском, это добавленные сверх оригинала (подсказки значений, ключи от свежих версий модов) — колонка «Полнота» это показывает |
 | качество | ручной перевод и вычитка: русский текст читался отдельно от английского (без кальки и машинных оборотов), шутки и отсылки переданы по смыслу. Содержимое готовых JAR проверено скриптами: покрытие ключей, плейсхолдеры, совпадение всех файлов с оригиналом, кроме добавленного `ru_ru`. Подтверждение запуском в игре не выполнялось |
 
+С v1.1.25 `leaderboards-1.21.1-NeoForge-2.0.4.jar`, `statuseffectbars-1.21.1-NeoForge-1.0.2.jar` и `synesthesia-1.21.1-NeoForge-1.1.0.jar` не входят в проект и архив StoneBlock 4. Их готовые русские JAR перенесены без изменений в [«Отдельные моды»](../../Отдельные%20моды/README.md).
 
 ## Основной состав сборки
 
@@ -254,7 +255,7 @@ Modonomicon (нужна для английского интерфейса кн�
 | `xycraft_machines-0.7.53.jar` | 225 | ru_ru создан с нуля; 225/225 |
 | `xycraft_world-0.7.53.jar` | 324 | ru_ru создан с нуля; 324/324 |
 
-Итого после дополнений: 414 готовых JAR в проекте StoneBlock 4 (146 исходных по снимку релиза + 268 добавленных после него), 90 012 ключей в русских файлах готовых JAR.
+Итого после дополнений: 411 готовых JAR в проекте StoneBlock 4 (146 исходных по снимку релиза + 265 добавленных после него), 89 859 ключей в русских файлах готовых JAR.
 
 ## Дополнение v1.1.4 (присланные владельцем моды)
 
@@ -393,7 +394,6 @@ Modonomicon (нужна для английского интерфейса кн�
 | kubejs_enderio-neoforge-1.21.1-0.13.0.jar | KubeJS EnderIO | 0 |
 | kubejspowah-1.3.4.jar | KubeJS Powah | 0 |
 | kubejstweaks-1.0.6.jar | KubeJS Tweaks | 4 |
-| leaderboards-1.21.1-NeoForge-2.0.4.jar | Leaderboards | 87 |
 | lionfishapi-3.1.jar | lionfishapi | 4 |
 | lmft-1.1.1+1.21.9-neoforge.jar | Load My F***ing Tags | 0 |
 | lodestone-1.21.1-1.8.2.jar | Lodestone | 31 |
@@ -434,14 +434,12 @@ Modonomicon (нужна для английского интерфейса кн�
 | sophisticateditemactions-1.21.1-0.5.16.423.jar | Sophisticated Item Actions | 49 |
 | sophisticatedstoragecreateintegration-1.21.1-0.1.22.238.jar | Sophisticated Storage Create Integration | 0 |
 | soulplied_energistics-1.0.3.jar | Soulplied Energistics | 4 |
-| statuseffectbars-1.21.1-NeoForge-1.0.2.jar | Status Effect Bars | 58 |
 | stepcrafter-neoforge-1.21.1-0.1.9.jar | Step Crafter | 79 |
 | structure-expansion-neoforge-88.0.1.jar | Structure Expansion | 0 |
 | structureessentials-1.21.1-5.0.jar | Structure Essentials mod | 0 |
 | structures_tweaker-1.21.1-NeoForge-2.1.7.jar | Structures Tweaker | 6 |
 | structurify-neoforge-2.0.42+mc1.21.1.jar | Structurify | 154 |
 | supermartijn642configlib-1.1.8-neoforge-mc1.21.jar | SuperMartijn642's Config Library | 0 |
-| synesthesia-1.21.1-NeoForge-1.1.0.jar | Synesthesia: Sound Visualizer | 8 |
 | toofast-1.21.0-0.4.3.6.jar | Too Fast | 0 |
 | ToolBelt-1.21.1-2.2.10.jar | Tool Belt | 13 |
 | torchmaster-neoforge-1.21.1-21.1.13.jar | Torchmaster | 42 |

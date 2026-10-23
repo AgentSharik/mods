@@ -4,7 +4,7 @@
 Единая методика (только готовые JAR):
 - истина — файлы JAR в «Проекты/», а не ручная арифметика;
 - готовые JAR StoneBlock 4: количество *.jar в «Проекты/StoneBlock 4»;
-- готовые JAR по репозиторию: StoneBlock 4 + «Проекты/Отдельные моды» (Axiom);
+- готовые JAR по репозиторию: StoneBlock 4 + JAR в корне «Проекты/Отдельные моды»;
 - ключи: суммарно по каждому JAR — количество ключей во всех lang/ru_ru.json,
   ключ считается один раз внутри JAR (файлы-дубли не раздувают цифру);
 - моды, для которых JAR не собирался, в итоги не входят и отдельно не суммируются.
@@ -49,10 +49,12 @@ def ru_keys(jar):
 def stats():
     sb, sp = jars(SB4), jars(SEP)
     sb_keys = sum(len(ru_keys(j)) for j in sb)
-    sp_keys = sum(len(ru_keys(j)) for j in sp)
+    sp_keys_by_jar = {os.path.basename(j): len(ru_keys(j)) for j in sp}
+    sp_keys = sum(sp_keys_by_jar.values())
     return {
         'sb_jars': len(sb), 'sep_jars': len(sp), 'total_jars': len(sb) + len(sp),
         'sb_keys': sb_keys, 'sep_keys': sp_keys, 'total_keys': sb_keys + sp_keys,
+        'sep_keys_by_jar': sp_keys_by_jar,
     }
 
 
@@ -70,9 +72,12 @@ def apply_rules(text, st, fname):
             (r'\| Готовых JAR \| \*\*\d+\*\* \|', f"| Готовых JAR | **{st['sb_jars']}** |"),
             (r'\| Ключей переведено \| \*\*[\d ]+\*\* \|',
              f"| Ключей переведено | **{fmt(st['sb_keys'])}** |"),
-            (r'\| `Axiom-6\.1\.3-for-MC1\.21\.1\.jar` \| [\d ]+ \|',
-             f"| `Axiom-6.1.3-for-MC1.21.1.jar` | {fmt(st['sep_keys'])} |"),
         ]
+        for name, count in sorted(st['sep_keys_by_jar'].items()):
+            rules.append((
+                r'\| `' + re.escape(name) + r'` \| [\d ]+ \|',
+                f"| `{name}` | {fmt(count)} |",
+            ))
     elif fname == 'RELEASE_CONTENTS.md':
         rules = [
             (r'\| Готовых JAR \| \*\*\d+\*\* \([^\n]*\) \|',
@@ -110,6 +115,9 @@ def validate(text, st, fname):
             problems.append('в разделе StoneBlock 4 не указано фактическое число готовых JAR')
         if f"| Ключей переведено | **{fmt(st['sb_keys'])}** |" not in text:
             problems.append('в разделе StoneBlock 4 не указано фактическое число ключей')
+        for name, count in sorted(st['sep_keys_by_jar'].items()):
+            if f"| `{name}` | {fmt(count)} |" not in text:
+                problems.append(f'в разделе отдельных модов неверно указан JAR или число ключей: {name}')
     if fname == 'RELEASE_CONTENTS.md':
         missing = [os.path.basename(p) for p in jars(SB4)
                    if os.path.basename(p) not in text]

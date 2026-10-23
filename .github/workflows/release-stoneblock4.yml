@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.24: вычитана русская вика Oritech, переведена таблица проектирования реактора и исправлен frontmatter связанных предметов; проверено содержимое озвучки Эхо. Поверх v1.1.23.
+# v1.1.25: Leaderboards, Status Effect Bars и Synesthesia перенесены из проекта и архива StoneBlock 4 в отдельные моды. Поверх v1.1.24.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.24'
+        default: 'StoneBlock4-ru-v1.1.25'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.24' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.25' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -38,6 +38,14 @@ jobs:
           SB4="Проекты/StoneBlock 4"
           mkdir -p pkg/mods pkg/config/ftbquests/quests/lang
           cp "$SB4"/*.jar pkg/mods/
+          test "$(find pkg/mods -maxdepth 1 -name '*.jar' | wc -l)" -eq 411
+          for excluded in \
+            leaderboards-1.21.1-NeoForge-2.0.4.jar \
+            statuseffectbars-1.21.1-NeoForge-1.0.2.jar \
+            synesthesia-1.21.1-NeoForge-1.1.0.jar; do
+            test ! -e "pkg/mods/$excluded"
+          done
+          echo "Проверка: 411 JAR; 3 отдельных мода не включены в архив"
           cp "$SB4/документация/_ftbquests_wip/ru_ru.snbt" pkg/config/ftbquests/quests/lang/ru_ru.snbt
           mkdir -p pkg/config/ftbquests/quests/chapters
           cp "$SB4/документация/release/config/ftbquests/quests/chapters/"*.snbt pkg/config/ftbquests/quests/chapters/
