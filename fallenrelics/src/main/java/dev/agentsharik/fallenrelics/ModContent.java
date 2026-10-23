@@ -15,6 +15,9 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import java.util.function.Supplier;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class ModContent {
@@ -27,6 +30,14 @@ public final class ModContent {
                     .persistent(RelicData.CODEC)
                     .networkSynchronized(RelicData.STREAM_CODEC)
                     .build());
+
+    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES =
+            DeferredRegister.create(Registries.PARTICLE_TYPE, FallenRelicsMod.MOD_ID);
+
+    public static final Supplier<SimpleParticleType> EMBER =
+            PARTICLE_TYPES.register("ember", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> SPARK =
+            PARTICLE_TYPES.register("spark", () -> new SimpleParticleType(true));
 
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(FallenRelicsMod.MOD_ID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FallenRelicsMod.MOD_ID);

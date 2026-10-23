@@ -122,7 +122,7 @@ public final class AscensionRitual {
                     st.floater.setPos(cx, ringY, cz);
                     st.floater.setDeltaMovement(0, 0, 0);
                     if (st.tick % 3 == 0) {
-                        level.sendParticles(ParticleTypes.CRIMSON_SPORE, cx, ringY, cz, 4, 0.3, 0.2, 0.3, 0.03);
+                        level.sendParticles(ModContent.EMBER.get(), cx, ringY, cz, 4, 0.3, 0.2, 0.3, 0.03);
                     }
                 }
                 // поток сфер опыта от игрока к парящему кольцу
@@ -131,7 +131,7 @@ public final class AscensionRitual {
                     Vec3 to = new Vec3(cx, ringY, cz);
                     for (int i = 0; i < 6; i++) {
                         Vec3 p = from.lerp(to, i / 6.0);
-                        level.sendParticles(i % 2 == 0 ? ParticleTypes.ENCHANT : ParticleTypes.CRIMSON_SPORE,
+                        level.sendParticles(i % 2 == 0 ? ModContent.SPARK.get() : ModContent.EMBER.get(),
                                 p.x, p.y, p.z, 1, 0, 0, 0, 0.0);
                     }
                 }
@@ -142,7 +142,7 @@ public final class AscensionRitual {
                         double bx = cx + Math.cos(a) * 2.2;
                         double bz = cz + Math.sin(a) * 2.2;
                         for (double y = st.table.getY(); y <= ringY; y += 0.5) {
-                            level.sendParticles(ParticleTypes.CRIMSON_SPORE, bx, y, bz, 1, 0, 0, 0, 0.02);
+                            level.sendParticles(ModContent.EMBER.get(), bx, y, bz, 1, 0, 0, 0, 0.02);
                             level.sendParticles(ParticleTypes.SMOKE, bx, y, bz, 1, 0, 0, 0, 0.01);
                         }
                     }
@@ -163,9 +163,9 @@ public final class AscensionRitual {
                         st.floater.discard();
                     }
                     double peakY = st.table.getY() + 4.2;
-                    level.sendParticles(ParticleTypes.FLASH, cx, peakY, cz, 1, 0, 0, 0, 0.0);
-                    level.sendParticles(ParticleTypes.CRIMSON_SPORE, cx, peakY, cz, 240, 1.6, 1.6, 1.6, 0.1);
-                    level.sendParticles(ParticleTypes.SMOKE, cx, peakY - 0.2, cz, 120, 1.4, 1.2, 1.4, 0.04);
+                    level.sendParticles(ModContent.SPARK.get(), cx, peakY, cz, 48, 0.4, 0.4, 0.4, 0.05);
+                    level.sendParticles(ModContent.EMBER.get(), cx, peakY, cz, 150, 0.7, 0.7, 0.7, 0.06);
+                    level.sendParticles(ParticleTypes.SMOKE, cx, peakY - 0.2, cz, 60, 0.6, 0.5, 0.6, 0.03);
                     level.playSound(null, st.table, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 0.8F, 0.7F);
                     ItemEntity d = new ItemEntity(level, cx, peakY, cz, new ItemStack(ModContent.ANGEL_RING.get()));
                     d.setNoGravity(true);
@@ -181,7 +181,7 @@ public final class AscensionRitual {
                     st.descender.setPos(cx, y, cz);
                     st.descender.setDeltaMovement(0, 0, 0);
                     if (st.tick % 3 == 0) {
-                        level.sendParticles(ParticleTypes.CRIMSON_SPORE, cx, y, cz, 6, 0.4, 0.3, 0.4, 0.03);
+                        level.sendParticles(ModContent.EMBER.get(), cx, y, cz, 6, 0.4, 0.3, 0.4, 0.03);
                     }
                 }
                 if (st.tick >= RITUAL_TICKS) {

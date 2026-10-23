@@ -142,7 +142,7 @@ public final class RelicAbilities {
             mob.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 0, false, true));
         }
         if (player.level() instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(ParticleTypes.CRIMSON_SPORE, player.getX(), player.getY() + 1.0,
+            serverLevel.sendParticles(ModContent.EMBER.get(), player.getX(), player.getY() + 1.0,
                     player.getZ(), 24, 0.4, 0.6, 0.4, 0.02);
             player.playSound(SoundEvents.BELL_BLOCK, 0.8F, 1.2F);
         }
@@ -187,7 +187,7 @@ public final class RelicAbilities {
                     mob.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 40, 1, false, true));
                     mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 1, false, true));
                 }
-                level.sendParticles(ParticleTypes.CRIMSON_SPORE, zone.pos().getX() + 0.5, zone.pos().getY() + 1.0,
+                level.sendParticles(ModContent.EMBER.get(), zone.pos().getX() + 0.5, zone.pos().getY() + 1.0,
                         zone.pos().getZ() + 0.5, 16, 3.5, 1.2, 3.5, 0.02);
                 level.sendParticles(ParticleTypes.SMOKE, zone.pos().getX() + 0.5, zone.pos().getY() + 0.4,
                         zone.pos().getZ() + 0.5, 8, 3.0, 0.6, 3.0, 0.01);
@@ -287,7 +287,7 @@ public final class RelicAbilities {
         stack.set(ModContent.RELIC_DATA.get(), relic.addXp(8 + 4 * stars));
         killer.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST,
                 40 + 20 * stars, stars >= 5 ? 1 : 0, false, true));
-        ((ServerLevel) killer.level()).sendParticles(ParticleTypes.CRIMSON_SPORE, killer.getX(), killer.getY() + 1.0,
+        ((ServerLevel) killer.level()).sendParticles(ModContent.EMBER.get(), killer.getX(), killer.getY() + 1.0,
                 killer.getZ(), 14, 0.5, 0.7, 0.5, 0.05);
         killer.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5F, 1.4F);
     }
@@ -358,9 +358,9 @@ public final class RelicAbilities {
         // слой 1: два рунических кольца, вращающихся в противоположные стороны
         for (int i = 0; i < 48; i++) {
             double a = i * Math.PI / 24.0;
-            level.sendParticles(ParticleTypes.CRIMSON_SPORE,
+            level.sendParticles(ModContent.EMBER.get(),
                     cx + Math.cos(a) * radius, cy + 0.2, cz + Math.sin(a) * radius, 1, 0, 0.05, 0, 0.01);
-            level.sendParticles(ParticleTypes.CRIMSON_SPORE,
+            level.sendParticles(ModContent.EMBER.get(),
                     cx + Math.cos(-a) * radius * 0.6, cy + 0.9, cz + Math.sin(-a) * radius * 0.6, 1, 0, 0.05, 0, 0.01);
         }
         // слой 2: восемь столпов-лучей от земли до роста игрока
@@ -369,13 +369,13 @@ public final class RelicAbilities {
             double bx = cx + Math.cos(a) * radius * 0.85;
             double bz = cz + Math.sin(a) * radius * 0.85;
             for (double y = cy - 2.0; y <= cy + 4.0; y += 0.5) {
-                level.sendParticles(ParticleTypes.CRIMSON_SPORE, bx, y, bz, 1, 0, 0, 0, 0.02);
+                level.sendParticles(ModContent.EMBER.get(), bx, y, bz, 1, 0, 0, 0, 0.02);
                 level.sendParticles(ParticleTypes.SMOKE, bx, y, bz, 1, 0, 0, 0, 0.01);
             }
         }
         // слой 3: ударная волна, дымовая шапка и финальная вспышка
         level.sendParticles(ParticleTypes.FLASH, cx, cy + 1.0, cz, 1, 0, 0, 0, 0.0);
-        level.sendParticles(ParticleTypes.CRIMSON_SPORE, cx, cy + 1.0, cz, 160, radius / 2, 1.2, radius / 2, 0.08);
+        level.sendParticles(ModContent.EMBER.get(), cx, cy + 1.0, cz, 160, radius / 2, 1.2, radius / 2, 0.08);
         level.sendParticles(ParticleTypes.SMOKE, cx, cy + 0.5, cz, 60, radius / 2, 0.8, radius / 2, 0.03);
         level.sendParticles(ParticleTypes.FLAME, cx, cy + 0.2, cz, 40, radius / 2, 0.2, radius / 2, 0.06);
         player.playSound(SoundEvents.END_PORTAL_SPAWN, 1.0F, 0.7F);

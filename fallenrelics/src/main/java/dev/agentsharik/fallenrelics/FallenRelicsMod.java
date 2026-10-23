@@ -28,6 +28,7 @@ public final class FallenRelicsMod {
         ModContent.COMPONENTS.register(modEventBus);
         ModContent.BLOCK_ENTITIES.register(modEventBus);
         ModContent.MENUS.register(modEventBus);
+        ModContent.PARTICLE_TYPES.register(modEventBus);
 
         modEventBus.addListener(this::addCreativeContent);
         // Angel ring flight needs Curios; without it the ring is just a shiny item.
