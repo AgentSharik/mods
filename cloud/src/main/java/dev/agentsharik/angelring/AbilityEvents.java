@@ -2,7 +2,6 @@ package dev.agentsharik.angelring;
 
 import java.util.Optional;
 
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -148,7 +147,7 @@ public final class AbilityEvents {
                 SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.35f, 0.6f);
         world.sendParticles(ModParticles.CRIMSON_SMOKE.get(), victim.getX(), victim.getY() + 0.8, victim.getZ(),
                 8, 0.3, 0.4, 0.3, 0.03);
-        world.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, victim.getX(), victim.getY() + 0.8, victim.getZ(),
+        world.sendParticles(ModParticles.CRIMSON_SPARK.get(), victim.getX(), victim.getY() + 0.8, victim.getZ(),
                 6, 0.2, 0.3, 0.2, 0.05);
         // душа убитого стремится к игроку
         for (int k = 0; k < 8; k++) {

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -134,20 +133,18 @@ public final class AscensionEffects {
 
         // слой 1: круг из рун и лучи света
         double spin = age * 0.05;
-        if (age % 2 == 0 && age < DETONATE + 18) {
-            ring(w, c, r, 30, spin, 0.08);
-            ring(w, c, r * 0.62, 20, -spin * 1.4, 0.08);
-            ring(w, c, r * 0.28, 10, spin * 2.0, 0.08);
-            if (age % 4 == 0) {
-                hexagram(w, c, r * 0.92, spin * 0.6);
-            }
+        if (age % 4 == 0 && age < DETONATE + 18) {
+            ring(w, c, r, Math.max(16, (int) (r * 2.5)), spin, 0.08);
+            ring(w, c, r * 0.62, Math.max(12, (int) (r * 1.6)), -spin * 1.4, 0.08);
+            ring(w, c, r * 0.28, 8, spin * 2.0, 0.08);
+            hexagram(w, c, r * 0.92, spin * 0.3);
         }
-        if (age % 3 == 0 && age < DETONATE + 8) {
-            beams(w, c, r, spin, age >= PULL_START ? 9 : 5);
+        if (age % 4 == 0 && age < DETONATE + 8) {
+            beams(w, c, r, spin * 0.4, age >= PULL_START ? 9 : 5);
         }
 
         // слой 2: дымная спираль внутрь
-        if (age < DETONATE) {
+        if (age < DETONATE && age % 2 == 0) {
             for (int arm = 0; arm < 3; arm++) {
                 double a = age * 0.22 + arm * (Math.PI * 2 / 3);
                 double rr = Math.max(1.0, r * 0.95 * (1.0 - age / (double) DETONATE));
@@ -162,14 +159,23 @@ public final class AscensionEffects {
             if (age % 2 == 0) {
                 pull(w, cast);
             }
-            w.sendParticles(ParticleTypes.REVERSE_PORTAL, c.x, c.y + 1.0, c.z, 6, 0.5, 1.0, 0.5, 0.25);
+            if (age % 2 == 0) {
+                for (int k = 0; k < 3; k++) {
+                    double a = w.random.nextDouble() * Math.PI * 2;
+                    double e = (w.random.nextDouble() - 0.5) * 1.6;
+                    double dx = Math.cos(a) * Math.cos(e);
+                    double dy = Math.sin(e);
+                    double dz = Math.sin(a) * Math.cos(e);
+                    spark(w, c.x + dx * 1.8, c.y + 1.0 + dy * 1.8, c.z + dz * 1.8, -dx * 0.14, -dy * 0.14, -dz * 0.14);
+                }
+            }
         }
 
         // слой 4: взрыв и ударные волны
         if (age == DETONATE) {
             detonate(server, w, cast);
         }
-        if (age > DETONATE && age <= DETONATE + 16) {
+        if (age > DETONATE && age <= DETONATE + 16 && age % 2 == 0) {
             shockwave(w, c, r * (age - DETONATE) / 16.0);
         }
     }
@@ -188,56 +194,55 @@ public final class AscensionEffects {
         w.playSound(null, c.x, c.y, c.z, sound, SoundSource.PLAYERS, volume, pitch);
     }
 
-    /** Окружность из искр на земле. */
+    /** Окружность на земле: тонкая сплошная линия из касательных лучей и несколько искр, поднимающихся над ней. */
     private static void ring(ServerLevel w, Vec3 c, double radius, int points, double rot, double lift) {
-        for (int k = 0; k < points; k++) {
-            double a = rot + k * (Math.PI * 2 / points);
-            spark(w, c.x + Math.cos(a) * radius, c.y + 0.08, c.z + Math.sin(a) * radius, 0, lift * 0.3, 0);
+        RelicFx.beamCircle(w, new Vec3(c.x, c.y + 0.08, c.z), radius, points, rot);
+        for (int k = 0; k < 4; k++) {
+            double a = w.random.nextDouble() * Math.PI * 2;
+            spark(w, c.x + Math.cos(a) * radius, c.y + 0.08, c.z + Math.sin(a) * radius, 0, lift * 0.5, 0);
         }
     }
 
-    /** Гексаграмма: два вписанных треугольника. */
+    /** Гексаграмма: два вписанных треугольника, каждое ребро — один тонкий луч. */
     private static void hexagram(ServerLevel w, Vec3 c, double radius, double rot) {
         for (int tri = 0; tri < 2; tri++) {
             double base = rot + tri * Math.PI / 3;
             for (int edge = 0; edge < 3; edge++) {
                 double a0 = base + edge * (Math.PI * 2 / 3);
                 double a1 = base + (edge + 1) * (Math.PI * 2 / 3);
-                double x0 = c.x + Math.cos(a0) * radius;
-                double z0 = c.z + Math.sin(a0) * radius;
-                double x1 = c.x + Math.cos(a1) * radius;
-                double z1 = c.z + Math.sin(a1) * radius;
-                for (int s = 0; s < 9; s++) {
-                    double t = s / 9.0;
-                    spark(w, x0 + (x1 - x0) * t, c.y + 0.1, z0 + (z1 - z0) * t, 0, 0.02, 0);
-                }
+                Vec3 p0 = new Vec3(c.x + Math.cos(a0) * radius, c.y + 0.1, c.z + Math.sin(a0) * radius);
+                Vec3 p1 = new Vec3(c.x + Math.cos(a1) * radius, c.y + 0.1, c.z + Math.sin(a1) * radius);
+                RelicFx.beamBetween(w, p0, p1);
             }
         }
     }
 
-    /** Шесть багровых лучей света, бьющих вверх от вершин гексаграммы. */
+    /** Шесть тонких багровых лучей света, бьющих вверх от вершин гексаграммы. */
     private static void beams(ServerLevel w, Vec3 c, double radius, double rot, int segments) {
+        double height = segments * 1.3;
         for (int k = 0; k < 6; k++) {
-            double a = rot * 2 + k * (Math.PI / 3);
+            double a = rot + k * (Math.PI / 3);
             double x = c.x + Math.cos(a) * radius * 0.92;
             double z = c.z + Math.sin(a) * radius * 0.92;
-            for (int h = 0; h < segments; h++) {
-                double y = c.y + 0.3 + h * 1.3 + w.random.nextDouble() * 0.6;
-                spark(w, x + (w.random.nextDouble() - 0.5) * 0.15, y, z + (w.random.nextDouble() - 0.5) * 0.15, 0, 0.22, 0);
-            }
+            RelicFx.beam(w, x, c.y + 0.2 + height / 2, z, 0, 1, 0, height);
         }
     }
 
-    /** Расходящаяся ударная волна: кольцо искр и дыма на заданном радиусе. */
+    /** Расходящаяся ударная волна: тонкое кольцо лучей, искры и редкие клубы дыма на заданном радиусе. */
     private static void shockwave(ServerLevel w, Vec3 c, double radius) {
-        int points = Math.max(24, (int) (radius * 9));
+        if (radius < 0.5) {
+            return;
+        }
+        Vec3 level = new Vec3(c.x, c.y + 0.3, c.z);
+        RelicFx.beamCircle(w, level, radius, Math.max(12, (int) (radius * 2.5)), 0);
+        int points = Math.max(16, (int) (radius * 2.5));
         for (int k = 0; k < points; k++) {
             double a = k * (Math.PI * 2 / points);
             double dx = Math.cos(a);
             double dz = Math.sin(a);
             spark(w, c.x + dx * radius, c.y + 0.3, c.z + dz * radius, dx * 0.2, 0.05, dz * 0.2);
-            if (k % 2 == 0) {
-                smoke(w, c.x + dx * radius, c.y + 0.2, c.z + dz * radius, dx * 0.08, 0.1, dz * 0.08);
+            if (k % 4 == 0) {
+                smoke(w, c.x + dx * radius, c.y + 0.2, c.z + dz * radius, dx * 0.06, 0.06, dz * 0.06);
             }
         }
     }
@@ -292,16 +297,16 @@ public final class AscensionEffects {
             p.discard();
         }
 
-        // вспышка: клубы багрового дыма, фонтан искр, разрыв пространства
-        w.sendParticles(ModParticles.CRIMSON_SMOKE.get(), c.x, c.y + 0.5, c.z, 160, r * 0.12, 0.5, r * 0.12, 0.35);
-        w.sendParticles(ModParticles.CRIMSON_SPARK.get(), c.x, c.y + 1.0, c.z, 220, 0.4, 0.6, 0.4, 0.9);
-        w.sendParticles(ParticleTypes.SONIC_BOOM, c.x, c.y + 1.0, c.z, 1, 0, 0, 0, 0);
-        w.sendParticles(ParticleTypes.REVERSE_PORTAL, c.x, c.y + 1.0, c.z, 100, 0.6, 1.0, 0.6, 0.5);
-        w.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, c.x, c.y + 0.5, c.z, 60, r * 0.2, 0.3, r * 0.2, 0.15);
-        w.sendParticles(ParticleTypes.LARGE_SMOKE, c.x, c.y + 0.5, c.z, 50, r * 0.15, 0.4, r * 0.15, 0.2);
-        // вертикальная вспышка столбом
-        for (int h = 0; h < 40; h++) {
-            spark(w, c.x, c.y + h * 0.5, c.z, 0, 0.3, 0);
-        }
+        // вспышка: мягкое свечение, умеренные клубы дыма, искры и тонкие лучи
+        RelicFx.glow(w, c.x, c.y + 1.0, c.z);
+        RelicFx.glow(w, c.x, c.y + 1.2, c.z);
+        w.sendParticles(ModParticles.CRIMSON_SMOKE.get(), c.x, c.y + 0.5, c.z, 30, r * 0.1, 0.4, r * 0.1, 0.12);
+        w.sendParticles(ModParticles.CRIMSON_SPARK.get(), c.x, c.y + 1.0, c.z, 70, 0.4, 0.6, 0.4, 0.45);
+        w.sendParticles(ModParticles.CRIMSON_SPARK.get(), c.x, c.y + 0.5, c.z, 20, r * 0.15, 0.3, r * 0.15, 0.1);
+        w.sendParticles(ModParticles.CRIMSON_SMOKE.get(), c.x, c.y + 0.5, c.z, 14, r * 0.12, 0.3, r * 0.12, 0.08);
+        // вертикальные лучи столбом
+        RelicFx.beam(w, c.x, c.y + 10.0, c.z, 0, 1, 0, 20.0);
+        RelicFx.beam(w, c.x + 0.25, c.y + 7.0, c.z, 0, 1, 0, 14.0);
+        RelicFx.beam(w, c.x - 0.25, c.y + 7.0, c.z, 0, 1, 0, 14.0);
     }
 }

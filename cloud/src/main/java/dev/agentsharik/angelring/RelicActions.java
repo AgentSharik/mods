@@ -1,6 +1,5 @@
 package dev.agentsharik.angelring;
 
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,7 +36,7 @@ public final class RelicActions {
         world.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.9f, 0.8f);
         world.sendParticles(ModParticles.CRIMSON_SPARK.get(), player.getX(), player.getY() + 1.0, player.getZ(),
-                40, 0.5, 0.8, 0.5, 0.15);
+                24, 0.5, 0.8, 0.5, 0.15);
         player.displayClientMessage(Component.translatable("message.angelring.level_up", next.level()), true);
         for (RelicAbility ability : RelicAbility.values()) {
             if (ability.unlockLevel == next.level()) {
@@ -80,8 +79,8 @@ public final class RelicActions {
         ServerLevel world = player.serverLevel();
         world.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0f, 0.7f);
-        world.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, player.getX(), player.getY() + 1.0, player.getZ(),
-                20, 0.4, 0.6, 0.4, 0.05);
+        world.sendParticles(ModParticles.CRIMSON_SPARK.get(), player.getX(), player.getY() + 1.0, player.getZ(),
+                16, 0.4, 0.6, 0.4, 0.05);
     }
 
     /** Применение активной способности (она у кольца одна — «Багровое вознесение», открывается на 10 уровне). */

@@ -34,5 +34,8 @@ public final class ClientModEvents {
     public static void registerParticles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ModParticles.CRIMSON_SMOKE.get(), CrimsonSmokeParticle.Provider::new);
         event.registerSpriteSet(ModParticles.CRIMSON_SPARK.get(), CrimsonSparkParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.XP_ORB.get(), XpOrbParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.CRIMSON_GLOW.get(), CrimsonGlowParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.CRIMSON_BEAM.get(), CrimsonBeamParticle.Provider::new);
     }
 }

@@ -5,12 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import org.joml.Vector3f;
-
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -278,11 +274,11 @@ public final class RitualManager {
     // ------------------------------------------------------------------ визуальные эффекты
 
     private static void spark(ServerLevel w, double x, double y, double z, double vx, double vy, double vz) {
-        w.sendParticles(ModParticles.CRIMSON_SPARK.get(), x, y, z, 0, vx, vy, vz, 1.0);
+        RelicFx.spark(w, x, y, z, vx, vy, vz);
     }
 
     private static void smoke(ServerLevel w, double x, double y, double z, double vx, double vy, double vz) {
-        w.sendParticles(ModParticles.CRIMSON_SMOKE.get(), x, y, z, 0, vx, vy, vz, 1.0);
+        RelicFx.smoke(w, x, y, z, vx, vy, vz);
     }
 
     private static void sound(ServerLevel w, Vec3 p, SoundEvent sound, float volume, float pitch) {
@@ -292,10 +288,14 @@ public final class RitualManager {
     private static void effects(ServerLevel w, ServerPlayer owner, Ritual r, Vec3 ring, int age) {
         Vec3 top = r.top();
 
-        // след от кольца при вылете и снижении
+        // след от кольца при вылете и снижении: редкие искры и лёгкий дымок
         if (age < FLY_TICKS || age > FLASH_TICK) {
-            spark(w, ring.x, ring.y, ring.z, 0, 0.02, 0);
-            smoke(w, ring.x, ring.y, ring.z, 0, 0.02, 0);
+            if (age % 2 == 0) {
+                spark(w, ring.x, ring.y, ring.z, 0, 0.02, 0);
+            }
+            if (age % 5 == 0) {
+                smoke(w, ring.x, ring.y, ring.z, 0, 0.02, 0);
+            }
         }
 
         // звук: нарастающий гул, глухие удары
@@ -310,71 +310,69 @@ public final class RitualManager {
             sound(w, ring, SoundEvents.WITHER_SPAWN, 0.8f, 1.6f);
         }
 
-        // поток поглощения: сферы и искры от игрока в кольцо (густеет со временем)
+        // поток опыта: зелёно-жёлтые сферы вылетают из игрока и летят к кольцу; у кольца они вспыхивают багровым
         if (age >= 8 && age < FLASH_TICK) {
-            Vec3 from = owner != null ? owner.position().add(0, owner.getBbHeight() * 0.65, 0) : top;
-            int count = 2 + age / 18;
-            for (int i = 0; i < count; i++) {
-                double s = (age * 0.09 + i / (double) count) % 1.0;
-                double ease = s * s * (3 - 2 * s);
-                Vec3 p = from.lerp(ring, ease);
-                double sway = Math.sin(s * Math.PI) * 0.6;
-                double ang = age * 0.4 + i * 2.1;
-                double px = p.x + Math.cos(ang) * sway;
-                double py = p.y + Math.sin(ang * 0.8) * sway * 0.5;
-                double pz = p.z + Math.sin(ang) * sway;
-                w.sendParticles(new DustParticleOptions(new Vector3f(0.78f, 0.08f, 0.12f), 1.7f), px, py, pz, 1, 0, 0, 0, 0);
-                if (i % 2 == 0) {
-                    spark(w, px, py, pz, (ring.x - px) * 0.05, (ring.y - py) * 0.05, (ring.z - pz) * 0.05);
+            if (owner != null && age % 2 == 0) {
+                Vec3 from = owner.position().add(0, owner.getBbHeight() * 0.65, 0);
+                // целимся туда, где кольцо будет к моменту прилёта сферы
+                Vec3 target = ringPos(r, owner, Math.min(age + RelicFx.ORB_FLIGHT_TICKS, FLASH_TICK - 1));
+                int count = 1 + age / 45;
+                for (int i = 0; i < count; i++) {
+                    Vec3 start = from.add((w.random.nextDouble() - 0.5) * 0.5,
+                            (w.random.nextDouble() - 0.5) * 0.4, (w.random.nextDouble() - 0.5) * 0.5);
+                    Vec3 end = target.add((w.random.nextDouble() - 0.5) * 0.2,
+                            (w.random.nextDouble() - 0.5) * 0.2, (w.random.nextDouble() - 0.5) * 0.2);
+                    RelicFx.orb(w, start, end);
+                }
+            }
+            // поглощение кольцом: мелкие багровые искры вокруг него и редкий мягкий отблеск
+            if (age >= 8 + RelicFx.ORB_FLIGHT_TICKS) {
+                if (age % 3 == 0) {
+                    double a = w.random.nextDouble() * Math.PI * 2;
+                    spark(w, ring.x + Math.cos(a) * 0.15, ring.y + (w.random.nextDouble() - 0.5) * 0.2,
+                            ring.z + Math.sin(a) * 0.15, Math.cos(a) * 0.05, 0.02, Math.sin(a) * 0.05);
+                }
+                if (age % 12 == 0) {
+                    RelicFx.glow(w, ring.x, ring.y, ring.z);
                 }
             }
         }
 
-        // объёмные лучи света вокруг кольца и столб над ним
-        if (age >= 50 && age < FLASH_TICK) {
-            double spin = age * 0.06;
-            int beams = 8;
-            int perBeam = age < 110 ? 3 : 6;
+        // тонкие лучи света: столбы вокруг кольца и центральный луч над ним
+        if (age >= 50 && age < FLASH_TICK && age % 4 == 0) {
+            int beams = age < 110 ? 6 : 8;
+            double height = r.riseHeight + 6.0;
+            double len = 2.0 + (height - 2.0) * smooth((age - 50) / 40.0);
             for (int k = 0; k < beams; k++) {
-                double a = spin + k * (Math.PI * 2 / beams);
-                double x = top.x + Math.cos(a) * 1.6;
-                double z = top.z + Math.sin(a) * 1.6;
-                for (int h = 0; h < perBeam; h++) {
-                    double y = top.y - 0.3 + w.random.nextDouble() * (r.riseHeight + 6.0);
-                    spark(w, x, y, z, 0, 0.18, 0);
-                }
+                double a = Math.PI / 6 + k * (Math.PI * 2 / beams);
+                RelicFx.beam(w, top.x + Math.cos(a) * 1.6, top.y - 0.3 + len / 2, top.z + Math.sin(a) * 1.6,
+                        0, 1, 0, len);
             }
-            for (int h = 0; h < 4; h++) {
-                spark(w, ring.x, ring.y + w.random.nextDouble() * 9.0, ring.z, 0, 0.25, 0);
-            }
+            RelicFx.beam(w, ring.x, ring.y + 3.3, ring.z, 0, 1, 0, 7.0);
         }
 
-        // энергетические волны: расходящиеся кольца на высоте кольца
-        if (age >= 100 && age < FLASH_TICK && age % 8 == 0) {
-            for (int step = 1; step <= 6; step++) {
-                double rr = step * 0.9;
-                int points = 24 + step * 4;
-                for (int k = 0; k < points; k++) {
-                    double a = k * (Math.PI * 2 / points);
-                    double dx = Math.cos(a);
-                    double dz = Math.sin(a);
-                    spark(w, ring.x + dx * rr, ring.y, ring.z + dz * rr, dx * 0.12, 0.02, dz * 0.12);
-                }
-            }
+        // энергетические волны: тонкие расходящиеся кольца на высоте кольца
+        if (age >= 100 && age < FLASH_TICK && age % 10 == 0) {
+            RelicFx.sparkRing(w, ring, 0.5, 20, 0.2);
+            RelicFx.sparkRing(w, ring, 0.5, 14, 0.12);
         }
 
-        // лучи в стороны, как при гибели Дракона Края
+        // лучи в стороны, как при гибели Дракона Края: несколько тонких лучей за раз
         if (age >= 118 && age < FLASH_TICK) {
-            for (int ray = 0; ray < 6; ray++) {
-                double a = w.random.nextDouble() * Math.PI * 2;
-                double e = (w.random.nextDouble() - 0.35) * 1.2;
-                Vec3 dir = new Vec3(Math.cos(a) * Math.cos(e), Math.sin(e), Math.sin(a) * Math.cos(e));
-                for (int s = 1; s <= 10; s++) {
-                    spark(w, ring.x + dir.x * s * 0.8, ring.y + dir.y * s * 0.8, ring.z + dir.z * s * 0.8,
-                            dir.x * 0.25, dir.y * 0.25, dir.z * 0.25);
+            if (age % 3 == 0) {
+                for (int ray = 0; ray < 3; ray++) {
+                    double a = w.random.nextDouble() * Math.PI * 2;
+                    double e = (w.random.nextDouble() - 0.35) * 1.2;
+                    Vec3 dir = new Vec3(Math.cos(a) * Math.cos(e), Math.sin(e), Math.sin(a) * Math.cos(e));
+                    double len = 4.0 + w.random.nextDouble() * 3.0;
+                    double mid = 0.5 + len / 2;
+                    RelicFx.beam(w, ring.x + dir.x * mid, ring.y + dir.y * mid, ring.z + dir.z * mid,
+                            dir.x, dir.y, dir.z, len);
                 }
             }
-            smoke(w, ring.x, ring.y, ring.z, (w.random.nextDouble() - 0.5) * 0.2, 0.08, (w.random.nextDouble() - 0.5) * 0.2);
+            if (age % 4 == 0) {
+                smoke(w, ring.x, ring.y, ring.z, (w.random.nextDouble() - 0.5) * 0.1, 0.04, (w.random.nextDouble() - 0.5) * 0.1);
+            }
         }
     }
 
@@ -396,16 +394,23 @@ public final class RitualManager {
         ItemStack stack = makeFinalStack(w, r);
         r.ring = spawnRing(w, pos, stack);
 
-        // вспышка: клубы багрового дыма, фонтан искр, разрыв пространства, гром
-        w.sendParticles(ModParticles.CRIMSON_SMOKE.get(), pos.x, pos.y, pos.z, 180, 0.4, 0.4, 0.4, 0.4);
-        w.sendParticles(ModParticles.CRIMSON_SPARK.get(), pos.x, pos.y, pos.z, 260, 0.3, 0.3, 0.3, 1.0);
-        w.sendParticles(ParticleTypes.REVERSE_PORTAL, pos.x, pos.y, pos.z, 120, 0.5, 0.5, 0.5, 0.6);
-        w.sendParticles(ParticleTypes.SONIC_BOOM, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);
-        w.sendParticles(ParticleTypes.LARGE_SMOKE, pos.x, pos.y, pos.z, 60, 0.4, 0.4, 0.4, 0.15);
-        w.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, pos.x, pos.y, pos.z, 60, 0.4, 0.4, 0.4, 0.2);
-        for (int h = 0; h < 50; h++) {
-            spark(w, pos.x, pos.y + h * 0.4, pos.z, 0, 0.35, 0);
+        // вспышка: мягкое свечение, умеренные клубы дыма, искры, ударные кольца и тонкие лучи
+        RelicFx.glow(w, pos.x, pos.y, pos.z);
+        RelicFx.glow(w, pos.x, pos.y + 0.2, pos.z);
+        w.sendParticles(ModParticles.CRIMSON_SMOKE.get(), pos.x, pos.y, pos.z, 26, 0.3, 0.3, 0.3, 0.1);
+        w.sendParticles(ModParticles.CRIMSON_SPARK.get(), pos.x, pos.y, pos.z, 60, 0.2, 0.2, 0.2, 0.35);
+        RelicFx.sparkRing(w, pos, 0.4, 28, 0.3);
+        RelicFx.sparkRing(w, pos, 0.4, 20, 0.16);
+        for (int k = 0; k < 10; k++) {
+            double a = w.random.nextDouble() * Math.PI * 2;
+            double e = (w.random.nextDouble() - 0.35) * 1.2;
+            Vec3 dir = new Vec3(Math.cos(a) * Math.cos(e), Math.sin(e), Math.sin(a) * Math.cos(e));
+            double len = 3.0 + w.random.nextDouble() * 3.0;
+            double mid = 0.4 + len / 2;
+            RelicFx.beam(w, pos.x + dir.x * mid, pos.y + dir.y * mid, pos.z + dir.z * mid, dir.x, dir.y, dir.z, len);
         }
+        RelicFx.beam(w, pos.x, pos.y + 5.0, pos.z, 0, 1, 0, 10.0);
+        RelicFx.beam(w, pos.x, pos.y - 1.5, pos.z, 0, 1, 0, 3.0);
         sound(w, pos, SoundEvents.ENDER_DRAGON_DEATH, 1.2f, 0.9f);
         sound(w, pos, SoundEvents.WARDEN_SONIC_BOOM, 2.5f, 0.7f);
         sound(w, pos, SoundEvents.LIGHTNING_BOLT_THUNDER, 3.0f, 0.6f);
@@ -434,7 +439,7 @@ public final class RitualManager {
             drop.setTarget(r.owner);
             w.addFreshEntity(drop);
         }
-        w.sendParticles(ModParticles.CRIMSON_SPARK.get(), pos.x, pos.y, pos.z, 40, 0.3, 0.3, 0.3, 0.3);
+        w.sendParticles(ModParticles.CRIMSON_SPARK.get(), pos.x, pos.y, pos.z, 16, 0.3, 0.3, 0.3, 0.3);
 
         if (owner != null) {
             AdvancementHolder advancement = server.getAdvancements().get(ADVANCEMENT_ID);
