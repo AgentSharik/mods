@@ -22,5 +22,28 @@
   "result": {
     "id": "fallenrelics:awakened_ring",
     "count": 1
+  },
+  "criteria": {
+    "has_ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:glowstone_dust",
+              "minecraft:ghast_tear",
+              "minecraft:nether_star",
+              "fallenrelics:glide_ring"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "fallenrelics:awakened_ring"
+      }
+    }
   }
 }

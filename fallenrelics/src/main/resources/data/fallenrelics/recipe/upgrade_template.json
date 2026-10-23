@@ -19,5 +19,27 @@
   "result": {
     "id": "fallenrelics:upgrade_template",
     "count": 1
+  },
+  "criteria": {
+    "has_ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:stone",
+              "minecraft:redstone",
+              "minecraft:brick"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "fallenrelics:upgrade_template"
+      }
+    }
   }
 }

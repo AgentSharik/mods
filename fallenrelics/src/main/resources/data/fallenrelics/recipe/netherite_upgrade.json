@@ -19,5 +19,27 @@
   "result": {
     "id": "fallenrelics:netherite_upgrade",
     "count": 1
+  },
+  "criteria": {
+    "has_ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:netherite_ingot",
+              "minecraft:redstone",
+              "fallenrelics:diamond_upgrade"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "fallenrelics:netherite_upgrade"
+      }
+    }
   }
 }

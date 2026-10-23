@@ -19,5 +19,27 @@
   "result": {
     "id": "fallenrelics:diamond_upgrade",
     "count": 1
+  },
+  "criteria": {
+    "has_ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:diamond",
+              "minecraft:redstone",
+              "fallenrelics:gold_upgrade"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "fallenrelics:diamond_upgrade"
+      }
+    }
   }
 }
