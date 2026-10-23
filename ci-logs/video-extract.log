@@ -1,14 +1,15 @@
 ffmpeg log tail:
-[swscaler @ 0x55bdc5198ac0] deprecated pixel format used, make sure you did set range correctly
-[swscaler @ 0x55bdc5791b40] deprecated pixel format used, make sure you did set range correctly
-    Last message repeated 2 times
+[swscaler @ 0x564ac4ab9e40] deprecated pixel format used, make sure you did set range correctly
+[swscaler @ 0x564ac4fe8fc0] deprecated pixel format used, make sure you did set range correctly
+[swscaler @ 0x564ac4fe8f80] deprecated pixel format used, make sure you did set range correctly
+    Last message repeated 1 times
 frames dir:
-total 7456
-drwxr-xr-x 2 runner runner  4096 Oct 23 11:31 .
-drwxr-xr-x 6 runner runner  4096 Oct 23 11:31 ..
--rw-r--r-- 1 runner runner 67380 Oct 23 11:31 0001.jpg
--rw-r--r-- 1 runner runner 65723 Oct 23 11:31 0002.jpg
--rw-r--r-- 1 runner runner 64844 Oct 23 11:31 0003.jpg
--rw-r--r-- 1 runner runner 56435 Oct 23 11:31 0004.jpg
--rw-r--r-- 1 runner runner 68636 Oct 23 11:31 0005.jpg
-7.3M	frames/r5clade
+total 2844
+drwxr-xr-x 2 runner runner  4096 Oct 23 11:42 .
+drwxr-xr-x 7 runner runner  4096 Oct 23 11:42 ..
+-rw-r--r-- 1 runner runner 57711 Oct 23 11:42 0001.jpg
+-rw-r--r-- 1 runner runner 55417 Oct 23 11:42 0002.jpg
+-rw-r--r-- 1 runner runner 49406 Oct 23 11:42 0003.jpg
+-rw-r--r-- 1 runner runner 56070 Oct 23 11:42 0004.jpg
+-rw-r--r-- 1 runner runner 52027 Oct 23 11:42 0005.jpg
+2.8M	frames/r5mine
