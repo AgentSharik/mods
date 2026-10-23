@@ -25,5 +25,29 @@
   "result": {
     "id": "fallenrelics:craft_builder",
     "count": 1
+  },
+  "criteria": {
+    "has_ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:diamond_block",
+              "minecraft:redstone_block",
+              "minecraft:crafting_table",
+              "fallenrelics:diamond_upgrade",
+              "minecraft:furnace"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "fallenrelics:craft_builder"
+      }
+    }
   }
 }

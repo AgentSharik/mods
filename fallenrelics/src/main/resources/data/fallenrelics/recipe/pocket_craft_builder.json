@@ -15,5 +15,26 @@
   "result": {
     "id": "fallenrelics:pocket_craft_builder",
     "count": 1
+  },
+  "criteria": {
+    "has_ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "fallenrelics:craft_builder",
+              "minecraft:stick"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "fallenrelics:pocket_craft_builder"
+      }
+    }
   }
 }

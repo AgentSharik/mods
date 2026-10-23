@@ -19,5 +19,27 @@
   "result": {
     "id": "fallenrelics:iron_upgrade",
     "count": 1
+  },
+  "criteria": {
+    "has_ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:iron_ingot",
+              "minecraft:redstone",
+              "fallenrelics:upgrade_template"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "fallenrelics:iron_upgrade"
+      }
+    }
   }
 }
