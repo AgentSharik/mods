@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.28: возвращён обычный шрифт; Simply Swords больше не дублирует стандартные наборы глифов. Поверх v1.1.27.
+# v1.1.29: из скрипта возврата шрифта удалён запрещённый KubeJS java.io.File. Поверх v1.1.28.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.28'
+        default: 'StoneBlock4-ru-v1.1.29'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.28' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.29' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -69,7 +69,7 @@ jobs:
           test -f pkg/kubejs/assets/ftb/lang/ru_ru.json
           test -f pkg/kubejs/client_scripts/ru_unicode_font.js
           node --check pkg/kubejs/client_scripts/ru_unicode_font.js
-          echo "Проверка: скрипт однократного восстановления обычного шрифта присутствует, синтаксис корректен"
+          echo "Проверка: скрипт восстановления обычного шрифта без файлового API присутствует, синтаксис корректен"
           test -f pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru/items/automating_recipes.md
           test "$(find pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru -name '*.md' | wc -l)" -eq 4
           echo "Проверка: 4 русские страницы гайда Oritech присутствуют"
@@ -104,8 +104,12 @@ jobs:
           restore_font = open('pkg/kubejs/client_scripts/ru_unicode_font.js', encoding='utf-8').read()
           assert 'forceUnicode.set(false)' in restore_font
           assert 'forceUnicode.set(true)' not in restore_font
-          assert '$restoreMarker.createNewFile()' in restore_font
-          print('Проверка: обычный шрифт восстанавливается однократно, включение Unicode удалено')
+          assert 'java.io.File' not in restore_font
+          assert restore_font.count('Java.loadClass(') == 1
+          assert "Java.loadClass('net.minecraft.client.Minecraft')" in restore_font
+          assert 'createNewFile' not in restore_font
+          assert 'let restoreDefaultFont = true' in restore_font
+          print('Проверка: обычный шрифт восстанавливается без файлового API и включения Unicode')
           with zipfile.ZipFile('pkg/mods/oritech-neoforge-1.21.1-1.2.13.jar') as z:
               designs = z.read('assets/oracle_index/books/oritech/translated/ru_ru/docs/reactor/designs.mdx').decode()
               redstone = z.read('assets/oracle_index/books/oritech/translated/ru_ru/content/resources/world/resource_node_redstone.mdx').decode()
