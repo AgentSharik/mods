@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.29: из скрипта возврата шрифта удалён запрещённый KubeJS java.io.File. Поверх v1.1.28.
+# v1.1.30: откат к v1.1.26; английские надписи только в окне выбора уровня мира Apotheosis, скрипт шрифта отключён.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.29'
+        default: 'StoneBlock4-ru-v1.1.30'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.29' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.30' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -69,13 +69,12 @@ jobs:
           test -f pkg/kubejs/assets/ftb/lang/ru_ru.json
           test -f pkg/kubejs/client_scripts/ru_unicode_font.js
           node --check pkg/kubejs/client_scripts/ru_unicode_font.js
-          echo "Проверка: скрипт восстановления обычного шрифта без файлового API присутствует, синтаксис корректен"
+          echo "Проверка: старый скрипт шрифта перезаписан отключённым файлом"
           test -f pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru/items/automating_recipes.md
           test "$(find pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru -name '*.md' | wc -l)" -eq 4
           echo "Проверка: 4 русские страницы гайда Oritech присутствуют"
           python3 - <<'PY'
-          import json
-          import zipfile
+          import zipfile, json
           with zipfile.ZipFile('pkg/mods/sg_economy-1.0.5.jar') as z:
               data = z.read('net/sirgrantd/sg_economy/command/EconomyCommand.class')
           assert '§aВы отправили %s %s игроку %s.'.encode() in data
@@ -85,31 +84,51 @@ jobs:
           print('Проверка: зашитые сообщения SG Economy переведены')
           with zipfile.ZipFile('pkg/mods/Apotheosis-1.21.1-8.9.0.jar') as z:
               world_tier = z.read('dev/shadowsoffire/apotheosis/client/WorldTierSelectScreen.class')
+              en = json.loads(z.read('assets/apotheosis/lang/en_us.json'))
+              ru = json.loads(z.read('assets/apotheosis/lang/ru_ru.json'))
           assert world_tier.count(bytes([0x10, 100, 0x10, 24])) == 1
           assert world_tier.count(bytes([0x10, 127, 0x10, 20])) == 1
           assert bytes([0x10, 60, 0x10, 24]) not in world_tier
           assert bytes([0x10, 80, 0x10, 20]) not in world_tier
-          print('Проверка: кнопки уровня мира Apotheosis расширены для русского текста')
+          print('Проверка: размеры кнопок Apotheosis из v1.1.26 сохранены')
+          tiers = ('haven', 'frontier', 'ascent', 'summit', 'pinnacle')
+          english_keys = {
+              'title.apotheosis.select_world_tier',
+              'text.apotheosis.world_tier.difficulty',
+              *(f'text.apotheosis.world_tier.{tier}' for tier in tiers),
+              *(f'text.apotheosis.world_tier.{tier}.desc' for tier in tiers),
+              *(f'button.apotheosis.{tier}' for tier in tiers),
+              'button.apotheosis.tier_locked',
+              'button.apotheosis.tier_advancement',
+              'button.apotheosis.activate_tier',
+              'button.apotheosis.already_activated',
+              'button.apotheosis.activate',
+              'button.apotheosis.activated',
+              'button.apotheosis.disabled',
+              'button.apotheosis.tier_changes_disabled',
+              'button.apotheosis.show_detailed_info',
+              'button.apotheosis.show_detailed_info.desc',
+              'button.apotheosis.inactive',
+              'button.apotheosis.locked',
+              'button.apotheosis.open_world_tier_tutorial',
+          }
+          assert len(english_keys) == 30
+          assert all(ru[key] == en[key] for key in english_keys)
+          assert ru['title.apotheosis.world_tier_details'] != en['title.apotheosis.world_tier_details']
+          assert ru['text.apotheosis.world_tier_tutorial'] != en['text.apotheosis.world_tier_tutorial']
+          print('Проверка: 30 надписей окна выбора уровня мира английские, остальной перевод Apotheosis сохранён')
+          disabled_font = open('pkg/kubejs/client_scripts/ru_unicode_font.js', encoding='utf-8').read()
+          assert 'Java.loadClass' not in disabled_font
+          assert 'ClientEvents.' not in disabled_font
+          assert 'forceUnicode' not in disabled_font
+          assert 'java.io.File' not in disabled_font
+          print('Проверка: скрипт шрифта отключён и не изменяет настройки Minecraft')
           with zipfile.ZipFile('pkg/mods/simplyswords-neoforge-1.70.2-1.21.1.jar') as z:
               font = json.loads(z.read('assets/minecraft/font/default.json'))
-              names = set(z.namelist())
-          providers = font['providers']
-          assert len(providers) == 11
-          assert all(p['type'] == 'bitmap' for p in providers)
-          assert not any(p['type'] == 'reference' for p in providers)
-          for provider in providers:
-              texture = 'assets/' + provider['file'].replace(':', '/textures/', 1)
-              assert texture in names, texture
-          print('Проверка: Simply Swords не дублирует шрифт Minecraft; 11 иконок сохранены')
-          restore_font = open('pkg/kubejs/client_scripts/ru_unicode_font.js', encoding='utf-8').read()
-          assert 'forceUnicode.set(false)' in restore_font
-          assert 'forceUnicode.set(true)' not in restore_font
-          assert 'java.io.File' not in restore_font
-          assert restore_font.count('Java.loadClass(') == 1
-          assert "Java.loadClass('net.minecraft.client.Minecraft')" in restore_font
-          assert 'createNewFile' not in restore_font
-          assert 'let restoreDefaultFont = true' in restore_font
-          print('Проверка: обычный шрифт восстанавливается без файлового API и включения Unicode')
+          references = [p.get('id') for p in font['providers'] if p.get('type') == 'reference']
+          assert references == ['minecraft:include/space', 'minecraft:include/default', 'minecraft:include/unifont']
+          assert len(font['providers']) == 14
+          print('Проверка: Simply Swords восстановлен к состоянию v1.1.26')
           with zipfile.ZipFile('pkg/mods/oritech-neoforge-1.21.1-1.2.13.jar') as z:
               designs = z.read('assets/oracle_index/books/oritech/translated/ru_ru/docs/reactor/designs.mdx').decode()
               redstone = z.read('assets/oracle_index/books/oritech/translated/ru_ru/content/resources/world/resource_node_redstone.mdx').decode()
@@ -141,7 +160,7 @@ jobs:
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/oritech/guides/oritech/guide/_ru_ru/items/automating_recipes.md"
           echo "Проверка: lang и гайд Oritech присутствуют в архиве"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/client_scripts/ru_unicode_font.js"
-          echo "Проверка: скрипт восстановления обычного шрифта включён в архив"
+          echo "Проверка: отключённый скрипт шрифта включён в архив для перезаписи старого"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/startup_scripts/ru_echo_sounds.js"
           test "$(grep -c "event.create('ftb:ru_ru/" ../pkg/kubejs/startup_scripts/ru_echo_sounds.js)" -eq 38
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/sounds.json"
