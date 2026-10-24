@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.25: Leaderboards, Status Effect Bars и Synesthesia перенесены из проекта и архива StoneBlock 4 в отдельные моды. Поверх v1.1.24.
+# v1.1.26: повторно применён к Apotheosis 8.9.0 патч ширины кнопок уровня мира, потерянный при обновлении с 8.8.0. Поверх v1.1.25.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.25'
+        default: 'StoneBlock4-ru-v1.1.26'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.25' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.26' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -79,6 +79,13 @@ jobs:
           assert b'You sent %s %s to %s.' not in data
           assert b'You received %s %s from %s.' not in data
           print('Проверка: зашитые сообщения SG Economy переведены')
+          with zipfile.ZipFile('pkg/mods/Apotheosis-1.21.1-8.9.0.jar') as z:
+              world_tier = z.read('dev/shadowsoffire/apotheosis/client/WorldTierSelectScreen.class')
+          assert world_tier.count(bytes([0x10, 100, 0x10, 24])) == 1
+          assert world_tier.count(bytes([0x10, 127, 0x10, 20])) == 1
+          assert bytes([0x10, 60, 0x10, 24]) not in world_tier
+          assert bytes([0x10, 80, 0x10, 20]) not in world_tier
+          print('Проверка: кнопки уровня мира Apotheosis расширены для русского текста')
           with zipfile.ZipFile('pkg/mods/oritech-neoforge-1.21.1-1.2.13.jar') as z:
               designs = z.read('assets/oracle_index/books/oritech/translated/ru_ru/docs/reactor/designs.mdx').decode()
               redstone = z.read('assets/oracle_index/books/oritech/translated/ru_ru/content/resources/world/resource_node_redstone.mdx').decode()
