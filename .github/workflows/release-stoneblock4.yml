@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.30: откат к v1.1.26; английские надписи только в окне выбора уровня мира Apotheosis, скрипт шрифта отключён.
+# v1.1.31: русский перевод окна выбора уровня мира Apotheosis со стандартным шрифтом; исполняемый скрипт шрифта не используется.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.30'
+        default: 'StoneBlock4-ru-v1.1.31'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.30' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.31' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -91,32 +91,43 @@ jobs:
           assert bytes([0x10, 60, 0x10, 24]) not in world_tier
           assert bytes([0x10, 80, 0x10, 20]) not in world_tier
           print('Проверка: размеры кнопок Apotheosis из v1.1.26 сохранены')
-          tiers = ('haven', 'frontier', 'ascent', 'summit', 'pinnacle')
-          english_keys = {
-              'title.apotheosis.select_world_tier',
-              'text.apotheosis.world_tier.difficulty',
-              *(f'text.apotheosis.world_tier.{tier}' for tier in tiers),
-              *(f'text.apotheosis.world_tier.{tier}.desc' for tier in tiers),
-              *(f'button.apotheosis.{tier}' for tier in tiers),
-              'button.apotheosis.tier_locked',
-              'button.apotheosis.tier_advancement',
-              'button.apotheosis.activate_tier',
-              'button.apotheosis.already_activated',
-              'button.apotheosis.activate',
-              'button.apotheosis.activated',
-              'button.apotheosis.disabled',
-              'button.apotheosis.tier_changes_disabled',
-              'button.apotheosis.show_detailed_info',
-              'button.apotheosis.show_detailed_info.desc',
-              'button.apotheosis.inactive',
-              'button.apotheosis.locked',
-              'button.apotheosis.open_world_tier_tutorial',
+          russian = {
+              'title.apotheosis.select_world_tier': 'Выбор уровня мира',
+              'text.apotheosis.world_tier.haven': 'Прибежище',
+              'text.apotheosis.world_tier.haven.desc': 'Начало вашего пути',
+              'text.apotheosis.world_tier.frontier': 'Рубеж',
+              'text.apotheosis.world_tier.frontier.desc': 'Отправляйтесь в опасный мир',
+              'text.apotheosis.world_tier.ascent': 'Подъём',
+              'text.apotheosis.world_tier.ascent.desc': 'Начните восхождение к могуществу',
+              'text.apotheosis.world_tier.summit': 'Вершина',
+              'text.apotheosis.world_tier.summit.desc': 'Вы достигли вершины, но это ещё не конец',
+              'text.apotheosis.world_tier.pinnacle': 'Пик',
+              'text.apotheosis.world_tier.pinnacle.desc': 'Затеряйтесь среди грозовых горных вершин',
+              'text.apotheosis.world_tier.difficulty': 'Сложность:',
+              'button.apotheosis.haven': 'Прибежище',
+              'button.apotheosis.frontier': 'Рубеж',
+              'button.apotheosis.ascent': 'Подъём',
+              'button.apotheosis.summit': 'Вершина',
+              'button.apotheosis.pinnacle': 'Пик',
+              'button.apotheosis.tier_locked': '%s (заблокировано)',
+              'button.apotheosis.tier_advancement': 'Выполните достижение %s, чтобы разблокировать.',
+              'button.apotheosis.activate_tier': 'Активировать уровень мира: %s',
+              'button.apotheosis.already_activated': 'Этот уровень мира сейчас активен',
+              'button.apotheosis.activate': 'Активировать',
+              'button.apotheosis.activated': 'Активировано',
+              'button.apotheosis.disabled': 'Отключено',
+              'button.apotheosis.tier_changes_disabled': 'Ручное изменение уровней мира отключено в настройках.',
+              'button.apotheosis.show_detailed_info': 'Подробности',
+              'button.apotheosis.show_detailed_info.desc': 'Просмотр усилений существ, усилений игроков и редкостей',
+              'button.apotheosis.inactive': 'Неактивно',
+              'button.apotheosis.locked': 'Этот уровень мира заблокирован',
+              'button.apotheosis.open_world_tier_tutorial': 'Открыть обучение по уровням мира',
           }
-          assert len(english_keys) == 30
-          assert all(ru[key] == en[key] for key in english_keys)
+          assert len(russian) == 30
+          assert all(ru[key] == value for key, value in russian.items())
           assert ru['title.apotheosis.world_tier_details'] != en['title.apotheosis.world_tier_details']
           assert ru['text.apotheosis.world_tier_tutorial'] != en['text.apotheosis.world_tier_tutorial']
-          print('Проверка: 30 надписей окна выбора уровня мира английские, остальной перевод Apotheosis сохранён')
+          print('Проверка: 30 надписей окна выбора уровня мира переведены, остальной перевод Apotheosis сохранён')
           disabled_font = open('pkg/kubejs/client_scripts/ru_unicode_font.js', encoding='utf-8').read()
           assert 'Java.loadClass' not in disabled_font
           assert 'ClientEvents.' not in disabled_font
@@ -125,10 +136,15 @@ jobs:
           print('Проверка: скрипт шрифта отключён и не изменяет настройки Minecraft')
           with zipfile.ZipFile('pkg/mods/simplyswords-neoforge-1.70.2-1.21.1.jar') as z:
               font = json.loads(z.read('assets/minecraft/font/default.json'))
-          references = [p.get('id') for p in font['providers'] if p.get('type') == 'reference']
-          assert references == ['minecraft:include/space', 'minecraft:include/default', 'minecraft:include/unifont']
-          assert len(font['providers']) == 14
-          print('Проверка: Simply Swords восстановлен к состоянию v1.1.26')
+              names = set(z.namelist())
+          providers = font['providers']
+          assert len(providers) == 11
+          assert all(p['type'] == 'bitmap' for p in providers)
+          assert not any(p['type'] == 'reference' for p in providers)
+          for provider in providers:
+              texture = 'assets/' + provider['file'].replace(':', '/textures/', 1)
+              assert texture in names, texture
+          print('Проверка: Simply Swords не дублирует стандартный шрифт; 11 иконок сохранены')
           with zipfile.ZipFile('pkg/mods/oritech-neoforge-1.21.1-1.2.13.jar') as z:
               designs = z.read('assets/oracle_index/books/oritech/translated/ru_ru/docs/reactor/designs.mdx').decode()
               redstone = z.read('assets/oracle_index/books/oritech/translated/ru_ru/content/resources/world/resource_node_redstone.mdx').decode()
