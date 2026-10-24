@@ -1,20 +1,25 @@
-// Apotheosis: русский текст может исчезать при использовании стандартного
-// растрового шрифта. Подтверждённый workaround — Force Unicode Font:
-// https://github.com/Shadows-of-Fire/Apotheosis/issues/1756
-// https://github.com/Shadows-of-Fire/Apotheosis/issues/1808
+// Миграция с v1.1.27: возвращаем обычный шрифт после неудачного
+// автоматического включения Force Unicode Font. Имя файла сохранено,
+// чтобы при обновлении перезаписать прошлый вариант скрипта.
 //
-// Не заменяем options.txt игрока. Меняем только forceUnicodeFont через
-// штатный OptionInstance: Minecraft сам обновляет шрифт и размер интерфейса.
+// Отключение выполняется только один раз. После этого игрок может сам
+// включать или выключать Unicode-шрифт — скрипт больше не вмешивается.
 const $Minecraft = Java.loadClass('net.minecraft.client.Minecraft')
+const $File = Java.loadClass('java.io.File')
+const $restoreMarker = new $File('kubejs/data/stoneblock4_default_font_restored.marker')
 
 ClientEvents.loggedIn(event => {
+  if ($restoreMarker.exists()) return
+
   const options = $Minecraft.getInstance().options
-  if (String(options.languageCode) !== 'ru_ru') return
-
   const forceUnicode = options.forceUnicodeFont()
-  if (forceUnicode.get()) return
+  if (forceUnicode.get()) {
+    forceUnicode.set(false)
+    options.save()
+    console.log('[StoneBlock 4 RU] Восстановлен обычный шрифт Minecraft.')
+  }
 
-  forceUnicode.set(true)
-  options.save()
-  console.log('[StoneBlock 4 RU] Force Unicode Font включён для русского языка.')
+  const parent = $restoreMarker.getParentFile()
+  if (parent !== null) parent.mkdirs()
+  $restoreMarker.createNewFile()
 })
