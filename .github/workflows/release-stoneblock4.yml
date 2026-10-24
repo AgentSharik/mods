@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.26: повторно применён к Apotheosis 8.9.0 патч ширины кнопок уровня мира, потерянный при обновлении с 8.8.0. Поверх v1.1.25.
+# v1.1.27: клиентский KubeJS-скрипт включает Unicode-шрифт для русского UI Apotheosis. Поверх v1.1.26.
 # Срабатывает на push в релизную ветку при изменении этого файла или
 # файла установки; также можно запустить вручную с ветки по умолчанию.
 on:
@@ -10,7 +10,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.26'
+        default: 'StoneBlock4-ru-v1.1.27'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -28,7 +28,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.26' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.27' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -67,6 +67,9 @@ jobs:
           echo "JAR в архиве: $(ls pkg/mods/*.jar | wc -l)"
           echo "Файлов kubejs в архиве: $(find pkg/kubejs -type f | wc -l)"
           test -f pkg/kubejs/assets/ftb/lang/ru_ru.json
+          test -f pkg/kubejs/client_scripts/ru_unicode_font.js
+          node --check pkg/kubejs/client_scripts/ru_unicode_font.js
+          echo "Проверка: клиентский скрипт Unicode-шрифта присутствует, синтаксис корректен"
           test -f pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru/items/automating_recipes.md
           test "$(find pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru -name '*.md' | wc -l)" -eq 4
           echo "Проверка: 4 русские страницы гайда Oritech присутствуют"
@@ -116,6 +119,8 @@ jobs:
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/lang/ru_ru.json"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/oritech/guides/oritech/guide/_ru_ru/items/automating_recipes.md"
           echo "Проверка: lang и гайд Oritech присутствуют в архиве"
+          unzip -l ../StoneBlock.4.zip | grep -q "kubejs/client_scripts/ru_unicode_font.js"
+          echo "Проверка: скрипт Unicode-шрифта включён в архив"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/startup_scripts/ru_echo_sounds.js"
           test "$(grep -c "event.create('ftb:ru_ru/" ../pkg/kubejs/startup_scripts/ru_echo_sounds.js)" -eq 38
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/sounds.json"
