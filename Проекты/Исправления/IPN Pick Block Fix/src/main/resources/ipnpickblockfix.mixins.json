@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "com.agentsharik.ipnpickblockfix",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "LockedSlotKeeperMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
