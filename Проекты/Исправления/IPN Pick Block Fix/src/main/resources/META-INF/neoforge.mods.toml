@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/AgentSharik/mods/issues"
 
 [[mods]]
 modId="ipnpickblockfix"
-version="1.0.0"
+version="1.0.1"
 displayName="IPN Pick Block Fix"
 authors="StoneBlock 4 RU"
 displayTest="IGNORE_SERVER_VERSION"

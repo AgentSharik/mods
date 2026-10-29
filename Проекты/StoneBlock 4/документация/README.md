@@ -79,7 +79,7 @@ Force Unicode не используется. `release/kubejs/client_scripts/ru_u
 
 ## IPN и pick-block
 
-С v1.1.33 архив включает официальные `InventoryProfilesNext-neoforge-1.21.1-2.2.5.jar`, `libIPN-neoforge-1.21.1-6.6.3.jar` и `IPN-PickBlock-Fix-neoforge-1.21.1-1.0.0.jar`. Фикс отключает только проблемный вызов `LockedSlotKeeper.ignoredSelectedHotbarSlot(I)V`, не меняя vanilla pick-block. Эти три JAR предназначены для клиента; на сервер их устанавливать не нужно. Они не входят в статистику 411 переведённых JAR.
+С v1.1.34 архив включает официальные `InventoryProfilesNext-neoforge-1.21.1-2.2.5.jar`, `libIPN-neoforge-1.21.1-6.6.3.jar` и `IPN-PickBlock-Fix-neoforge-1.21.1-1.0.1.jar`. Фикс отключает только проблемный вызов `LockedSlotKeeper.ignoredSelectedHotbarSlot(I)V`, не меняя vanilla pick-block. Эти три JAR предназначены для клиента; на сервер их устанавливать не нужно. Они не входят в статистику 411 переведённых JAR.
 
 ## Книга DimDungeons
 
@@ -122,6 +122,7 @@ Force Unicode не используется. `release/kubejs/client_scripts/ru_u
 | v1.1.30 | откат изменений шрифтов v1.1.27–v1.1.29 к состоянию v1.1.26; окно выбора уровня мира Apotheosis оставлено с английскими надписями |
 | v1.1.31 | русский перевод окна выбора уровня мира Apotheosis со стандартным шрифтом; Simply Swords не дублирует стандартные наборы глифов |
 | v1.1.32 | русская книга DimDungeons: две страницы Колокола Секретов переведены на data components вместо устаревшего NBT |
-| v1.1.33 | IPN 2.2.5, libIPN 6.6.3 и фикс краша pick-block добавлены непосредственно в `mods` ZIP-архива |
+| v1.1.33 | IPN 2.2.5, libIPN 6.6.3 и фикс pick-block добавлены в ZIP; фикс 1.0.0 вызывал MixinApply при запуске и заменён в v1.1.34 |
+| v1.1.34 | фикс IPN 1.0.1: аннотация `@Mixin` записана в `RuntimeInvisibleAnnotations`, как требует её `RetentionPolicy.CLASS` |
 
 Подробная история работ по датам (журналы и аудиты) — в папке [архив](архив/).

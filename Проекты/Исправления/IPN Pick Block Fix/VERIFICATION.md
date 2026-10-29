@@ -1,6 +1,12 @@
-# Проверка IPN Pick Block Fix 1.0.0
+# Проверка IPN Pick Block Fix 1.0.1
 
 Дата: 2026-10-29.
+
+## Исправление запуска после 1.0.0
+
+Игровой `stderr_stream.log` показал `MixinApplyError` во время `PREPARE`: `The mixin 'com.agentsharik.ipnpickblockfix.LockedSlotKeeperMixin' is missing an @Mixin annotation`.
+
+Причина найдена: `@Mixin` имеет `RetentionPolicy.CLASS`, но генератор 1.0.0 ошибочно записал её в `RuntimeVisibleAnnotations`. В 1.0.1 аннотация класса записана в `RuntimeInvisibleAnnotations`. `@Inject` имеет `RetentionPolicy.RUNTIME` и по-прежнему находится в `RuntimeVisibleAnnotations` на методе. Дополнительная сверка с compiled Mixin в `AE2-Things-1.4.2-beta.jar` подтвердила использование `RuntimeInvisibleAnnotations` для `@Mixin`.
 
 ## Основание
 
@@ -16,8 +22,8 @@
 - `python scripts/build_ipn_pick_block_fix.py --check` — существующий JAR побайтово совпал с повторной сборкой.
 - `zipfile.ZipFile.testzip()` — ошибок CRC нет.
 - Состав JAR — 6 файлов: manifest, mods.toml, Mixin JSON, 2 class file, LICENSE.
-- Пользовательский валидатор подтвердил Java 21 class file, Mixin/Inject-аннотации и точную цель.
-- Независимый парсер `jawa` прочитал оба класса и дизассемблировал методы: конструкторы корректны; обработчик — `aload_2`, `invokevirtual CallbackInfo.cancel`, `return`.
+- Пользовательский валидатор подтвердил Java 21 class file и точную цель; `@Mixin` находится только в `RuntimeInvisibleAnnotations`, `@Inject` — только в `RuntimeVisibleAnnotations`.
+- Независимый парсер `jawa` прочитал оба класса и подтвердил те атрибуты; конструкторы корректны, обработчик — `aload_2`, `invokevirtual CallbackInfo.cancel`, `return`.
 
 ## Не выполнялось
 
@@ -27,4 +33,4 @@
 
 ## SHA-256
 
-`8fc313927cf4955823803ab14e15761a5ced0953ce9ae09c085581f97441f4db` — `IPN-PickBlock-Fix-neoforge-1.21.1-1.0.0.jar`.
+`e9c574d0915c7f22dfcd3d165df567c800f74ec0bb582a707330b2e9b73f6d81` — `IPN-PickBlock-Fix-neoforge-1.21.1-1.0.1.jar`.

@@ -20,7 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PROJECT = ROOT / "Проекты" / "Исправления" / "IPN Pick Block Fix"
 RESOURCES = PROJECT / "src" / "main" / "resources"
-JAR_PATH = PROJECT / "IPN-PickBlock-Fix-neoforge-1.21.1-1.0.0.jar"
+JAR_PATH = PROJECT / "IPN-PickBlock-Fix-neoforge-1.21.1-1.0.1.jar"
 MOD_ID = "ipnpickblockfix"
 TARGET = "org.anti_ad.mc.ipnext.event.LockedSlotKeeper"
 TARGET_METHOD = "ignoredSelectedHotbarSlot(I)V"
@@ -97,12 +97,20 @@ class ConstantPool:
 
 
 class ClassBuilder:
-    def __init__(self, cp: ConstantPool, name: str, access: int, source: str) -> None:
+    def __init__(
+        self,
+        cp: ConstantPool,
+        name: str,
+        access: int,
+        source: str,
+        class_annotation_attribute: str = "RuntimeVisibleAnnotations",
+    ) -> None:
         self.cp = cp
         self.this = cp.cls(name)
         self.super = cp.cls("java/lang/Object")
         self.access = access
         self.source = source
+        self.class_annotation_attribute = class_annotation_attribute
         self.methods: list[tuple[int, int, int, list[tuple[int, bytes]]]] = []
         self.annotations: list[bytes] = []
 
@@ -152,7 +160,7 @@ class ClassBuilder:
         if self.annotations:
             class_attributes.append(
                 self.attribute(
-                    "RuntimeVisibleAnnotations",
+                    self.class_annotation_attribute,
                     u2(len(self.annotations)) + b"".join(self.annotations),
                 )
             )
@@ -206,7 +214,15 @@ def add_constructor(builder: ClassBuilder) -> None:
 def build_mixin_class() -> bytes:
     cp = ConstantPool()
     annotations = Annotations(cp)
-    builder = ClassBuilder(cp, MIXIN_CLASS, 0x0021, "LockedSlotKeeperMixin.java")
+    # @Mixin имеет RetentionPolicy.CLASS: Mixin читает именно invisible-атрибут.
+    # @Inject имеет RetentionPolicy.RUNTIME и остаётся visible на методе.
+    builder = ClassBuilder(
+        cp,
+        MIXIN_CLASS,
+        0x0021,
+        "LockedSlotKeeperMixin.java",
+        class_annotation_attribute="RuntimeInvisibleAnnotations",
+    )
     add_constructor(builder)
 
     cancel = cp.methodref(CALLBACK, "cancel", "()V")
@@ -359,11 +375,15 @@ class ParsedClass:
     def named_attributes(self, attributes: dict[int, bytes]) -> dict[str, bytes]:
         return {self.utf8(index): data for index, data in attributes.items()}
 
-    def annotations(self, attributes: dict[int, bytes]) -> list[tuple[str, dict]]:
+    def annotations(
+        self,
+        attributes: dict[int, bytes],
+        attribute_name: str = "RuntimeVisibleAnnotations",
+    ) -> list[tuple[str, dict]]:
         named = self.named_attributes(attributes)
-        if "RuntimeVisibleAnnotations" not in named:
+        if attribute_name not in named:
             return []
-        reader = Reader(named["RuntimeVisibleAnnotations"])
+        reader = Reader(named[attribute_name])
         result = [self.read_annotation(reader) for _ in range(reader.u2())]
         assert reader.pos == len(reader.data)
         return result
@@ -406,14 +426,16 @@ def verify_classes(mixin_data: bytes, mod_data: bytes) -> None:
     mixin = ParsedClass(mixin_data)
     assert mixin.major == 65
     assert mixin.class_name(mixin.this) == MIXIN_CLASS
-    class_annotations = mixin.annotations(mixin.attributes)
+    class_annotations = mixin.annotations(mixin.attributes, "RuntimeInvisibleAnnotations")
+    assert mixin.annotations(mixin.attributes, "RuntimeVisibleAnnotations") == []
     assert len(class_annotations) == 1
     descriptor, values = class_annotations[0]
     assert descriptor == "Lorg/spongepowered/asm/mixin/Mixin;"
     assert values == {"targets": [TARGET], "remap": False}
 
     handler = mixin.methods[("ipnPickBlockFix$cancel", f"(IL{CALLBACK};)V")]
-    method_annotations = mixin.annotations(handler[1])
+    method_annotations = mixin.annotations(handler[1], "RuntimeVisibleAnnotations")
+    assert mixin.annotations(handler[1], "RuntimeInvisibleAnnotations") == []
     assert len(method_annotations) == 1
     descriptor, values = method_annotations[0]
     assert descriptor == "Lorg/spongepowered/asm/mixin/injection/Inject;"
@@ -437,7 +459,7 @@ def manifest() -> bytes:
         "Manifest-Version: 1.0\r\n"
         "Created-By: build_ipn_pick_block_fix.py\r\n"
         "Implementation-Title: IPN Pick Block Fix\r\n"
-        "Implementation-Version: 1.0.0\r\n"
+        "Implementation-Version: 1.0.1\r\n"
         "\r\n"
     ).encode("utf-8")
 
@@ -472,7 +494,7 @@ def verify_jar(data: bytes) -> None:
         assert metadata["mods"] == [
             {
                 "modId": MOD_ID,
-                "version": "1.0.0",
+                "version": "1.0.1",
                 "displayName": "IPN Pick Block Fix",
                 "authors": "StoneBlock 4 RU",
                 "displayTest": "IGNORE_SERVER_VERSION",
