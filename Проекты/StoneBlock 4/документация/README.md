@@ -8,7 +8,7 @@
 | Часть | Что сделано |
 |---|---|
 | Моды сборки | 411 готовых JAR: у каждого переведены все языковые ключи, включая вложенные библиотеки (JarJar) |
-| Дополнительно в ZIP | IPN 2.2.5, libIPN 6.6.3 и фикс IPN pick-block — 3 клиентских JAR; всего в `mods` архива 414 файлов |
+| Дополнительно в ZIP | Официальные IPN 2.2.5 и libIPN 6.6.3 — 2 клиентских JAR; всего в `mods` архива 413 файлов. IPN-PickBlock-Fix исключён |
 | Книги и гайды внутри модов | Patchouli, Modonomicon, GuideME, Oracle Index, Ponder — проверены и переведены все системы |
 | Книга квестов FTB Quests | 2 523 ключа. Основа — перевод владельца сборки (`_user_original_ru_ru.snbt`), идёт в релиз без изменений; от нас только 12 недостающих заголовков и точечные правки ниже |
 | Гайды KubeJS | 30 руководств: 26 FTB в `release/kubejs/assets/ftb/guides/ftb/guide/_ru_ru/` и 4 Oritech в `release/kubejs/assets/oritech/guides/oritech/guide/_ru_ru/` |
@@ -51,7 +51,7 @@ StoneBlock 4/
 
 Workflow `.github/workflows/release-stoneblock4.yml` (GitHub Actions):
 
-1. Копирует 411 JAR проекта в `mods/`, добавляет фикс IPN и скачивает официальные IPN 2.2.5/libIPN 6.6.3 с проверкой размера и SHA-512; файл квестов и главы кладёт в `config/`, конфиги и `kubejs/` — как лежат в `release/`.
+1. Копирует 411 JAR проекта в `mods/` и скачивает официальные IPN 2.2.5/libIPN 6.6.3 с проверкой размера и SHA-512; файл квестов и главы кладёт в `config/`, конфиги и `kubejs/` — как лежат в `release/`.
 2. Скачивает 38 файлов озвучки с Google Drive по `echo_ru_voice.tsv` и проверяет каждый: сигнатура `OggS` и точный размер в байтах.
 3. Упаковывает `StoneBlock.4.zip` и проверяет наличие ключевых файлов внутри архива.
 
@@ -79,7 +79,7 @@ Force Unicode не используется. `release/kubejs/client_scripts/ru_u
 
 ## IPN и pick-block
 
-С v1.1.34 архив включает официальные `InventoryProfilesNext-neoforge-1.21.1-2.2.5.jar`, `libIPN-neoforge-1.21.1-6.6.3.jar` и `IPN-PickBlock-Fix-neoforge-1.21.1-1.0.1.jar`. Фикс отключает только проблемный вызов `LockedSlotKeeper.ignoredSelectedHotbarSlot(I)V`, не меняя vanilla pick-block. Эти три JAR предназначены для клиента; на сервер их устанавливать не нужно. Они не входят в статистику 411 переведённых JAR.
+С v1.1.35 архив включает только официальные `InventoryProfilesNext-neoforge-1.21.1-2.2.5.jar` и `libIPN-neoforge-1.21.1-6.6.3.jar`. `IPN-PickBlock-Fix` полностью исключён из ZIP, отдельных файлов релиза и репозитория. После обновления старые фиксы 1.0.0/1.0.1 нужно удалить из локальной папки `mods`. Официальные IPN и libIPN предназначены для клиента и не входят в статистику 411 переведённых JAR.
 
 ## Книга DimDungeons
 
@@ -124,5 +124,6 @@ Force Unicode не используется. `release/kubejs/client_scripts/ru_u
 | v1.1.32 | русская книга DimDungeons: две страницы Колокола Секретов переведены на data components вместо устаревшего NBT |
 | v1.1.33 | IPN 2.2.5, libIPN 6.6.3 и фикс pick-block добавлены в ZIP; фикс 1.0.0 вызывал MixinApply при запуске и заменён в v1.1.34 |
 | v1.1.34 | фикс IPN 1.0.1: аннотация `@Mixin` записана в `RuntimeInvisibleAnnotations`, как требует её `RetentionPolicy.CLASS` |
+| v1.1.35 | IPN-PickBlock-Fix полностью удалён из релиза и репозитория; оставлены только официальные IPN/libIPN, в ZIP 413 JAR |
 
 Подробная история работ по датам (журналы и аудиты) — в папке [архив](архив/).
