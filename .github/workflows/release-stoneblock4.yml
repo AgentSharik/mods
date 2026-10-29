@@ -37,6 +37,7 @@ jobs:
         run: |
           set -euo pipefail
           SB4="Проекты/StoneBlock 4"
+          python3 scripts/build_ipn_pick_block_fix.py --check
           mkdir -p pkg/mods pkg/config/ftbquests/quests/lang
           cp "$SB4"/*.jar pkg/mods/
           test "$(find pkg/mods -maxdepth 1 -name '*.jar' | wc -l)" -eq 411
@@ -200,7 +201,8 @@ jobs:
         run: |
           set -euo pipefail
           gh release upload "$RELEASE_TAG" --clobber \
-            StoneBlock.4.zip
+            StoneBlock.4.zip \
+            "Проекты/Исправления/IPN Pick Block Fix/IPN-PickBlock-Fix-neoforge-1.21.1-1.0.0.jar"
 
       - name: Publish release
         env:
