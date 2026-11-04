@@ -16,6 +16,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
+import java.util.HashSet;
+import java.util.Set;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -64,61 +66,84 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
     };
 
     /**
-     * Input filter: with a player-taught pattern only the pattern's item types may
-     * enter (so pipes cannot jam the taught recipe). Without a pattern the packager
-     * accepts any items — multi-ingredient recipes (two or more distinct types)
-     * must be able to sit in the input side by side, otherwise such recipes could
-     * never craft and the second ingredient bounced off or got ejected.
+     * Input filter — the craft owns the buffer. With a player-taught pattern only
+     * the pattern's item types may enter. Without a pattern a type may enter only
+     * if, together with the types already buffered, it stays a subset of the
+     * ingredients of some real crafting recipe: the buffer therefore fills towards
+     * an actual craft (a 9-unique-cell recipe buffers exactly those 9 types) and
+     * pipe junk that no recipe shares with the buffer bounces off.
      */
     private boolean matchesInputLock(ItemStack stack) {
         if (stack.isEmpty()) {
             return true;
         }
         List<ItemStack> allowed = patternTypes();
-        if (allowed.isEmpty()) {
-            return true;
+        if (!allowed.isEmpty()) {
+            for (ItemStack entry : allowed) {
+                if (ItemStack.isSameItemSameComponents(entry, stack)) {
+                    return true;
+                }
+            }
+            return false;
         }
-        for (ItemStack entry : allowed) {
-            if (ItemStack.isSameItemSameComponents(entry, stack)) {
+        return bufferFitsSomeRecipe(stack.getItem());
+    }
+
+    /** True if the buffered types plus {@code extra} fit inside one recipe's ingredient set. */
+    private boolean bufferFitsSomeRecipe(Item extra) {
+        Set<Item> buffered = new HashSet<>();
+        for (int slot = 0; slot < inputInventory.getSlots(); slot++) {
+            ItemStack inSlot = inputInventory.getStackInSlot(slot);
+            if (!inSlot.isEmpty()) {
+                buffered.add(inSlot.getItem());
+            }
+        }
+        buffered.add(extra);
+        for (Set<Item> recipeTypes : recipeTypeSets()) {
+            if (recipeTypes.containsAll(buffered)) {
                 return true;
             }
         }
         return false;
     }
 
-    private final ItemStackHandler outputInventory = new ItemStackHandler(OUTPUT_SLOTS) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            markDirtyAndNotify();
+    /**
+     * Ingredient type sets of every crafting recipe, refreshed every 100 ticks so
+     * CraftBuilder-added recipes join without rebuilding the index on every pipe
+     * insertion. Sets wider than the 9 input slots can never be buffered anyway.
+     */
+    private List<Set<Item>> ingredientTypeSets = List.of();
+    private long typeSetsRefreshedAt = -1000L;
+
+    private List<Set<Item>> recipeTypeSets() {
+        if (level == null) {
+            return List.of();
         }
-    };
-
-    /** Template of the craft the player taught the machine; empty = auto scan. */
-    private final ItemStackHandler patternInventory = new ItemStackHandler(9) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            recomputeCustomRecipe();
-            markDirtyAndNotify();
+        long now = level.getGameTime() / 100L;
+        if (now == typeSetsRefreshedAt) {
+            return ingredientTypeSets;
         }
-    };
-    private final ItemStackHandler patternResultInventory = new ItemStackHandler(1);
-    private boolean patternDirty;
-
-    private final IItemHandler pipeView = new CombinedItemHandler();
-
-    private PackagerMode mode = PackagerMode.HYBRID;
-    private int tickCounter;
-    private int tickDelay = NORMAL_DELAY;
-    private int recipeScanIndex;
-
-    public PackagerBlockEntity(BlockPos pos, BlockState state) {
-        super(ModContent.PACKAGER_BLOCK_ENTITY.get(), pos, state);
-    }
-
-    public static void serverTick(Level level, BlockPos pos, BlockState state, PackagerBlockEntity packager) {
-        if (!level.isClientSide) {
-            packager.tickServer(state);
+        typeSetsRefreshedAt = now;
+        List<Set<Item>> sets = new ArrayList<>();
+        for (RecipeHolder<CraftingRecipe> holder : level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)) {
+            Set<Item> types = new HashSet<>();
+            boolean overflow = false;
+            for (Ingredient ingredient : holder.value().getIngredients()) {
+                for (ItemStack option : ingredient.getItems()) {
+                    types.add(option.getItem());
+                    break; // one representative per slot: variants of one slot stay one buffered type decision
+                }
+                if (types.size() > INPUT_SLOTS) {
+                    overflow = true;
+                    break;
+                }
+            }
+            if (!overflow && !types.isEmpty()) {
+                sets.add(types);
+            }
         }
+        ingredientTypeSets = sets;
+        return ingredientTypeSets;
     }
 
     private void tickServer(BlockState state) {
