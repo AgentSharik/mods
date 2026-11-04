@@ -30,7 +30,6 @@ dependencies {
     compileOnly 'mezz.jei:jei-1.21.1-neoforge-api:19.+'
     // Curios API is compile-only: the angel ring flight is a soft integration
     // and stays dormant when the player has no Curios installed.
-    compileOnly 'top.theillusivec4.curios:curios-neoforge:9.5.0+1.21.1:api'
 }
 
 sourceSets.main.resources {

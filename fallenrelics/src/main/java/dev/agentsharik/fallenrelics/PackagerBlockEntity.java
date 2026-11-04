@@ -64,30 +64,26 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
     };
 
     /**
-     * The machine compresses a single resource: once items of one type are in,
-     * only more of the same type may enter (any amount), other types bounce off
-     * pipes and manual clicks alike. The lock frees when the input runs empty.
+     * Input filter: with a player-taught pattern only the pattern's item types may
+     * enter (so pipes cannot jam the taught recipe). Without a pattern the packager
+     * accepts any items — multi-ingredient recipes (two or more distinct types)
+     * must be able to sit in the input side by side, otherwise such recipes could
+     * never craft and the second ingredient bounced off or got ejected.
      */
     private boolean matchesInputLock(ItemStack stack) {
         if (stack.isEmpty()) {
             return true;
         }
         List<ItemStack> allowed = patternTypes();
-        if (!allowed.isEmpty()) {
-            for (ItemStack entry : allowed) {
-                if (ItemStack.isSameItemSameComponents(entry, stack)) {
-                    return true;
-                }
-            }
-            return false;
+        if (allowed.isEmpty()) {
+            return true;
         }
-        for (int slot = 0; slot < inputInventory.getSlots(); slot++) {
-            ItemStack existing = inputInventory.getStackInSlot(slot);
-            if (!existing.isEmpty()) {
-                return ItemStack.isSameItemSameComponents(existing, stack);
+        for (ItemStack entry : allowed) {
+            if (ItemStack.isSameItemSameComponents(entry, stack)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private final ItemStackHandler outputInventory = new ItemStackHandler(OUTPUT_SLOTS) {
@@ -148,25 +144,14 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
     }
 
     /**
-     * The input may only ever hold one item type. Legacy saves or exotic pipe
-     * behaviour could leave a foreign type behind, which used to jam the machine
-     * forever; now the packager simply ejects anything that does not match the
-     * locked type into its output (and from there into the chest), and pipes are
-     * allowed to pull from the input as well.
+     * With a player-taught pattern the input must hold only the pattern's types:
+     * anything foreign (legacy saves, exotic pipe behaviour) is ejected into the
+     * output instead of jamming the machine. Without a pattern every input type is
+     * a potential ingredient, so nothing is ejected.
      */
     private void sanitizeInput() {
         List<ItemStack> allowed = patternTypes();
-        ItemStack locked = ItemStack.EMPTY;
         if (allowed.isEmpty()) {
-            for (int slot = 0; slot < INPUT_SLOTS; slot++) {
-                ItemStack stack = inputInventory.getStackInSlot(slot);
-                if (!stack.isEmpty()) {
-                    locked = stack;
-                    break;
-                }
-            }
-        }
-        if (allowed.isEmpty() && locked.isEmpty()) {
             return;
         }
         for (int slot = 0; slot < INPUT_SLOTS; slot++) {
@@ -174,15 +159,12 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
             if (stack.isEmpty()) {
                 continue;
             }
-            boolean ok = !allowed.isEmpty()
-                    ? allowed.stream().anyMatch(entry -> ItemStack.isSameItemSameComponents(entry, stack))
-                    : ItemStack.isSameItemSameComponents(locked, stack);
+            boolean ok = allowed.stream().anyMatch(entry -> ItemStack.isSameItemSameComponents(entry, stack));
             if (!ok) {
                 inputInventory.setStackInSlot(slot, insertIntoOutput(stack));
             }
         }
     }
-
 
     /** Player-taught recipe support: the packager crafts exactly what is shown in its window. */
     public ItemStackHandler getPatternInventory() {
