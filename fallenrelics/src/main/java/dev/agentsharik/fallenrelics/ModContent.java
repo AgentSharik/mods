@@ -15,9 +15,6 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class ModContent {
-    public static final DeferredRegister<DataComponentType<?>> COMPONENTS =
-            DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, FallenRelicsMod.MOD_ID);
-
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(FallenRelicsMod.MOD_ID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FallenRelicsMod.MOD_ID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
