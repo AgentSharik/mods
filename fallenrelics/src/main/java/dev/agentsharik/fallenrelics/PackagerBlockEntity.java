@@ -131,7 +131,7 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
             for (Ingredient ingredient : holder.value().getIngredients()) {
                 for (ItemStack option : ingredient.getItems()) {
                     types.add(option.getItem());
-                    break; // one representative per slot: variants of one slot stay one buffered type decision
+                    break;
                 }
                 if (types.size() > INPUT_SLOTS) {
                     overflow = true;
@@ -144,6 +144,41 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
         }
         ingredientTypeSets = sets;
         return ingredientTypeSets;
+    }
+
+    private final ItemStackHandler outputInventory = new ItemStackHandler(OUTPUT_SLOTS) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            markDirtyAndNotify();
+        }
+    };
+
+    /** Template of the craft the player taught the machine; empty = auto scan. */
+    private final ItemStackHandler patternInventory = new ItemStackHandler(9) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            recomputeCustomRecipe();
+            markDirtyAndNotify();
+        }
+    };
+    private final ItemStackHandler patternResultInventory = new ItemStackHandler(1);
+    private boolean patternDirty;
+
+    private final IItemHandler pipeView = new CombinedItemHandler();
+
+    private PackagerMode mode = PackagerMode.HYBRID;
+    private int tickCounter;
+    private int tickDelay = NORMAL_DELAY;
+    private int recipeScanIndex;
+
+    public PackagerBlockEntity(BlockPos pos, BlockState state) {
+        super(ModContent.PACKAGER_BLOCK_ENTITY.get(), pos, state);
+    }
+
+    public static void serverTick(Level level, BlockPos pos, BlockState state, PackagerBlockEntity packager) {
+        if (!level.isClientSide) {
+            packager.tickServer(state);
+        }
     }
 
     private void tickServer(BlockState state) {
