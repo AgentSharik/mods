@@ -1,6 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
+# v1.1.36: возвращён ключ ars_nouveau.category.source для русского названия Истока в терминале AE2.
 # v1.1.35: IPN-PickBlock-Fix полностью удалён; в ZIP остаются только официальные IPN и libIPN.
 # v1.1.33: IPN 2.2.5 и libIPN 6.6.3 включены в mods архива.
 # v1.1.32: русская книга DimDungeons использует data components вместо устаревшего NBT.
@@ -13,7 +14,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.35'
+        default: 'StoneBlock4-ru-v1.1.36'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -31,7 +32,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.35' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.36' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -99,6 +100,15 @@ jobs:
               target = z.read('org/anti_ad/mc/ipnext/event/LockedSlotKeeper.class')
           assert b'ignoredSelectedHotbarSlot' in target
           print('Проверка: официальные IPN и libIPN целы')
+          with zipfile.ZipFile('pkg/mods/ars_nouveau-1.21.1-5.13.3.jar') as z:
+              ru_ars = json.loads(z.read('assets/ars_nouveau/lang/ru_ru.json'))
+              en_ars = json.loads(z.read('assets/ars_nouveau/lang/en_us.json'))
+          assert ru_ars['ars_nouveau.category.source'] == 'Источник'
+          assert 'ars_nouveau.category.source' not in en_ars
+          with zipfile.ZipFile('pkg/mods/arseng-2.1.1-beta.jar') as z:
+              source_key_type = z.read('gripe/_90/arseng/me/key/SourceKeyType.class')
+          assert b'ars_nouveau.category.source' in source_key_type
+          print('Проверка: ключ Истока возвращён в русский Ars Nouveau и нужен arseng')
           with zipfile.ZipFile('pkg/mods/sg_economy-1.0.5.jar') as z:
               data = z.read('net/sirgrantd/sg_economy/command/EconomyCommand.class')
           assert '§aВы отправили %s %s игроку %s.'.encode() in data
@@ -210,6 +220,15 @@ jobs:
             exit 1
           fi
           echo "Проверка: 413 JAR в ZIP; IPN-PickBlock-Fix отсутствует"
+          python3 - <<'PY'
+          import io, json, zipfile
+          with zipfile.ZipFile('../StoneBlock.4.zip') as outer:
+              ars_jar = outer.read('mods/ars_nouveau-1.21.1-5.13.3.jar')
+          with zipfile.ZipFile(io.BytesIO(ars_jar)) as inner:
+              ru = json.loads(inner.read('assets/ars_nouveau/lang/ru_ru.json'))
+          assert ru['ars_nouveau.category.source'] == 'Источник'
+          print('Проверка: в ZIP лежит Ars Nouveau с русским названием Истока')
+          PY
           unzip -l ../StoneBlock.4.zip | grep -q "config/apotheosis/names.cfg"
           unzip -l ../StoneBlock.4.zip | grep -q "config/ftbquests/quests/chapters/general_magic.snbt"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/lang/ru_ru.json"
