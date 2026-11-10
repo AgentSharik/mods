@@ -1,7 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
-# v1.1.37: Исток добавлен в JEI/EMI клиентским KubeJS-скриптом для шаблонов и фильтров AE2.
+# v1.1.37 (перевыпуск): скрипты KubeJS убраны из ZIP; Iron's Spellbooks заменён обновлённым JAR.
 # v1.1.36: возвращён ключ ars_nouveau.category.source для русского названия Истока в терминале AE2.
 # v1.1.35: IPN-PickBlock-Fix полностью удалён; в ZIP остаются только официальные IPN и libIPN.
 # v1.1.33: IPN 2.2.5 и libIPN 6.6.3 включены в mods архива.
@@ -82,24 +82,26 @@ jobs:
           echo "JAR в архиве: $(ls pkg/mods/*.jar | wc -l)"
           echo "Файлов kubejs в архиве: $(find pkg/kubejs -type f | wc -l)"
           test -f pkg/kubejs/assets/ftb/lang/ru_ru.json
-          test -f pkg/kubejs/client_scripts/ru_unicode_font.js
-          node --check pkg/kubejs/client_scripts/ru_unicode_font.js
-          echo "Проверка: старый скрипт шрифта перезаписан отключённым файлом"
-          test -f pkg/kubejs/client_scripts/ae2_source_entry.js
-          node --check pkg/kubejs/client_scripts/ae2_source_entry.js
-          echo "Проверка: клиентский скрипт Истока синтаксически корректен"
+          test "$(find pkg/kubejs -type f -name '*.js' | wc -l)" -eq 0
+          echo "Проверка: в kubejs архива нет скриптов .js"
+          cmp -s "$SB4/irons_spellbooks-1.21.1-3.16.3.jar" "Исходные моды для перевода/irons_spellbooks-1.21.1-3.16.3.jar"
+          echo "Проверка: в mods лежит обновлённый Iron's Spellbooks"
           test -f pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru/items/automating_recipes.md
           test "$(find pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru -name '*.md' | wc -l)" -eq 4
           echo "Проверка: 4 русские страницы гайда Oritech присутствуют"
           python3 - <<'PY'
-          import zipfile, json
-          source_entry = open('pkg/kubejs/client_scripts/ae2_source_entry.js', encoding='utf-8').read()
-          assert "Java.loadClass('appeng.api.stacks.GenericStack')" in source_entry
-          assert "Java.loadClass('gripe._90.arseng.me.key.SourceKey')" in source_entry
-          assert '$GenericStack.wrapInItemStack($SourceKey.KEY, 1000)' in source_entry
-          assert "RecipeViewerEvents.addEntries('item'" in source_entry
-          assert 'ae2:wrapped_stack' in source_entry
-          print('Проверка: скрипт Истока ссылается на SourceKey и добавляет запись в JEI/EMI')
+          import zipfile, json, hashlib
+          irons = 'pkg/mods/irons_spellbooks-1.21.1-3.16.3.jar'
+          assert hashlib.sha256(open(irons, 'rb').read()).hexdigest() == '61d8c1818e5d4a364b78b6bf2c3023e1d1161b7943a63a832776071390295e43'
+          with zipfile.ZipFile(irons) as z:
+              assert z.testzip() is None
+              irons_ru = json.loads(z.read('assets/irons_spellbooks/lang/ru_ru.json'))
+              irons_en = json.loads(z.read('assets/irons_spellbooks/lang/en_us.json'))
+              assert len(irons_en) == 1315 and len(irons_ru) == 1404
+              assert not set(irons_en) - set(irons_ru)
+              assert len(z.read('assets/irons_spellbooks/textures/item/infernal_sorcerer_chestplate.png')) == 500
+              assert len(z.read('assets/irons_spellbooks/textures/models/armor/infernal_sorcerer.png')) == 2323
+          print('Проверка: обновлённый Iron’s Spellbooks цел, перевод полный, текстуры новые')
           ipn_files = [
               'InventoryProfilesNext-neoforge-1.21.1-2.2.5.jar',
               'libIPN-neoforge-1.21.1-6.6.3.jar',
@@ -173,12 +175,6 @@ jobs:
           assert ru['title.apotheosis.world_tier_details'] != en['title.apotheosis.world_tier_details']
           assert ru['text.apotheosis.world_tier_tutorial'] != en['text.apotheosis.world_tier_tutorial']
           print('Проверка: 30 надписей окна выбора уровня мира переведены, остальной перевод Apotheosis сохранён')
-          disabled_font = open('pkg/kubejs/client_scripts/ru_unicode_font.js', encoding='utf-8').read()
-          assert 'Java.loadClass' not in disabled_font
-          assert 'ClientEvents.' not in disabled_font
-          assert 'forceUnicode' not in disabled_font
-          assert 'java.io.File' not in disabled_font
-          print('Проверка: скрипт шрифта отключён и не изменяет настройки Minecraft')
           with zipfile.ZipFile('pkg/mods/simplyswords-neoforge-1.70.2-1.21.1.jar') as z:
               font = json.loads(z.read('assets/minecraft/font/default.json'))
               names = set(z.namelist())
@@ -232,25 +228,23 @@ jobs:
           fi
           echo "Проверка: 413 JAR в ZIP; IPN-PickBlock-Fix отсутствует"
           python3 - <<'PY'
-          import io, json, zipfile
+          import io, json, zipfile, hashlib
           with zipfile.ZipFile('../StoneBlock.4.zip') as outer:
+              names = outer.namelist()
+              assert not any(n.startswith('kubejs/') and n.endswith('.js') for n in names)
               ars_jar = outer.read('mods/ars_nouveau-1.21.1-5.13.3.jar')
+              irons_jar = outer.read('mods/irons_spellbooks-1.21.1-3.16.3.jar')
+          assert hashlib.sha256(irons_jar).hexdigest() == '61d8c1818e5d4a364b78b6bf2c3023e1d1161b7943a63a832776071390295e43'
           with zipfile.ZipFile(io.BytesIO(ars_jar)) as inner:
               ru = json.loads(inner.read('assets/ars_nouveau/lang/ru_ru.json'))
           assert ru['ars_nouveau.category.source'] == 'Источник'
-          print('Проверка: в ZIP лежит Ars Nouveau с русским названием Истока')
+          print('Проверка: в ZIP нет скриптов KubeJS; Iron’s Spellbooks обновлён, имя Истока на месте')
           PY
           unzip -l ../StoneBlock.4.zip | grep -q "config/apotheosis/names.cfg"
           unzip -l ../StoneBlock.4.zip | grep -q "config/ftbquests/quests/chapters/general_magic.snbt"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/lang/ru_ru.json"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/oritech/guides/oritech/guide/_ru_ru/items/automating_recipes.md"
           echo "Проверка: lang и гайд Oritech присутствуют в архиве"
-          unzip -l ../StoneBlock.4.zip | grep -q "kubejs/client_scripts/ru_unicode_font.js"
-          echo "Проверка: отключённый скрипт шрифта включён в архив для перезаписи старого"
-          unzip -l ../StoneBlock.4.zip | grep -q "kubejs/client_scripts/ae2_source_entry.js"
-          echo "Проверка: скрипт Истока для JEI/EMI включён в архив"
-          unzip -l ../StoneBlock.4.zip | grep -q "kubejs/startup_scripts/ru_echo_sounds.js"
-          test "$(grep -c "event.create('ftb:ru_ru/" ../pkg/kubejs/startup_scripts/ru_echo_sounds.js)" -eq 38
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/sounds.json"
           test "$(unzip -l ../StoneBlock.4.zip | grep -c 'sounds/echo/ru_ru/.*\.ogg')" -eq 38
           echo "Проверка: sounds.json и 38 файлов русской озвучки Эхо в архиве"
