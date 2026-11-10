@@ -1,6 +1,7 @@
 name: Release StoneBlock 4 RU
 
 # Собирает архив локализации из репозитория и прикрепляет к релизу.
+# v1.1.37: Исток добавлен в JEI/EMI клиентским KubeJS-скриптом для шаблонов и фильтров AE2.
 # v1.1.36: возвращён ключ ars_nouveau.category.source для русского названия Истока в терминале AE2.
 # v1.1.35: IPN-PickBlock-Fix полностью удалён; в ZIP остаются только официальные IPN и libIPN.
 # v1.1.33: IPN 2.2.5 и libIPN 6.6.3 включены в mods архива.
@@ -14,7 +15,7 @@ on:
       tag:
         description: 'Тег релиза'
         required: true
-        default: 'StoneBlock4-ru-v1.1.36'
+        default: 'StoneBlock4-ru-v1.1.37'
   push:
     branches:
       - 'arena/88cc25d2-mods'
@@ -32,7 +33,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.36' }}
+      RELEASE_TAG: ${{ inputs.tag || 'StoneBlock4-ru-v1.1.37' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -84,11 +85,21 @@ jobs:
           test -f pkg/kubejs/client_scripts/ru_unicode_font.js
           node --check pkg/kubejs/client_scripts/ru_unicode_font.js
           echo "Проверка: старый скрипт шрифта перезаписан отключённым файлом"
+          test -f pkg/kubejs/client_scripts/ae2_source_entry.js
+          node --check pkg/kubejs/client_scripts/ae2_source_entry.js
+          echo "Проверка: клиентский скрипт Истока синтаксически корректен"
           test -f pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru/items/automating_recipes.md
           test "$(find pkg/kubejs/assets/oritech/guides/oritech/guide/_ru_ru -name '*.md' | wc -l)" -eq 4
           echo "Проверка: 4 русские страницы гайда Oritech присутствуют"
           python3 - <<'PY'
           import zipfile, json
+          source_entry = open('pkg/kubejs/client_scripts/ae2_source_entry.js', encoding='utf-8').read()
+          assert "Java.loadClass('appeng.api.stacks.GenericStack')" in source_entry
+          assert "Java.loadClass('gripe._90.arseng.me.key.SourceKey')" in source_entry
+          assert '$GenericStack.wrapInItemStack($SourceKey.KEY, 1000)' in source_entry
+          assert "RecipeViewerEvents.addEntries('item'" in source_entry
+          assert 'ae2:wrapped_stack' in source_entry
+          print('Проверка: скрипт Истока ссылается на SourceKey и добавляет запись в JEI/EMI')
           ipn_files = [
               'InventoryProfilesNext-neoforge-1.21.1-2.2.5.jar',
               'libIPN-neoforge-1.21.1-6.6.3.jar',
@@ -236,6 +247,8 @@ jobs:
           echo "Проверка: lang и гайд Oritech присутствуют в архиве"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/client_scripts/ru_unicode_font.js"
           echo "Проверка: отключённый скрипт шрифта включён в архив для перезаписи старого"
+          unzip -l ../StoneBlock.4.zip | grep -q "kubejs/client_scripts/ae2_source_entry.js"
+          echo "Проверка: скрипт Истока для JEI/EMI включён в архив"
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/startup_scripts/ru_echo_sounds.js"
           test "$(grep -c "event.create('ftb:ru_ru/" ../pkg/kubejs/startup_scripts/ru_echo_sounds.js)" -eq 38
           unzip -l ../StoneBlock.4.zip | grep -q "kubejs/assets/ftb/sounds.json"
