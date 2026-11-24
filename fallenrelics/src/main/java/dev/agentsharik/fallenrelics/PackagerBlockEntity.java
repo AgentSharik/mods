@@ -401,6 +401,20 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
         patternResultInventory.setStackInSlot(0, result);
     }
 
+    /**
+     * A taught pattern consumes what the pattern shows, and matching is as tolerant
+     * as the recipe resolution behind it: a sample taught without components accepts
+     * any stack of that item, because a pipe or another mod may attach data the player
+     * never put into the pattern. A sample that does carry components still has to
+     * match exactly, so a deliberately specific pattern stays specific.
+     */
+    private boolean patternAccepts(ItemStack have, ItemStack need) {
+        if (have.isEmpty() || need.isEmpty() || !ItemStack.isSameItem(have, need)) {
+            return false;
+        }
+        return need.getComponentsPatch().isEmpty() || ItemStack.isSameItemSameComponents(have, need);
+    }
+
     private boolean tryPatternCraft() {
         ItemStack result = patternResultInventory.getStackInSlot(0);
         if (result.isEmpty()) {
@@ -415,7 +429,7 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
             boolean found = false;
             for (int slot = 0; slot < INPUT_SLOTS; slot++) {
                 ItemStack have = inputInventory.getStackInSlot(slot);
-                if (have.isEmpty() || !ItemStack.isSameItemSameComponents(have, need)) {
+                if (!patternAccepts(have, need)) {
                     continue;
                 }
                 if (have.getCount() - take[slot] > 0) {
