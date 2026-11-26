@@ -19,14 +19,10 @@ import net.minecraft.world.item.Item;
 import java.util.HashSet;
 import java.util.Set;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -65,30 +61,17 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
             if (!matchesInputLock(stack)) {
                 return stack;
             }
-            if (patternTypes().isEmpty() && !craftingTypeSets().isEmpty()
-                    && !craftingIngredientTypes().contains(stack.getItem())) {
-                // No crafting recipe anywhere uses this item (a smeltable ore chunk,
-                // for instance), so it must not occupy a crafting cell: it is routed
-                // straight to the output and the pipe line carries it on to the furnace.
-                return insertIntoOutput(stack, simulate);
-            }
             return super.insertItem(slot, stack, simulate);
         }
     };
 
     /**
-     * Input filter — the craft owns the buffer. With a player-taught pattern the
-     * pattern's item types may enter; they are compared by item, not by components,
-     * so a stack a pipe carries is never refused over data the pipe added.
-     * Without a pattern a type may enter when either
-     * <ul>
-     * <li>together with the crafting types already buffered it stays a subset of one
-     * real crafting recipe's ingredients — the buffer fills towards an actual craft,
-     * so a recipe with 9 unique cells buffers exactly those 9 types; or</li>
-     * <li>some other recipe (smelting, blasting, a modded machine) uses it — this
-     * machine cannot craft it, so it is accepted only to be forwarded, and pipe
-     * junk no recipe knows at all still bounces off the face.</li>
-     * </ul>
+     * Input filter — the craft owns the buffer. With a player-taught pattern only
+     * the pattern's item types may enter. Without a pattern a type may enter only
+     * if, together with the types already buffered, it stays a subset of the
+     * ingredients of some real crafting recipe: the buffer therefore fills towards
+     * an actual craft (a 9-unique-cell recipe buffers exactly those 9 types) and
+     * pipe junk that no recipe shares with the buffer bounces off.
      */
     private boolean matchesInputLock(ItemStack stack) {
         if (stack.isEmpty()) {
@@ -97,32 +80,26 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
         List<ItemStack> allowed = patternTypes();
         if (!allowed.isEmpty()) {
             for (ItemStack entry : allowed) {
-                if (ItemStack.isSameItem(entry, stack)) {
+                if (ItemStack.isSameItemSameComponents(entry, stack)) {
                     return true;
                 }
             }
             return false;
         }
-        Item item = stack.getItem();
-        return bufferFitsSomeRecipe(item) || forwardableIngredient(item);
+        return bufferFitsSomeRecipe(stack.getItem());
     }
 
-    /** True if the buffered crafting types plus {@code extra} fit inside one crafting recipe's ingredient set. */
+    /** True if the buffered types plus {@code extra} fit inside one recipe's ingredient set. */
     private boolean bufferFitsSomeRecipe(Item extra) {
-        List<Set<Item>> craftingSets = craftingTypeSets();
-        if (craftingSets.isEmpty()) {
-            return true;
-        }
-        Set<Item> known = craftingIngredientTypes();
         Set<Item> buffered = new HashSet<>();
         for (int slot = 0; slot < inputInventory.getSlots(); slot++) {
             ItemStack inSlot = inputInventory.getStackInSlot(slot);
-            if (!inSlot.isEmpty() && known.contains(inSlot.getItem())) {
+            if (!inSlot.isEmpty()) {
                 buffered.add(inSlot.getItem());
             }
         }
         buffered.add(extra);
-        for (Set<Item> recipeTypes : craftingSets) {
+        for (Set<Item> recipeTypes : recipeTypeSets()) {
             if (recipeTypes.containsAll(buffered)) {
                 return true;
             }
@@ -131,53 +108,24 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
     }
 
     /**
-     * Recipe index, refreshed every 100 ticks (staggered per machine so a row of
-     * packagers never rebuilds it in the same tick) so CraftBuilder-added recipes
-     * join without rebuilding on every pipe insertion:
-     * <ul>
-     * <li>{@code craftingTypeSets} — ingredient type set of each crafting recipe;
-     * sets wider than the 9 input slots can never be buffered anyway;</li>
-     * <li>{@code craftingIngredientTypes} — union of those sets: what this machine
-     * can actually craft;</li>
-     * <li>{@code forwardIngredientTypes} — ingredients of every other recipe type,
-     * vanilla and modded: items that only pass through towards the machine that
-     * does use them.</li>
-     * </ul>
+     * Ingredient type sets of every crafting recipe, refreshed every 100 ticks so
+     * CraftBuilder-added recipes join without rebuilding the index on every pipe
+     * insertion. Sets wider than the 9 input slots can never be buffered anyway.
      */
-    private List<Set<Item>> craftingTypeSets = List.of();
-    private Set<Item> craftingIngredientTypes = Set.of();
-    private Set<Item> forwardIngredientTypes = Set.of();
+    private List<Set<Item>> ingredientTypeSets = List.of();
     private long typeSetsRefreshedAt = -1000L;
 
-    private List<Set<Item>> craftingTypeSets() {
-        refreshTypeSets();
-        return craftingTypeSets;
-    }
-
-    private Set<Item> craftingIngredientTypes() {
-        refreshTypeSets();
-        return craftingIngredientTypes;
-    }
-
-    private boolean forwardableIngredient(Item item) {
-        refreshTypeSets();
-        return forwardIngredientTypes.contains(item);
-    }
-
-    private void refreshTypeSets() {
+    private List<Set<Item>> recipeTypeSets() {
         if (level == null) {
-            return;
+            return List.of();
         }
-        int stagger = (worldPosition.getX() * 31 + worldPosition.getZ()) & 63;
-        long now = (level.getGameTime() + stagger) / 100L;
+        long now = level.getGameTime() / 100L;
         if (now == typeSetsRefreshedAt) {
-            return;
+            return ingredientTypeSets;
         }
         typeSetsRefreshedAt = now;
-        RecipeManager manager = level.getRecipeManager();
         List<Set<Item>> sets = new ArrayList<>();
-        Set<Item> craftingTypes = new HashSet<>();
-        for (RecipeHolder<CraftingRecipe> holder : manager.getAllRecipesFor(RecipeType.CRAFTING)) {
+        for (RecipeHolder<CraftingRecipe> holder : level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)) {
             Set<Item> types = new HashSet<>();
             boolean overflow = false;
             for (Ingredient ingredient : holder.value().getIngredients()) {
@@ -192,58 +140,10 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
             }
             if (!overflow && !types.isEmpty()) {
                 sets.add(types);
-                craftingTypes.addAll(types);
             }
         }
-        craftingTypeSets = sets;
-        craftingIngredientTypes = craftingTypes;
-        Set<Item> forward = new HashSet<>();
-        collectIngredients(manager, RecipeType.SMELTING, forward);
-        collectIngredients(manager, RecipeType.BLASTING, forward);
-        collectIngredients(manager, RecipeType.SMOKING, forward);
-        collectIngredients(manager, RecipeType.CAMPFIRE_COOKING, forward);
-        collectIngredients(manager, RecipeType.STONECUTTING, forward);
-        collectIngredients(manager, RecipeType.SMITHING, forward);
-        collectRegisteredIngredients(manager, forward);
-        forward.removeAll(craftingTypes);
-        forwardIngredientTypes = forward;
-    }
-
-    private <C extends RecipeInput, T extends Recipe<C>> void collectIngredients(
-            RecipeManager manager, RecipeType<T> type, Set<Item> out) {
-        for (RecipeHolder<T> holder : manager.getAllRecipesFor(type)) {
-            addIngredientItems(holder.value().getIngredients(), out);
-        }
-    }
-
-    /**
-     * Modded machines register recipe types of their own; sweeping the registry keeps
-     * their ingredients pass-through too. A type that cannot be enumerated simply does
-     * not widen the set.
-     */
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private void collectRegisteredIngredients(RecipeManager manager, Set<Item> out) {
-        for (RecipeType<?> registered : BuiltInRegistries.RECIPE_TYPE) {
-            RecipeType raw = registered;
-            try {
-                for (Object holderObject : manager.getAllRecipesFor(raw)) {
-                    Recipe recipe = (Recipe) ((RecipeHolder) holderObject).value();
-                    List<Ingredient> ingredients = recipe.getIngredients();
-                    addIngredientItems(ingredients, out);
-                }
-            } catch (RuntimeException ignored) {
-                // Exotic recipe type: skip it rather than break the index.
-            }
-        }
-    }
-
-    private void addIngredientItems(List<Ingredient> ingredients, Set<Item> out) {
-        for (Ingredient ingredient : ingredients) {
-            for (ItemStack option : ingredient.getItems()) {
-                out.add(option.getItem());
-                break;
-            }
-        }
+        ingredientTypeSets = sets;
+        return ingredientTypeSets;
     }
 
     private final ItemStackHandler outputInventory = new ItemStackHandler(OUTPUT_SLOTS) {
@@ -304,20 +204,14 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
     }
 
     /**
-     * The craft keeps the buffer coherent. With a player-taught pattern the input
-     * must hold only the pattern's item types: anything foreign (legacy saves, exotic
-     * pipe behaviour) is forwarded into the output instead of jamming the machine.
-     * Without a pattern, anything no crafting recipe can use is forwarded as well, so
-     * a stream of smeltable material keeps moving down the line towards the furnace
-     * and never squats in a crafting cell.
+     * With a player-taught pattern the input must hold only the pattern's types:
+     * anything foreign (legacy saves, exotic pipe behaviour) is ejected into the
+     * output instead of jamming the machine. Without a pattern every input type is
+     * a potential ingredient, so nothing is ejected.
      */
     private void sanitizeInput() {
         List<ItemStack> allowed = patternTypes();
-        Set<Item> craftable = allowed.isEmpty() && !craftingTypeSets().isEmpty()
-                ? craftingIngredientTypes()
-                : null;
-        if (allowed.isEmpty() && craftable == null) {
-            // Recipe index not ready yet: never eject on incomplete information.
+        if (allowed.isEmpty()) {
             return;
         }
         for (int slot = 0; slot < INPUT_SLOTS; slot++) {
@@ -325,12 +219,7 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
             if (stack.isEmpty()) {
                 continue;
             }
-            boolean ok;
-            if (!allowed.isEmpty()) {
-                ok = allowed.stream().anyMatch(entry -> ItemStack.isSameItem(entry, stack));
-            } else {
-                ok = craftable.contains(stack.getItem());
-            }
+            boolean ok = allowed.stream().anyMatch(entry -> ItemStack.isSameItemSameComponents(entry, stack));
             if (!ok) {
                 inputInventory.setStackInSlot(slot, insertIntoOutput(stack));
             }
@@ -401,20 +290,6 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
         patternResultInventory.setStackInSlot(0, result);
     }
 
-    /**
-     * A taught pattern consumes what the pattern shows, and matching is as tolerant
-     * as the recipe resolution behind it: a sample taught without components accepts
-     * any stack of that item, because a pipe or another mod may attach data the player
-     * never put into the pattern. A sample that does carry components still has to
-     * match exactly, so a deliberately specific pattern stays specific.
-     */
-    private boolean patternAccepts(ItemStack have, ItemStack need) {
-        if (have.isEmpty() || need.isEmpty() || !ItemStack.isSameItem(have, need)) {
-            return false;
-        }
-        return need.getComponentsPatch().isEmpty() || ItemStack.isSameItemSameComponents(have, need);
-    }
-
     private boolean tryPatternCraft() {
         ItemStack result = patternResultInventory.getStackInSlot(0);
         if (result.isEmpty()) {
@@ -429,7 +304,7 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
             boolean found = false;
             for (int slot = 0; slot < INPUT_SLOTS; slot++) {
                 ItemStack have = inputInventory.getStackInSlot(slot);
-                if (!patternAccepts(have, need)) {
+                if (have.isEmpty() || !ItemStack.isSameItemSameComponents(have, need)) {
                     continue;
                 }
                 if (have.getCount() - take[slot] > 0) {
@@ -900,15 +775,11 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
     }
 
     private ItemStack insertIntoOutput(ItemStack stack) {
-        return insertIntoOutput(stack, false);
-    }
-
-    private ItemStack insertIntoOutput(ItemStack stack, boolean simulate) {
         ItemStack remaining = stack;
         for (int slot = 0; slot < outputInventory.getSlots() && !remaining.isEmpty(); slot++) {
-            remaining = outputInventory.insertItem(slot, remaining, simulate);
+            remaining = outputInventory.insertItem(slot, remaining, false);
         }
-        if (!simulate && !remaining.isEmpty()) {
+        if (!remaining.isEmpty()) {
             setChanged();
         }
         return remaining;
@@ -1126,11 +997,7 @@ public final class PackagerBlockEntity extends BlockEntity implements MenuProvid
                 return ItemStack.EMPTY;
             }
             if (slot < INPUT_SLOTS) {
-                // Input cells are insert-only for pipes: an extractor walking slots in
-                // order used to drain the very buffer the craft was filling, which is
-                // how material left the machine uncrafted. The GUI still takes them back,
-                // and anything the machine cannot use is forwarded to the output itself.
-                return ItemStack.EMPTY;
+                return inputInventory.extractItem(slot, amount, simulate);
             }
             return outputInventory.extractItem(slot - INPUT_SLOTS, amount, simulate);
         }
